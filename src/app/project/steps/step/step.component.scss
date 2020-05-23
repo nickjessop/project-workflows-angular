@@ -1,0 +1,22 @@
+@import 'src/sass/core';
+
+.step {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 200px;
+    height: 40px;
+    border-radius: 100px;
+    padding: 0 10px;
+    background: #ffffff;
+}
+
+.step--focused {
+    border: 2px solid #3a7ad7;
+}
+
+.step__input {
+}
+
+.step__input--checked {
+}

@@ -1,0 +1,44 @@
+@import 'core';
+
+.radio-button {
+    @include checkbox-container;
+}
+
+.radio-button__input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.radio-button__checkmark {
+    @include checkmark;
+    border-radius: 50%;
+}
+
+.radio-button:hover .radio-button__input ~ .radio-button__checkmark {
+    background-color: $light-background;
+}
+
+.radio-button .radio-button__input:checked ~ .radio-button__checkmark {
+    background-color: $action;
+}
+
+.radio-button__checkmark:after {
+    content: '';
+    position: absolute;
+    display: none;
+}
+
+.radio-button .radio-button__input:checked ~ .radio-button__checkmark:after {
+    display: block;
+}
+
+.radio-button .radio-button__checkmark:after {
+    top: 6px;
+    left: 6px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: white;
+}

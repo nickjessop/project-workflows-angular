@@ -1,0 +1,13 @@
+.view {
+    display: flex;
+}
+
+.view__steps {
+    justify-content: flex-end;
+    flex-grow: 1;
+}
+
+.view__form {
+    justify-content: flex-start;
+    flex-grow: 2;
+}

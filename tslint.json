@@ -1,0 +1,11 @@
+{
+  "extends": "gts/tslint.json",
+  "rules": {
+    "member-access": false
+  },
+  "linterOptions": {
+    "exclude": [
+      "**/*.json"
+    ]
+  }
+}

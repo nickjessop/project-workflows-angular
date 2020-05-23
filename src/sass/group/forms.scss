@@ -1,0 +1,46 @@
+@import 'core';
+
+fieldset {
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+button.button {
+    display: inline-flex;
+    position: relative;
+    cursor: pointer;
+    justify-content: center;
+    padding: 1em 1.5em;
+    text-align: center;
+    white-space: nowrap;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    vertical-align: top;
+    border-radius: 8px;
+    align-items: center;
+    font-size: ms(-1);
+    height: 44px;
+    border: none;
+}
+
+input[type='text'],
+textarea {
+    font-size: ms(-1);
+    background: white;
+    border: 1px solid $outline;
+    min-width: 362px;
+    padding: 1em;
+    max-height: 44px;
+}
+
+input[type='text']:focus,
+textarea:focus {
+    outline: none;
+    border-color: $action;
+}
+
+textarea {
+    min-height: 104px;
+    padding: 1em;
+}

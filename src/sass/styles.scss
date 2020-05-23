@@ -1,0 +1,67 @@
+/* You can add global styles to this file, and also import other style files */
+
+// CSS RESET
+@import '~normalize.css';
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,400i,500,700&display=swap');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+
+// VARIABLES AND MIXINS
+@import 'core';
+
+// RESET
+*,
+::after,
+::before {
+    box-sizing: inherit;
+}
+
+html {
+    text-rendering: optimizeLegibility;
+    text-size-adjust: 100%;
+    box-sizing: border-box;
+    font-size: $baseline;
+}
+
+// GENERAL
+body {
+    color: $body;
+    font-family: 'Roboto', sans-serif;
+}
+
+.wrapper {
+    padding: 24px;
+}
+
+.container {
+    display: flex;
+    &--column {
+        flex-direction: column;
+    }
+}
+
+nav {
+}
+
+.visible {
+    @include visible;
+}
+.hidden {
+    @include hidden;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:visited {
+    color: $action;
+}
+
+// SPACING
+@each $item in $rules {
+    @include generate-spacing(nth($item, 1), nth($item, 2));
+}
+
+// GROUPS
+@import 'group/typography';
+@import 'group/forms';
