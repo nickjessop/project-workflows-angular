@@ -1,0 +1,8 @@
+<h1>Authentication component</h1>
+
+<form [formGroup]="loginForm" (ngSubmit)="login(loginForm.value)">
+    <input type="text" placeholder="username" formControlName="username">
+    <input type="password" placeholder="password" formControlName="password">
+
+    <button type="submit">Sign in</button>
+</form>

@@ -1,0 +1,70 @@
+@import 'variables';
+@import 'utilities/modularscale';
+
+@mixin pseudo($display: block, $pos: absolute, $content: '') {
+    content: $content;
+    display: $display;
+    position: $pos;
+}
+
+@mixin checkbox-container {
+    display: block;
+    position: relative;
+    padding-left: 32px;
+    padding-top: ($checkbox-height - $baseline) / 2;
+    cursor: pointer;
+    font-size: ms(0);
+    user-select: none;
+    width: max-content;
+}
+
+@mixin checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: $checkbox-height;
+    width: 20px;
+    background-color: white;
+    border: 2px solid $outline;
+    box-sizing: content-box;
+}
+
+@mixin visible {
+    display: block !important;
+}
+
+@mixin hidden {
+    display: none !important;
+}
+
+// SPACING
+@mixin generate-spacing($prefix, $property) {
+
+    // List of sizes to generate for each
+    $sizes: [0.25, .5, 1, 1.5, 2, 3];
+
+    // Spacing to multiply the sizes by
+    $spacing: 1rem;
+
+    @for $i from 1 through length($sizes) {
+
+        // Get the size for the current index
+        $size: nth($sizes, $i);
+
+        @if $prefix == my or $prefix == py {
+            .#{$prefix}-#{$i - 1} {
+                #{$property}-top: $spacing * $size;
+                #{$property}-bottom: $spacing * $size;
+            }
+        } @else if $prefix == mx or $prefix == px {
+            .#{$prefix}-#{$i - 1} {
+                #{$property}-left: $spacing * $size;
+                #{$property}-right: $spacing * $size;
+            }
+        } @else {
+            .#{$prefix}-#{$i - 1} {
+                #{$property}: $spacing * $size;
+            }
+        }
+    }
+}

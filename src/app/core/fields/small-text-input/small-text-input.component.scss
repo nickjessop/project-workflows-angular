@@ -1,0 +1,17 @@
+@import 'core';
+
+.small-text {
+    width: 100%;
+}
+
+.small-text.edit {
+    .small-text__input {
+        width: 362px;
+    }
+}
+
+.small-text.view {
+    p {
+        margin: 0;
+    }
+}

@@ -1,0 +1,63 @@
+@import 'core';
+
+.table {
+    &__column-drag {
+        border: 1px solid $action;
+        opacity: 0.5;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+    }
+
+    table,
+    th,
+    td {
+        border: 1px solid $outline;
+    }
+
+    tr {
+        height: 48px;
+    }
+
+    th,
+    td {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    th {
+        background: $light-background;
+        text-align: left;
+        font-weight: normal;
+        position: relative;
+    }
+
+    th:last-child {
+        border: 0;
+    }
+
+    td {
+        padding: 0;
+    }
+
+    th span,
+    td span {
+        display: inline-block;
+        padding: 8px;
+        width: 100%;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        white-space: normal;
+    }
+    th span:focus,
+    td span:focus {
+        outline: none;
+    }
+    th:focus-within,
+    td:focus-within {
+        background: $highlight;
+    }
+}

@@ -1,0 +1,129 @@
+@import 'core';
+
+:host {
+    display: inline-flex;
+}
+.button {
+    background-color: white;
+    color: $body;
+    border: 1px solid $outline;
+    &:hover {
+        background-color: $light-background;
+    }
+    &--primary {
+        background-color: $action;
+        color: white;
+        border: none;
+        &:hover {
+            background-color: $action-dark;
+        }
+    }
+    &--round {
+        height: 44px;
+        width: 44px;
+        border-radius: 100%;
+    }
+    &--icon {
+        height: 22px;
+        width: 22px;
+        background: none;
+        border: none;
+    }
+    &--icon,
+    &--round {
+        .button__icon {
+            line-height: 0;
+        }
+    }
+    &--dropdown {
+        padding: calc(0.5em + 1px) 1em;
+    }
+    &:focus {
+        outline: none;
+    }
+}
+
+.dropdown {
+    display: inline-flex;
+    position: relative;
+    vertical-align: top;
+    font-size: ms(-1);
+    &--active .dropdown__menu,
+    &--hoverable:hover .dropdown__menu {
+        display: block;
+    }
+    &--left .dropdown__menu {
+        left: 0;
+    }
+    &--right .dropdown__menu {
+        left: auto;
+        right: 0;
+    }
+    &--up .dropdown__menu {
+        bottom: 100%;
+        padding-bottom: 16px;
+        padding-top: initial;
+        top: auto;
+    }
+    &__icon {
+        margin-left: 0.25em;
+        margin-right: calc(-0.5em - 1px);
+        margin-bottom: -0.125em;
+        padding-top: 0.25em;
+        padding-right: 0.25em;
+    }
+}
+
+.dropdown__menu {
+    display: none;
+    position: absolute;
+    min-width: 12rem;
+    padding-top: 8px;
+    top: 100%;
+    z-index: 1;
+}
+
+.dropdown__content {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 0.5em 1em -0.125em rgba(0, 0, 0, 0.1), 0 0px 0 1px rgba(0, 0, 0, 0.02);
+    padding: 8px 0;
+}
+
+.dropdown__item {
+    color: $body;
+    display: block;
+    font-size: ms(-1);
+    line-height: 1.5;
+    padding: 0.375rem 1rem;
+    position: relative;
+}
+
+a.dropdown__item,
+button .dropdown__item {
+    padding-right: 3rem;
+    text-align: left;
+    white-space: nowrap;
+    width: 100%;
+    color: $body;
+    &:hover {
+        background-color: $light-background;
+        color: $body;
+    }
+    &--active {
+        background-color: $action;
+        color: white;
+        &:hover {
+            background-color: $action;
+            color: white;
+        }
+    }
+}
+
+.dropdown__divider {
+    background-color: $outline;
+    border: none;
+    display: block;
+    height: 1px;
+    margin: 0.5rem 0;
+}

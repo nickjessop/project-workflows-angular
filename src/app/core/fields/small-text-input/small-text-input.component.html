@@ -1,0 +1,12 @@
+<app-base-field>
+    <ng-container *ngIf="editMode; else viewMode">
+        <div class="small-text edit">
+          <input [ngModel]="field.value" type="text" name="small-text" placeholder="Your response" class="small-text__input">
+        </div>
+    </ng-container>
+    <ng-template #viewMode>
+        <div class="small-text view">
+            <p>{{field.value}}</p>
+        </div>
+    </ng-template>
+</app-base-field>

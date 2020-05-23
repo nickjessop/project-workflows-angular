@@ -1,0 +1,14 @@
+@import 'core';
+
+.checkboxes__add {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    opacity: 0.6;
+    width: max-content;
+}
+
+.checkboxes__add:hover {
+    opacity: 1;
+    color: $action;
+}
