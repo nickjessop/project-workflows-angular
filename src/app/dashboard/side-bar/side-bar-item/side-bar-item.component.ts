@@ -1,6 +1,5 @@
-import { Component, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { SideBarItem } from '../../../models/interfaces/side-bar-item';
-import { EventEmitter } from 'protractor';
 
 @Component({
     selector: 'app-side-bar-item',
@@ -10,7 +9,7 @@ import { EventEmitter } from 'protractor';
 export class SideBarItemComponent implements OnInit {
     @Input() sideBarItem: SideBarItem = { displayText: '', isTitle: false };
 
-    @Output() onPress: EventEmitter = new EventEmitter();
+    @Output() onPress: EventEmitter<any> = new EventEmitter();
 
     constructor() {}
 
