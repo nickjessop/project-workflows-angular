@@ -25,6 +25,7 @@ button.button {
 }
 
 input[type='text'],
+input[type='password'],
 textarea {
     font-size: ms(-1);
     background: white;
@@ -35,6 +36,7 @@ textarea {
 }
 
 input[type='text']:focus,
+input[type='password']:focus,
 textarea:focus {
     outline: none;
     border-color: $action;
