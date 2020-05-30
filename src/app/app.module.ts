@@ -19,7 +19,7 @@ import { SliceEllipsisPipe } from './pipes/slice-ellipsis.pipe';
 import { ProjectCardComponent } from './dashboard/project-card/project-card.component';
 import { ComponentPlaygroundComponent } from './dashboard/component-playground/component-playground.component';
 import { SideBarItemComponent } from './dashboard/side-bar/side-bar-item/side-bar-item.component';
-import { AuthenticationModule } from '../projects/authentication/authentication.module';
+import { AuthenticationModule } from './authentication/authentication.module';
 
 @NgModule({
     declarations: [
