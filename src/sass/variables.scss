@@ -1,12 +1,15 @@
 // COLOURS
 $outline: #d2d7de;
 $light-background: #f6faff;
+$light-gray-body: #e5e5e5;
 $highlight: #fffff1;
 $action: #2673e1;
 $action-dark: #145dc5;
 $body: #404b5b;
 $sub-text: #666f7c;
-$placeholder: #BAC7DA;
+$placeholder: #bac7da;
+$default-action: #4b48a3;
+$default-action-text: #ffffff;
 
 // SIZING
 $baseline: 16px;
@@ -19,19 +22,6 @@ $modularscale: (
 );
 
 // SPACING
-$rules: [
-[ml, margin-left],
-[mt, margin-top],
-[mb, margin-bottom],
-[mr, margin-right],
-[ma, margin],
-[mx, margin],
-[my, margin],
-[pl, padding-left],
-[pt, padding-top],
-[pb, padding-bottom],
-[pr, padding-right],
-[pa, padding],
-[px, padding],
-[py, padding],
-];
+$rules: [ [ml, margin-left], [mt, margin-top], [mb, margin-bottom], [mr, margin-right], [ma, margin], [mx, margin], [my,
+    margin], [pl, padding-left], [pt, padding-top], [pb, padding-bottom], [pr, padding-right], [pa, padding], [px,
+    padding], [py, padding], ];

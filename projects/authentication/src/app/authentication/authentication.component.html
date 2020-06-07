@@ -1,0 +1,29 @@
+<div class="authentication">
+    <div class="authentication__header">
+        <img src="../../assets/stepflow-logo.svg" />
+        <h2>Sign in to StepFlow</h2>
+    </div>
+    <div class="authentication__form">
+        <form [formGroup]="loginForm" (ngSubmit)="login(loginForm.value)">
+            <div class="form-input">
+                <label>Your email</label>
+                <input type="text" placeholder="Enter your email" formControlName="email" />
+            </div>
+
+            <div class="form-input">
+                <label>Password</label>
+                <input type="password" placeholder="Enter your password" formControlName="password1" />
+            </div>
+            <!-- <div class="form-input">
+                <label>Password</label>
+                <input type="password" placeholder="Enter your password" formControlName="password2" />
+            </div> -->
+            <div class="form-button">
+                <button class="button" type="submit">Log in</button>
+            </div>
+        </form>
+        <div class="form-link">
+            <p>Looking for an invite? Request one <a href="">here.</a></p>
+        </div>
+    </div>
+</div>
