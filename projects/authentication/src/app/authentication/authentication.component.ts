@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
 
 @Component({
     selector: 'app-authentication',
@@ -7,16 +6,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
     styleUrls: ['./authentication.component.scss'],
 })
 export class AuthenticationComponent implements OnInit {
-    public loginForm: FormGroup;
-    public formInputs = { email: '', password1: '', password2: '' };
-
-    constructor(private formBuilder: FormBuilder) {
-        this.loginForm = this.formBuilder.group(this.formInputs);
-    }
+    constructor() {}
 
     ngOnInit() {}
-
-    public login() {
-        console.log('Login pressed');
-    }
 }
