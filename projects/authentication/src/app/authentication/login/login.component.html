@@ -1,0 +1,33 @@
+<div class="authentication">
+    <div class="authentication__header">
+        <img src="../../assets/stepflow-logo.svg" />
+        <h2>Sign in to StepFlow</h2>
+    </div>
+    <div class="authentication__form">
+        <form [formGroup]="loginForm" (ngSubmit)="login(loginForm.value)">
+            <div class="form-input">
+                <label>Your email</label>
+                <input type="text" placeholder="Enter your email" formControlName="email" />
+            </div>
+
+            <div class="form-input">
+                <label>Password</label>
+                <input type="password" placeholder="Enter your password" formControlName="password" />
+            </div>
+            <div class="form-button">
+                <button class="button" type="submit">Log in</button>
+            </div>
+        </form>
+        <div class="form-link">
+            <p>Looking for an invite? Request one <a href="">here.</a></p>
+        </div>
+    </div>
+</div>
+
+<div class="authentication__note">
+    <div>
+        <i class="material-icons">info</i>
+        We are currently testing with small group of beta users and are slowly sending out invitations to our waitlist.
+        Thank you for your patience!
+    </div>
+</div>
