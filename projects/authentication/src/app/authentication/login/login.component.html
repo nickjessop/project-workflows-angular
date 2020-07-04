@@ -5,6 +5,10 @@
     </div>
     <div class="authentication__form">
         <form [formGroup]="loginForm" (ngSubmit)="login(loginForm.value)">
+            <div class="form-error" *ngIf="loginError">
+                <div><i class="material-icons">info</i></div>
+                <div>{{ loginError }}</div>
+            </div>
             <div class="form-input">
                 <label>Your email</label>
                 <input type="text" placeholder="Enter your email" formControlName="email" />
@@ -31,3 +35,38 @@
         Thank you for your patience!
     </div>
 </div>
+
+<!--
+<div class="authentication">
+    <div class="authentication__header">
+        <img src="../../assets/stepflow-logo.svg" />
+        <h2>Sign Up for StepFlow</h2>
+    </div>
+    <div class="authentication__form">
+        <form [formGroup]="registerForm" (ngSubmit)="register(registerForm.value)">
+            <div class="form-error" *ngIf="registerError">
+                <div><i class="material-icons">info</i></div>
+                <div>{{ registerError }}</div>
+            </div>
+            <div class="form-input">
+                <label>Name</label>
+                <input type="text" placeholder="Enter your name" formControlName="name" />
+            </div>
+            <div class="form-input">
+                <label>Your email</label>
+                <input type="text" placeholder="Enter your email" formControlName="email" />
+            </div>
+            <div class="form-input">
+                <label>Password</label>
+                <input type="password" placeholder="Enter your password" formControlName="password1" />
+            </div>
+            <div class="form-input">
+                <label>Re-enter Password</label>
+                <input type="password" placeholder="Enter your password" formControlName="password2" />
+            </div>
+            <div class="form-button">
+                <button class="button" type="submit">Sign up</button>
+            </div>
+        </form>
+    </div>
+</div> -->

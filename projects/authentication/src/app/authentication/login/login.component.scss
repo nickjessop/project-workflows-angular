@@ -67,3 +67,20 @@
         font-size: 48px;
     }
 }
+
+.form-error {
+    display: inline-flex;
+    background-color: #fff1ea;
+    color: #bb411a;
+    font-weight: bold;
+    min-height: 44px;
+    max-width: 362px;
+    padding: 0.1em 0;
+    font-size: 12px;
+    margin: auto;
+    align-items: center;
+
+    .material-icons {
+        vertical-align: middle;
+    }
+}

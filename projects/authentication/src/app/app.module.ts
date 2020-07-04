@@ -8,9 +8,10 @@ import { SignUpComponent } from './authentication/sign-up/sign-up.component';
 import { LoginComponent } from './authentication/login/login.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ThankYouComponent } from './thank-you/thank-you.component';
+import { NavBarComponent } from './nav-bar/nav-bar.component';
 
 @NgModule({
-    declarations: [AppComponent, AuthenticationComponent, SignUpComponent, LoginComponent, ThankYouComponent],
+    declarations: [AppComponent, AuthenticationComponent, SignUpComponent, LoginComponent, ThankYouComponent, NavBarComponent],
     imports: [BrowserModule, ReactiveFormsModule, AppRoutingModule],
     providers: [],
     bootstrap: [AppComponent],
