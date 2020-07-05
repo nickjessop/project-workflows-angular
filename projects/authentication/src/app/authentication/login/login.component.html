@@ -1,44 +1,47 @@
-<div class="nav__back">
-    <a href="https://stepflow.co"> Back to stepflow.com</a>
-</div>
-<div class="nav__signup">
-    <a routerLink="/auth/signup">
-        Sign Up
-    </a>
-</div>
-
-<div class="authentication">
-    <div class="authentication__header">
-        <img src="../../assets/stepflow-logo.svg" />
-        <h2>Sign in to StepFlow</h2>
+<div class="login__container">
+    <div class="nav__back">
+        <a href="https://stepflow.co"> Back to stepflow.com</a>
     </div>
-    <div class="authentication__form">
-        <form [formGroup]="loginForm" (ngSubmit)="login(loginForm.value)">
-            <div class="form-error" *ngIf="loginError">
-                <div><i class="material-icons">info</i></div>
-                {{ loginError }}
-            </div>
-            <div class="form-input">
-                <label>Your email</label>
-                <input type="text" placeholder="Enter your email" formControlName="email" />
-            </div>
-
-            <div class="form-input">
-                <label>Password</label>
-                <input type="password" placeholder="Enter your password" formControlName="password" />
-            </div>
-            <div class="form-button">
-                <button class="button" type="submit">Log in</button>
-            </div>
-        </form>
-        <div class="form-link">Looking for an invite? Request one <a routerLink="/auth/signup">here.</a></div>
+    <div class="nav__signup">
+        <a routerLink="/auth/signup">
+            Sign Up
+        </a>
     </div>
-</div>
 
-<div class="authentication__note">
-    <div>
-        <i class="material-icons">info</i>
-        We are currently testing with small group of beta users and are slowly sending out invitations to our waitlist.
-        Thank you for your patience!
+    <div class="authentication-container">
+        <div class="authentication">
+            <div class="authentication__header">
+                <img src="../../assets/stepflow-logo.svg" />
+                <h2>Sign in to StepFlow</h2>
+            </div>
+            <div class="authentication__form">
+                <form [formGroup]="loginForm" (ngSubmit)="login(loginForm.value)">
+                    <div class="form-error" *ngIf="loginError">
+                        <div><i class="material-icons">info</i></div>
+                        {{ loginError }}
+                    </div>
+                    <div class="form-input">
+                        <label>Your email</label>
+                        <input type="text" placeholder="Enter your email" formControlName="email" />
+                    </div>
+
+                    <div class="form-input">
+                        <label>Password</label>
+                        <input type="password" placeholder="Enter your password" formControlName="password" />
+                    </div>
+                    <div class="form-button">
+                        <button class="button" type="submit">Log in</button>
+                    </div>
+                </form>
+                <div class="form-link">Looking for an invite? Request one <a routerLink="/auth/signup">here.</a></div>
+            </div>
+        </div>
+        <div class="authentication__note">
+            <div>
+                <i class="material-icons">info</i>
+                We are currently testing with small group of beta users and are slowly sending out invitations to our
+                waitlist. Thank you for your patience!
+            </div>
+        </div>
     </div>
 </div>
