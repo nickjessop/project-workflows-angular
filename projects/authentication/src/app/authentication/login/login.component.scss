@@ -83,7 +83,6 @@
         font-size: 48px;
     }
 }
-
 .form-error {
     display: inline-flex;
     background-color: #fff1ea;
@@ -99,9 +98,6 @@
 
     .material-icons {
         vertical-align: middle;
+        margin-right: 0.25em;
     }
-}
-
-.error__message {
-    margin-left: 0.4em;
 }

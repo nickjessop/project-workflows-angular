@@ -1,5 +1,5 @@
 <div class="nav__back">
-    <a href="https://stepflow.co">Back to stepflow.com</a>
+    <a href="https://stepflow.co"> Back to stepflow.com</a>
 </div>
 <div class="nav__signup">
     <a routerLink="/auth/signup">
@@ -16,7 +16,7 @@
         <form [formGroup]="loginForm" (ngSubmit)="login(loginForm.value)">
             <div class="form-error" *ngIf="loginError">
                 <div><i class="material-icons">info</i></div>
-                <div class="error__message">{{ loginError }}</div>
+                {{ loginError }}
             </div>
             <div class="form-input">
                 <label>Your email</label>

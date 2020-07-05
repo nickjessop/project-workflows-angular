@@ -22,6 +22,10 @@
         position: absolute;
         right: 0;
     }
+
+    .form-error {
+        flex-direction: row;
+    }
 }
 
 .info-banner {
@@ -40,8 +44,13 @@
 .banner__text {
     display: flex;
     flex-direction: column;
-    margin: auto;
+    margin: auto 0;
     padding: 0 3em;
+    color: #ffffff;
+    font-weight: 400;
+    h1 {
+        font-size: 36px;
+    }
 }
 
 .authentication__body {
@@ -96,9 +105,12 @@
 .header__badge {
     max-width: 100%;
     height: 35px;
-    padding: 8px 15px;
+    padding: 10px 15px;
     background: #ece5d8;
     border-radius: 50px;
+    font-weight: bold;
+    color: #312e2b;
+    margin-bottom: 1em;
 }
 
 .form-error {
@@ -108,12 +120,14 @@
     font-weight: bold;
     min-height: 44px;
     max-width: 362px;
-    padding: 0.1em 0;
+    padding: 0.1em 1em;
     font-size: 12px;
     margin: auto;
     align-items: center;
+    width: 100%;
 
     .material-icons {
         vertical-align: middle;
+        margin-right: 0.25em;
     }
 }
