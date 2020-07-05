@@ -48,7 +48,10 @@
 }
 
 .form-button {
-    margin: 1.5em 0;
+    .button {
+        margin-top: 2.5em;
+        background-color: #30649a;
+    }
 }
 
 .button {
@@ -88,12 +91,17 @@
     font-weight: bold;
     min-height: 44px;
     max-width: 362px;
-    padding: 0.1em 0;
+    padding: 0.1em 1em;
     font-size: 12px;
     margin: auto;
     align-items: center;
+    width: 100%;
 
     .material-icons {
         vertical-align: middle;
     }
+}
+
+.error__message {
+    margin-left: 0.4em;
 }

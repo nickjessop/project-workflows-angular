@@ -19,7 +19,9 @@
                 have you around and we hope you enjoy this first glimpse at our app!
             </p>
             <div>
-                Cheers,
+                <p>
+                    Cheers,
+                </p>
                 <img src="../../../assets/team-stepflow-signature.svg" />
             </div>
         </div>
@@ -35,6 +37,9 @@
             <div class="authentication__header">
                 <img src="../../assets/stepflow-logo.svg" />
                 <h2>Create your account</h2>
+                <div class="header__badge">
+                    CURRENTLY IN BETA
+                </div>
             </div>
             <div class="authentication__form">
                 <form [formGroup]="registerForm" (ngSubmit)="register(registerForm.value)">
@@ -43,7 +48,7 @@
                         <div>{{ registerError }}</div>
                     </div>
                     <div class="form-input">
-                        <label>Name</label>
+                        <label>Your name</label>
                         <input type="text" placeholder="Enter your name" formControlName="name" />
                     </div>
                     <div class="form-input">
