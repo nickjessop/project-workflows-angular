@@ -1,0 +1,53 @@
+@import url("//hello.myfonts.net/count/3b9107");
+
+@font-face {
+	font-family: 'Sailec-Black';
+	src: url('Sailec-Black/font.woff2') format('woff2'), url('Sailec-Black/font.woff') format('woff');
+}
+@font-face {
+	font-family: 'Sailec-Medium';
+	src: url('Sailec-Medium/font.woff2') format('woff2'), url('Sailec-Medium/font.woff') format('woff');
+}
+@font-face {
+	font-family: 'Sailec-RegularItalic';
+	src: url('Sailec-RegularItalic/font.woff2') format('woff2'), url('Sailec-RegularItalic/font.woff') format('woff');
+}
+@font-face {
+	font-family: 'Sailec-Bold';
+	src: url('Sailec-Bold/font.woff2') format('woff2'), url('Sailec-Bold/font.woff') format('woff');
+}
+@font-face {
+	font-family: 'Sailec-Regular';
+	src: url('Sailec-Regular/font.woff2') format('woff2'), url('Sailec-Regular/font.woff') format('woff');
+}
+
+/**
+ * @license
+ * MyFonts Webfont Build ID 3903751, 2020-05-17T13:54:21-0400
+ *
+ * The fonts listed in this notice are subject to the End User License
+ * Agreement(s) entered into by the website owner. All other parties are
+ * explicitly restricted from using the Licensed Webfonts(s).
+ *
+ * You may obtain a valid license at the URLs below.
+ *
+ * Webfont: Sailec-Bold by Type Dynamic
+ * URL: https://www.myfonts.com/fonts/typedynamic/sailec/bold/
+ *
+ * Webfont: Sailec-Black by Type Dynamic
+ * URL: https://www.myfonts.com/fonts/typedynamic/sailec/black/
+ *
+ * Webfont: Sailec-Medium by Type Dynamic
+ * URL: https://www.myfonts.com/fonts/typedynamic/sailec/medium/
+ *
+ * Webfont: Sailec-Regular by Type Dynamic
+ * URL: https://www.myfonts.com/fonts/typedynamic/sailec/regular/
+ *
+ * Webfont: Sailec-RegularItalic by Type Dynamic
+ * URL: https://www.myfonts.com/fonts/typedynamic/sailec/regular-italic/
+ *
+ *
+ * Webfonts copyright: Copyright &amp;#x00A9; 2014 by Type Dynamic. All rights reserved.
+ *
+ * © 2020 MyFonts Inc
+*/

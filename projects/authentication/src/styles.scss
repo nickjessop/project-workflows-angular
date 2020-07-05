@@ -1,5 +1,66 @@
+@import './assets/fonts/fonts.css';
+
 html,
 body {
     height: 100% !important;
     width: 100% !important;
+}
+
+body {
+    font-family: 'Sailec-Regular', BlinkMacSystemFont, -apple-system, 'Segoe UI', 'Helvetica', 'Arial', sans-serif;
+    -webkit-overflow-scrolling: touch;
+}
+
+h1,
+h1.title {
+    font-family: 'Sailec-Black', BlinkMacSystemFont, -apple-system, 'Segoe UI', 'Helvetica', 'Arial', sans-serif;
+}
+
+h2,
+h3,
+h4,
+h5,
+h6,
+.title {
+    font-family: 'Sailec-Bold', BlinkMacSystemFont, -apple-system, 'Segoe UI', 'Helvetica', 'Arial', sans-serif;
+}
+
+button {
+    font-family: 'Sailec-Medium', BlinkMacSystemFont, -apple-system, 'Segoe UI', 'Helvetica', 'Arial', sans-serif;
+}
+
+strong,
+b {
+    font-family: 'Sailec-Bold', BlinkMacSystemFont, -apple-system, 'Segoe UI', 'Helvetica', 'Arial', sans-serif;
+}
+
+i {
+    font-family: 'Sailec-RegularItalic', BlinkMacSystemFont, -apple-system, 'Segoe UI', 'Helvetica', 'Arial', sans-serif;
+}
+
+p {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 30px;
+    letter-spacing: -0.015em;
+}
+
+h2 {
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 30px;
+
+    letter-spacing: -0.015em;
+}
+
+div {
+    font-family: 'Sailec-Regular';
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 17px;
+    letter-spacing: -0.015em;
+
+    color: #312e2b;
 }

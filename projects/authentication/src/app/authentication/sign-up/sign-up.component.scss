@@ -77,7 +77,11 @@
 }
 
 .form-button {
-    margin: 1.5em 0;
+    width: 100%;
+    .button {
+        margin: 2.5em 0;
+        background-color: #30649a;
+    }
 }
 
 .button {
@@ -87,6 +91,14 @@
     border-radius: 4px;
     background-color: $default-action;
     color: $default-action-text;
+}
+
+.header__badge {
+    max-width: 100%;
+    height: 35px;
+    padding: 8px 15px;
+    background: #ece5d8;
+    border-radius: 50px;
 }
 
 .form-error {

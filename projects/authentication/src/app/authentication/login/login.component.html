@@ -16,7 +16,7 @@
         <form [formGroup]="loginForm" (ngSubmit)="login(loginForm.value)">
             <div class="form-error" *ngIf="loginError">
                 <div><i class="material-icons">info</i></div>
-                <div>{{ loginError }}</div>
+                <div class="error__message">{{ loginError }}</div>
             </div>
             <div class="form-input">
                 <label>Your email</label>
@@ -31,9 +31,7 @@
                 <button class="button" type="submit">Log in</button>
             </div>
         </form>
-        <div class="form-link">
-            <p>Looking for an invite? Request one <a href="">here.</a></p>
-        </div>
+        <div class="form-link">Looking for an invite? Request one <a routerLink="/auth/signup">here.</a></div>
     </div>
 </div>
 
