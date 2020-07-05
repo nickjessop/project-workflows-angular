@@ -18,10 +18,10 @@
                 be prompted to select and confirm the plan you originally chose on our pricing page. We are excited to
                 have you around and we hope you enjoy this first glimpse at our app!
             </p>
+            <p>
+                Cheers,
+            </p>
             <div>
-                <p>
-                    Cheers,
-                </p>
                 <img src="../../../assets/team-stepflow-signature.svg" />
             </div>
         </div>
@@ -45,7 +45,7 @@
                 <form [formGroup]="registerForm" (ngSubmit)="register(registerForm.value)">
                     <div class="form-error" *ngIf="registerError">
                         <div><i class="material-icons">info</i></div>
-                        <div>{{ registerError }}</div>
+                        {{ registerError }}
                     </div>
                     <div class="form-input">
                         <label>Your name</label>
