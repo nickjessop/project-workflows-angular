@@ -10,7 +10,13 @@ import 'firebase/analytics';
 import 'firebase/auth';
 import { from } from 'rxjs/internal/observable/from';
 import { take } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
 
+export interface User {
+    id: string;
+    email: string | null;
+    emailVerified: boolean;
+}
 @Injectable({
     providedIn: 'root',
 })
@@ -25,6 +31,9 @@ export class AuthenticationService {
         appId: '1:539731725055:web:dac75c01a58ff8016e5aca',
         measurementId: 'G-3KY262229M',
     };
+
+    private _user: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(null);
+    public readonly $user = this._user.asObservable();
 
     private readonly auth: firebase.auth.Auth;
 

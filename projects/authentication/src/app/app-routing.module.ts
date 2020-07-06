@@ -3,6 +3,8 @@ import { AuthenticationComponent } from './authentication/authentication.compone
 import { RouterModule, Routes } from '@angular/router';
 import { SignUpComponent } from './authentication/sign-up/sign-up.component';
 import { LoginComponent } from './authentication/login/login.component';
+import { ThankYouComponent } from './authentication/thank-you/thank-you.component';
+import { ThankYouGuard } from './thank-you.guard';
 
 const appRoutes: Routes = [
     {
@@ -14,6 +16,23 @@ const appRoutes: Routes = [
         ],
     },
     { path: '**', redirectTo: '/auth/login' },
+];
+
+const guardedRouted: Routes = [
+    {
+        path: 'thank-you',
+        component: ThankYouComponent,
+        canActivate: [ThankYouGuard],
+        children: [
+            // {
+            //     path: '',
+            //     children: [
+            //         { path: 'edit', component: EditComponent },
+            //         { path: 'view', component: ViewComponent },
+            //     ],
+            // },
+        ],
+    },
 ];
 
 @NgModule({
