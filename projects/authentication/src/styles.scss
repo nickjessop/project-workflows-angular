@@ -65,6 +65,12 @@ div {
     color: #312e2b;
 }
 
+.hide-on-mobile {
+    @media (min-width: 320px) and (max-width: 900px) {
+        display: none !important;
+    }
+}
+
 // CSS Normalization
 
 /*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */

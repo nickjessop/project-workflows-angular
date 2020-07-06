@@ -133,7 +133,11 @@
         },
         "authentication": {
             "projectType": "application",
-            "schematics": {},
+            "schematics": {
+                "@schematics/angular:component": {
+                    "style": "scss"
+                }
+            },
             "root": "projects/authentication",
             "sourceRoot": "projects/authentication/src",
             "prefix": "app",
