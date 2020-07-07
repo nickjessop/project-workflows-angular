@@ -9,27 +9,25 @@ import { AuthenticationService } from './services/authentication.service';
 export class ThankYouGuard implements CanActivate {
     constructor(private authenticationService: AuthenticationService, private router: Router) {
         this.authenticationService.$user.subscribe(user => {
-            this.user = user;
+            // this.user = user;
         });
     }
 
-    canActivate(
-        next: ActivatedRouteSnapshot,
-        state: RouterStateSnapshot
-    ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+    canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         const url: string = state.url;
 
-        return this.checkLogin(url);
+        return false;
+        // return this.checkLogin(url);
     }
 
-    checkLogin(url: string): boolean {
-        if (this.user) {
-            return true;
-        } else {
-            // Navigate to the login page with extras
-            this.router.navigate(['/auth/login']);
+    // checkLogin(url: string): boolean {
+    // if (this.user) {
+    //     return true;
+    // } else {
+    //     // Navigate to the login page with extras
+    //     this.router.navigate(['/auth/login']);
 
-            return false;
-        }
-    }
+    //     return false;
+    // }
+    // }
 }
