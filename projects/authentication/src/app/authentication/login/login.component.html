@@ -1,6 +1,6 @@
 <div class="login__container">
     <div class="nav__back">
-        <a href="https://stepflow.co"> Back to stepflow.com</a>
+        <a href="https://stepflow.co">&#8592; Back to stepflow.co</a>
     </div>
     <div class="nav__signup">
         <a routerLink="/auth/signup">
@@ -12,7 +12,7 @@
         <div class="authentication">
             <div class="authentication__header">
                 <img src="../../assets/stepflow-logo.svg" />
-                <h2>Sign in to StepFlow</h2>
+                <h2 class="subtitle">Sign in to StepFlow</h2>
             </div>
             <div class="authentication__form">
                 <form [formGroup]="loginForm" (ngSubmit)="login(loginForm.value)">
