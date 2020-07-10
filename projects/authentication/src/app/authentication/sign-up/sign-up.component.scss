@@ -26,10 +26,6 @@
         padding: 2em 1.5em 0 0;
         position: absolute;
         right: 0;
-
-        a {
-            color: #312e2b;
-        }
     }
 
     .form-error {
@@ -79,6 +75,9 @@
 .authentication__header {
     margin-top: 2.5em;
     text-align: center;
+    img {
+        margin: 1em 0;
+    }
 }
 
 .authentication__form {
@@ -130,6 +129,7 @@
     font-weight: bold;
     color: #312e2b;
     margin-bottom: 1em;
+    font-size: 10px;
 }
 
 .form-error {
