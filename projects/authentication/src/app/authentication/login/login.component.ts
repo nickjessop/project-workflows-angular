@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { AuthenticationService } from '../../services/authentication.service';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-login',
@@ -12,7 +13,11 @@ export class LoginComponent implements OnInit {
     public formInputs = { email: '', password: '' };
     public loginError = '';
 
-    constructor(private formBuilder: FormBuilder, private authenticationService: AuthenticationService) {
+    constructor(
+        private formBuilder: FormBuilder,
+        private authenticationService: AuthenticationService,
+        private router: Router
+    ) {
         this.loginForm = this.formBuilder.group(this.formInputs);
     }
 
@@ -28,7 +33,9 @@ export class LoginComponent implements OnInit {
             return;
         }
 
-        this.authenticationService.login(email, password).subscribe(userCredential => {});
+        this.authenticationService.login(email, password).subscribe(userCredential => {
+            this.redirectToThankYouPage();
+        });
     }
 
     private validEmailAndPassword(email: string, password: string) {
@@ -37,5 +44,11 @@ export class LoginComponent implements OnInit {
         }
 
         return true;
+    }
+
+    private redirectToThankYouPage() {
+        const didRouteSuccessfully = this.router.navigate(['/thank-you']);
+
+        return didRouteSuccessfully;
     }
 }

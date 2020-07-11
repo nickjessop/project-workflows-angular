@@ -15,10 +15,6 @@ const appRoutes: Routes = [
             { path: 'login', component: LoginComponent },
         ],
     },
-    { path: '**', redirectTo: '/auth/login' },
-];
-
-const guardedRouted: Routes = [
     {
         path: 'thank-you',
         component: ThankYouComponent,
@@ -33,7 +29,25 @@ const guardedRouted: Routes = [
             // },
         ],
     },
+    { path: '**', redirectTo: '/auth/login' },
 ];
+
+// const guardedRouted: Routes = [
+//     {
+//         path: 'thank-you',
+//         component: ThankYouComponent,
+//         canActivate: [ThankYouGuard],
+//         children: [
+//             // {
+//             //     path: '',
+//             //     children: [
+//             //         { path: 'edit', component: EditComponent },
+//             //         { path: 'view', component: ViewComponent },
+//             //     ],
+//             // },
+//         ],
+//     },
+// ];
 
 @NgModule({
     declarations: [],

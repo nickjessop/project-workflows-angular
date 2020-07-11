@@ -11,6 +11,7 @@ import 'firebase/auth';
 import { from } from 'rxjs/internal/observable/from';
 import { take } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
+import { Router } from '@angular/router';
 
 export interface User {
     id: string;
@@ -32,12 +33,9 @@ export class AuthenticationService {
         measurementId: 'G-3KY262229M',
     };
 
-    private _user: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(null);
-    public readonly $user = this._user.asObservable();
-
     private readonly auth: firebase.auth.Auth;
 
-    constructor() {
+    constructor(private router: Router) {
         firebase.initializeApp(this.firebaseConfig);
         this.auth = firebase.auth();
     }
@@ -48,5 +46,22 @@ export class AuthenticationService {
 
     public login(email: string, password: string) {
         return from(this.auth.signInWithEmailAndPassword(email, password)).pipe(take(1));
+    }
+
+    public logout() {
+        from(this.auth.signOut())
+            .pipe(take(1))
+            .subscribe(
+                success => {
+                    this.router.navigate(['/']);
+                },
+                error => {
+                    console.log('error signing user out');
+                }
+            );
+    }
+
+    public getCurrentUser() {
+        return this.auth.currentUser;
     }
 }

@@ -7,9 +7,10 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { SignUpComponent } from './authentication/sign-up/sign-up.component';
 import { LoginComponent } from './authentication/login/login.component';
 import { AppRoutingModule } from './app-routing.module';
+import { ThankYouComponent } from './authentication/thank-you/thank-you.component';
 
 @NgModule({
-    declarations: [AppComponent, AuthenticationComponent, SignUpComponent, LoginComponent],
+    declarations: [AppComponent, AuthenticationComponent, SignUpComponent, LoginComponent, ThankYouComponent],
     imports: [BrowserModule, ReactiveFormsModule, AppRoutingModule],
     providers: [],
     bootstrap: [AppComponent],
