@@ -5,6 +5,7 @@ html,
 body {
     height: 100% !important;
     width: 100% !important;
+    background-color: #ece5d8;
 }
 
 body {
@@ -45,6 +46,13 @@ nav.nav {
         .nav__auth a {
             color: white !important;
         }
+    }
+}
+
+//auth form
+@media (min-width: 320px) and (max-width: 900px) {
+    .authentication__form {
+        padding: 0 0.5em;
     }
 }
 
