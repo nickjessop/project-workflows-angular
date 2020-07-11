@@ -156,8 +156,8 @@
                             "projects/authentication/src/assets"
                         ],
                         "styles": [
-                            "src/sass/styles.scss",
-                            "projects/authentication/src/styles.scss"
+                            "projects/authentication/src/styles.scss",
+                            "src/sass/styles.scss"
                         ],
                         "scripts": []
                     },

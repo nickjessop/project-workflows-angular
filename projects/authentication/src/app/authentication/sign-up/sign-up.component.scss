@@ -16,7 +16,8 @@
     flex-direction: column;
     flex: 1 1 50%;
 
-    * {
+    div,
+    form {
         align-items: center;
         display: flex;
         flex-direction: column;
@@ -79,8 +80,6 @@
 }
 
 .authentication__form {
-    text-align: center;
-    margin-bottom: 2.5em;
 }
 
 .form-input {
@@ -95,7 +94,7 @@
     input {
         max-height: 65px;
         height: 55px;
-        max-width: 150px;
+        max-width: 150px !important;
         width: 100%;
     }
 }

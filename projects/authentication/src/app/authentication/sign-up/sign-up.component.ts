@@ -28,7 +28,7 @@ export class SignUpComponent implements OnInit {
         this.registerError = '';
 
         if (!this.validNameLength(name)) {
-            this.registerError = 'Please enter your name;';
+            this.registerError = 'Please enter your name.';
             return;
         }
 
@@ -38,7 +38,7 @@ export class SignUpComponent implements OnInit {
         }
 
         if (!this.validPasswordLengths(password1, password2)) {
-            this.registerError = 'Passwords should be at least 6 characters in length';
+            this.registerError = 'Passwords should be at least 6 characters in length.';
             return;
         }
 
