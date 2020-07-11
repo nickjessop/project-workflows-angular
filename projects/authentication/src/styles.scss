@@ -22,13 +22,30 @@ a {
     text-decoration: underline !important;
 }
 
-.nav__back a, .nav__signup a, .authentication__login a {
-    color: #312e2b !important;
-    text-decoration: none !important;
+
+//nav
+nav.nav {
+    position: absolute;
+    display: flex;
+    padding: 2em 1.5em 0 1.5em;
+    width: 100%;
+    justify-content: space-between;
+    .nav__back a, .nav__auth a {
+        color: #312e2b !important;
+        text-decoration: none !important;
+    }
 }
-.banner__back a {
-    color: white !important;
-    text-decoration: none !important;
+
+.sign-up__container nav.nav {
+    .nav__back a {
+        color: white !important;
+        text-decoration: none !important;
+    }
+    @media (min-width: 320px) and (max-width: 900px) {
+        .nav__auth a {
+            color: white !important;
+        }
+    }
 }
 
 h1,
