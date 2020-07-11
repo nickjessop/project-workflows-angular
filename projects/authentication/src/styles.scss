@@ -13,7 +13,8 @@ body {
     -webkit-overflow-scrolling: touch;
 }
 
-p, div {
+p,
+div {
     font-family: 'Sailec-Regular', BlinkMacSystemFont, -apple-system, 'Segoe UI', 'Helvetica', 'Arial', sans-serif;
     font-size: 14px;
 }
@@ -23,7 +24,6 @@ a {
     text-decoration: underline !important;
 }
 
-
 //nav
 nav.nav {
     position: absolute;
@@ -31,7 +31,8 @@ nav.nav {
     padding: 2em 1.5em 0 1.5em;
     width: 100%;
     justify-content: space-between;
-    .nav__back a, .nav__auth a {
+    .nav__back a,
+    .nav__auth a {
         color: #312e2b !important;
         text-decoration: none !important;
     }
@@ -46,13 +47,6 @@ nav.nav {
         .nav__auth a {
             color: white !important;
         }
-    }
-}
-
-//auth form
-@media (min-width: 320px) and (max-width: 900px) {
-    .authentication__form {
-        padding: 0 0.5em;
     }
 }
 
