@@ -7,6 +7,9 @@ import { AuthenticationService } from '../../services/authentication.service';
     styleUrls: ['./thank-you.component.scss'],
 })
 export class ThankYouComponent implements OnInit {
+    public currentPosition = 2;
+    public totalWaitlist = 10;
+
     constructor(private authService: AuthenticationService) {}
 
     ngOnInit() {}

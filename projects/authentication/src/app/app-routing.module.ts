@@ -16,17 +16,13 @@ const appRoutes: Routes = [
         ],
     },
     {
-        path: 'thank-you',
-        component: ThankYouComponent,
+        path: '',
         canActivate: [ThankYouGuard],
         children: [
-            // {
-            //     path: '',
-            //     children: [
-            //         { path: 'edit', component: EditComponent },
-            //         { path: 'view', component: ViewComponent },
-            //     ],
-            // },
+            {
+                path: 'thank-you',
+                component: ThankYouComponent,
+            },
         ],
     },
     { path: '**', redirectTo: '/auth/login' },
