@@ -1,9 +1,28 @@
-<h1>
-    Thank you for signing up!
-</h1>
+<nav class="nav">
+    <div class="nav__back">
+        <a href="https://stepflow.co">&#8592; Back to Stepflow.co</a>
+    </div>
+</nav>
 
+<div class="thank-you">
+    <div class="thank-you__body">
+        <img src="../../../assets/stepflow-logo.svg" />
+
+        <div class="body__text">
+            <h1>
+                Thank you!
+            </h1>
+            <p>
+                Thanks for signing up for the Stepflow wait-list. You are currently in position
+                <b>{{ currentPosition }}</b> out of a total of <b>{{ totalWaitlist }}</b> in the queue. We will notify
+                you via email when you can access our beta.
+            </p>
+        </div>
+    </div>
+</div>
+<!--
 <div>
     <button (click)="onLogoutClick()">
         Sign out here
     </button>
-</div>
+</div> -->

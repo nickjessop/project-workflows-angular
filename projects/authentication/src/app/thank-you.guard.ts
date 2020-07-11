@@ -10,6 +10,8 @@ export class ThankYouGuard implements CanActivate {
 
     canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         const url: string = state.url;
+
+        // return true;
         const currentUser = this.authenticationService.getCurrentUser();
         const canProceed = !!currentUser;
 
