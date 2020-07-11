@@ -36,6 +36,12 @@
     img {
         margin: 1em 0;
     }
+    @media (min-width: 320px) and (max-width: 900px) {
+        margin-top: 1em;
+        img {
+            margin: 0.5em 0;
+        }
+    }
 }
 
 .authentication__form {
@@ -97,6 +103,14 @@
         float: left;
         margin-right: 0.5em;
         font-size: 48px;
+    }
+    @media (min-width: 320px) and (max-width: 900px) {
+        .material-icons {
+            font-size: 24px;
+            display: block;
+            width: 100%;
+            margin-bottom: 0.5em;
+        }
     }
 }
 .form-error {

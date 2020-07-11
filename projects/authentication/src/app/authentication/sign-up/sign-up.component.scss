@@ -57,6 +57,10 @@
 
     @media (min-width: 320px) and (max-width: 900px) {
         padding: 5em 2em;
+        h1 {
+            font-size: 20px;
+            margin-top: 1em;
+        }
     }
 }
 
