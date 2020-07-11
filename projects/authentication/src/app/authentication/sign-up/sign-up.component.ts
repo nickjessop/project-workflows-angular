@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { AuthenticationService } from '../../services/authentication.service';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-sign-up',
@@ -12,7 +13,11 @@ export class SignUpComponent implements OnInit {
     public formInputs = { email: '', password1: '', password2: '', name: '' };
     public registerError = '';
 
-    constructor(private formBuilder: FormBuilder, private authenticationService: AuthenticationService) {
+    constructor(
+        private formBuilder: FormBuilder,
+        private authenticationService: AuthenticationService,
+        private router: Router
+    ) {
         this.registerForm = this.formBuilder.group(this.formInputs);
     }
 
@@ -21,6 +26,11 @@ export class SignUpComponent implements OnInit {
     public register(formValues: { email: string; password1: string; password2: string; name: string }) {
         const { email, password1, password2, name } = formValues;
         this.registerError = '';
+
+        if (!this.validNameLength(name)) {
+            this.registerError = 'Please enter your name;';
+            return;
+        }
 
         if (!this.validMatchingPasswords(password1, password2)) {
             this.registerError = 'Passwords do not match.';
@@ -34,6 +44,7 @@ export class SignUpComponent implements OnInit {
 
         this.authenticationService.register(email, password1).subscribe(
             firebaseCredential => {
+                this.redirectToThankYouPage();
                 console.log(firebaseCredential);
             },
             err => {
@@ -49,5 +60,15 @@ export class SignUpComponent implements OnInit {
 
     private validPasswordLengths(password1: string, password2: string) {
         return password1.length >= 6 && password2.length >= 6;
+    }
+
+    private validNameLength(name: string) {
+        return name.length >= 1;
+    }
+
+    private redirectToThankYouPage() {
+        const didRouteSuccessfully = this.router.navigate(['/thank-you']);
+
+        return didRouteSuccessfully;
     }
 }

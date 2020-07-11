@@ -1,33 +1,24 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, CanActivate, Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { ActivatedRouteSnapshot, RouterStateSnapshot, CanActivate, Router } from '@angular/router';
 import { AuthenticationService } from './services/authentication.service';
 
 @Injectable({
     providedIn: 'root',
 })
 export class ThankYouGuard implements CanActivate {
-    constructor(private authenticationService: AuthenticationService, private router: Router) {
-        this.authenticationService.$user.subscribe(user => {
-            // this.user = user;
-        });
-    }
+    constructor(private authenticationService: AuthenticationService, private router: Router) {}
 
     canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         const url: string = state.url;
+        const currentUser = this.authenticationService.getCurrentUser();
+        const canProceed = !!currentUser;
 
-        return false;
-        // return this.checkLogin(url);
+        if (canProceed) {
+            return true;
+        } else {
+            const didNavigate = this.router.navigate(['${url}']);
+
+            return didNavigate;
+        }
     }
-
-    // checkLogin(url: string): boolean {
-    // if (this.user) {
-    //     return true;
-    // } else {
-    //     // Navigate to the login page with extras
-    //     this.router.navigate(['/auth/login']);
-
-    //     return false;
-    // }
-    // }
 }
