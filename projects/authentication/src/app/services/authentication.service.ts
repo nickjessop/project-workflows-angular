@@ -34,9 +34,12 @@ export class AuthenticationService {
     };
 
     private readonly auth: firebase.auth.Auth;
+    private readonly functions: firebase.functions.Functions;
 
     constructor(private router: Router) {
         firebase.initializeApp(this.firebaseConfig);
+        this.functions = firebase.functions();
+
         this.auth = firebase.auth();
     }
 
@@ -64,4 +67,19 @@ export class AuthenticationService {
     public getCurrentUser() {
         return this.auth.currentUser;
     }
+
+    public async getUserTotal() {
+        const userTotal = this.functions.httpsCallable('userTotal');
+
+        return userTotal();
+    }
+
+    /*
+addMessage({text: messageText}).then(function(result) {
+  // Read result of the Cloud Function.
+  var sanitizedMessage = result.data.text;
+  // ...
+});
+
+    */
 }
