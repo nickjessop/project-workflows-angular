@@ -33,9 +33,14 @@ export class LoginComponent implements OnInit {
             return;
         }
 
-        this.authenticationService.login(email, password).subscribe(userCredential => {
-            this.redirectToThankYouPage();
-        });
+        this.authenticationService.login(email, password).subscribe(
+            userCredential => {
+                this.redirectToThankYouPage();
+            },
+            error => {
+                this.loginError = 'Invalid username/password';
+            }
+        );
     }
 
     private validEmailAndPassword(email: string, password: string) {
