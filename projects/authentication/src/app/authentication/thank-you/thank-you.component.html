@@ -13,8 +13,11 @@
                 Thank you!
             </h1>
             <p>
-                Thanks for signing up for the Stepflow wait-list. There are a total of <b>{{ totalWaitlist }}</b> others
-                in the queue. We will notify you via email when you can access our beta.
+                Thanks for signing up for the Stepflow wait-list.
+                <ng-container *ngIf="totalWaitlist > 1">
+                    There are a total of <b>{{ totalWaitlist }}</b> others in the queue.
+                </ng-container>
+                We will notify you via email when you can access our beta.
             </p>
         </div>
     </div>

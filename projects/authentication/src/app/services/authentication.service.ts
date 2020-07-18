@@ -69,10 +69,10 @@ export class AuthenticationService {
         return this.auth.currentUser;
     }
 
-    public async getUserTotal() {
+    public getUserTotal() {
         const userTotal = this.functions.httpsCallable('userTotal');
 
-        return userTotal();
+        return from(userTotal()).pipe(take(1));
     }
 
     /*
