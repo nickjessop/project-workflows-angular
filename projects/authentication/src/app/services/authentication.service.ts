@@ -6,11 +6,12 @@ import * as firebase from 'firebase/app';
 // If you enabled Analytics in your project, add the Firebase SDK for Analytics
 import 'firebase/analytics';
 
+import 'firebase/functions';
+
 // Add the Firebase products that you want to use
 import 'firebase/auth';
 import { from } from 'rxjs/internal/observable/from';
 import { take } from 'rxjs/operators';
-import { BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
 
 export interface User {
