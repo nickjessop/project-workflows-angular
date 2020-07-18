@@ -8,7 +8,7 @@ import { AuthenticationService } from '../../services/authentication.service';
 })
 export class ThankYouComponent implements OnInit {
     public currentPosition = 2;
-    public totalWaitlist = 10;
+    public totalWaitlist = 0;
 
     constructor(private authService: AuthenticationService) {
         this.initializeUserCount();
@@ -21,13 +21,8 @@ export class ThankYouComponent implements OnInit {
     }
 
     private initializeUserCount() {
-        this.authService.getUserTotal().then(
-            totalUsers => {
-                console.log(`total users = ${totalUsers.data}`);
-            },
-            error => {
-                console.log('ERROR', error);
-            }
-        );
+        const test = this.authService.getUserTotal().subscribe(val => {
+            console.log(val);
+        });
     }
 }
