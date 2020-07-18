@@ -8,9 +8,12 @@
         ],
         "rewrites": [
             {
+                "source": "/userTotal",
+                "destination": "userTotal"
+            },
+            {
                 "source": "**",
-                "destination": "/index.html",
-                "function": "userTotal"
+                "destination": "/index.html"
             }
         ]
     }
