@@ -3,7 +3,7 @@
     "version": 1,
     "newProjectRoot": "projects",
     "projects": {
-        "stepify": {
+        "stepflow": {
             "projectType": "application",
             "schematics": {
                 "@schematics/angular:component": {
@@ -17,7 +17,7 @@
                 "build": {
                     "builder": "@angular-devkit/build-angular:browser",
                     "options": {
-                        "outputPath": "dist/stepify",
+                        "outputPath": "dist/stepflow",
                         "index": "src/index.html",
                         "main": "src/main.ts",
                         "polyfills": "src/polyfills.ts",
@@ -67,19 +67,19 @@
                 "serve": {
                     "builder": "@angular-devkit/build-angular:dev-server",
                     "options": {
-                        "browserTarget": "stepify:build",
+                        "browserTarget": "stepflow:build",
                         "port": 4200
                     },
                     "configurations": {
                         "production": {
-                            "browserTarget": "stepify:build:production"
+                            "browserTarget": "stepflow:build:production"
                         }
                     }
                 },
                 "extract-i18n": {
                     "builder": "@angular-devkit/build-angular:extract-i18n",
                     "options": {
-                        "browserTarget": "stepify:build"
+                        "browserTarget": "stepflow:build"
                     }
                 },
                 "test": {
@@ -121,11 +121,11 @@
                     "builder": "@angular-devkit/build-angular:protractor",
                     "options": {
                         "protractorConfig": "e2e/protractor.conf.js",
-                        "devServerTarget": "stepify:serve"
+                        "devServerTarget": "stepflow:serve"
                     },
                     "configurations": {
                         "production": {
-                            "devServerTarget": "stepify:serve:production"
+                            "devServerTarget": "stepflow:serve:production"
                         }
                     }
                 }
@@ -252,5 +252,5 @@
             }
         }
     },
-    "defaultProject": "stepify"
+    "defaultProject": "stepflow"
 }

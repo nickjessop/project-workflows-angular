@@ -5,6 +5,7 @@
         "ng": "ng",
         "start": "ng serve",
         "build": "ng build",
+        "build-auth": "ng build authentication",
         "auth-app": "ng serve authentication",
         "test": "ng test",
         "lint": "ng lint",
