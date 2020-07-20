@@ -6,42 +6,42 @@
 //   response.send("Hello from Firebase!");
 // });
 
-import * as functions from 'firebase-functions';
-import * as admin from 'firebase-admin';
+// import * as functions from 'firebase-functions';
+// import * as admin from 'firebase-admin';
 
-admin.initializeApp();
+// admin.initializeApp();
 
-const UserCountBuffer = 53;
-const MaxUserPagination = 10;
+// const UserCountBuffer = 53;
+// const MaxUserPagination = 10;
 
-export async function totalUsers() {
-    let count = 0;
+// export async function totalUsers() {
+//     let count = 0;
 
-    const countedUsers = await countUsers();
-    count += countedUsers.userCount;
+//     const countedUsers = await countUsers();
+//     count += countedUsers.userCount;
 
-    return count;
-}
+//     return count;
+// }
 
-function countUsers(nextPageToken?: any) {
-    const val = admin
-        .auth()
-        .listUsers(MaxUserPagination, nextPageToken)
-        .then(userResults => {
-            console.log(userResults.users[0].metadata);
-            return {
-                userCount: userResults.users.length,
-                token: userResults.pageToken,
-            };
-        });
+// function countUsers(nextPageToken?: any) {
+//     const val = admin
+//         .auth()
+//         .listUsers(MaxUserPagination, nextPageToken)
+//         .then(userResults => {
+//             console.log(userResults.users[0].metadata);
+//             return {
+//                 userCount: userResults.users.length,
+//                 token: userResults.pageToken,
+//             };
+//         });
 
-    return val;
-}
+//     return val;
+// }
 
-exports.userTotal = functions.https.onRequest(async (req, res) => {
-    const users = await totalUsers();
+// exports.userTotal = functions.https.onRequest(async (req, res) => {
+//     const users = await totalUsers();
 
-    const count = users + UserCountBuffer;
+//     const count = users + UserCountBuffer;
 
-    res.send({ userTotal: `${count}` });
-});
+//     res.send({ userTotal: `${count}` });
+// });
