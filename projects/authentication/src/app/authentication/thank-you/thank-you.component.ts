@@ -11,7 +11,7 @@ export class ThankYouComponent implements OnInit {
     public totalWaitlist = 0;
 
     constructor(private authService: AuthenticationService) {
-        this.initializeUserCount();
+        // this.initializeUserCount();
     }
 
     ngOnInit() {}
@@ -22,7 +22,7 @@ export class ThankYouComponent implements OnInit {
 
     private initializeUserCount() {
         const test = this.authService.getUserTotal().subscribe(val => {
-            console.log(val);
+            this.totalWaitlist = val.data;
         });
     }
 }
