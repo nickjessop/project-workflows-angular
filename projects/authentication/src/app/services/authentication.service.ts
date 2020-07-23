@@ -5,7 +5,6 @@ import * as firebase from 'firebase/app';
 
 // If you enabled Analytics in your project, add the Firebase SDK for Analytics
 import 'firebase/analytics';
-import 'firebase/functions';
 
 // Add the Firebase products that you want to use
 import 'firebase/auth';
@@ -33,11 +32,11 @@ export class AuthenticationService {
     };
 
     private readonly auth: firebase.auth.Auth;
-    private readonly functions: firebase.functions.Functions;
+    // private readonly functions: firebase.functions.Functions;
 
     constructor(private router: Router) {
         firebase.initializeApp(this.firebaseConfig);
-        this.functions = firebase.functions();
+        // this.functions = firebase.functions();
 
         this.auth = firebase.auth();
     }
@@ -67,11 +66,11 @@ export class AuthenticationService {
         return this.auth.currentUser;
     }
 
-    public getUserTotal() {
-        const userTotal = this.functions.httpsCallable('userTotal');
+    // public getUserTotal() {
+    //     const userTotal = this.functions.httpsCallable('userTotal');
 
-        return from(userTotal()).pipe(take(1));
-    }
+    //     return from(userTotal()).pipe(take(1));
+    // }
 
     /*
 addMessage({text: messageText}).then(function(result) {
