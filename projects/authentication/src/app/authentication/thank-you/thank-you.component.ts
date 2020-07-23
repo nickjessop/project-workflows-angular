@@ -20,9 +20,9 @@ export class ThankYouComponent implements OnInit {
         this.authService.logout();
     }
 
-    private initializeUserCount() {
-        const test = this.authService.getUserTotal().subscribe(val => {
-            this.totalWaitlist = val.data;
-        });
-    }
+    // private initializeUserCount() {
+    //     const test = this.authService.getUserTotal().subscribe(val => {
+    //         this.totalWaitlist = val.data;
+    //     });
+    // }
 }
