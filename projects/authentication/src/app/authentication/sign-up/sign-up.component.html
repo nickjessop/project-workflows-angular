@@ -33,46 +33,44 @@
         </div>
     </div>
     <div class="authentication">
-        <div class="authentication__body">
-            <div class="authentication__header">
-                <img src="../../assets/stepflow-logo.svg" />
-                <h2 class="subtitle">Create your account and join the waitlist</h2>
-                <div class="header__badge">
-                    CURRENTLY IN BETA
+        <div class="authentication__header">
+            <img src="../../assets/stepflow-logo.svg" />
+            <h2 class="subtitle">Create your account and join the waitlist</h2>
+            <div class="header__badge">
+                CURRENTLY IN BETA
+            </div>
+        </div>
+        <div class="authentication__form">
+            <form [formGroup]="registerForm" (ngSubmit)="register(registerForm.value)">
+                <div class="form-error" *ngIf="registerError">
+                    <div><i class="material-icons">info</i></div>
+                    {{ registerError }}
                 </div>
-            </div>
-            <div class="authentication__form">
-                <form [formGroup]="registerForm" (ngSubmit)="register(registerForm.value)">
-                    <div class="form-error" *ngIf="registerError">
-                        <div><i class="material-icons">info</i></div>
-                        {{ registerError }}
-                    </div>
-                    <div class="form-input">
-                        <label>Your name</label>
-                        <input type="text" placeholder="Enter your name" formControlName="name" />
-                    </div>
-                    <div class="form-input">
-                        <label>Your email</label>
-                        <input type="text" placeholder="Enter your email" formControlName="email" />
-                    </div>
-                    <div class="form-input">
-                        <label>Password</label>
-                        <input type="password" placeholder="Enter your password" formControlName="password1" />
-                    </div>
-                    <div class="form-input">
-                        <label>Re-enter Password</label>
-                        <input type="password" placeholder="Enter your password" formControlName="password2" />
-                    </div>
-                    <div class="form-button">
-                        <button class="button" type="submit">Sign up</button>
-                    </div>
-                </form>
-                <p class="terms">
-                    By clicking "Sign up" you agree to Stepflow's
-                    <a href="https://stepflow.co/terms-of-service" target="_blank">Terms of Service</a> and
-                    <a href="https://stepflow.co/privacy-policy" target="_blank">Privacy Policy.</a>
-                </p>
-            </div>
+                <div class="form-input">
+                    <label>Your name</label>
+                    <input type="text" placeholder="Enter your name" formControlName="name" />
+                </div>
+                <div class="form-input">
+                    <label>Your email</label>
+                    <input type="text" placeholder="Enter your email" formControlName="email" />
+                </div>
+                <div class="form-input">
+                    <label>Password</label>
+                    <input type="password" placeholder="Enter your password" formControlName="password1" />
+                </div>
+                <div class="form-input">
+                    <label>Re-enter Password</label>
+                    <input type="password" placeholder="Enter your password" formControlName="password2" />
+                </div>
+                <div class="form-button">
+                    <button class="button" type="submit">Sign up</button>
+                </div>
+            </form>
+            <p class="terms">
+                By clicking "Sign up" you agree to Stepflow's
+                <a href="https://stepflow.co/terms-of-service" target="_blank">Terms of Service</a> and
+                <a href="https://stepflow.co/privacy-policy" target="_blank">Privacy Policy.</a>
+            </p>
         </div>
     </div>
 </div>
