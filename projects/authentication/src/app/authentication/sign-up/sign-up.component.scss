@@ -1,8 +1,6 @@
 @import '~src/sass/variables';
 
 .sign-up__container {
-    width: 100%;
-    height: 100%;
     flex-direction: row;
     display: flex;
 
@@ -15,24 +13,16 @@
     background-color: #ffffff;
     flex-direction: column;
     flex: 1 1 50%;
-
-    div,
-    form {
-        align-items: center;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .form-error {
-        flex-direction: row;
-    }
 }
 
 .info-banner {
-    display: flex;
-    flex-direction: column;
     flex: 1 1 50%;
+    padding: 5em 1em;
     background-color: #477b72;
+
+    @media (min-width: 320px) and (max-width: 900px) {
+        padding: 1em 0.5em;
+    }
 }
 
 .banner__back {
@@ -47,14 +37,9 @@
 .banner__text {
     display: flex;
     flex-direction: column;
-    margin: auto 0;
     padding: 0 3em;
     color: #ffffff;
     font-weight: 400;
-
-    h1 {
-        font-size: 36px;
-    }
 
     @media (min-width: 320px) and (max-width: 900px) {
         padding: 5em 2em;
@@ -71,36 +56,37 @@
     height: 100%;
     justify-content: center;
 }
+
 .authentication__header {
     margin-top: 2.5em;
     text-align: center;
+
     img {
         margin: 1em 0;
     }
 }
 
 .authentication__form {
+    padding: 1em 5em;
+
+    @media (min-width: 320px) and (max-width: 900px) {
+        padding: 1em 1.5em;
+    }
 }
 
 .form-input {
-    // display: inline-grid;
-    margin: 0.5em 0;
-
-    label {
-        align-self: flex-start;
-        margin: 0.5em 0;
-    }
+    margin: 1em 0;
 
     input {
         max-height: 65px;
         height: 55px;
-        max-width: 150px !important;
         width: 100%;
     }
 }
 
 .form-button {
     width: 100%;
+    text-align: center;
 
     .button {
         margin: 2.5em 0;
@@ -118,14 +104,14 @@
 }
 
 .header__badge {
-    max-width: 100%;
+    max-width: 150px;
     height: 35px;
     padding: 12px 15px 10px 15px;
     background: #ece5d8;
     border-radius: 50px;
     font-weight: bold;
     color: #312e2b;
-    margin-bottom: 1em;
+    margin: auto;
     font-size: 10px;
 }
 
