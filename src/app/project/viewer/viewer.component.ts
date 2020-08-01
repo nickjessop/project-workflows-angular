@@ -1,15 +1,15 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { ProjectService } from '../../services/project/project.service';
-import { Project } from '../../models/interfaces/project';
+import { Component, OnInit, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Project } from 'src/app/models/interfaces/project';
+import { ProjectService } from 'src/app/services/project/project.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
-    selector: 'app-edit',
-    templateUrl: './edit.component.html',
-    styleUrls: ['./edit.component.scss'],
+    selector: 'app-viewer',
+    templateUrl: './viewer.component.html',
+    styleUrls: ['./viewer.component.scss'],
 })
-export class EditComponent implements OnInit {
+export class ViewerComponent implements OnInit {
     @Input() isNewProject = true;
 
     private projectConfigSubscription: Subscription = new Subscription();
