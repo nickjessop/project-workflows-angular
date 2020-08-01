@@ -3,7 +3,7 @@ name: Build and Deploy Authentication
 on:
     push:
         branches:
-            - master
+            - authentication
 
 jobs:
     build:
