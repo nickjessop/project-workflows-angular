@@ -4,13 +4,13 @@
     <div class="field__handle"><app-button [buttonStyle]="'button--icon'" icon="drag_indicator"></app-button></div>
 
     <div class="mb-2 pr-1">
-        <span
+        <input
             class="field__label"
-            contenteditable="true"
-            data-placeholder="Name your field"
-            (keydown.enter)="$event.preventDefault()">
-            {{field.label}}
-        </span>
+            placeholder="Name your field"
+            autocomplete="none"
+            (keydown.enter)="$event.preventDefault()"
+            value="{{field.label}}"
+        />
     </div>
     <div class="field__description mb-2">Description</div>
 
