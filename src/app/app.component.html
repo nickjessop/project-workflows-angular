@@ -1,11 +1,9 @@
-<div class="wrapper">
-  <nav>
-    <a routerLink="/auth" routerLinkActive="active">Authentication</a>
-    <br>
+<app-nav-bar></app-nav-bar>
+<nav>
     <a routerLink="/" routerLinkActive="active">Home</a>
-    <br>
+    <br />
     <a routerLink="/project">Project</a>
-  </nav>
-  <router-outlet></router-outlet>
-</div>
-
+    <br />
+    <a routerLink="/dashboard">Dashboard</a>
+</nav>
+<router-outlet></router-outlet>

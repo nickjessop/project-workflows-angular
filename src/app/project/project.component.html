@@ -1,11 +1,4 @@
-<p>Project Component</p>
 <nav>
-    <a [routerLink]="['view']">view project</a>
-    <br>
-    <a [routerLink]="['edit']">edit project</a>
+    <a [routerLink]="['viewer']">project viewer</a>
 </nav>
 <router-outlet></router-outlet>
-
-<button (click)="saveProject()">Create Dummy Project</button>
-<button (click)="updateProject()">Test update</button>
-<button (click)="getProjects()">Test get projects</button>
