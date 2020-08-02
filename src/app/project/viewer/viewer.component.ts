@@ -21,9 +21,10 @@ export class ViewerComponent implements OnInit {
 
     ngOnInit() {
         this.route.data.subscribe(data => {
-            const _project: Project = data.project;
-            const _isNewProject: boolean = data.boolean;
-            const _componentMode: ComponentMode = data.componentMode;
+            const { project } = data;
+            const _project: Project = project.project;
+            const _isNewProject: boolean = project.isNewProject;
+            const _componentMode: ComponentMode = project.componentMode;
 
             this.projectConfig = _project;
             this.isNewProject = _isNewProject;
