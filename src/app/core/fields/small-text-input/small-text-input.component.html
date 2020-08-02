@@ -1,12 +1,18 @@
 <app-base-field>
-    <ng-container *ngIf="editMode; else viewMode">
+    <ng-container *ngIf="componentMode === 'edit'">
         <div class="small-text edit">
-          <input [ngModel]="field.value" type="text" name="small-text" placeholder="Your response" class="small-text__input">
+            <input
+                [ngModel]="field.value"
+                type="text"
+                name="small-text"
+                placeholder="Your response"
+                class="small-text__input"
+            />
         </div>
     </ng-container>
-    <ng-template #viewMode>
+    <ng-container *ngIf="componentMode === 'view'">
         <div class="small-text view">
-            <p>{{field.value}}</p>
+            <p>{{ field.value }}</p>
         </div>
-    </ng-template>
+    </ng-container>
 </app-base-field>

@@ -17,16 +17,15 @@ export interface FieldConfig {
     validations?: Validator[];
 }
 
-export function createFieldConfigDefault(): FieldConfig {
-    const fieldConfig: FieldConfig = {
+export function createFieldConfigDefault() {
+    const fieldConfig = {
         label: '',
         name: '',
         inputType: '',
         options: [''],
         collections: '',
-        type: 'empty',
+        type: 'empty' as ComponentType,
         value: '',
-        validations: [],
     };
 
     return fieldConfig;
@@ -46,3 +45,5 @@ export type ComponentType =
     | 'empty';
 
 export type ButtonType = 'button--primary' | 'button--secondary' | 'button--button' | 'button--round';
+
+export type ComponentMode = 'edit' | 'view';
