@@ -125,6 +125,7 @@ export class ProjectService {
 
     public getProject(projectId: string) {
         console.log(`get project called with id: ${projectId}`);
+
         return this.firebaseService
             .getDbInstance()!
             .collection(this.PROJECT_COLLECTION_NAME)
