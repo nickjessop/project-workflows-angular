@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 import { Project } from 'src/app/models/interfaces/project';
 import { ProjectService } from 'src/app/services/project/project.service';
 import { ActivatedRoute } from '@angular/router';
+import { ComponentMode } from 'src/app/models/interfaces/core-component';
 
 @Component({
     selector: 'app-viewer',
@@ -10,25 +11,24 @@ import { ActivatedRoute } from '@angular/router';
     styleUrls: ['./viewer.component.scss'],
 })
 export class ViewerComponent implements OnInit {
-    @Input() isNewProject = true;
+    private projectConfigSubscription = new Subscription();
 
-    private projectConfigSubscription: Subscription = new Subscription();
-    private projectConfig: Project = this.projectService.createBaseProject();
-    private routeSubscription: Subscription = new Subscription();
+    public projectConfig = this.projectService.createBaseProject();
+    public isNewProject = false;
+    public componentMode: ComponentMode = 'view';
 
     constructor(private projectService: ProjectService, private route: ActivatedRoute) {}
 
     ngOnInit() {
-        this.routeSubscription = this.route.data.subscribe(data => {
-            this.projectConfig = data.project;
-        });
-        // this.initProject(this.isNewProject);
-    }
+        this.route.data.subscribe(data => {
+            const _project: Project = data.project;
+            const _isNewProject: boolean = data.boolean;
+            const _componentMode: ComponentMode = data.componentMode;
 
-    ngOnDestroy() {
-        if (this.routeSubscription) {
-            this.routeSubscription.unsubscribe();
-        }
+            this.projectConfig = _project;
+            this.isNewProject = _isNewProject;
+            this.componentMode = _componentMode;
+        });
     }
 
     private initProject(isNewProject: boolean) {

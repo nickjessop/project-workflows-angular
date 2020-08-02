@@ -22,18 +22,12 @@ const guardedRoutes: Routes = [
         path: 'project',
         component: ProjectComponent,
         canActivate: [ProtectedGuard],
-        children: [
-            {
-                path: '',
-                children: [
-                    {
-                        path: 'p/:id',
-                        component: ViewerComponent,
-                        resolve: { project: ProjectResolverService },
-                    },
-                ],
-            },
-        ],
+    },
+    {
+        path: 'project/:id',
+        component: ViewerComponent,
+        canActivate: [ProtectedGuard],
+        resolve: { project: ProjectResolverService },
     },
 ];
 
