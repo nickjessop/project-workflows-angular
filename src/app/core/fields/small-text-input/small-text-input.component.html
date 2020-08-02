@@ -12,7 +12,7 @@
     </ng-container>
     <ng-container *ngIf="componentMode === 'view'">
         <div class="small-text view">
-            <p>{{ field.value }}</p>
+            <p>{{ field.value || 'Some readonly text goes here' }}</p>
         </div>
     </ng-container>
 </app-base-field>
