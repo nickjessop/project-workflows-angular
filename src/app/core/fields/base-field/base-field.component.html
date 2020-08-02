@@ -1,5 +1,11 @@
 <div class="field mb-2 px-4 py-2" #fieldContainer>
-    <div class="field__settings"><app-button [buttonStyle]="'button--dropdown'" icon="more_horiz" dropdownPosition="dropdown--right"></app-button></div>
+    <div class="field__settings">
+        <app-button
+            [buttonStyle]="'button--dropdown'"
+            icon="more_horiz"
+            dropdownPosition="dropdown--right"
+        ></app-button>
+    </div>
 
     <div class="field__handle"><app-button [buttonStyle]="'button--icon'" icon="drag_indicator"></app-button></div>
 
@@ -8,8 +14,9 @@
             class="field__label"
             contenteditable="true"
             data-placeholder="Name your field"
-            (keydown.enter)="$event.preventDefault()">
-            {{field.label}}
+            (keydown.enter)="$event.preventDefault()"
+        >
+            {{ field.label }}
         </span>
     </div>
     <div class="field__description mb-2">Description</div>

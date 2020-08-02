@@ -1,4 +1,4 @@
-import { createFieldConfigDefault, FieldConfig } from '../../../models/interfaces/core-component';
+import { createFieldConfigDefault, FieldConfig, ComponentMode } from '../../../models/interfaces/core-component';
 import { Component, Input, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
@@ -10,6 +10,7 @@ import { FormGroup } from '@angular/forms';
 export class BaseFieldComponent {
     @Input() field: FieldConfig = createFieldConfigDefault();
     @Input() group!: FormGroup;
+    @Input() componentMode: ComponentMode = 'view';
 
     constructor() {}
 
