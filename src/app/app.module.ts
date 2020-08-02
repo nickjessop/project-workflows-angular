@@ -13,11 +13,11 @@ import { StepsComponent } from './project/steps/steps.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SideBarComponent } from './dashboard/side-bar/side-bar.component';
 import { SliceEllipsisPipe } from './pipes/slice-ellipsis.pipe';
-import { ProjectCardComponent } from './dashboard/project-card/project-card.component';
 import { ComponentPlaygroundComponent } from './dashboard/component-playground/component-playground.component';
 import { SideBarItemComponent } from './dashboard/side-bar/side-bar-item/side-bar-item.component';
 import { ViewerComponent } from './project/viewer/viewer.component';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
+import { ProjectCardComponent } from './project/project-card/project-card.component';
 
 @NgModule({
     declarations: [

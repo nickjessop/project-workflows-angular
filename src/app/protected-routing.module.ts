@@ -12,29 +12,11 @@ const guardedRoutes: Routes = [
         path: 'dashboard/playground',
         component: ComponentPlaygroundComponent,
         // canActivate: [ProtectedGuard],
-        children: [
-            // {
-            //     path: '',
-            //     children: [
-            //         { path: 'edit', component: EditComponent },
-            //         { path: 'view', component: ViewComponent },
-            //     ],
-            // },
-        ],
     },
     {
         path: 'dashboard',
         component: DashboardComponent,
         // canActivate: [ProtectedGuard],
-        children: [
-            // {
-            //     path: '',
-            //     children: [
-            //         { path: 'edit', component: EditComponent },
-            //         { path: 'view', component: ViewComponent },
-            //     ],
-            // },
-        ],
     },
     {
         path: 'project',
