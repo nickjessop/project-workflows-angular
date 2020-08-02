@@ -1,9 +1,17 @@
 <!-- <app-side-bar [sideBarItems]=""></app-side-bar> -->
 <h1>Dashboard</h1>
 
-<app-project-card
-    projectName="Component Playground"
-    projectDescription=""
-    link="/dashboard/playground"
-></app-project-card>
-<app-project-card projectName="Projects Page" projectDescription="" link="/project"></app-project-card>
+<div class="dashboard">
+    <app-project-card
+        class="dashboard__card"
+        projectName="Component Playground"
+        projectDescription=""
+        link="/dashboard/playground"
+    ></app-project-card>
+    <app-project-card
+        class="dashboard__card"
+        projectName="Projects Page"
+        projectDescription=""
+        link="/project"
+    ></app-project-card>
+</div>
