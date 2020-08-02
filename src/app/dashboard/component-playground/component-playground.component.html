@@ -1,7 +1,7 @@
 <div class="wrapper" id="dashboard">
-
     <h3>Field Components</h3>
-    <app-small-text-input></app-small-text-input>
+    <app-small-text-input [componentMode]="'view'"></app-small-text-input>
+    <app-small-text-input [componentMode]="'edit'"></app-small-text-input>
     <app-large-text-input></app-large-text-input>
     <app-file-uploader></app-file-uploader>
     <app-image-uploader></app-image-uploader>
@@ -49,5 +49,4 @@
     <p>Body text</p>
     <p class="text">Text</p>
     <small>Small text</small>
-
 </div>
