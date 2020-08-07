@@ -16,14 +16,14 @@ import { FieldConfig } from '../../models/interfaces/core-component';
 })
 export class FirebaseService {
     private firebaseConfig = {
-        apiKey: 'AIzaSyAejSkkVrvn4kWYtgbrL_UJCpyAKOaqXuA',
-        authDomain: 'steppy-4d4a7.firebaseapp.com',
-        databaseURL: 'https://steppy-4d4a7.firebaseio.com',
-        projectId: 'steppy-4d4a7',
-        storageBucket: 'steppy-4d4a7.appspot.com',
-        messagingSenderId: '905912458711',
-        appId: '1:905912458711:web:85211e6e32a8a6e6cebf92',
-        measurementId: 'G-FK7JVL5776',
+        apiKey: 'AIzaSyAhwXJ3W9O-Gk9b96FcZJEiBWWziNraLgI',
+        authDomain: 'stepflow-d6a02.firebaseapp.com',
+        databaseURL: 'https://stepflow-d6a02.firebaseio.com',
+        projectId: 'stepflow-d6a02',
+        storageBucket: 'stepflow-d6a02.appspot.com',
+        messagingSenderId: '539731725055',
+        appId: '1:539731725055:web:46c5cff639f4c4366e5aca',
+        measurementId: 'G-7WQFDR9ZVR',
     };
 
     private readonly db?: firebase.firestore.Firestore;
