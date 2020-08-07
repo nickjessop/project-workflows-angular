@@ -1,16 +1,18 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import { slice } from 'lodash';
 
 @Pipe({
     name: 'sliceEllipsis',
 })
 export class SliceEllipsisPipe implements PipeTransform {
     transform(value: string, start: number, end: number): string {
-        if (start >= end) {
-            return value;
+        let text = value;
+        const sliceLength = Math.abs(end - start);
+
+        if (value.length >= sliceLength) {
+            text = `${value.slice(start, end)} ...`;
         }
 
-        const text = value.slice(start, end);
-
-        return `${text} ...`;
+        return text;
     }
 }
