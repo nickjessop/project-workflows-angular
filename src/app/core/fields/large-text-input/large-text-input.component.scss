@@ -6,4 +6,12 @@
 
 .large-text__input {
     width: 632px;
+    resize: none;
+}
+
+.large-text.view {
+    .large-text__input {
+        border: none;
+        background: transparent;
+    }
 }

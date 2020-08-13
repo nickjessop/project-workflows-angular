@@ -8,10 +8,10 @@
     </div> -->
 
     <div class="mb-2 pr-1">
-        <span
+        <input
             class="field__label"
-            contenteditable="true"
-            data-placeholder="Name your field"
+            placeholder="Name your field"
+            autocomplete="none"
             (keydown.enter)="$event.preventDefault()"
         >
             {{ label }}
