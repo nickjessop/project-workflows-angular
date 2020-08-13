@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FieldConfig, ComponentMode } from 'src/app/models/interfaces/core-component';
+import { FieldConfig, ComponentMode, createFieldConfigDefault } from 'src/app/models/interfaces/core-component';
 import { FormGroup } from '@angular/forms';
 
 @Component({
@@ -8,7 +8,7 @@ import { FormGroup } from '@angular/forms';
     styleUrls: ['./large-text-input.component.scss'],
 })
 export class LargeTextInputComponent implements OnInit {
-    @Input() field!: FieldConfig;
+    @Input() field: FieldConfig = createFieldConfigDefault();
     @Input() group!: FormGroup;
     @Input() componentMode: ComponentMode = 'view';
 
