@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Project } from '../../models/interfaces/project';
+import { Project, ProjectConfig } from '../../models/interfaces/project';
 import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
-import { EMPTY, from, Observable, of } from 'rxjs';
+import { EMPTY, from, of } from 'rxjs';
 import { ProjectService } from './project.service';
 import { mergeMap, take } from 'rxjs/operators';
 import { ComponentMode } from 'src/app/models/interfaces/core-component';
@@ -10,7 +10,7 @@ import { ComponentMode } from 'src/app/models/interfaces/core-component';
     providedIn: 'root',
 })
 export class ProjectResolverService
-    implements Resolve<{ project: Project; isNewProject: boolean; componentMode: ComponentMode } | null> {
+    implements Resolve<null | { project?: Project; isNewProject?: boolean; componentMode?: ComponentMode }> {
     constructor(private projectService: ProjectService, private router: Router) {}
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {

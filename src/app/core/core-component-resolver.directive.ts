@@ -43,9 +43,10 @@ export class CoreComponentResolverDirective implements OnInit {
 
     ngOnInit() {
         const factory = this.componentFactoryResolver.resolveComponentFactory(this.componentMap[this.field.type]);
-
         this.componentRef = this.viewContainerRef.createComponent(factory);
+
         this.componentRef.instance.field = this.field;
         this.componentRef.instance.group = this.group;
+        this.componentRef.instance.componentMode = 'view';
     }
 }

@@ -1,15 +1,18 @@
-import { Component, OnInit } from '@angular/core';
-import { BaseFieldComponent } from '../base-field/base-field.component';
+import { Component, OnInit, Input } from '@angular/core';
+import { FieldConfig, ComponentMode } from 'src/app/models/interfaces/core-component';
+import { FormGroup } from '@angular/forms';
 
 @Component({
     selector: 'app-small-text-input',
     templateUrl: './small-text-input.component.html',
     styleUrls: ['./small-text-input.component.scss'],
 })
-export class SmallTextInputComponent extends BaseFieldComponent implements OnInit {
-    constructor() {
-        super();
-    }
+export class SmallTextInputComponent implements OnInit {
+    @Input() field!: FieldConfig;
+    @Input() group!: FormGroup;
+    @Input() componentMode: ComponentMode = 'view';
+
+    constructor() {}
 
     ngOnInit() {}
 }

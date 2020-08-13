@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, combineLatest, from, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable, Subject } from 'rxjs';
 import { createFieldConfigDefault, FieldConfig } from '../../models/interfaces/core-component';
 import { FirebaseService } from '../firebase/firebase.service';
 import { AuthenticationService } from '../authentication/authentication.service';
-import { Project } from '../../models/interfaces/project';
-import { combineAll } from 'rxjs/operators';
+import { Project, ProjectConfig } from '../../models/interfaces/project';
 
 @Injectable({
     providedIn: 'root',
@@ -23,19 +22,23 @@ export class ProjectService {
         return this._projectConfig.getValue();
     }
 
-    public set projectConfig(projectConfig) {
+    public set projectConfig(projectConfig: Project) {
         this._projectConfig.next(projectConfig);
     }
 
     public createBaseProject(
         creatorId: string = this.authenticationService.user!.id,
         projectName = '',
-        configuration?: FieldConfig[]
+        configuration?: ProjectConfig
     ) {
+        const config = configuration
+            ? [configuration]
+            : [{ components: [createFieldConfigDefault()], step: { title: '', icon: '', selected: true } }];
+
         const baseProject: Project = {
             name: projectName,
             ownerIds: [creatorId],
-            configuration: configuration || [createFieldConfigDefault()],
+            configuration: config,
         };
 
         return baseProject;
@@ -173,11 +176,11 @@ export class ProjectService {
                 value: 'Additional $56,656 cost for travel allowance around GTA.',
             },
         ];
-        const projectConfig: Project = this.createBaseProject(
-            this.authenticationService.user!.id,
-            'Testing Project',
-            defaultConfig
-        );
+
+        const projectConfig: Project = this.createBaseProject(this.authenticationService.user!.id, 'Testing Project', {
+            components: defaultConfig,
+            step: { title: 'Insert title here', icon: '', selected: true },
+        });
 
         const project = this.createNewProject(true).then(newProject => {
             projectConfig.id = newProject.id;

@@ -11,7 +11,7 @@ import * as _ from 'lodash';
 })
 export class DynamicFormComponent implements OnInit {
     @Input() fields: FieldConfig[] = [];
-    @Output() submitEvent: EventEmitter<any> = new EventEmitter<any>();
+    // @Output() submitEvent: EventEmitter<any> = new EventEmitter<any>();
 
     form?: FormGroup;
 
@@ -30,7 +30,7 @@ export class DynamicFormComponent implements OnInit {
 
         if (this.fields && this.fields.length > 0) {
             this.fields.forEach(field => {
-                const control = this.formBuilder.control(field.value, this.bindValidations(field.validations || []));
+                const control = this.formBuilder.control(field, this.bindValidations(field.validations || []));
                 group.addControl(field.name, control);
             });
         }
@@ -57,7 +57,7 @@ export class DynamicFormComponent implements OnInit {
 
         if (this.form) {
             if (this.form.valid) {
-                this.submitEvent.emit(this.form.value);
+                // this.submitEvent.emit(this.form.value);
             } else {
                 this.validateAllFormFields(this.form);
             }
@@ -72,8 +72,5 @@ export class DynamicFormComponent implements OnInit {
                 control.markAsTouched({ onlySelf: true });
             }
         });
-    }
-    logit(item: any) {
-        console.log(item);
     }
 }

@@ -1,4 +1,7 @@
-<label class="radio-button mb-2"> {{radioLabel}}
-  <input type="radio" name="radio" class="radio-button__input" [attr.disabled]="disabled ? '' : null">
-  <span class="radio-button__checkmark"></span>
-</label>
+<app-base-field>
+    <label class="radio-button mb-2">
+        {{ radioLabel }}
+        <input type="radio" name="radio" class="radio-button__input" [attr.disabled]="disabled ? '' : null" />
+        <span class="radio-button__checkmark"></span>
+    </label>
+</app-base-field>
