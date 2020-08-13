@@ -12,10 +12,9 @@
             class="field__label"
             placeholder="Name your field"
             autocomplete="none"
+            [(ngModel)]="label"
             (keydown.enter)="$event.preventDefault()"
-        >
-            {{ label }}
-        </span>
+        />
     </div>
     <div class="field__description mb-2">Description</div>
 
