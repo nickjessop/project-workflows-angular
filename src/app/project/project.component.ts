@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ProjectService } from '../services/project/project.service';
 import { AuthenticationService } from '../services/authentication/authentication.service';
+import { take } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { Project } from '../models/interfaces/project';
 
 @Component({
     selector: 'app-project',
@@ -8,9 +11,13 @@ import { AuthenticationService } from '../services/authentication/authentication
     styleUrls: ['./project.component.scss'],
 })
 export class ProjectComponent implements OnInit {
-    constructor(private projectService: ProjectService, private authenticationService: AuthenticationService) {}
+    public projects: { id: string; description: string; name: string }[] = [];
 
-    ngOnInit() {}
+    constructor(private projectService: ProjectService) {}
+
+    ngOnInit() {
+        this.getProjects();
+    }
 
     public saveProject() {
         console.log('saving project test');
@@ -23,9 +30,24 @@ export class ProjectComponent implements OnInit {
     }
 
     public getProjects() {
-        const { id } = this.authenticationService.user!;
+        this.projectService.getAllProjectIds().subscribe(
+            projectDocument => {
+                let _projects: { id: string; description: string; name: string }[] = [];
 
-        console.log(`getting projects for user ${id}`);
-        // this.projectService.getProjects(`${id}`);
+                projectDocument.forEach(projectDoc => {
+                    const projectData = projectDoc.data() as Project;
+                    _projects.push({
+                        id: projectDoc.id,
+                        description: projectData.description,
+                        name: projectData.name,
+                    });
+                });
+
+                this.projects = _projects;
+            },
+            err => {
+                console.log(err);
+            }
+        );
     }
 }

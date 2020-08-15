@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, combineLatest, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable, Subject, of, from } from 'rxjs';
 import { createFieldConfigDefault, FieldConfig } from '../../models/interfaces/core-component';
 import { FirebaseService } from '../firebase/firebase.service';
 import { AuthenticationService } from '../authentication/authentication.service';
@@ -29,14 +29,15 @@ export class ProjectService {
     public createBaseProject(
         creatorId: string = this.authenticationService.user!.id,
         projectName = '',
-        configuration?: ProjectConfig
+        configuration?: ProjectConfig[]
     ) {
         const config = configuration
-            ? [configuration]
+            ? configuration
             : [{ components: [createFieldConfigDefault()], step: { title: '', icon: '', selected: true } }];
 
         const baseProject: Project = {
             name: projectName,
+            description: 'Test dummy description',
             ownerIds: [creatorId],
             configuration: config,
         };
@@ -94,6 +95,15 @@ export class ProjectService {
             );
     }
 
+    public getAllProjectIds() {
+        return from(
+            this.firebaseService
+                .getDbInstance()
+                .collection(`${this.PROJECT_COLLECTION_NAME}`)
+                .get()
+        );
+    }
+
     //TODO: Add firebase rule to only return authorized projects
     public getProjects(userId: string) {
         const creatorsProjects$ = new Subject();
@@ -148,6 +158,22 @@ export class ProjectService {
     }
 
     public saveDemoProject() {
+        const demoConfig = this.generateDemoProjectConfig();
+        const demoConfigs = [demoConfig, demoConfig, demoConfig, demoConfig];
+
+        const projectConfig: Project = this.createBaseProject(
+            this.authenticationService.user!.id,
+            'Testing Project',
+            demoConfigs
+        );
+
+        const project = this.createNewProject(true).then(newProject => {
+            projectConfig.id = newProject.id;
+            this.updateProject(projectConfig);
+        });
+    }
+
+    private generateDemoProjectConfig() {
         const defaultConfig: FieldConfig[] = [
             {
                 type: 'smallTextInput',
@@ -177,14 +203,11 @@ export class ProjectService {
             },
         ];
 
-        const projectConfig: Project = this.createBaseProject(this.authenticationService.user!.id, 'Testing Project', {
+        const projectConfig = {
             components: defaultConfig,
             step: { title: 'Insert title here', icon: '', selected: true },
-        });
+        };
 
-        const project = this.createNewProject(true).then(newProject => {
-            projectConfig.id = newProject.id;
-            this.updateProject(projectConfig);
-        });
+        return projectConfig;
     }
 }
