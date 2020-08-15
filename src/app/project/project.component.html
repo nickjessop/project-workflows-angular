@@ -1,35 +1,13 @@
 <h1>Project Page</h1>
 <!-- <button (click)="saveProject()">Save Dummy Project</button> -->
-<div class="project">
-    <app-project-card
-        class="project__card"
-        projectName="Project 1"
-        projectDescription="Project 1 description goes here."
-        link="/project/hwKTlzU3zhtkmSABCokJ"
-    ></app-project-card>
-    <app-project-card
-        class="project__card"
-        projectName="Project 2"
-        projectDescription="Project 2 description goes here."
-        link="/project/hwKTlzU3zhtkmSABCokJ"
-    ></app-project-card>
-    <app-project-card
-        class="project__card"
-        projectName="Project 3"
-        projectDescription="Project 3 description goes here."
-        link="/project/hwKTlzU3zhtkmSABCokJ"
-    ></app-project-card>
-    <app-project-card
-        class="project__card"
-        projectName="Project 4"
-        projectDescription="Project 4 description goes here."
-        link="/project/hwKTlzU3zhtkmSABCokJ"
-    ></app-project-card>
-    <app-project-card
-        class="project__card"
-        projectName="Project 5"
-        projectDescription="Project 5 description goes here."
-        link="/project/hwKTlzU3zhtkmSABCokJ"
-    ></app-project-card>
+<div class="project" *ngIf="projects">
+    <ng-container *ngFor="let project of projects">
+        <app-project-card
+            class="project__card"
+            projectName="{{ project.name }}"
+            projectDescription="{{ project.description }}"
+            link="/project/{{ project.id }}"
+        ></app-project-card>
+    </ng-container>
 </div>
 <router-outlet></router-outlet>
