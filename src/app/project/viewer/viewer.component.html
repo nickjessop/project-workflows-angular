@@ -1,4 +1,4 @@
 <div class="view">
-    <!-- <app-steps [projectConfig]="projectConfig"></app-steps> -->
+    <app-steps [projectConfig]="projectConfig$ | async"></app-steps>
     <app-dynamic-form [fields]="currentStep$ | async"></app-dynamic-form>
 </div>
