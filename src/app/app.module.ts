@@ -14,6 +14,7 @@ import { ComponentPlaygroundComponent } from './dashboard/component-playground/c
 import { ViewerComponent } from './project/viewer/viewer.component';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { ProjectCardComponent } from './project/project-card/project-card.component';
+import { StepsComponent } from './project/steps/steps.component';
 
 @NgModule({
     declarations: [
@@ -26,6 +27,7 @@ import { ProjectCardComponent } from './project/project-card/project-card.compon
         ComponentPlaygroundComponent,
         ViewerComponent,
         NavBarComponent,
+        StepsComponent,
     ],
     imports: [ProtectedRoutingModule, BrowserModule, AppRoutingModule, CoreComponentsModule, ReactiveFormsModule],
     providers: [],

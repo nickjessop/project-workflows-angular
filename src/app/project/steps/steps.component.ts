@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ProjectConfig } from 'src/app/models/interfaces/project';
+import { Project, Step } from 'src/app/models/interfaces/project';
 
 @Component({
     selector: 'app-steps',
@@ -7,11 +7,19 @@ import { ProjectConfig } from 'src/app/models/interfaces/project';
     styleUrls: ['./steps.component.scss'],
 })
 export class StepsComponent implements OnInit {
-    @Input() projectConfig: ProjectConfig[] = [];
+    @Input() projectConfig?: Project;
+
+    public steps: Step[] = [];
 
     constructor() {}
 
-    ngOnInit(): void {
-        console.log;
+    ngOnInit() {
+        if (this.projectConfig?.configuration) {
+            this.steps = this.projectConfig.configuration.map(projectConfg => {
+                return projectConfg.step;
+            });
+        }
+
+        console.log(`steps: ${JSON.stringify(this.steps)}`);
     }
 }

@@ -11,12 +11,9 @@ import { ComponentMode, FieldConfig } from 'src/app/models/interfaces/core-compo
     styleUrls: ['./viewer.component.scss'],
 })
 export class ViewerComponent implements OnInit {
-    private projectConfigSubscription = new Subscription();
-
     public projectConfig$?: Observable<Project>;
     public currentStep$?: Observable<FieldConfig[] | null>;
-
-    public project?: Project;
+    public currentStepIndex = 0;
 
     constructor(private projectService: ProjectService, private route: ActivatedRoute) {}
 
@@ -47,11 +44,9 @@ export class ViewerComponent implements OnInit {
             this.currentStep$ = this.projectService.currentStep$;
 
             if (_project.configuration?.length) {
-                this.setCurrentProjectStep(_project.configuration[0].components);
+                this.setCurrentProjectStep(_project.configuration[this.currentStepIndex].components);
             }
             this.projectConfig$ = this.projectService.projectConfig$;
-
-            this.project = _project;
         }
     }
 
@@ -59,7 +54,8 @@ export class ViewerComponent implements OnInit {
         this.projectService.projectConfig = project;
     }
 
-    private setCurrentProjectStep(step: FieldConfig[] | null) {
+    private setCurrentProjectStep(step: FieldConfig[] | null, index?: number) {
+        this.currentStepIndex = index ? index : 0;
         this.projectService.currentStep = step;
     }
 
