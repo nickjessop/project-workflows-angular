@@ -11,10 +11,10 @@ import { Project, ProjectConfig } from '../../models/interfaces/project';
 export class ProjectService {
     private readonly PROJECT_COLLECTION_NAME = 'projects';
     private _projectConfig: BehaviorSubject<Project> = new BehaviorSubject<Project>(this.createBaseProject());
-    public readonly projectConfig$: Observable<Project> = this._projectConfig.asObservable();
+    public readonly projectConfig$ = this._projectConfig.asObservable();
 
-    // private _allProjectsForUser$: BehaviorSubject<Project[]> = new BehaviorSubject<Project[]>()
-    // public readonly allProjectsForUser$: Observable<Project[]>;
+    private _currentStep: BehaviorSubject<FieldConfig[] | null> = new BehaviorSubject<FieldConfig[] | null>(null);
+    public readonly currentStep$ = this._currentStep.asObservable();
 
     constructor(private firebaseService: FirebaseService, private authenticationService: AuthenticationService) {}
 
@@ -24,6 +24,14 @@ export class ProjectService {
 
     public set projectConfig(projectConfig: Project) {
         this._projectConfig.next(projectConfig);
+    }
+
+    public get currentStep() {
+        return this._currentStep.getValue();
+    }
+
+    public set currentStep(step: FieldConfig[] | null) {
+        this._currentStep.next(step);
     }
 
     public createBaseProject(

@@ -1,5 +1,4 @@
 import { ValidatorFn } from '@angular/forms';
-import { ProjectConfig } from './project';
 
 export interface Validator {
     name: string;

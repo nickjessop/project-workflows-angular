@@ -1,10 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { Subscription, of } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
+import { Subscription, Observable } from 'rxjs';
 import { Project, ProjectConfig } from 'src/app/models/interfaces/project';
 import { ProjectService } from 'src/app/services/project/project.service';
 import { ActivatedRoute } from '@angular/router';
 import { ComponentMode, FieldConfig } from 'src/app/models/interfaces/core-component';
-import { take } from 'rxjs/operators';
 
 @Component({
     selector: 'app-viewer',
@@ -14,8 +13,10 @@ import { take } from 'rxjs/operators';
 export class ViewerComponent implements OnInit {
     private projectConfigSubscription = new Subscription();
 
-    public projectConfig?: ProjectConfig[];
-    public currentStep: FieldConfig[] = [];
+    public projectConfig$?: Observable<Project>;
+    public currentStep$?: Observable<FieldConfig[] | null>;
+
+    public project?: Project;
 
     constructor(private projectService: ProjectService, private route: ActivatedRoute) {}
 
@@ -37,15 +38,29 @@ export class ViewerComponent implements OnInit {
         const _project = project.project ? project.project : null;
         const _isNewProject = project.isNewProject as boolean;
 
-        this.currentStep = _project && _project.configuration?.length ? _project.configuration[0].components : [];
-
         if (!_project) {
             // of(this.projectService.createNewProject()).pipe(take(1)).subscribe((newProject) => {
             //     this.projectService.projectConfig = newProject;
             // });
         } else {
-            this.projectService.projectConfig = _project;
+            this.setProjectConfig(_project);
+            this.currentStep$ = this.projectService.currentStep$;
+
+            if (_project.configuration?.length) {
+                this.setCurrentProjectStep(_project.configuration[0].components);
+            }
+            this.projectConfig$ = this.projectService.projectConfig$;
+
+            this.project = _project;
         }
+    }
+
+    private setProjectConfig(project: Project) {
+        this.projectService.projectConfig = project;
+    }
+
+    private setCurrentProjectStep(step: FieldConfig[] | null) {
+        this.projectService.currentStep = step;
     }
 
     // private initProject(isNewProject: boolean) {

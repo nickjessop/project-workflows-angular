@@ -1,0 +1,8 @@
+<div class="steps-container">
+    <ng-container *ngFor="let config of projectConfig">
+        <div class="step">
+            <i class="material-icons">{{ config.step?.icon }}</i>
+            <h5>{{ config.step?.title }}</h5>
+        </div>
+    </ng-container>
+</div>
