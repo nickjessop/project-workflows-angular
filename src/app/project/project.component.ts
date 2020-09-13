@@ -11,6 +11,7 @@ import { Project } from '../models/interfaces/project';
     styleUrls: ['./project.component.scss'],
 })
 export class ProjectComponent implements OnInit {
+    public isLoadingProjects = true;
     public projects: { id: string; description: string; name: string }[] = [];
 
     constructor(private projectService: ProjectService) {}
@@ -30,6 +31,8 @@ export class ProjectComponent implements OnInit {
     }
 
     public getProjects() {
+        this.isLoadingProjects = true;
+
         this.projectService.getAllProjectIds().subscribe(
             projectDocument => {
                 let _projects: { id: string; description: string; name: string }[] = [];
@@ -44,9 +47,11 @@ export class ProjectComponent implements OnInit {
                 });
 
                 this.projects = _projects;
+                this.isLoadingProjects = false;
             },
             err => {
                 console.log(err);
+                this.isLoadingProjects = false;
             }
         );
     }

@@ -1,3 +1,4 @@
-<div class="view view__form">
-    <app-dynamic-form [fields]="currentStep"></app-dynamic-form>
+<div class="view">
+    <!-- <app-steps [projectConfig]="projectConfig"></app-steps> -->
+    <app-dynamic-form [fields]="currentStep$ | async"></app-dynamic-form>
 </div>

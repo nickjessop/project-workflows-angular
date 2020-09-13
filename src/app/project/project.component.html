@@ -1,13 +1,18 @@
 <h1>Project Page</h1>
 <!-- <button (click)="saveProject()">Save Dummy Project</button> -->
-<div class="project" *ngIf="projects">
-    <ng-container *ngFor="let project of projects">
-        <app-project-card
-            class="project__card"
-            projectName="{{ project.name }}"
-            projectDescription="{{ project.description }}"
-            link="/project/{{ project.id }}"
-        ></app-project-card>
-    </ng-container>
-</div>
+
+<ng-container *ngIf="isLoadingProjects; else showProjects"> Loading... </ng-container>
+
+<ng-template #showProjects>
+    <div class="project" *ngIf="projects">
+        <ng-container *ngFor="let project of projects">
+            <app-project-card
+                class="project__card"
+                projectName="{{ project.name }}"
+                projectDescription="{{ project.description }}"
+                link="/project/{{ project.id }}"
+            ></app-project-card>
+        </ng-container>
+    </div>
+</ng-template>
 <router-outlet></router-outlet>
