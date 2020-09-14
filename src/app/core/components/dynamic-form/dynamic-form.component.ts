@@ -1,8 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FieldConfig, Validator } from '../../../models/interfaces/core-component';
 import { FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
-
-import * as _ from 'lodash';
 
 @Component({
     selector: 'app-dynamic-form',
@@ -22,7 +20,8 @@ export class DynamicFormComponent implements OnInit {
     }
 
     get value() {
-        return _.get(this.form, 'value');
+        // return _.get(this.form, 'value');
+        return this.form ? this.form.value : null;
     }
 
     createControl() {
