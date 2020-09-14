@@ -1,6 +1,6 @@
 <app-base-field [(label)]="field.label">
     <div class="large-text edit">
-        <textarea placeholder="Add content" class="large-text__input"></textarea>
+        <textarea placeholder="Add content" class="large-text__input" [(ngModel)]="field.value"></textarea>
     </div>
     <div class="large-text view">
         <textarea placeholder="No content" readonly class="large-text__input"></textarea>

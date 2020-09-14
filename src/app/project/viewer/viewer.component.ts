@@ -59,6 +59,10 @@ export class ViewerComponent implements OnInit {
         this.projectService.currentStep = step;
     }
 
+    public getCurrentProjectConfig() {
+        console.log(this.projectService.projectConfig);
+    }
+
     // private initProject(isNewProject: boolean) {
     //     this.projectConfigSubscription = this.projectService.projectConfig$.subscribe(projectConfig => {
     //         this.projectConfig = projectConfig;
