@@ -29,6 +29,11 @@ body {
     font-family: 'Roboto', sans-serif;
 }
 
+body.noscroll{
+    position:fixed;
+    overflow:hidden;
+}
+
 .wrapper {
     padding: 24px;
 }

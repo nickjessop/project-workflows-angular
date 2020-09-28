@@ -4,27 +4,12 @@
     </ng-container>
     <ng-container *ngIf="componentMode === 'view'">
         <div class="images view">
+            <app-lightbox *ngIf='showLightbox' (onCloseLightbox)='onCloseLightbox()' [image]='imagePath' [title]='imageTitle' [alt]='imageAltText'></app-lightbox>
             <div class="images__gallery" *ngIf="(field.value != {}); else noImages"><!--change back to != -->
-                <div *ngFor="let item of field.value | keyvalue">
-                    Key: <b>{{item.key}}</b> and Value: <b>{{item.value}}</b>
-                </div>
-                <div class="gallery-item mr-1 mb-1">
-                    <img src="/assets/placeholder/placeholder-thumbnail.jpg" alt="Thumbnail Placeholder" />
-                </div>
-                <div class="gallery-item mr-1 mb-1">
-                    <img src="/assets/placeholder/placeholder-thumbnail.jpg" alt="Thumbnail Placeholder" />
-                </div>
-                <div class="gallery-item mr-1 mb-1">
-                    <img src="/assets/placeholder/placeholder-thumbnail.jpg" alt="Thumbnail Placeholder" />
-                </div>
-                <div class="gallery-item mr-1 mb-1">
-                    <img src="/assets/placeholder/placeholder-thumbnail.jpg" alt="Thumbnail Placeholder" />
-                </div>
-                <div class="gallery-item mr-1 mb-1">
-                    <img src="/assets/placeholder/placeholder-thumbnail.jpg" alt="Thumbnail Placeholder" />
-                </div>
-                <div class="gallery-item mr-1 mb-1">
-                    <img src="/assets/placeholder/placeholder-thumbnail.jpg" alt="Thumbnail Placeholder" />
+                <div *ngFor="let image of images">
+                    <div class="gallery-item mr-1 mb-1" (click)='openLightbox(image.path, image.title, image.altText)'>
+                        <img src="{{image.path}}" alt="{{image.altText}}" />
+                    </div>
                 </div>
             </div>
             <ng-template #noImages>

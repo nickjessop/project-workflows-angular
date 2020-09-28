@@ -17,8 +17,8 @@ import { UploaderComponent } from './fields/uploader/uploader.component';
 import { CheckboxesComponent } from './fields/checkboxes/checkboxes.component';
 import { ButtonComponent } from './components/button/button.component';
 import { BaseFieldComponent } from './fields/base-field/base-field.component';
-``;
 import { RouterModule } from '@angular/router';
+import { LightboxComponent } from './components/lightbox/lightbox.component';
 
 @NgModule({
     declarations: [
@@ -38,6 +38,7 @@ import { RouterModule } from '@angular/router';
         CheckboxesComponent,
         ButtonComponent,
         BaseFieldComponent,
+        LightboxComponent,
     ],
     imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule],
     exports: [
