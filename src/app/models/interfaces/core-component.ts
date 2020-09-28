@@ -46,4 +46,4 @@ export type ComponentType =
 
 export type ButtonType = 'button--primary' | 'button--secondary' | 'button--button' | 'button--round';
 
-export type ComponentMode = 'edit' | 'view';
+export type ComponentMode = 'edit' | 'view' | 'interact';

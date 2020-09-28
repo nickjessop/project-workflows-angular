@@ -1,12 +1,9 @@
-<app-base-field>
-    <ng-container *ngIf="componentMode === 'edit'">
-        <div class="large-text edit">
-            <textarea placeholder="Add content" class="large-text__input"></textarea>
-        </div>
-    </ng-container>
-    <ng-container *ngIf="componentMode === 'view'">
-        <div class="large-text view">
-            <textarea placeholder="{{ field.value || 'Empty field' }}" readonly class="large-text__input"></textarea>
-        </div>
-    </ng-container>
+
+<app-base-field [(label)]="field.label">
+    <div class="large-text edit">
+        <textarea placeholder="Add content" class="large-text__input" [(ngModel)]="field.value"></textarea>
+    </div>
+    <div class="large-text view">
+        <textarea placeholder="No content" readonly class="large-text__input"></textarea>
+    </div>
 </app-base-field>

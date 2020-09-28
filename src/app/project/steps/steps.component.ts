@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { Project, Step } from 'src/app/models/interfaces/project';
 
 @Component({
     selector: 'app-steps',
@@ -6,25 +7,19 @@ import { Component, Input, OnInit } from '@angular/core';
     styleUrls: ['./steps.component.scss'],
 })
 export class StepsComponent implements OnInit {
-    @Input() steps: string[] = [''];
+    @Input() projectConfig?: Project;
+
+    public steps: Step[] = [];
 
     constructor() {}
 
-    public dummySteps = [
-        {
-            title: 'step 1',
-            completed: true,
-        },
-        {
-            title: 'step 2',
-            completed: false,
-            focused: true,
-        },
-        {
-            title: 'step 3',
-            completed: false,
-        },
-    ];
+    ngOnInit() {
+        if (this.projectConfig?.configuration) {
+            this.steps = this.projectConfig.configuration.map(projectConfg => {
+                return projectConfg.step;
+            });
+        }
 
-    ngOnInit() {}
+        console.log(`steps: ${JSON.stringify(this.steps)}`);
+    }
 }
