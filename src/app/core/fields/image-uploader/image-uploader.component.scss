@@ -6,6 +6,9 @@
         flex-direction: row;
         flex-wrap: wrap;
         .gallery-item {
+            &:hover {
+                cursor: pointer;
+            }
             img {
                 max-width: 150px;
                 max-height: 150px;
