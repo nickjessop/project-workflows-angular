@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, combineLatest, from, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable, Subject, of, from } from 'rxjs';
 import { createFieldConfigDefault, FieldConfig } from '../../models/interfaces/core-component';
 import { FirebaseService } from '../firebase/firebase.service';
 import { AuthenticationService } from '../authentication/authentication.service';
-import { Project } from '../../models/interfaces/project';
-import { combineAll } from 'rxjs/operators';
+import { Project, ProjectConfig } from '../../models/interfaces/project';
 
 @Injectable({
     providedIn: 'root',
@@ -12,10 +11,10 @@ import { combineAll } from 'rxjs/operators';
 export class ProjectService {
     private readonly PROJECT_COLLECTION_NAME = 'projects';
     private _projectConfig: BehaviorSubject<Project> = new BehaviorSubject<Project>(this.createBaseProject());
-    public readonly projectConfig$: Observable<Project> = this._projectConfig.asObservable();
+    public readonly projectConfig$ = this._projectConfig.asObservable();
 
-    // private _allProjectsForUser$: BehaviorSubject<Project[]> = new BehaviorSubject<Project[]>()
-    // public readonly allProjectsForUser$: Observable<Project[]>;
+    private _currentStep: BehaviorSubject<FieldConfig[] | null> = new BehaviorSubject<FieldConfig[] | null>(null);
+    public readonly currentStep$ = this._currentStep.asObservable();
 
     constructor(private firebaseService: FirebaseService, private authenticationService: AuthenticationService) {}
 
@@ -23,19 +22,32 @@ export class ProjectService {
         return this._projectConfig.getValue();
     }
 
-    public set projectConfig(projectConfig) {
+    public set projectConfig(projectConfig: Project) {
         this._projectConfig.next(projectConfig);
+    }
+
+    public get currentStep() {
+        return this._currentStep.getValue();
+    }
+
+    public set currentStep(step: FieldConfig[] | null) {
+        this._currentStep.next(step);
     }
 
     public createBaseProject(
         creatorId: string = this.authenticationService.user!.id,
         projectName = '',
-        configuration?: FieldConfig[]
+        configuration?: ProjectConfig[]
     ) {
+        const config = configuration
+            ? configuration
+            : [{ components: [createFieldConfigDefault()], step: { title: '', icon: '', selected: true } }];
+
         const baseProject: Project = {
             name: projectName,
+            description: 'Test dummy description',
             ownerIds: [creatorId],
-            configuration: configuration || [createFieldConfigDefault()],
+            configuration: config,
         };
 
         return baseProject;
@@ -89,6 +101,15 @@ export class ProjectService {
                     return false;
                 }
             );
+    }
+
+    public getAllProjectIds() {
+        return from(
+            this.firebaseService
+                .getDbInstance()
+                .collection(`${this.PROJECT_COLLECTION_NAME}`)
+                .get()
+        );
     }
 
     //TODO: Add firebase rule to only return authorized projects
@@ -145,6 +166,22 @@ export class ProjectService {
     }
 
     public saveDemoProject() {
+        const demoConfig = this.generateDemoProjectConfig();
+        const demoConfigs = [demoConfig, demoConfig, demoConfig, demoConfig];
+
+        const projectConfig: Project = this.createBaseProject(
+            this.authenticationService.user!.id,
+            'Testing Project',
+            demoConfigs
+        );
+
+        const project = this.createNewProject(true).then(newProject => {
+            projectConfig.id = newProject.id;
+            this.updateProject(projectConfig);
+        });
+    }
+
+    private generateDemoProjectConfig() {
         const defaultConfig: FieldConfig[] = [
             {
                 type: 'smallTextInput',
@@ -173,15 +210,12 @@ export class ProjectService {
                 value: 'Additional $56,656 cost for travel allowance around GTA.',
             },
         ];
-        const projectConfig: Project = this.createBaseProject(
-            this.authenticationService.user!.id,
-            'Testing Project',
-            defaultConfig
-        );
 
-        const project = this.createNewProject(true).then(newProject => {
-            projectConfig.id = newProject.id;
-            this.updateProject(projectConfig);
-        });
+        const projectConfig = {
+            components: defaultConfig,
+            step: { title: 'Insert title here', icon: '', selected: true },
+        };
+
+        return projectConfig;
     }
 }

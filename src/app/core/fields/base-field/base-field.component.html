@@ -1,21 +1,19 @@
 <div class="field mb-2 px-4 py-2" #fieldContainer>
-    <div class="field__settings">
-        <app-button
-            [buttonStyle]="'button--dropdown'"
-            icon="more_horiz"
-            dropdownPosition="dropdown--right"
-        ></app-button>
+    <!-- <div class="field__settings">
+        <app-button buttonStyle="'button--dropdown'" icon="more_horiz" dropdownPosition="dropdown--right"></app-button>
     </div>
 
-    <div class="field__handle"><app-button [buttonStyle]="'button--icon'" icon="drag_indicator"></app-button></div>
+    <div class="field__handle">
+        <app-button buttonStyle="'button--icon'" icon="drag_indicator"></app-button>
+    </div> -->
 
     <div class="mb-2 pr-1">
         <input
             class="field__label"
             placeholder="Name your field"
             autocomplete="none"
+            [(ngModel)]="label"
             (keydown.enter)="$event.preventDefault()"
-            value="{{field.label}}"
         />
     </div>
     <div class="field__description mb-2">Description</div>

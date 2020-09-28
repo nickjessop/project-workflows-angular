@@ -8,32 +8,26 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { ProtectedRoutingModule } from './protected-routing.module';
 import { CoreComponentsModule } from './core/core-components.module';
 import { ProjectComponent } from './project/project.component';
-import { StepComponent } from './project/steps/step/step.component';
-import { StepsComponent } from './project/steps/steps.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { SideBarComponent } from './dashboard/side-bar/side-bar.component';
 import { SliceEllipsisPipe } from './pipes/slice-ellipsis.pipe';
 import { ComponentPlaygroundComponent } from './dashboard/component-playground/component-playground.component';
-import { SideBarItemComponent } from './dashboard/side-bar/side-bar-item/side-bar-item.component';
 import { ViewerComponent } from './project/viewer/viewer.component';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { ProjectCardComponent } from './project/project-card/project-card.component';
+import { StepsComponent } from './project/steps/steps.component';
 
 @NgModule({
     declarations: [
         AppComponent,
-        StepComponent,
-        StepsComponent,
         DashboardComponent,
         PageNotFoundComponent,
         ProjectComponent,
-        SideBarComponent,
         ProjectCardComponent,
         SliceEllipsisPipe,
         ComponentPlaygroundComponent,
-        SideBarItemComponent,
         ViewerComponent,
         NavBarComponent,
+        StepsComponent,
     ],
     imports: [ProtectedRoutingModule, BrowserModule, AppRoutingModule, CoreComponentsModule, ReactiveFormsModule],
     providers: [],

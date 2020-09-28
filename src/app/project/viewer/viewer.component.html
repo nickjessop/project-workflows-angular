@@ -1,1 +1,6 @@
-<app-dynamic-form [(fields)]="projectConfig.configuration" (submitEvent)="onFormSubmit()"> </app-dynamic-form>
+<div class="view">
+    <app-steps [projectConfig]="projectConfig$ | async"></app-steps>
+    <app-dynamic-form [fields]="currentStep$ | async"></app-dynamic-form>
+</div>
+
+<button (click)="getCurrentProjectConfig()">Print Project Config</button>

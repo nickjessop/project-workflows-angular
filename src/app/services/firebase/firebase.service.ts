@@ -26,8 +26,8 @@ export class FirebaseService {
         measurementId: 'G-7WQFDR9ZVR',
     };
 
-    private readonly db?: firebase.firestore.Firestore;
-    private readonly auth?: firebase.auth.Auth;
+    private readonly db: firebase.firestore.Firestore;
+    private readonly auth: firebase.auth.Auth;
 
     constructor() {
         firebase.initializeApp(this.firebaseConfig);

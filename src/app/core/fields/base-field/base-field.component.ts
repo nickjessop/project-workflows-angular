@@ -1,6 +1,4 @@
-import { createFieldConfigDefault, FieldConfig, ComponentMode } from '../../../models/interfaces/core-component';
-import { Component, Input, ViewChild } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { Component, Input } from '@angular/core';
 
 @Component({
     selector: 'app-base-field',
@@ -8,9 +6,7 @@ import { FormGroup } from '@angular/forms';
     styleUrls: ['./base-field.component.scss'],
 })
 export class BaseFieldComponent {
-    @Input() field: FieldConfig = createFieldConfigDefault();
-    @Input() group!: FormGroup;
-    @Input() componentMode: ComponentMode = 'view';
+    @Input() label = '';
 
     constructor() {}
 
