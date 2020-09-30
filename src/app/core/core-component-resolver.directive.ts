@@ -11,8 +11,6 @@ import { TableComponent } from './fields/table/table.component';
 import { ComponentType, FieldConfig } from '../models/interfaces/core-component';
 import { FormGroup } from '@angular/forms';
 
-import * as _ from 'lodash';
-
 @Directive({
     selector: '[appCoreComponentResolver]',
 })

@@ -1,5 +1,4 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { slice } from 'lodash';
 
 @Pipe({
     name: 'sliceEllipsis',
