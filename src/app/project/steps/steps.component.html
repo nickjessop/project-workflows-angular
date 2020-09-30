@@ -1,6 +1,6 @@
 <div class="steps-container">
-    <ng-container *ngFor="let step of steps">
-        <div class="step">
+    <ng-container *ngFor="let step of steps; index as index">
+        <div class="step" [class.step-selected]="step === currentStep" (click)="onStepPress(index)">
             <i class="material-icons">{{ step.icon }}</i>
             <h5>{{ step.title }}</h5>
         </div>
