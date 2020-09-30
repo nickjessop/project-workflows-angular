@@ -1,5 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { FieldConfig } from 'src/app/models/interfaces/core-component';
 import { Project, Step } from 'src/app/models/interfaces/project';
+import { ProjectService } from 'src/app/services/project/project.service';
+import { parseConfigFileTextToJson } from 'typescript';
 
 @Component({
     selector: 'app-steps',
@@ -7,19 +11,47 @@ import { Project, Step } from 'src/app/models/interfaces/project';
     styleUrls: ['./steps.component.scss'],
 })
 export class StepsComponent implements OnInit {
-    @Input() projectConfig?: Project;
+    private subscriptions = new Subscription();
 
-    public steps: Step[] = [];
+    public project?: Project;
+    public steps?: Step[] = [];
+    public currentStep?: Step;
 
-    constructor() {}
+    constructor(private projectService: ProjectService) {}
 
     ngOnInit() {
-        if (this.projectConfig?.configuration) {
-            this.steps = this.projectConfig.configuration.map(projectConfg => {
-                return projectConfg.step;
+        this.initializeProject();
+    }
+
+    ngOnDestroy() {
+        this.subscriptions.unsubscribe();
+    }
+
+    private getSteps(project: Project) {
+        if (project.configuration) {
+            return project.configuration.map(_project => {
+                return _project.step;
             });
         }
 
-        console.log(`steps: ${JSON.stringify(this.steps)}`);
+        return;
+    }
+
+    private initializeProject() {
+        this.subscriptions.add(
+            this.projectService.projectConfig$.subscribe(_project => {
+                this.project = _project;
+                this.steps = this.getSteps(_project);
+            })
+        );
+    }
+
+    public onStepPress(index: number) {
+        if (this.project?.configuration?.[index]) {
+            const currentStepConfig = this.project.configuration[index];
+
+            this.projectService.currentStep = currentStepConfig.components;
+            this.currentStep = currentStepConfig.step;
+        }
     }
 }
