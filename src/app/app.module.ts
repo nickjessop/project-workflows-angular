@@ -15,6 +15,7 @@ import { ViewerComponent } from './project/viewer/viewer.component';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { ProjectCardComponent } from './project/project-card/project-card.component';
 import { StepsComponent } from './project/steps/steps.component';
+import { PrimengModule } from './primeng/primeng.module';
 
 @NgModule({
     declarations: [
@@ -29,7 +30,14 @@ import { StepsComponent } from './project/steps/steps.component';
         NavBarComponent,
         StepsComponent,
     ],
-    imports: [ProtectedRoutingModule, BrowserModule, AppRoutingModule, CoreComponentsModule, ReactiveFormsModule],
+    imports: [
+        ProtectedRoutingModule,
+        BrowserModule,
+        AppRoutingModule,
+        CoreComponentsModule,
+        ReactiveFormsModule,
+        PrimengModule,
+    ],
     providers: [],
     bootstrap: [AppComponent],
     exports: [],
