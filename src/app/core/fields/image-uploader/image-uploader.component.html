@@ -1,3 +1,25 @@
 <app-base-field>
-    <app-uploader icon="add_photo_alternate"></app-uploader>
+    <ng-container *ngIf="componentMode === 'edit'">
+        <app-uploader icon="add_photo_alternate"></app-uploader>
+    </ng-container>
+    <ng-container *ngIf="componentMode === 'view'">
+        <div class="images view">
+            <app-lightbox *ngIf='showLightbox' (onCloseLightbox)='onCloseLightbox()' [image]='imagePath' [title]='imageTitle' [alt]='imageAltText'></app-lightbox>
+            <div class="images__gallery" *ngIf="(field.value != {}); else noImages"><!--change back to != -->
+                <div *ngFor="let image of images">
+                    <div class="gallery-item mr-1 mb-1" (click)='openLightbox(image.path, image.title, image.altText)'>
+                        <img src="{{image.path}}" alt="{{image.altText}}" />
+                    </div>
+                </div>
+            </div>
+            <ng-template #noImages>
+                <div class="images__placeholder pa-4">
+                    <div class="placeholder-noimages mb-2">
+                        <img src="/assets/placeholder/placeholder-noimage.png" alt="Image Placeholder" />
+                    </div>
+                    No images uploaded yet.
+                </div>
+            </ng-template>
+        </div>
+    </ng-container>
 </app-base-field>

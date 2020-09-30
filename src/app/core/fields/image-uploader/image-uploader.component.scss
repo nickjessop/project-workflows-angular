@@ -1,0 +1,31 @@
+@import 'core';
+
+.images.view {
+    .images__gallery {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        .gallery-item {
+            &:hover {
+                cursor: pointer;
+            }
+            img {
+                max-width: 150px;
+                max-height: 150px;
+            }
+        }
+    }
+    .images__placeholder {
+        border: 1px solid $outline;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        .placeholder-noimages {
+            img {
+                max-width: 100px;
+                max-height: 100px;
+            }
+        }
+    }
+}
