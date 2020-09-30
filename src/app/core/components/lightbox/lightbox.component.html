@@ -1,0 +1,13 @@
+<div class="lightbox">
+    <div class="lightbox__tray px-2">
+        <div class="lightbox-action" (click)="closeLightbox()">
+            <i class="material-icons close">close</i>
+        </div>
+    </div>
+    <div class="lightbox__container">
+        <div class="lightbox__content">
+            <div class="lightbox-title py-1">{{title}}</div>
+            <img src="{{image}}" alt="{{alt}}" />
+        </div>
+    </div>
+</div>
