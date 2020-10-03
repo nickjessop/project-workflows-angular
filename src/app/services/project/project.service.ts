@@ -147,22 +147,24 @@ export class ProjectService {
     public getProject(projectId: string) {
         console.log(`get project called with id: ${projectId}`);
 
-        return this.firebaseService
-            .getDbInstance()!
-            .collection(this.PROJECT_COLLECTION_NAME)
-            .doc(projectId)
-            .get()
-            .then(
-                project => {
-                    console.log('fetched project: ', project.data());
+        return from(
+            this.firebaseService
+                .getDbInstance()!
+                .collection(this.PROJECT_COLLECTION_NAME)
+                .doc(projectId)
+                .get()
+                .then(
+                    project => {
+                        console.log('fetched project: ', project.data());
 
-                    return project.data() as Project;
-                },
-                error => {
-                    console.log(`Error while fetching project: ${projectId}`, error);
-                    return null;
-                }
-            );
+                        return project.data() as Project;
+                    },
+                    error => {
+                        console.log(`Error while fetching project: ${projectId}`, error);
+                        return null;
+                    }
+                )
+        );
     }
 
     public saveDemoProject() {
