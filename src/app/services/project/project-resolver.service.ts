@@ -1,37 +1,42 @@
 import { Injectable } from '@angular/core';
-import { Project, ProjectConfig } from '../../models/interfaces/project';
-import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
-import { EMPTY, from, of } from 'rxjs';
+import { ActivatedRouteSnapshot, Resolve, Router } from '@angular/router';
+import { EMPTY, of } from 'rxjs';
+import { mergeMap } from 'rxjs/operators';
 import { ProjectService } from './project.service';
-import { mergeMap, take } from 'rxjs/operators';
-import { ComponentMode } from 'src/app/models/interfaces/core-component';
 
 @Injectable({
     providedIn: 'root',
 })
-export class ProjectResolverService
-    implements Resolve<null | { project?: Project; isNewProject?: boolean; componentMode?: ComponentMode }> {
+export class ProjectResolverService implements Resolve<{ isNewProject: boolean } | null> {
     constructor(private projectService: ProjectService, private router: Router) {}
 
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        const projectId = route.paramMap.get('id') || '';
-        const isNewProject = false;
-        const componentMode: ComponentMode = 'edit';
+    resolve(route: ActivatedRouteSnapshot) {
+        const projectId = route.paramMap.get('id');
 
-        return from(this.projectService.getProject(projectId)).pipe(
-            take(1),
-            mergeMap(project => {
-                if (project) {
-                    return of({
-                        project,
-                        isNewProject,
-                        componentMode,
-                    });
-                } else {
-                    this.router.navigate(['404']);
-                    return EMPTY;
-                }
-            })
-        );
+        if (projectId) {
+            return this.projectService.getProject(projectId).pipe(
+                mergeMap(project => {
+                    if (!project) {
+                        this.router.navigate(['404']);
+                        return EMPTY;
+                    }
+
+                    this.projectService.projectConfig = project;
+                    this.projectService.currentStep = project.configuration?.length
+                        ? project.configuration[0].components
+                        : null;
+
+                    return of({ isNewProject: false });
+                })
+            );
+        } else {
+            const defaultProject = this.projectService.createBaseProject();
+            this.projectService.projectConfig = defaultProject;
+            this.projectService.currentStep = defaultProject.configuration?.length
+                ? defaultProject.configuration[0].components
+                : null;
+
+            return of({ isNewProject: true });
+        }
     }
 }

@@ -1,6 +1,6 @@
 <div class="view">
     <app-steps></app-steps>
-    <app-dynamic-form [fields]="currentStep$ | async"></app-dynamic-form>
+    <app-dynamic-form [fields]="currentStep"></app-dynamic-form>
 </div>
 
 <button (click)="getCurrentProjectConfig()">Print Project Config</button>
