@@ -15,22 +15,26 @@ export class ImageUploaderComponent implements OnInit {
 
     images = [
 		{
-            path: 'https://mir-s3-cdn-cf.behance.net/project_modules/disp/19a4ae25434871.563453b964a2b.jpg',
+            path: 'https://primefaces.org/primeng/showcase/assets/showcase/images/galleria/galleria1.jpg',
+            thumbnail: 'https://primefaces.org/primeng/showcase/assets/showcase/images/galleria/galleria1s.jpg',
             alt: 'flower',
             title: 'An odd looking flower'
 		},
 		{
-            path: 'https://mir-s3-cdn-cf.behance.net/project_modules/disp/7ac9f625434871.563453b97867a.jpg',
+            path: 'https://primefaces.org/primeng/showcase/assets/showcase/images/galleria/galleria2.jpg',
+            thumbnail: 'https://primefaces.org/primeng/showcase/assets/showcase/images/galleria/galleria2s.jpg',
             alt: 'fog',
             title: 'Chill fog'
 		},
 		{
-            path: 'https://mir-s3-cdn-cf.behance.net/project_modules/disp/5f8a3c25434871.563453b95d980.jpg',
+            path: 'https://primefaces.org/primeng/showcase/assets/showcase/images/galleria/galleria3.jpg',
+            thumbnail: 'https://primefaces.org/primeng/showcase/assets/showcase/images/galleria/galleria3s.jpg',
             alt: 'dead dandelion',
             title: 'Is this danelion dead?'
 		},
 		{
-            path: 'https://mir-s3-cdn-cf.behance.net/project_modules/disp/d7550725434871.563453b951273.jpg',
+            path: 'https://primefaces.org/primeng/showcase/assets/showcase/images/galleria/galleria4.jpg',
+            thumbnail: 'https://primefaces.org/primeng/showcase/assets/showcase/images/galleria/galleria4s.jpg',
             alt: 'flower',
             title: 'Another odd flower'
 		},
