@@ -4,22 +4,22 @@
     </ng-container>
     <ng-container *ngIf="componentMode === 'view'">
         <div class="images view">
-            <app-lightbox *ngIf='showLightbox' (onCloseLightbox)='onCloseLightbox()' [image]='imagePath' [title]='imageTitle' [alt]='imageAltText'></app-lightbox>
-            <div class="images__gallery" *ngIf="(field.value != {}); else noImages"><!--change back to != -->
-                <div *ngFor="let image of images">
-                    <div class="gallery-item mr-1 mb-1" (click)='openLightbox(image.path, image.title, image.altText)'>
-                        <img src="{{image.path}}" alt="{{image.altText}}" />
-                    </div>
+            <div *ngIf="images" class="p-grid" style="max-width: 400px;">
+                <div *ngFor="let image of images; let index = index;" class="p-col-3" key="index">
+                    <img [src]="image.path" [alt]="image.alt" style="cursor: pointer" (click)="imageClick(index)"/>
                 </div>
             </div>
-            <ng-template #noImages>
-                <div class="images__placeholder pa-4">
-                    <div class="placeholder-noimages mb-2">
-                        <img src="/assets/placeholder/placeholder-noimage.png" alt="Image Placeholder" />
+            <p-galleria [(value)]="images" [(visible)]="displayLightbox" [(activeIndex)]="activeIndex" [responsiveOptions]="responsiveOptions" [containerStyle]="{'max-width': '850px'}" [numVisible]="7"
+                [circular]="true" [fullScreen]="true" [showItemNavigators]="true" [showThumbnails]="false" [baseZIndex]="100000">
+                <ng-template pTemplate="item" let-item>
+                    <img [src]="item.path" style="width: 100%; display: block;"/>
+                </ng-template>
+                <ng-template pTemplate="thumbnail" let-item>
+                    <div class="p-grid p-nogutter p-justify-center">
+                        <img [src]="item.path" style="display: block;"/>
                     </div>
-                    No images uploaded yet.
-                </div>
-            </ng-template>
+                </ng-template>
+            </p-galleria>
         </div>
     </ng-container>
 </app-base-field>
