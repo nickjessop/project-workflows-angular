@@ -6,7 +6,7 @@
         <div class="images view">
             <div *ngIf="images" class="p-grid" style="max-width: 400px;">
                 <div *ngFor="let image of images; let index = index;" class="p-col-3" key="index">
-                    <img [src]="image.path" [alt]="image.alt" style="cursor: pointer" (click)="imageClick(index)"/>
+                    <img [src]="image.thumbnail" [alt]="image.alt" style="cursor: pointer" (click)="imageClick(index)"/>
                 </div>
             </div>
             <p-galleria [(value)]="images" [(visible)]="displayLightbox" [(activeIndex)]="activeIndex" [responsiveOptions]="responsiveOptions" [containerStyle]="{'max-width': '850px'}" [numVisible]="7"
