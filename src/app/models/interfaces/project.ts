@@ -17,6 +17,7 @@ export interface ProjectConfig {
 export interface Step {
     title?: string;
     icon?: string;
+    isCurrentStep?: boolean;
 }
 
 export type Role = 'admin' | 'editor' | 'viewer' | 'guest';

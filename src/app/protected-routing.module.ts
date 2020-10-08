@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule, ActivatedRouteSnapshot } from '@angular/router';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { ProtectedGuard } from './protected.guard';
-import { ProjectComponent } from './project/project.component';
-import { ProjectResolverService } from './services/project/project-resolver.service';
+import { RouterModule, Routes } from '@angular/router';
 import { ComponentPlaygroundComponent } from './dashboard/component-playground/component-playground.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { ProjectComponent } from './project/project.component';
 import { ViewerComponent } from './project/viewer/viewer.component';
+import { ProtectedGuard } from './protected.guard';
+import { ProjectResolverService } from './services/project/project-resolver.service';
 
 const guardedRoutes: Routes = [
     {
@@ -27,7 +27,7 @@ const guardedRoutes: Routes = [
         path: 'project/:id',
         component: ViewerComponent,
         canActivate: [ProtectedGuard],
-        resolve: { project: ProjectResolverService },
+        resolve: { data: ProjectResolverService },
     },
 ];
 
