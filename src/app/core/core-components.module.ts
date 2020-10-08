@@ -19,6 +19,7 @@ import { ButtonComponent } from './components/button/button.component';
 import { BaseFieldComponent } from './fields/base-field/base-field.component';
 import { RouterModule } from '@angular/router';
 import { LightboxComponent } from './components/lightbox/lightbox.component';
+import { PrimengModule } from '../primeng/primeng.module';
 
 @NgModule({
     declarations: [
@@ -40,7 +41,7 @@ import { LightboxComponent } from './components/lightbox/lightbox.component';
         BaseFieldComponent,
         LightboxComponent,
     ],
-    imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule],
+    imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, PrimengModule],
     exports: [
         LargeTextInputComponent,
         SmallTextInputComponent,

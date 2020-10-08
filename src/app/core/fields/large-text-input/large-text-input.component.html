@@ -1,9 +1,9 @@
 
 <app-base-field [(label)]="field.label">
     <div class="large-text edit">
-        <textarea placeholder="Add content" class="large-text__input" [(ngModel)]="field.value"></textarea>
+        <textarea pInputTextarea placeholder="Add content" [(ngModel)]="field.value"></textarea>
     </div>
     <div class="large-text view">
-        <textarea placeholder="No content" readonly class="large-text__input"></textarea>
+        <textarea pInputTextarea placeholder="No content" readonly class="large-text__input"></textarea>
     </div>
 </app-base-field>
