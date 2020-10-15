@@ -10,7 +10,7 @@ export interface Project {
 }
 
 export interface ProjectConfig {
-    components: FieldConfig[];
+    components?: FieldConfig[];
     step: Step;
 }
 

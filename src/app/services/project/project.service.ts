@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, combineLatest, Observable, Subject, of, from } from 'rxjs';
+import { BehaviorSubject, combineLatest, from, Subject } from 'rxjs';
 import { createFieldConfigDefault, FieldConfig } from '../../models/interfaces/core-component';
-import { FirebaseService } from '../firebase/firebase.service';
-import { AuthenticationService } from '../authentication/authentication.service';
 import { Project, ProjectConfig } from '../../models/interfaces/project';
+import { AuthenticationService } from '../authentication/authentication.service';
+import { FirebaseService } from '../firebase/firebase.service';
 
 @Injectable({
     providedIn: 'root',
@@ -51,6 +51,13 @@ export class ProjectService {
         };
 
         return baseProject;
+    }
+
+    public createNewProjectStep() {
+        const fieldConfig = createFieldConfigDefault();
+        const step = { step: { title: '(Untitled Step)' }, components: [fieldConfig] };
+
+        return step;
     }
 
     //Call this on creating a new project, `shouldPersistAndGenerateId` indicates whether we should pre-generate and pre-persist the project
