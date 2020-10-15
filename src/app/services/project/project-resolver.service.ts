@@ -22,7 +22,7 @@ export class ProjectResolverService implements Resolve<{ isNewProject: boolean }
                     }
 
                     this.projectService.projectConfig = project;
-                    this.projectService.currentStep = project.configuration?.length
+                    this.projectService.currentStep = project.configuration?.[0].components
                         ? project.configuration[0].components
                         : null;
 
@@ -32,7 +32,7 @@ export class ProjectResolverService implements Resolve<{ isNewProject: boolean }
         } else {
             const defaultProject = this.projectService.createBaseProject();
             this.projectService.projectConfig = defaultProject;
-            this.projectService.currentStep = defaultProject.configuration?.length
+            this.projectService.currentStep = defaultProject.configuration?.[0].components
                 ? defaultProject.configuration[0].components
                 : null;
 

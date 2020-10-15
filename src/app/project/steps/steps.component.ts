@@ -1,9 +1,7 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { FieldConfig } from 'src/app/models/interfaces/core-component';
 import { Project, Step } from 'src/app/models/interfaces/project';
 import { ProjectService } from 'src/app/services/project/project.service';
-import { parseConfigFileTextToJson } from 'typescript';
 
 @Component({
     selector: 'app-steps',
@@ -47,11 +45,24 @@ export class StepsComponent implements OnInit {
     }
 
     public onStepPress(index: number) {
-        if (this.project?.configuration?.[index]) {
-            const currentStepConfig = this.project.configuration[index];
+        const currentStepConfig = this.project?.configuration?.[index];
 
-            this.projectService.currentStep = currentStepConfig.components;
+        if (currentStepConfig) {
+            if (currentStepConfig.components) {
+                this.projectService.currentStep = currentStepConfig.components;
+            }
             this.currentStep = currentStepConfig.step;
         }
+    }
+
+    public onNewStepPress(event: Event) {
+        const newStepIndex = this.project?.configuration?.length ? this.project?.configuration?.length : 0;
+        const newStep = this.projectService.createNewProjectStep();
+
+        const project = this.projectService.projectConfig;
+        project.configuration?.push(newStep);
+
+        this.projectService.projectConfig = project;
+        this.projectService.currentStep = newStep.components;
     }
 }
