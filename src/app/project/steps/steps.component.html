@@ -5,4 +5,14 @@
             <h5>{{ step.title }}</h5>
         </div>
     </ng-container>
+    <div class="step">
+        <button
+            pButton
+            type="button"
+            label="New Step"
+            icon="pi pi-plus"
+            class="p-button-text"
+            (click)="onNewStepPress($event)"
+        ></button>
+    </div>
 </div>
