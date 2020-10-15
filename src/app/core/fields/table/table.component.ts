@@ -1,75 +1,54 @@
-import { Component, OnInit, ViewChild, ElementRef, ViewEncapsulation } from '@angular/core';
-// @ts-ignore
-import ColumnResizer from 'column-resizer';
-import { BaseFieldComponent } from '../base-field/base-field.component';
+import { Component, OnInit, Input } from '@angular/core';
+import { FieldConfig, ComponentMode, createFieldConfigDefault } from 'src/app/models/interfaces/core-component';
+import { FormGroup } from '@angular/forms';
 
 @Component({
     selector: 'app-table',
     templateUrl: './table.component.html',
     styleUrls: ['./table.component.scss'],
-    encapsulation: ViewEncapsulation.None,
 })
-export class TableComponent extends BaseFieldComponent implements OnInit {
-    @ViewChild('tableElement', { static: true, read: ElementRef })
-    tableElements?: ElementRef;
+export class TableComponent implements OnInit {
 
-    tableSettings?: any;
+    @Input() field: FieldConfig = createFieldConfigDefault();
+    @Input() group!: FormGroup;
+    @Input() componentMode: ComponentMode = 'view';
 
+    tableData = [
+        {
+            name: 'Project coordination',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+            hours: '40',
+            price: '3200'
+        },
+        {
+            name: 'Webpage design',
+            description: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
+            hours: '120',
+            price: '9600'
+        },
+        {
+            name: 'Branding',
+            description: 'Et harum quidem rerum facilis est et expedita distinctio.',
+            hours: '40',
+            price: '3200'
+        },
+        {
+            name: 'Development',
+            description: 'Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus.',
+            hours: '240',
+            price: '19,000'
+        },
+        {
+            name: 'Server Configuration',
+            description: 'Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur.',
+            hours: '20',
+            price: '1600'
+        }
+    ]
     constructor() {
-        super();
     }
 
     ngOnInit() {
-        this.columnResizer();
     }
 
-    columnResizer() {
-        if (this.tableElements) {
-            this.tableSettings = new ColumnResizer(this.tableElements.nativeElement, {
-                minWidth: 24,
-                resizeMode: 'fit',
-                draggingClass: 'table__column-drag',
-                // widths: [20, 20, 60],
-            });
-        }
-    }
-
-    addColumn() {
-        if (!this.tableElements) {
-            return;
-        }
-
-        const tableContents = this.tableElements.nativeElement;
-        this.tableSettings.reset({ disable: true });
-        let i = 0;
-        const tr = tableContents.querySelectorAll('tr');
-        for (i = 0; i < tr.length; i++) {
-            const row = tr[i];
-            const cell = i ? document.createElement('td') : document.createElement('th');
-            cell.innerHTML = i ? '<span contenteditable>cell</span>' : '<span contenteditable>header</span>';
-            row.appendChild(cell);
-        }
-        // since now we have more columns, lets share the table width proportionally
-        const th = tableContents.querySelectorAll('th');
-        for (i = 0; i < th.length; i++) {
-            th[i].style.width = 100 / th.length + '%';
-        }
-        this.columnResizer();
-    }
-
-    addRow() {
-        if (!this.tableElements) {
-            return;
-        }
-
-        const tableContents = this.tableElements.nativeElement;
-        this.tableSettings.reset({ disable: true });
-        // duplicate the last row
-        const tr = tableContents.querySelectorAll('tr');
-        const html = tr[tr.length - 1].innerHTML;
-        const row = document.createElement('tr');
-        row.innerHTML = html;
-        tableContents.appendChild(row);
-        this.columnResizer();
-    }
 }
