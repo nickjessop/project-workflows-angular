@@ -4,12 +4,12 @@ export interface Project {
     name: string;
     ownerIds: string[];
     description: string;
-    configuration?: ProjectConfig[];
+    configuration?: StepConfig[];
     members?: Array<{ userId: string; role: Role }>;
     id?: string;
 }
 
-export interface ProjectConfig {
+export interface StepConfig {
     components?: FieldConfig[];
     step: Step;
 }

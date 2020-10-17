@@ -22,9 +22,7 @@ export class ProjectResolverService implements Resolve<{ isNewProject: boolean }
                     }
 
                     this.projectService.projectConfig = project;
-                    this.projectService.currentStep = project.configuration?.[0].components
-                        ? project.configuration[0].components
-                        : null;
+                    this.projectService.currentStep = project.configuration?.[0] ? project.configuration[0] : null;
 
                     return of({ isNewProject: false });
                 })
@@ -32,8 +30,8 @@ export class ProjectResolverService implements Resolve<{ isNewProject: boolean }
         } else {
             const defaultProject = this.projectService.createBaseProject();
             this.projectService.projectConfig = defaultProject;
-            this.projectService.currentStep = defaultProject.configuration?.[0].components
-                ? defaultProject.configuration[0].components
+            this.projectService.currentStep = defaultProject.configuration?.[0]
+                ? defaultProject.configuration[0]
                 : null;
 
             return of({ isNewProject: true });

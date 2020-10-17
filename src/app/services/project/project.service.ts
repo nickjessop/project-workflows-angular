@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, combineLatest, from, Subject } from 'rxjs';
 import { createFieldConfigDefault, FieldConfig } from '../../models/interfaces/core-component';
-import { Project, ProjectConfig } from '../../models/interfaces/project';
+import { Project, StepConfig } from '../../models/interfaces/project';
 import { AuthenticationService } from '../authentication/authentication.service';
 import { FirebaseService } from '../firebase/firebase.service';
 
@@ -13,7 +13,7 @@ export class ProjectService {
     private _projectConfig: BehaviorSubject<Project> = new BehaviorSubject<Project>(this.createBaseProject());
     public readonly projectConfig$ = this._projectConfig.asObservable();
 
-    private _currentStep: BehaviorSubject<FieldConfig[] | null> = new BehaviorSubject<FieldConfig[] | null>(null);
+    private _currentStep: BehaviorSubject<StepConfig | null> = new BehaviorSubject<StepConfig | null>(null);
     public readonly currentStep$ = this._currentStep.asObservable();
 
     constructor(private firebaseService: FirebaseService, private authenticationService: AuthenticationService) {}
@@ -30,14 +30,14 @@ export class ProjectService {
         return this._currentStep.getValue();
     }
 
-    public set currentStep(step: FieldConfig[] | null) {
-        this._currentStep.next(step);
+    public set currentStep(currentStep: StepConfig | null) {
+        this._currentStep.next(currentStep);
     }
 
     public createBaseProject(
         creatorId: string = this.authenticationService.user!.id,
         projectName = '',
-        configuration?: ProjectConfig[]
+        configuration?: StepConfig[]
     ) {
         const config = configuration
             ? configuration
