@@ -8,13 +8,14 @@
     </div> -->
 
     <div class="mb-2 pr-1">
-        <input
-            class="field__label"
-            placeholder="Name your field"
-            autocomplete="none"
-            [(ngModel)]="label"
-            (keydown.enter)="$event.preventDefault()"
-        />
+        <p-inplace closable="closable">
+            <ng-template pTemplate="display">
+                Name your field
+            </ng-template>
+            <ng-template pTemplate="content">
+                <input type="text" value="PrimeNG" pInputText />
+            </ng-template>
+        </p-inplace>
     </div>
     <div class="field__description mb-2">Description</div>
 
