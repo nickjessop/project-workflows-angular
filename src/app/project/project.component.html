@@ -6,12 +6,12 @@
 <ng-template #showProjects>
     <div class="project" *ngIf="projects">
         <ng-container *ngFor="let project of projects">
-            <app-project-card
+            <project-card
                 class="project__card"
                 projectName="{{ project.name }}"
                 projectDescription="{{ project.description }}"
                 link="/project/{{ project.id }}"
-            ></app-project-card>
+            ></project-card>
         </ng-container>
     </div>
 </ng-template>

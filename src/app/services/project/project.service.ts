@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, combineLatest, from, Subject } from 'rxjs';
-import { createFieldConfigDefault, FieldConfig } from '../../models/interfaces/core-component';
+import { ComponentType, createFieldConfig, FieldConfig } from '../../models/interfaces/core-component';
 import { Project, StepConfig } from '../../models/interfaces/project';
 import { AuthenticationService } from '../authentication/authentication.service';
 import { FirebaseService } from '../firebase/firebase.service';
@@ -41,7 +41,7 @@ export class ProjectService {
     ) {
         const config = configuration
             ? configuration
-            : [{ components: [createFieldConfigDefault()], step: { title: '', icon: '', selected: true } }];
+            : [{ components: [createFieldConfig()], step: { title: '', icon: '', selected: true } }];
 
         const baseProject: Project = {
             name: projectName,
@@ -53,9 +53,18 @@ export class ProjectService {
         return baseProject;
     }
 
-    public createNewProjectStep() {
-        const fieldConfig = createFieldConfigDefault();
-        const step = { step: { title: '(Untitled Step)' }, components: [fieldConfig] };
+    public createNewProjectStep(
+        stepTitle?: string,
+        label?: string,
+        name?: string,
+        inputType?: string,
+        options?: string[],
+        collections?: string,
+        type?: ComponentType,
+        value?: string
+    ) {
+        const fieldConfig = createFieldConfig(label, name, inputType, options, collections, type, value);
+        const step = { step: { title: stepTitle || '(Untitled Step)' }, components: [fieldConfig] };
 
         return step;
     }

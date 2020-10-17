@@ -17,15 +17,23 @@ export interface FieldConfig {
     validations?: Validator[];
 }
 
-export function createFieldConfigDefault() {
+export function createFieldConfig(
+    label?: string,
+    name?: string,
+    inputType?: string,
+    options?: string[],
+    collections?: string,
+    type?: ComponentType,
+    value?: string
+) {
     const fieldConfig = {
-        label: '',
-        name: '',
-        inputType: '',
-        options: [''],
-        collections: '',
-        type: 'empty' as ComponentType,
-        value: '',
+        label: label || '',
+        name: name || '',
+        inputType: inputType || '',
+        options: options || [''],
+        collections: collections || '',
+        type: type || ('empty' as ComponentType),
+        value: value || '',
     };
 
     return fieldConfig;

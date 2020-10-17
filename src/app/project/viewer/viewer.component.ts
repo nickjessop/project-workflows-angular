@@ -5,7 +5,7 @@ import { Project, StepConfig } from 'src/app/models/interfaces/project';
 import { ProjectService } from 'src/app/services/project/project.service';
 
 @Component({
-    selector: 'app-viewer',
+    selector: 'project-viewer',
     templateUrl: './viewer.component.html',
     styleUrls: ['./viewer.component.scss'],
 })

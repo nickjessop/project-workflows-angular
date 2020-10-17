@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
-    selector: 'app-project-card',
+    selector: 'project-card',
     templateUrl: './project-card.component.html',
     styleUrls: ['./project-card.component.scss'],
 })
