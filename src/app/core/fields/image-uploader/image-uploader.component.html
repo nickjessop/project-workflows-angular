@@ -14,6 +14,10 @@
                 <ng-template pTemplate="item" let-item>
                     <img [src]="item.path" style="width: 100%; display: block;"/>
                 </ng-template>
+                <ng-template pTemplate="caption" let-item>
+                    <h4 style="margin-bottom: .5rem; color: #ffffff;">{{item.title}}</h4>
+                    <p>{{item.alt}}</p>
+                </ng-template>
                 <ng-template pTemplate="thumbnail" let-item>
                     <div class="p-grid p-nogutter p-justify-center">
                         <img [src]="item.path" style="display: block;"/>
