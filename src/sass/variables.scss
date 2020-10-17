@@ -1,6 +1,6 @@
 // COLOURS
 $outline: #d2d7de;
-$light-background: #F8F9FC;
+$light-background: #f8f9fc;
 $light-gray-body: #e5e5e5;
 $highlight: #fffff1;
 $action: #2673e1;
@@ -20,8 +20,3 @@ $modularscale: (
     base: 1rem,
     ratio: 1.125,
 );
-
-// SPACING
-$rules: [ [ml, margin-left], [mt, margin-top], [mb, margin-bottom], [mr, margin-right], [ma, margin], [mx, margin], [my,
-    margin], [pl, padding-left], [pt, padding-top], [pb, padding-bottom], [pr, padding-right], [pa, padding], [px,
-    padding], [py, padding], ];

@@ -29,9 +29,9 @@ body {
     font-family: 'Roboto', sans-serif;
 }
 
-body.noscroll{
-    position:fixed;
-    overflow:hidden;
+body.noscroll {
+    position: fixed;
+    overflow: hidden;
 }
 
 .wrapper {
@@ -43,9 +43,6 @@ body.noscroll{
     &--column {
         flex-direction: column;
     }
-}
-
-nav {
 }
 
 .visible {
@@ -63,11 +60,5 @@ a:visited {
     color: $action;
 }
 
-// SPACING
-@each $item in $rules {
-    @include generate-spacing(nth($item, 1), nth($item, 2));
-}
-
-// GROUPS
+// TYPOGRAPHY
 @import 'group/typography';
-@import 'group/forms';
