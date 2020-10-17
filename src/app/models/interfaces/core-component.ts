@@ -40,18 +40,12 @@ export function createFieldConfig(
 }
 
 export type ComponentType =
-    | 'checkbox'
-    | 'dropdown'
+    | 'checkboxes'
     | 'fileUploader'
     | 'imageUploader'
     | 'largeTextInput'
-    | 'linearScale'
-    | 'multipleChoice'
-    | 'radioButton'
     | 'smallTextInput'
     | 'table'
     | 'empty';
-
-export type ButtonType = 'button--primary' | 'button--secondary' | 'button--button' | 'button--round';
 
 export type ComponentMode = 'edit' | 'view' | 'interact';
