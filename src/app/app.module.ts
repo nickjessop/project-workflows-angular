@@ -16,6 +16,7 @@ import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { ProjectCardComponent } from './project/project-card/project-card.component';
 import { StepsComponent } from './project/steps/steps.component';
 import { PrimengModule } from './primeng/primeng.module';
+import { ControlsComponent } from './project/controls/controls.component';
 
 @NgModule({
     declarations: [
@@ -29,6 +30,7 @@ import { PrimengModule } from './primeng/primeng.module';
         ViewerComponent,
         NavBarComponent,
         StepsComponent,
+        ControlsComponent,
     ],
     imports: [
         ProtectedRoutingModule,

@@ -1,9 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FieldConfig, Validator } from '../../../models/interfaces/core-component';
 import { FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { FieldConfig, Validator } from '../../../models/interfaces/core-component';
 
 @Component({
-    selector: 'app-dynamic-form',
+    selector: 'project-dynamic-form',
     templateUrl: './dynamic-form.component.html',
     styleUrls: ['./dynamic-form.component.scss'],
 })
@@ -20,7 +20,6 @@ export class DynamicFormComponent implements OnInit {
     }
 
     get value() {
-        // return _.get(this.form, 'value');
         return this.form ? this.form.value : null;
     }
 

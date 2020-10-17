@@ -1,4 +1,6 @@
 <div class="view">
-    <app-steps></app-steps>
-    <app-dynamic-form [fields]="currentStep.components"></app-dynamic-form>
+    <project-steps></project-steps>
+    <project-dynamic-form [fields]="currentStep.components">
+        <project-controls></project-controls>
+    </project-dynamic-form>
 </div>
