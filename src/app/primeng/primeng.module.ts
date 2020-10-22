@@ -1,14 +1,25 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AccordionModule } from 'primeng/accordion';
 import { ButtonModule } from 'primeng/button';
-import {InputTextareaModule} from 'primeng/inputtextarea';
-import {GalleriaModule} from 'primeng/galleria';
-import {TableModule} from 'primeng/table';
+import { DialogModule } from 'primeng/dialog';
+import { GalleriaModule } from 'primeng/galleria';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { TableModule } from 'primeng/table';
 
 @NgModule({
     declarations: [],
-    imports: [CommonModule, AccordionModule, ButtonModule, InputTextareaModule, GalleriaModule, TableModule],
-    exports: [AccordionModule, ButtonModule, InputTextareaModule, GalleriaModule, TableModule],
+    imports: [
+        CommonModule,
+        BrowserAnimationsModule,
+        AccordionModule,
+        ButtonModule,
+        InputTextareaModule,
+        GalleriaModule,
+        TableModule,
+        DialogModule,
+    ],
+    exports: [AccordionModule, ButtonModule, InputTextareaModule, GalleriaModule, TableModule, DialogModule],
 })
 export class PrimengModule {}

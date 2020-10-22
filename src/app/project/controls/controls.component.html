@@ -3,5 +3,7 @@
     type="button"
     class="p-button-outlined p-button-rounded p-button-secondary"
     icon="pi pi-plus"
-    (click)="addNewBlock()"
+    (click)="toggleAddBlockDialog()"
 ></button>
+
+<project-block-dialog [(showDialog)]="showDialog"> </project-block-dialog>
