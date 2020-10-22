@@ -1,4 +1,4 @@
-<div class="field mb-2 px-4 py-2" #fieldContainer>
+<div class="field p-mb-2 p-py-4 p-px-2" #fieldContainer>
     <!-- <div class="field__settings">
         <app-button buttonStyle="'button--dropdown'" icon="more_horiz" dropdownPosition="dropdown--right"></app-button>
     </div>
@@ -7,14 +7,15 @@
         <app-button buttonStyle="'button--icon'" icon="drag_indicator"></app-button>
     </div> -->
 
-    <div class="mb-2 pr-1">
-        <input
-            class="field__label"
-            placeholder="Name your field"
-            autocomplete="none"
-            [(ngModel)]="label"
-            (keydown.enter)="$event.preventDefault()"
-        />
+    <div class="p-mb-3">
+        <p-inplace closable="closable">
+            <ng-template pTemplate="display">
+                Name your field
+            </ng-template>
+            <ng-template pTemplate="content">
+                <input type="text" class="p-inputtext-lg" value="Name your field" pInputText />
+            </ng-template>
+        </p-inplace>
     </div>
     <div class="field__description mb-2">Description</div>
 

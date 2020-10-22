@@ -1,14 +1,11 @@
 import { ComponentFactoryResolver, Directive, Input, OnInit, ViewContainerRef } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ComponentType, FieldConfig } from '../models/interfaces/core-component';
-import { CheckboxComponent } from './fields/checkbox/checkbox.component';
-import { DropdownComponent } from './fields/dropdown/dropdown.component';
+import { CheckboxesComponent } from './fields/checkboxes/checkboxes.component';
 import { FileUploaderComponent } from './fields/file-uploader/file-uploader.component';
 import { ImageUploaderComponent } from './fields/image-uploader/image-uploader.component';
 import { LargeTextInputComponent } from './fields/large-text-input/large-text-input.component';
-import { MultipleChoiceComponent } from './fields/multiple-choice/multiple-choice.component';
 import { PlaceholderComponent } from './fields/placeholder/placeholder.component';
-import { RadioButtonComponent } from './fields/radio-button/radio-button.component';
 import { SmallTextInputComponent } from './fields/small-text-input/small-text-input.component';
 import { TableComponent } from './fields/table/table.component';
 
@@ -22,14 +19,10 @@ export class CoreComponentResolverDirective implements OnInit {
     componentRef: any;
 
     private componentMap: { [path in ComponentType]: any } = {
-        checkbox: CheckboxComponent,
-        dropdown: DropdownComponent,
         fileUploader: FileUploaderComponent,
         imageUploader: ImageUploaderComponent,
         largeTextInput: LargeTextInputComponent,
-        linearScale: LargeTextInputComponent,
-        multipleChoice: MultipleChoiceComponent,
-        radioButton: RadioButtonComponent,
+        checkboxes: CheckboxesComponent,
         smallTextInput: SmallTextInputComponent,
         table: TableComponent,
         empty: PlaceholderComponent,
