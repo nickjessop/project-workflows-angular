@@ -1,11 +1,5 @@
 <div class="wrapper playground" id="dashboard">
-    <button pButton type="button" label="Click"></button>
-    OR
-    <p-button label="Click"></p-button>
-
-    <textarea pInputTextarea placeholder="Add content"></textarea>
-
-    <div class="playground__background pa-4">
+    <div class="playground__background p-p-4">
         <h3>Field Components</h3>
         <app-small-text-input [componentMode]="'view'"></app-small-text-input>
         <app-small-text-input [componentMode]="'edit'"></app-small-text-input>
@@ -14,29 +8,12 @@
         <app-image-uploader [componentMode]="'edit'"></app-image-uploader>
         <app-image-uploader [componentMode]="'view'"></app-image-uploader>
         <app-file-uploader></app-file-uploader>
-        <app-multiple-choice></app-multiple-choice>
         <app-checkboxes></app-checkboxes>
-        <app-linear-scale></app-linear-scale>
         <app-table></app-table>
 
-        <h3>Core Components</h3>
-        <h4>Buttons</h4>
-        <div class="container">
-            <app-button [buttonStyle]="'button--dropdown'" class="mr-2"></app-button>
-            <app-button [buttonStyle]="'button--primary'" class="mr-2"></app-button>
-            <app-button [buttonStyle]="'button--secondary'" class="mr-2"></app-button>
-            <app-button [buttonStyle]="'button--round'" icon="home" class="mr-2"></app-button>
-            <app-button [buttonStyle]="'button--round'" icon="close"></app-button>
-        </div>
-        <h4>Checkbox</h4>
-        <app-checkbox></app-checkbox>
-        <h4>Radio Button</h4>
-        <app-radio-button></app-radio-button>
-
         <h3>Style Tests</h3>
-        <button class="button button--primary mr-2">Primary Button</button>
-        <button class="button button--secondary mr-2">Secondary Button</button>
-        <button class="button button--round">X</button>
+
+        <p-button label="Click"></p-button>
 
         <div class="ma-3">Test div with margin all around</div>
         <div class="my-3">Test div with margin on top and bottom</div>

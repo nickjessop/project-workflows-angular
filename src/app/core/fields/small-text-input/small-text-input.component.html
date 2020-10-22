@@ -1,18 +1,12 @@
 <app-base-field [(label)]="field.label">
-    <ng-container *ngIf="componentMode === 'edit'">
-        <div class="small-text edit">
-            <input
-                [ngModel]="field.value"
-                type="text"
-                name="small-text"
-                placeholder="Your response"
-                class="small-text__input"
-            />
-        </div>
-    </ng-container>
     <ng-container *ngIf="componentMode === 'view'">
         <div class="small-text view">
-            <p>{{ field.value || 'Empty field' }}</p>
+            <p class="p-p-2">No content</p>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="componentMode === 'edit'">
+        <div class="small-text edit">
+            <input type="text" pInputText [(ngModel)]="field.value" placeholder="Add content" />
         </div>
     </ng-container>
 </app-base-field>
