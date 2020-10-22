@@ -17,6 +17,8 @@ import { ProjectCardComponent } from './project/project-card/project-card.compon
 import { StepsComponent } from './project/steps/steps.component';
 import { PrimengModule } from './primeng/primeng.module';
 import { ControlsComponent } from './project/controls/controls.component';
+import { BlockDialogComponent } from './project/block-dialog/block-dialog.component';
+import { StepDialogComponent } from './project/step-dialog/step-dialog.component';
 
 @NgModule({
     declarations: [
@@ -31,6 +33,8 @@ import { ControlsComponent } from './project/controls/controls.component';
         NavBarComponent,
         StepsComponent,
         ControlsComponent,
+        BlockDialogComponent,
+        StepDialogComponent,
     ],
     imports: [
         ProtectedRoutingModule,

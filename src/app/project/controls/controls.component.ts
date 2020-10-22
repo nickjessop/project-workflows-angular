@@ -10,6 +10,7 @@ import { ProjectService } from 'src/app/services/project/project.service';
     styleUrls: ['./controls.component.scss'],
 })
 export class ControlsComponent implements OnInit {
+    public showDialog = false;
     private currentStep?: StepConfig;
     private subscriptions = new Subscription();
 
@@ -31,6 +32,10 @@ export class ControlsComponent implements OnInit {
                 }
             })
         );
+    }
+
+    public toggleAddBlockDialog() {
+        this.showDialog = !this.showDialog;
     }
 
     public addNewBlock(
