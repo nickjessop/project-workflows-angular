@@ -10,6 +10,7 @@ import { InplaceModule } from 'primeng/inplace';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { TableModule } from 'primeng/table';
+import { ToolbarModule } from 'primeng/toolbar';
 
 @NgModule({
     declarations: [],
@@ -25,6 +26,7 @@ import { TableModule } from 'primeng/table';
         DialogModule,
         InplaceModule,
         InputTextModule,
+        ToolbarModule,
     ],
     exports: [
         AccordionModule,
@@ -36,6 +38,7 @@ import { TableModule } from 'primeng/table';
         InputTextModule,
         DialogModule,
         FileUploadModule,
+        ToolbarModule,
     ],
 })
 export class PrimengModule {}

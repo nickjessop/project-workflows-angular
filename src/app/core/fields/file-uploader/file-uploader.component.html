@@ -12,7 +12,7 @@
             <tr style="height:34px">
                 <ng-container *ngFor="let col of columns; last as isLast">
                     <td [ngStyle]="{'width' : col.size + '%'}" *ngIf="isLast; else elseBlock">
-                        <a href="{{rowData[col.field]}}">Download</a>
+                        <a href="{{rowData[col.field]}}"><button pButton type="button" icon="pi pi-download" iconPos="left"></button></a>
                     </td>
                     <ng-template #elseBlock>
                         <td [ngStyle]="{'width' : col.size + '%'}">{{rowData[col.field]}}</td>
@@ -20,9 +20,19 @@
                 </ng-container>
             </tr>
         </ng-template>
-        <ng-template *ngIf="componentMode === 'edit'" pTemplate="summary">
-           <p-fileUpload  mode="basic" name="images[]" url="/" accept="image/*" maxFileSize="1000000" multiple="multiple" [auto]="true" chooseLabel="Upload files"></p-fileUpload>
-        </ng-template>
+
     </p-table>
+
+    <ng-container *ngIf="componentMode === 'edit'">
+        <p-toolbar>
+            <div class="p-toolbar-group-left">
+                <p-fileUpload  mode="basic" name="files[]" url="/" accept="image/*" maxFileSize="1000000" multiple="multiple" [auto]="true" chooseLabel="Upload files"></p-fileUpload>
+            </div>
+
+            <div class="p-toolbar-group-right">
+                6 files
+            </div>
+        </p-toolbar>
+    </ng-container>
 
 </app-base-field>
