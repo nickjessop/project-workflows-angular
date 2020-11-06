@@ -14,7 +14,7 @@
                     <td pEditableColumn>
                         <p-cellEditor>
                             <ng-template pTemplate="input">
-                                <textarea pInputText type="text" [(ngModel)]="tableData.name"></textarea>
+                                <div contenteditable pInputText type="text" [(ngModel)]="tableData.name">{{tableData.name}}</div>
                             </ng-template>
                             <ng-template pTemplate="output">
                                 {{tableData.name}}
@@ -24,7 +24,7 @@
                     <td pEditableColumn>
                         <p-cellEditor>
                             <ng-template pTemplate="input">
-                                <textarea pInputText type="text" [(ngModel)]="tableData.description"></textarea>
+                                <div contenteditable pInputText type="text" [(ngModel)]="tableData.description">{{tableData.description}}</div>
                             </ng-template>
                             <ng-template pTemplate="output">
                                 {{tableData.description}}
@@ -34,7 +34,7 @@
                     <td pEditableColumn>
                         <p-cellEditor>
                             <ng-template pTemplate="input">
-                                <textarea pInputText type="text" [(ngModel)]="tableData.hours"></textarea>
+                                <div contenteditable pInputText type="text" [(ngModel)]="tableData.hours">{{tableData.hours}}</div>
                             </ng-template>
                             <ng-template pTemplate="output">
                                 {{tableData.hours}}
@@ -44,7 +44,7 @@
                     <td pEditableColumn>
                         <p-cellEditor>
                             <ng-template pTemplate="input">
-                                <textarea pInputText type="text" [(ngModel)]="tableData.price"></textarea>
+                                <div contenteditable pInputText type="text" [(ngModel)]="tableData.price">{{tableData.price}}</div>
                             </ng-template>
                             <ng-template pTemplate="output">
                                 {{tableData.price}}
