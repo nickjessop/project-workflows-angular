@@ -1,3 +1,28 @@
 <app-base-field>
-    <app-uploader></app-uploader>
+    <p-table [columns]="cols" [value]="files" [scrollable]="true" [rows]="20" scrollHeight="250px"
+        [virtualScroll]="true" [virtualRowHeight]="34" styleClass="p-datatable-striped">
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+                <ng-container *ngFor="let col of columns">
+                    <th [ngStyle]="{'width' : col.size + '%'}">{{col.header}}</th>
+                </ng-container>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <tr style="height:34px">
+                <ng-container *ngFor="let col of columns; last as isLast">
+                    <td [ngStyle]="{'width' : col.size + '%'}" *ngIf="isLast; else elseBlock">
+                        <a href="{{rowData[col.field]}}">Download</a>
+                    </td>
+                    <ng-template #elseBlock>
+                        <td [ngStyle]="{'width' : col.size + '%'}">{{rowData[col.field]}}</td>
+                    </ng-template>
+                </ng-container>
+            </tr>
+        </ng-template>
+        <ng-template *ngIf="componentMode === 'edit'" pTemplate="summary">
+           <p-fileUpload  mode="basic" name="images[]" url="/" accept="image/*" maxFileSize="1000000" multiple="multiple" [auto]="true" chooseLabel="Upload files"></p-fileUpload>
+        </ng-template>
+    </p-table>
+
 </app-base-field>
