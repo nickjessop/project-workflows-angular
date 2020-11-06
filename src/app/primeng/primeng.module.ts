@@ -4,6 +4,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AccordionModule } from 'primeng/accordion';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
+import { FileUploadModule } from 'primeng/fileupload';
 import { GalleriaModule } from 'primeng/galleria';
 import { InplaceModule } from 'primeng/inplace';
 import { InputTextModule } from 'primeng/inputtext';
@@ -14,7 +15,7 @@ import { TableModule } from 'primeng/table';
     declarations: [],
     imports: [
         CommonModule,
-
+        FileUploadModule,
         BrowserAnimationsModule,
         AccordionModule,
         ButtonModule,
@@ -34,6 +35,7 @@ import { TableModule } from 'primeng/table';
         InplaceModule,
         InputTextModule,
         DialogModule,
+        FileUploadModule,
     ],
 })
 export class PrimengModule {}
