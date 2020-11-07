@@ -4,17 +4,20 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AccordionModule } from 'primeng/accordion';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
+import { FileUploadModule } from 'primeng/fileupload';
 import { GalleriaModule } from 'primeng/galleria';
 import { InplaceModule } from 'primeng/inplace';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { TableModule } from 'primeng/table';
+import { ToolbarModule } from 'primeng/toolbar';
 
 @NgModule({
     declarations: [],
     imports: [
         CommonModule,
+        FileUploadModule,
         BrowserAnimationsModule,
         AccordionModule,
         ButtonModule,
@@ -25,6 +28,7 @@ import { TableModule } from 'primeng/table';
         InplaceModule,
         InputTextModule,
         OverlayPanelModule,
+        ToolbarModule,
     ],
     exports: [
         AccordionModule,
@@ -36,6 +40,8 @@ import { TableModule } from 'primeng/table';
         InputTextModule,
         DialogModule,
         OverlayPanelModule,
+        FileUploadModule,
+        ToolbarModule,
     ],
 })
 export class PrimengModule {}

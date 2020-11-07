@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { ComponentMode, createFieldConfig, FieldConfig } from 'src/app/models/interfaces/core-component';
 
 @Component({
     selector: 'app-file-uploader',
@@ -6,7 +8,33 @@ import { Component, OnInit } from '@angular/core';
     styleUrls: ['./file-uploader.component.scss'],
 })
 export class FileUploaderComponent implements OnInit {
+    @Input() field: FieldConfig = createFieldConfig();
+    @Input() group!: FormGroup;
+    @Input() componentMode: ComponentMode = 'view';
+
+    files: any[] | undefined;
+
+    cols: any[] | undefined;
+
+    log(val: any) {
+        console.log(val);
+    }
+
     constructor() {}
 
-    ngOnInit() {}
+    ngOnInit() {
+        this.cols = [
+            { field: 'filename', header: 'Name', size: '55' },
+            { field: 'filetype', header: 'Type', size: '15' },
+            { field: 'filesize', header: 'Size', size: '15' },
+            { field: 'fileurl', header: 'Download', size: '15' },
+        ];
+        this.files = [
+            { filename: 'Testfile.pdf', filetype: 'PDF', filesize: '1 MB', fileurl: '/path/to/file.pdf' },
+            { filename: 'Testfile.pdf', filetype: 'PDF', filesize: '1 MB', fileurl: '/path/to/file.pdf' },
+            { filename: 'Testfile.pdf', filetype: 'PDF', filesize: '1 MB', fileurl: '/path/to/file.pdf' },
+            { filename: 'Testfile.pdf', filetype: 'PDF', filesize: '1 MB', fileurl: '/path/to/file.pdf' },
+            { filename: 'Testfile.pdf', filetype: 'PDF', filesize: '1 MB', fileurl: '/path/to/file.pdf' },
+        ];
+    }
 }
