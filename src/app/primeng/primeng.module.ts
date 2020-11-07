@@ -8,13 +8,13 @@ import { GalleriaModule } from 'primeng/galleria';
 import { InplaceModule } from 'primeng/inplace';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { TableModule } from 'primeng/table';
 
 @NgModule({
     declarations: [],
     imports: [
         CommonModule,
-
         BrowserAnimationsModule,
         AccordionModule,
         ButtonModule,
@@ -24,6 +24,7 @@ import { TableModule } from 'primeng/table';
         DialogModule,
         InplaceModule,
         InputTextModule,
+        OverlayPanelModule,
     ],
     exports: [
         AccordionModule,
@@ -34,6 +35,7 @@ import { TableModule } from 'primeng/table';
         InplaceModule,
         InputTextModule,
         DialogModule,
+        OverlayPanelModule,
     ],
 })
 export class PrimengModule {}
