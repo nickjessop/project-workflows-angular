@@ -35,7 +35,7 @@ export class BlockPanelOverlayComponent implements OnInit {
         return options;
     }
 
-    public getObjectKeys<T>(object: Map<T, T>) {
+    public getObjectKeys(object: any) {
         const keys = Object.keys(object);
         console.log(keys);
     }

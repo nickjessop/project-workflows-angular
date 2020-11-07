@@ -1,6 +1,6 @@
 <p-overlayPanel #overlay [dismissable]="true" [showCloseIcon]="true">
     <ng-template pTemplate>
-        <div *ngFor="let blockOption of Object.keys(blockOptions)">
+        <div *ngFor="let blockOption of getObjectKeys(blockOptions)">
             <button
                 pButton
                 type="button"
