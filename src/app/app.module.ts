@@ -1,7 +1,4 @@
-<<<<<<< HEAD
-=======
 import { HttpClientModule } from '@angular/common/http';
->>>>>>> a8c64c7f71dbccc1a5e18eba686daf3758fa1e47
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
