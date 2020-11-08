@@ -14,6 +14,7 @@ import { PlaceholderComponent } from './fields/placeholder/placeholder.component
 import { SmallTextInputComponent } from './fields/small-text-input/small-text-input.component';
 import { TableComponent } from './fields/table/table.component';
 import { UploaderComponent } from './fields/uploader/uploader.component';
+import { UrlComponent } from './fields/url/url.component';
 
 @NgModule({
     declarations: [
@@ -28,6 +29,7 @@ import { UploaderComponent } from './fields/uploader/uploader.component';
         CheckboxesComponent,
         BaseFieldComponent,
         PlaceholderComponent,
+        UrlComponent,
     ],
     imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, PrimengModule],
     exports: [
@@ -39,6 +41,7 @@ import { UploaderComponent } from './fields/uploader/uploader.component';
         DynamicFormComponent,
         UploaderComponent,
         CheckboxesComponent,
+        UrlComponent,
     ],
     entryComponents: [
         LargeTextInputComponent,
@@ -49,6 +52,7 @@ import { UploaderComponent } from './fields/uploader/uploader.component';
         DynamicFormComponent,
         UploaderComponent,
         CheckboxesComponent,
+        UrlComponent,
     ],
 })
 export class CoreComponentsModule {}
