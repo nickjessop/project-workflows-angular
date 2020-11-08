@@ -9,6 +9,7 @@ import { GalleriaModule } from 'primeng/galleria';
 import { InplaceModule } from 'primeng/inplace';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { TableModule } from 'primeng/table';
 import { ToolbarModule } from 'primeng/toolbar';
 
@@ -26,6 +27,7 @@ import { ToolbarModule } from 'primeng/toolbar';
         DialogModule,
         InplaceModule,
         InputTextModule,
+        OverlayPanelModule,
         ToolbarModule,
     ],
     exports: [
@@ -37,6 +39,7 @@ import { ToolbarModule } from 'primeng/toolbar';
         InplaceModule,
         InputTextModule,
         DialogModule,
+        OverlayPanelModule,
         FileUploadModule,
         ToolbarModule,
     ],
