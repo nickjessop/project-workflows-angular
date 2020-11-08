@@ -8,6 +8,7 @@ import { LargeTextInputComponent } from './fields/large-text-input/large-text-in
 import { PlaceholderComponent } from './fields/placeholder/placeholder.component';
 import { SmallTextInputComponent } from './fields/small-text-input/small-text-input.component';
 import { TableComponent } from './fields/table/table.component';
+import { UrlComponent } from './fields/url/url.component';
 
 @Directive({
     selector: '[appCoreComponentResolver]',
@@ -25,6 +26,7 @@ export class CoreComponentResolverDirective implements OnInit {
         checkboxes: CheckboxesComponent,
         smallTextInput: SmallTextInputComponent,
         table: TableComponent,
+        url: UrlComponent,
         empty: PlaceholderComponent,
     };
 

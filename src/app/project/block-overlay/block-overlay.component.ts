@@ -27,6 +27,7 @@ export class BlockPanelOverlayComponent implements OnInit {
             smallTextInput: { enabled: true, icon: 'pi pi-ticket', label: 'Small Text Box' },
             largeTextInput: { enabled: true, icon: 'pi pi-ticket', label: 'Large Text Box' },
             table: { enabled: true, icon: 'pi pi-ticket', label: 'Table' },
+            url: { enabled: true, icon: 'pi pi-ticket', label: 'Url' },
             empty: { enabled: true, icon: 'pi pi-ticket', label: 'Checkbox' },
         };
 

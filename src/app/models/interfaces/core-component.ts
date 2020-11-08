@@ -46,6 +46,7 @@ export type ComponentType =
     | 'largeTextInput'
     | 'smallTextInput'
     | 'table'
+    | 'url'
     | 'empty';
 
 export type ComponentMode = 'edit' | 'view' | 'interact';

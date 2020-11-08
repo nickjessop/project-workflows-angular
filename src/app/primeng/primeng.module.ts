@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AccordionModule } from 'primeng/accordion';
 import { ButtonModule } from 'primeng/button';
+import { CardModule } from 'primeng/card';
 import { DialogModule } from 'primeng/dialog';
 import { FileUploadModule } from 'primeng/fileupload';
 import { GalleriaModule } from 'primeng/galleria';
@@ -29,6 +30,7 @@ import { ToolbarModule } from 'primeng/toolbar';
         InputTextModule,
         OverlayPanelModule,
         ToolbarModule,
+        CardModule,
     ],
     exports: [
         AccordionModule,
@@ -42,6 +44,7 @@ import { ToolbarModule } from 'primeng/toolbar';
         OverlayPanelModule,
         FileUploadModule,
         ToolbarModule,
+        CardModule,
     ],
 })
 export class PrimengModule {}
