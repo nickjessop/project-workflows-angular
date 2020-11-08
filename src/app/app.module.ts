@@ -11,7 +11,7 @@ import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { SliceEllipsisPipe } from './pipes/slice-ellipsis.pipe';
 import { PrimengModule } from './primeng/primeng.module';
-import { BlockDialogComponent } from './project/block-dialog/block-dialog.component';
+import { BlockPanelOverlayComponent } from './project/block-overlay/block-overlay.component';
 import { ControlsComponent } from './project/controls/controls.component';
 import { ProjectCardComponent } from './project/project-card/project-card.component';
 import { ProjectComponent } from './project/project.component';
@@ -33,7 +33,7 @@ import { ProtectedRoutingModule } from './protected-routing.module';
         NavBarComponent,
         StepsComponent,
         ControlsComponent,
-        BlockDialogComponent,
+        BlockPanelOverlayComponent,
         StepDialogComponent,
     ],
     imports: [

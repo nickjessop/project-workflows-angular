@@ -1,0 +1,21 @@
+<p-overlayPanel #overlay [dismissable]="true" [showCloseIcon]="true">
+    <ng-template pTemplate>
+        <div *ngFor="let blockOption of getObjectKeys(blockOptions)">
+            <button
+                pButton
+                type="button"
+                icon="{{ blockOption.icon }}"
+                iconPos="left"
+                label="{{ blockOption.label }}"
+            ></button>
+        </div>
+    </ng-template>
+</p-overlayPanel>
+
+<button
+    pButton
+    type="button"
+    class="p-button-outlined p-button-rounded p-button-secondary"
+    icon="pi pi-plus"
+    (click)="showAddNewBlockDialog($event)"
+></button>
