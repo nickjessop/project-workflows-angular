@@ -5,14 +5,5 @@
             <h5>{{ stepConfig.step.title }}</h5>
         </div>
     </ng-container>
-    <div class="step">
-        <button
-            pButton
-            type="button"
-            label="New Step"
-            icon="pi pi-plus"
-            class="p-button-text"
-            (click)="onNewStepPress($event)"
-        ></button>
-    </div>
+<project-step-dialog (onSavePress)="onSavePress($event)"></project-step-dialog>
 </div>
