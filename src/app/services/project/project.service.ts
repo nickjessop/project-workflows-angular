@@ -61,10 +61,14 @@ export class ProjectService {
         options?: string[],
         collections?: string,
         type?: ComponentType,
-        value?: string
+        value?: string,
+        stepDescription?: string
     ) {
         const fieldConfig = createFieldConfig(label, name, inputType, options, collections, type, value);
-        const step = { step: { title: stepTitle || '(Untitled Step)' }, components: [fieldConfig] };
+        const step = {
+            step: { title: stepTitle || '(Untitled Step)', description: stepDescription || '' },
+            components: [fieldConfig],
+        };
 
         return step;
     }
