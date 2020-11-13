@@ -33,6 +33,11 @@ export class ControlsComponent implements OnInit {
         );
     }
 
+    public onSelectNewBlock(blockType: ComponentType) {
+        console.log(`adding new block: ${blockType}`);
+        this.addNewBlock(undefined, undefined, undefined, undefined, undefined, undefined, blockType);
+    }
+
     public addNewBlock(
         label?: string,
         name?: string,

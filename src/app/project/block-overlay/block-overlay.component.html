@@ -1,12 +1,13 @@
 <p-overlayPanel #overlay [dismissable]="true" [showCloseIcon]="true">
     <ng-template pTemplate>
-        <div *ngFor="let blockOption of getObjectKeys(blockOptions)">
+        <div *ngFor="let blockOption of blockOptions">
             <button
                 pButton
                 type="button"
                 icon="{{ blockOption.icon }}"
                 iconPos="left"
                 label="{{ blockOption.label }}"
+                (click)="onAddNewBlockPress(blockOption.component)"
             ></button>
         </div>
     </ng-template>
