@@ -47,7 +47,6 @@ export class ViewerComponent implements OnInit {
             })
         );
     }
-
     ngOnDestroy() {
         this.subscriptions.unsubscribe();
     }
