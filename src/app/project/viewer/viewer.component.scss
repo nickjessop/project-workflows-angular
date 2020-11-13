@@ -1,6 +1,9 @@
 .viewer {
     display: flex;
     flex-direction: row;
+    .back-link:hover {
+        cursor: pointer;
+    }
     .p-grid.viewer-container {
         width: 90%;
     }
