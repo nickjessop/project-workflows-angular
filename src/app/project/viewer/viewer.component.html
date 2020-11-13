@@ -1,38 +1,41 @@
 <div class="viewer">
     <div class="p-grid p-nogutter viewer-container p-pr-4 p-pt-4">
         <div class="p-col-3">
-            <div class="p-pb-4 p-pl-3 p-d-flex p-ai-center">
+            <div class="p-pt-1 p-pb-5 p-pl-3 p-d-flex p-ai-center">
                 <span [routerLink]="['/project']" class="p-d-flex p-ai-center p-text-bold back-link">
-                    <button pButton icon="pi pi-chevron-left" iconPos="left" class="p-button-outlined p-button-rounded p-button-secondary p-mr-2"></button>
-                    Back
+                    <i class="pi pi-chevron-left p-mr-2"></i>
+                    <img src="/assets/stepflow-logo.svg" alt="Stepflow logo" height="26px" />
                 </span>
             </div>
             <project-steps></project-steps>
         </div>
         <div class="p-col-9 p-pl-4">
             <div class="p-grid p-pb-3">
-                <div class="p-col-6 p-d-flex p-ai-center p-pl-4">
-                    <span class="ms-2 p-text-bold">{{ project.name }}</span>
+                <div class="p-col-6 p-d-flex p-ai-center">
+                    <div class="p-ml-3 ms-2 p-text-bold">{{ project.name }}</div>
                 </div>
-                <div class="p-col-6 p-d-flex p-jc-end p-ai-center p-pr-4">
-                    <i class="pi pi-cog ms-3 p-mr-4"></i>
-                    <p-button label="Share"></p-button>
+                <div class="p-col-6 p-d-flex p-jc-end p-ai-center">
+                    <i class="pi pi-cog ms-3 p-mr-3"></i>
+                    <p-button label="Share" class="p-mr-3"></p-button>
+                    <img src="/assets/placeholder/placeholder-profile.png" class="p-mr-3" width="36px" height="36px" alt="Your profile picture" />
                 </div>
             </div>
-            <p-card class="step-container">
+            <div class="p-card step-container p-mb-4">
                 <p-header>
                     <div class="p-grid p-nogutter p-py-2">
-                        <div class="p-col-6 p-pl-4">
-                            <h2>{{ currentStep.step.title }}</h2>
+                        <div class="p-col-6">
+                            <h2 class="p-pl-3">{{ currentStep.step.title }}</h2>
                         </div>
-                        <div class="p-col-6 p-d-flex p-jc-end p-ai-center p-pr-4">
-                            <project-controls></project-controls>
+                        <div class="p-col-6 p-d-flex p-jc-end p-ai-center">
+                            <div class="p-pr-3">
+                                <project-controls></project-controls>
+                            </div>
                         </div>
                     </div>
                     <hr />
                 </p-header>
                 <project-dynamic-form [fields]="currentStep.components"></project-dynamic-form>
-            </p-card>
+            </div>
         </div>
     </div>
 </div>
