@@ -53,11 +53,20 @@ export class StepsComponent implements OnInit {
         this.currentStep = step;
     }
 
-    public onNewStepPress(event: Event) {
+    public onSavePress(event: { title: string; description: string }) {
+        console.log(`Saved pressed with title: ${event.title} and description: ${event.description}`);
+        this.onNewStepPress(event);
+    }
+
+    private onNewStepPress(stepConfig: { title: string; description: string }) {
         const newStep = this.projectService.createNewProjectStep();
+        newStep.step.description = stepConfig.description;
+        newStep.step.title = stepConfig.title;
 
         const project = this.projectService.projectConfig;
         project.configuration?.push(newStep);
+
+        console.log(project);
 
         this.projectService.projectConfig = project;
         this.projectService.currentStep = newStep;
