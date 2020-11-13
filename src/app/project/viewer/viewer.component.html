@@ -1,6 +1,23 @@
-<div class="view">
-    <project-steps></project-steps>
-    <project-dynamic-form [fields]="currentStep.components">
-        <project-controls></project-controls>
-    </project-dynamic-form>
+<div class="viewer">
+    <div class="p-grid p-nogutter viewer-container p-pr-4 p-pt-4">
+        <div class="p-col-3">
+            <project-steps></project-steps>
+        </div>
+        <div class="p-col-9 p-pl-4">
+            <p-card class="step-container">
+                <p-header>
+                    <div class="p-grid p-nogutter p-py-2">
+                        <div class="p-col-6 p-pl-4">
+                            <h2>Project Title</h2>
+                        </div>
+                        <div class="p-col-6 p-d-flex p-jc-end p-ai-center p-pr-4">
+                            <project-controls></project-controls>
+                        </div>
+                    </div>
+                    <hr />
+                </p-header>
+                <project-dynamic-form [fields]="currentStep.components"></project-dynamic-form>
+            </p-card>
+        </div>
+    </div>
 </div>

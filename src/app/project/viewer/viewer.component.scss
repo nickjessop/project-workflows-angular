@@ -1,4 +1,10 @@
-.view {
+.viewer {
     display: flex;
     flex-direction: row;
+    .p-grid.viewer-container {
+        width: 90%;
+    }
+    p-card.step-container {
+        min-width: 600px;
+    }
 }
