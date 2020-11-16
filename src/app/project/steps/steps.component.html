@@ -1,4 +1,4 @@
-<div class="steps-container p-pl-4">
+<div class="steps-container">
     <ng-container *ngFor="let stepConfig of steps">
         <div class="step p-d-flex p-ai-center p-mb-3" [class.step-selected]="stepConfig === currentStep" (click)="onStepPress(stepConfig)">
             <i class="material-icons">{{ stepConfig.step.icon }}</i>

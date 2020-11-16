@@ -1,5 +1,9 @@
-<div class="card" (click)="navigate()">
-    <h3 title="{{ projectName }}">{{ projectName | sliceEllipsis: 0:40 }}</h3>
-    <p title="{{ openedDate }}">{{ openedDate | sliceEllipsis: 0:40 }}</p>
-    <label title="{{ projectDescription }}">{{ projectDescription | sliceEllipsis: 0:80 }}</label>
-</div>
+<tr (click)="navigate()" class="project__row p-py-3 p-px-2">
+    <td>
+        <strong>{{ projectName | sliceEllipsis: 0:80 }}</strong><br />
+        <span>{{ projectDescription | sliceEllipsis: 1:40 }}</span>
+    </td>
+    <td>
+        <span title="{{ openedDate }}">{{ openedDate | sliceEllipsis: 0:40 }}</span>
+    </td>
+</tr>

@@ -1,18 +1,38 @@
-<h1>Project Page</h1>
+
 <!-- <button (click)="saveProject()">Save Dummy Project</button> -->
+<app-nav-bar></app-nav-bar>
 
-<ng-container *ngIf="isLoadingProjects; else showProjects"> Loading... </ng-container>
+<div class="p-px-5 p-py-5">
 
-<ng-template #showProjects>
-    <div class="project" *ngIf="projects">
-        <ng-container *ngFor="let project of projects">
-            <project-card
-                class="project__card"
-                projectName="{{ project.name }}"
-                projectDescription="{{ project.description }}"
-                link="/project/{{ project.id }}"
-            ></project-card>
-        </ng-container>
-    </div>
-</ng-template>
+    <h1>Projects</h1>
+
+    <ng-container *ngIf="isLoadingProjects; else showProjects"> <p-progressSpinner></p-progressSpinner> </ng-container>
+
+    <ng-template #showProjects>
+        <div class="project" *ngIf="projects">
+            <p-tabView>
+                <p-tabPanel header="All">
+                    <p-table [value]="projects" styleClass="p-datatable-gridlines p-datatable-lg p-py-3">
+                        <ng-template pTemplate="body" let-project>
+                            <project-card
+                                class="project__card"
+                                projectName="{{ project.name }}"
+                                projectDescription="{{ project.description }}"
+                                link="/project/{{ project.id }}"
+                            ></project-card>
+                        </ng-template>
+                    </p-table>
+                </p-tabPanel>
+                <p-tabPanel header="Created">
+                    <div class="p-py-3">Projects I'm the owner of</div>
+                </p-tabPanel>
+                <p-tabPanel header="Invited">
+                    <div class="p-py-3">Projects I've been invited to</div>
+                </p-tabPanel>
+            </p-tabView>
+        </div>
+    </ng-template>
+
+</div>
+
 <router-outlet></router-outlet>

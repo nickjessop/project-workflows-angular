@@ -1,13 +1,12 @@
-.card {
-    padding: 5px 20px;
-    width: 300px;
-    height: 192px;
-    border: 1px solid #d2d7de;
-    box-sizing: border-box;
-    border-radius: 8px;
-
-    cursor: pointer;
+.project__card {
+    width: 100%;
+    display: block;
+}
+.project__row {
+    width: 100%;
+    display: block;
     &:hover {
-        box-shadow: 1px 1px 12px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+        background: rgba(33, 150, 243, 0.04);
     }
 }

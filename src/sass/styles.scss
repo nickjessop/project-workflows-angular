@@ -20,13 +20,14 @@ html {
     text-size-adjust: 100%;
     box-sizing: border-box;
     font-size: $baseline;
+    height: 100%;
 }
 
 // GENERAL
 body {
-    color: $body;
-    background-color: $light-background;
     font-family: 'Roboto', sans-serif;
+    min-height: 100%;
+    background: $light-background;
 }
 
 body.noscroll {
