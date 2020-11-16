@@ -1,9 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ProjectService } from '../services/project/project.service';
-import { AuthenticationService } from '../services/authentication/authentication.service';
-import { take } from 'rxjs/operators';
-import { of } from 'rxjs';
 import { Project } from '../models/interfaces/project';
+import { ProjectService } from '../services/project/project.service';
 
 @Component({
     selector: 'app-project',

@@ -11,7 +11,9 @@ import { InplaceModule } from 'primeng/inplace';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { TableModule } from 'primeng/table';
+import { TabViewModule } from 'primeng/tabview';
 import { ToolbarModule } from 'primeng/toolbar';
 
 @NgModule({
@@ -31,6 +33,8 @@ import { ToolbarModule } from 'primeng/toolbar';
         OverlayPanelModule,
         ToolbarModule,
         CardModule,
+        ProgressSpinnerModule,
+        TabViewModule,
     ],
     exports: [
         AccordionModule,
@@ -45,6 +49,8 @@ import { ToolbarModule } from 'primeng/toolbar';
         FileUploadModule,
         ToolbarModule,
         CardModule,
+        ProgressSpinnerModule,
+        TabViewModule,
     ],
 })
 export class PrimengModule {}
