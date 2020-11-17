@@ -1,6 +1,8 @@
 .navigation {
     width: 100% !important;
     height: 70px !important;
+    background: white;
+    border-bottom: 1px solid var(--surface-d);
     &__content {
         width: 100%;
     }
