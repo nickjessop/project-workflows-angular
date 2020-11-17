@@ -6,7 +6,11 @@
 
     <h1>Projects</h1>
 
-    <ng-container *ngIf="isLoadingProjects; else showProjects"> <p-progressSpinner></p-progressSpinner> </ng-container>
+    <ng-container *ngIf="isLoadingProjects; else showProjects">
+        <div class="p-d-flex p-jc-center p-py-6">
+            <p-progressSpinner></p-progressSpinner>
+        </div>
+    </ng-container>
 
     <ng-template #showProjects>
         <div class="project" *ngIf="projects">
