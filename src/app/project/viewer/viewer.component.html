@@ -1,28 +1,14 @@
 <div class="viewer">
-    <div class="viewer__nav">
-        <div class="p-grid p-nogutter p-p-3">
-            <div class="p-col-6 p-d-flex p-ai-center">
-                    <i class="pi pi-chevron-left p-pr-2 back-link" [routerLink]="['/project']"></i>
-                    <img src="/assets/stepflow-logo.svg" [routerLink]="['/project']" alt="Stepflow logo" height="26px" class="back-link" />
-                <div class="viewer__divider p-mx-3"></div>
-                <div class="ms-1 p-text-bold">{{ project.name }}</div>
-            </div>
-            <div class="p-col-6 p-d-flex p-jc-end p-ai-center">
-                <i class="pi pi-cog ms-3 p-mr-3"></i>
-                <p-button label="Share" class="p-mr-3"></p-button>
-                <img src="/assets/placeholder/placeholder-profile.png" width="36px" height="36px" alt="Your profile picture" />
-            </div>
-        </div>
-    </div>
+    <app-project-controls projectName="{{ project.name }}"></app-project-controls>
     <div class="p-grid p-nogutter viewer-container p-px-5 p-pt-6">
         <div class="p-col-3">
             <project-steps></project-steps>
         </div>
         <div class="p-col-9 p-pl-4">
-            <div class="p-card step-container p-mb-4">
-                <p-header>
+            <div class="p-card step-container p-mb-4 p-shadow-2">
+                <p-header class="p-mb-2">
                     <div class="p-grid p-nogutter p-py-2">
-                        <div class="p-col-6">
+                        <div class="p-col-6 p-d-flex p-ai-center">
                             <h2 class="p-pl-3 ms-2">{{ currentStep.step.title }}</h2>
                         </div>
                         <div class="p-col-6 p-d-flex p-jc-end p-ai-center">
@@ -31,9 +17,11 @@
                             </div>
                         </div>
                     </div>
-                    <hr />
+                    <hr class="p-mt-0 p-mb-4" />
                 </p-header>
-                <project-dynamic-form [fields]="currentStep.components"></project-dynamic-form>
+                <div class="p-px-2">
+                    <project-dynamic-form [fields]="currentStep.components"></project-dynamic-form>
+                </div>
             </div>
         </div>
     </div>

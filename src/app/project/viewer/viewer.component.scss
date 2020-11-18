@@ -1,19 +1,6 @@
 .viewer {
     display: flex;
     flex-direction: column;
-    .viewer__nav {
-        width: 100%;
-        background: white;
-        border-bottom: 1px solid var(--surface-d);
-    }
-    .viewer__divider {
-        width: 1px;
-        height: 26px;
-        background: var(--surface-d);
-    }
-    .back-link:hover {
-        cursor: pointer;
-    }
     .p-grid.viewer-container {
         width: 80%;
         margin: 0 auto;

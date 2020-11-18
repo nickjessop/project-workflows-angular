@@ -1,0 +1,15 @@
+.project-controls {
+    &__nav {
+        width: 100%;
+        background: white;
+        border-bottom: 1px solid var(--surface-d);
+    }
+    &__divider {
+        width: 1px;
+        height: 26px;
+        background: var(--surface-d);
+    }
+    &__back-link:hover {
+        cursor: pointer;
+    }
+}

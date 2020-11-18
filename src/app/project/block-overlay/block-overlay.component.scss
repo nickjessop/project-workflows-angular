@@ -1,6 +1,25 @@
 .dialog {
     width: 50vw;
 }
+.block-overlayPanel {
+    &:after,
+    &:before {
+        left: 50%;
+    }
+    background: red !important;
+}
+
+.block-overlay {
+    &__item {
+        text-align: center;
+        height: 90px;
+        &:hover {
+            background: var(--surface-d);
+            cursor: pointer;
+            border-radius: 6px;
+        }
+    }
+}
 
 @media screen and (max-width: 40em) {
     .dialog {

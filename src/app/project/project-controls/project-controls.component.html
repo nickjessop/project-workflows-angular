@@ -1,0 +1,15 @@
+<div class="project-controls__nav">
+    <div class="p-grid p-nogutter p-p-3">
+        <div class="p-col-6 p-d-flex p-ai-center">
+                <i class="pi pi-chevron-left p-pr-2 project-controls__back-link" [routerLink]="['/project']"></i>
+                <img src="/assets/stepflow-logo.svg" [routerLink]="['/project']" alt="Stepflow logo" height="26px" class="project-controls__back-link" />
+            <div class="project-controls__divider p-mx-3"></div>
+            <div class="ms-1 p-text-bold">{{ projectName }}</div>
+        </div>
+        <div class="p-col-6 p-d-flex p-jc-end p-ai-center">
+            <i class="pi pi-cog ms-3 p-mr-3"></i>
+            <p-button label="Share" class="p-mr-3"></p-button>
+            <img src="/assets/placeholder/placeholder-profile.png" width="36px" height="36px" alt="Your profile picture" />
+        </div>
+    </div>
+</div>
