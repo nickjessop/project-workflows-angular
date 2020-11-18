@@ -21,13 +21,13 @@ export class BlockPanelOverlayComponent implements OnInit {
 
     private getBlockOptions() {
         const options = [
-            { enabled: true, icon: 'pi pi-ticket', label: 'Checkbox', component: 'checkboxes' },
-            { enabled: true, icon: 'pi pi-ticket', label: 'File Uploader', component: 'fileUploader' },
-            { enabled: true, icon: 'pi pi-ticket', label: 'Image Uploader', component: 'imageUploader' },
-            { enabled: true, icon: 'pi pi-ticket', label: 'Small Text Box', component: 'smallTextInput' },
-            { enabled: true, icon: 'pi pi-ticket', label: 'Large Text Box', component: 'largeTextInput' },
-            { enabled: true, icon: 'pi pi-ticket', label: 'Table', component: 'table' },
-            { enabled: true, icon: 'pi pi-ticket', label: 'Url', component: 'url' },
+            { enabled: true, icon: 'pi-check-square', label: 'Checkbox', component: 'checkboxes' },
+            { enabled: true, icon: 'pi-folder', label: 'File Uploader', component: 'fileUploader' },
+            { enabled: true, icon: 'pi-images', label: 'Image Uploader', component: 'imageUploader' },
+            { enabled: true, icon: 'pi-pencil', label: 'Small Text Box', component: 'smallTextInput' },
+            { enabled: true, icon: 'pi-pencil', label: 'Large Text Box', component: 'largeTextInput' },
+            { enabled: true, icon: 'pi-table', label: 'Table', component: 'table' },
+            { enabled: true, icon: 'pi-globe', label: 'Url', component: 'url' },
         ];
 
         return options;
