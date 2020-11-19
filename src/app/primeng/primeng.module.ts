@@ -10,6 +10,7 @@ import { GalleriaModule } from 'primeng/galleria';
 import { InplaceModule } from 'primeng/inplace';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import { MenuModule } from 'primeng/menu';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { TableModule } from 'primeng/table';
@@ -35,6 +36,7 @@ import { ToolbarModule } from 'primeng/toolbar';
         CardModule,
         ProgressSpinnerModule,
         TabViewModule,
+        MenuModule,
     ],
     exports: [
         AccordionModule,
@@ -51,6 +53,7 @@ import { ToolbarModule } from 'primeng/toolbar';
         CardModule,
         ProgressSpinnerModule,
         TabViewModule,
+        MenuModule,
     ],
 })
 export class PrimengModule {}
