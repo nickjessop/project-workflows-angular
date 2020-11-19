@@ -21,6 +21,7 @@ import { StepsComponent } from './project/steps/steps.component';
 import { ViewerComponent } from './project/viewer/viewer.component';
 import { ProtectedRoutingModule } from './protected-routing.module';
 import { ProjectControlsComponent } from './project/project-controls/project-controls.component';
+import { UserMenuComponent } from './user-menu/user-menu.component';
 
 @NgModule({
     declarations: [
@@ -38,6 +39,7 @@ import { ProjectControlsComponent } from './project/project-controls/project-con
         BlockPanelOverlayComponent,
         StepDialogComponent,
         ProjectControlsComponent,
+        UserMenuComponent,
     ],
     imports: [
         ProtectedRoutingModule,
