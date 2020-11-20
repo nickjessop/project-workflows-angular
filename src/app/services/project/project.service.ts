@@ -16,6 +16,8 @@ export class ProjectService {
     private _currentStep: BehaviorSubject<StepConfig | null> = new BehaviorSubject<StepConfig | null>(null);
     public readonly currentStep$ = this._currentStep.asObservable();
 
+    public unsubscribeToProjectListener?: () => void;
+
     constructor(private firebaseService: FirebaseService, private authenticationService: AuthenticationService) {}
 
     public get projectConfig() {
@@ -32,6 +34,12 @@ export class ProjectService {
 
     public set currentStep(currentStep: StepConfig | null) {
         this._currentStep.next(currentStep);
+    }
+
+    ngOnDestroy() {
+        if (this.unsubscribeToProjectListener) {
+            this.unsubscribeToProjectListener();
+        }
     }
 
     public createBaseProject(
@@ -167,24 +175,46 @@ export class ProjectService {
     public getProject(projectId: string) {
         console.log(`get project called with id: ${projectId}`);
 
-        return from(
-            this.firebaseService
-                .getDbInstance()!
-                .collection(this.PROJECT_COLLECTION_NAME)
-                .doc(projectId)
-                .get()
-                .then(
-                    project => {
-                        console.log('fetched project: ', project.data());
+        this.subscribeAndSetProject(projectId);
 
-                        return project.data() as Project;
-                    },
-                    error => {
-                        console.log(`Error while fetching project: ${projectId}`, error);
-                        return null;
-                    }
-                )
-        );
+        // return from(
+        //     this.firebaseService
+        //         .getDbInstance()!
+        //         .collection(this.PROJECT_COLLECTION_NAME)
+        //         .doc(projectId)
+        //         .get()
+        //         .then(
+        //             project => {
+        //                 return project.data() as Project;
+        //             },
+        //             error => {
+        //                 console.log(`Error while fetching project: ${projectId}`, error);
+        //                 return null;
+        //             }
+        //         )
+        // );
+    }
+
+    public subscribeAndSetProject(projectId: string) {
+        console.log(`Subscribing to project: ${projectId}`);
+
+        this.unsubscribeToProjectListener = this.firebaseService
+            .getDbInstance()!
+            .collection(this.PROJECT_COLLECTION_NAME)
+            .doc(projectId)
+            .onSnapshot(
+                document => {
+                    const project = document.data() as Project;
+
+                    this.projectConfig = project;
+                    this.currentStep = project.configuration?.[0] ? project.configuration[0] : null;
+
+                    console.log(`Subscription result:`, project);
+                },
+                error => {
+                    console.log(error);
+                }
+            );
     }
 
     public saveDemoProject() {
