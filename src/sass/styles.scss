@@ -63,3 +63,14 @@ a:visited {
 
 // TYPOGRAPHY
 @import 'group/typography';
+
+// PRIME OVERRIDES
+.dialog {
+    width: 50vw;
+}
+
+@media screen and (max-width: 40em) {
+    .dialog {
+        width: 75vw;
+    }
+}

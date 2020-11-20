@@ -5,12 +5,15 @@ import { AccordionModule } from 'primeng/accordion';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { DialogModule } from 'primeng/dialog';
+import { DropdownModule } from 'primeng/dropdown';
 import { FileUploadModule } from 'primeng/fileupload';
 import { GalleriaModule } from 'primeng/galleria';
 import { InplaceModule } from 'primeng/inplace';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { MenuModule } from 'primeng/menu';
+import { MessageModule } from 'primeng/message';
+import { MessagesModule } from 'primeng/messages';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { TableModule } from 'primeng/table';
@@ -37,6 +40,9 @@ import { ToolbarModule } from 'primeng/toolbar';
         ProgressSpinnerModule,
         TabViewModule,
         MenuModule,
+        DropdownModule,
+        MessagesModule,
+        MessageModule,
     ],
     exports: [
         AccordionModule,
@@ -54,6 +60,9 @@ import { ToolbarModule } from 'primeng/toolbar';
         ProgressSpinnerModule,
         TabViewModule,
         MenuModule,
+        DropdownModule,
+        MessagesModule,
+        MessageModule,
     ],
 })
 export class PrimengModule {}
