@@ -18,6 +18,7 @@ import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { TableModule } from 'primeng/table';
 import { TabViewModule } from 'primeng/tabview';
+import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
 
 @NgModule({
@@ -43,6 +44,7 @@ import { ToolbarModule } from 'primeng/toolbar';
         DropdownModule,
         MessagesModule,
         MessageModule,
+        ToastModule,
     ],
     exports: [
         AccordionModule,
@@ -63,6 +65,7 @@ import { ToolbarModule } from 'primeng/toolbar';
         DropdownModule,
         MessagesModule,
         MessageModule,
+        ToastModule,
     ],
 })
 export class PrimengModule {}

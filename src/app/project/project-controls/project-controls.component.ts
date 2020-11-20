@@ -1,14 +1,19 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
 
 interface Role {
     name: string;
+}
+interface Permission {
+    permission: string;
 }
 
 @Component({
     selector: 'app-project-controls',
     templateUrl: './project-controls.component.html',
     styleUrls: ['./project-controls.component.scss'],
+    providers: [MessageService],
 })
 export class ProjectControlsComponent implements OnInit {
     @Input() projectName = '';
@@ -20,8 +25,10 @@ export class ProjectControlsComponent implements OnInit {
     linkCopiedMsg: any[] = [];
 
     roles: Role[];
-
     selectedRole!: Role;
+
+    permissions: Permission[];
+    selectedPermission!: Permission;
 
     projectUsers = [
         {
@@ -52,18 +59,26 @@ export class ProjectControlsComponent implements OnInit {
         this.displayShareDialog = true;
     }
 
+    hideShareDialog() {
+        this.displayShareDialog = false;
+    }
+
     copyInputMessage(linkInput: any) {
         linkInput.select();
         document.execCommand('copy');
         linkInput.setSelectionRange(0, 0);
-        this.linkCopiedMsg.push({ severity: 'success', text: 'Link copied' });
+        this.messageService.add({
+            key: 'linkCopied',
+            severity: 'success',
+            detail: 'Link copied',
+        });
     }
 
     hideLinkCopiedMsg() {
         this.linkCopiedMsg = [];
     }
 
-    constructor(private router: Router) {
+    constructor(private router: Router, private messageService: MessageService) {
         this.roles = [
             {
                 name: 'Owner',
@@ -76,6 +91,14 @@ export class ProjectControlsComponent implements OnInit {
             },
             {
                 name: 'Viewer',
+            },
+        ];
+        this.permissions = [
+            {
+                permission: 'Restricted',
+            },
+            {
+                permission: 'Open',
             },
         ];
     }
