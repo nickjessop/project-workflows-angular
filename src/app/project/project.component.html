@@ -2,9 +2,16 @@
 <!-- <button (click)="saveProject()">Save Dummy Project</button> -->
 <app-nav-bar></app-nav-bar>
 
-<div class="p-px-5 p-py-5">
+<div class="p-px-5 p-py-5 container">
 
-    <h1>Projects</h1>
+    <div class="p-grid p-nogutter p-pt-2 p-pb-4">
+        <div class="p-col-6">
+            <h1 class="p-m-0">Projects</h1>
+        </div>
+        <div class="p-col-6 p-d-flex p-ai-center p-jc-end">
+                <button pButton type="button" icon="pi pi-plus" iconPos="left" label="New Project"></button>
+        </div>
+    </div>
 
     <ng-container *ngIf="isLoadingProjects; else showProjects">
         <div class="p-d-flex p-jc-center p-py-6">
@@ -15,7 +22,7 @@
     <ng-template #showProjects>
         <div class="project" *ngIf="projects">
             <p-tabView>
-                <p-tabPanel header="All">
+                <p-tabPanel header="All projects">
                     <p-table [value]="projects" styleClass="p-datatable-gridlines p-datatable-lg p-py-3">
                         <ng-template pTemplate="body" let-project>
                             <project-card
@@ -27,10 +34,10 @@
                         </ng-template>
                     </p-table>
                 </p-tabPanel>
-                <p-tabPanel header="Created">
+                <p-tabPanel header="Created by me">
                     <div class="p-py-3">Projects I'm the owner of</div>
                 </p-tabPanel>
-                <p-tabPanel header="Invited">
+                <p-tabPanel header="Shared with me">
                     <div class="p-py-3">Projects I've been invited to</div>
                 </p-tabPanel>
             </p-tabView>

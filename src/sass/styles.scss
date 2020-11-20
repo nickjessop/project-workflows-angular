@@ -27,7 +27,6 @@ html {
 body {
     font-family: 'Roboto', sans-serif;
     min-height: 100%;
-    background: $light-background;
 }
 
 body.noscroll {
@@ -40,9 +39,17 @@ body.noscroll {
 }
 
 .container {
-    display: flex;
-    &--column {
-        flex-direction: column;
+    width: 80%;
+    width: 80vw;
+    margin: 0 auto;
+    min-width: 960px;
+}
+
+@media screen and (max-width: 60em) {
+    .container {
+        width: 95%;
+        width: 95vw;
+        min-width: auto;
     }
 }
 
@@ -66,11 +73,15 @@ a:visited {
 
 // PRIME OVERRIDES
 .dialog {
-    width: 50vw;
+    width: 40vw;
 }
 
 @media screen and (max-width: 40em) {
     .dialog {
         width: 75vw;
     }
+}
+
+.p-field > label {
+    display: block;
 }
