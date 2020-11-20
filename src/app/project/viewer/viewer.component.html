@@ -4,7 +4,7 @@
         <div class="p-col-3">
             <project-steps></project-steps>
         </div>
-        <div class="p-col-9 p-pl-4">
+        <div class="p-col-9 p-pl-4" *ngIf="currentStep; else showLoading">
             <div class="p-card step-container p-mb-4 p-shadow-2">
                 <p-header class="p-mb-2">
                     <div class="p-grid p-nogutter p-py-2">
@@ -24,5 +24,8 @@
                 </div>
             </div>
         </div>
+         <ng-template #showLoading>
+            Loading...
+        </ng-template>
     </div>
 </div>
