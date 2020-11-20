@@ -66,11 +66,15 @@ a:visited {
 
 // PRIME OVERRIDES
 .dialog {
-    width: 50vw;
+    width: 40vw;
 }
 
 @media screen and (max-width: 40em) {
     .dialog {
         width: 75vw;
     }
+}
+
+.p-field > label {
+    display: block;
 }

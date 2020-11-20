@@ -1,15 +1,17 @@
 
-<p-dialog header="Add Step" [(visible)]="showDialog" styleClass="dialog">
-    <span class="p-float-label p-my-5">
-        <input id="title" type="text" pInputText [(ngModel)]='title'>
-        <label for="title">Title</label>
-    </span>
-    <span class="p-float-label p-my-5">
-        <input id="description" type="text" pInputText [(ngModel)]='description'>
-        <label for="description">Description</label>
-    </span>
+<p-dialog header="Add Step" [(visible)]="showDialog" styleClass="dialog" focusTrap="true" modal="true">
+    <div class="p-field">
+        <label for="title" aria-describedby="Name your step" styleClass="labelBlock">Title</label>
+        <input id="title" type="text" pInputText [(ngModel)]='title' style="width: 100%">
+    </div>
+    <div class="p-field p-pt-2">
+        <label for="description" aria-describedby="Add a description for your step" styleClass="labelBlock">Description</label>
+        <input id="description" type="text" pInputText [(ngModel)]='description' style="width: 100%">
+    </div>
     <!-- <p-dropdown [options]="visibilityOptions" class='p-my-3'></p-dropdown> -->
-    <button pButton type="button" label="Save" (click)="onStepSave()"></button>
+    <p-footer>
+        <button type="button" pButton label="Save" (click)="onStepSave()"></button>
+    </p-footer>
 </p-dialog>
 
 <div class="step">

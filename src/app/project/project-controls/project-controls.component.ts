@@ -17,6 +17,7 @@ interface Permission {
 })
 export class ProjectControlsComponent implements OnInit {
     @Input() projectName = '';
+    @Input() projectDescription = '';
 
     public href: string = '';
     parsedUrl = new URL(window.location.href);
@@ -61,6 +62,16 @@ export class ProjectControlsComponent implements OnInit {
 
     hideShareDialog() {
         this.displayShareDialog = false;
+    }
+
+    displaySettingsDialog: boolean = false;
+
+    showSettingsDialog() {
+        this.displaySettingsDialog = true;
+    }
+
+    hideSettingsDialog() {
+        this.displaySettingsDialog = false;
     }
 
     copyInputMessage(linkInput: any) {
