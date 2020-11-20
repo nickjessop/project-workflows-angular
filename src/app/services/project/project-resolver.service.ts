@@ -23,9 +23,6 @@ export class ProjectResolverService implements Resolve<{ isNewProject: boolean }
         } else {
             const defaultProject = this.projectService.createBaseProject();
             this.projectService.projectConfig = defaultProject;
-            this.projectService.currentStep = defaultProject.configuration?.[0]
-                ? defaultProject.configuration[0]
-                : null;
 
             return of({ isNewProject: true });
         }

@@ -19,7 +19,7 @@ export class StepsComponent implements OnInit {
 
     ngOnInit() {
         this.initializeProject();
-        this.initializeCurrentStep();
+        // this.initializeCurrentStep();
     }
 
     ngOnDestroy() {
@@ -38,19 +38,21 @@ export class StepsComponent implements OnInit {
         );
     }
 
-    private initializeCurrentStep() {
-        this.subscriptions.add(
-            this.projectService.currentStep$.subscribe(_currentStep => {
-                if (_currentStep) {
-                    this.currentStep = _currentStep;
-                }
-            })
-        );
-    }
+    // private initializeCurrentStep() {
+    //     this.subscriptions.add(
+    //         this.projectService.currentStep$.subscribe(_currentStep => {
+    //             if (_currentStep) {
+    //                 this.currentStep = _currentStep;
+    //             }
+    //         })
+    //     );
+    // }
 
-    public onStepPress(step: StepConfig) {
-        this.projectService.currentStep = step;
-        this.currentStep = step;
+    public onStepPress(stepIndex: number) {
+        this.projectService.setNewCurrentProjectStep(stepIndex);
+
+        // this.projectService.currentStep = step;
+        // this.currentStep = step;
     }
 
     public onSavePress(event: { title: string; description: string }) {
@@ -63,12 +65,6 @@ export class StepsComponent implements OnInit {
         newStep.step.description = stepConfig.description;
         newStep.step.title = stepConfig.title;
 
-        const project = this.projectService.projectConfig;
-        project.configuration?.push(newStep);
-
-        console.log(project);
-
-        this.projectService.projectConfig = project;
-        this.projectService.currentStep = newStep;
+        this.projectService.addProjectStep(newStep);
     }
 }
