@@ -1,13 +1,13 @@
 <div class="project-controls__nav">
     <div class="p-grid p-nogutter p-p-3">
         <div class="p-col-6 p-d-flex p-ai-center">
-            <i class="pi pi-chevron-left p-pr-2 project-controls__back-link" [routerLink]="['/project']"></i>
+            <i class="pi pi-chevron-left p-pr-2 project-controls__back" [routerLink]="['/project']"></i>
             <img src="/assets/stepflow-logo.svg" [routerLink]="['/project']" alt="Stepflow logo" height="26px" class="project-controls__back-link" />
             <div class="project-controls__divider p-mx-3"></div>
             <div class="ms-1 p-text-bold">{{ projectName }}</div>
         </div>
         <div class="p-col-6 p-d-flex p-jc-end p-ai-center">
-            <i class="pi pi-cog ms-3 p-mr-3"></i>
+            <i class="pi pi-cog ms-3 p-mr-3 project-controls__settings" (click)="showSettingsDialog()"></i>
             <p-button label="Share" icon="pi pi-users" class="p-mr-3" (click)="showShareDialog()"></p-button>
             <app-user-menu [showUsername]="false"></app-user-menu>
         </div>
@@ -50,5 +50,19 @@
     </div>
     <p-footer>
         <button type="button" pButton label="Done" (click)="hideShareDialog()"></button>
+    </p-footer>
+</p-dialog>
+
+<p-dialog header="Settings" [(visible)]="displaySettingsDialog" styleClass="dialog" focusTrap="true" modal="true">
+    <div class="p-field">
+            <label for="settingsDialogTitle">Title</label>
+            <input type="text" pInputText value="{{ projectName }}" id="settingsDialogTitle" style="width: 100%">
+    </div>
+    <div class="p-field p-pt-2">
+        <label for="settingsDialogDescription">Description</label>
+        <input type="text" pInputText value="{{ projectDescription }}" id="settingsDialogDescription" style="width: 100%">
+    </div>
+    <p-footer>
+        <button type="button" pButton label="Done" (click)="hideSettingsDialog()"></button>
     </p-footer>
 </p-dialog>
