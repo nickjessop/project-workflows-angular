@@ -34,9 +34,9 @@
         "firebase": "^7.6.1",
         "normalize.css": "^8.0.1",
         "prettier": "^1.19.1",
-        "primeflex": "^2.0.0",
-        "primeicons": "^4.0.0",
-        "primeng": "^10.0.1",
+        "primeflex": "~2.0.0",
+        "primeicons": "~4.0.0",
+        "primeng": "~10.0.1",
         "rxjs": "~6.6.2",
         "tslib": "^1.9.0",
         "zone.js": "~0.10.3"
