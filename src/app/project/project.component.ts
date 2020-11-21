@@ -52,4 +52,15 @@ export class ProjectComponent implements OnInit {
             }
         );
     }
+
+    public createNewProject() {
+        this.projectService.createNewProject(true).then(
+            success => {
+                this.getProjects();
+            },
+            error => {
+                console.log('Error creating new project');
+            }
+        );
+    }
 }
