@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import * as _ from 'lodash';
 import { BehaviorSubject, combineLatest, from, Subject } from 'rxjs';
 import { ComponentType, createFieldConfig, FieldConfig } from '../../models/interfaces/core-component';
 import { Project, StepConfig } from '../../models/interfaces/project';
@@ -13,9 +14,6 @@ export class ProjectService {
     private _projectConfig: BehaviorSubject<Project> = new BehaviorSubject<Project>(this.createBaseProject());
     public readonly projectConfig$ = this._projectConfig.asObservable();
 
-    private _currentStep: BehaviorSubject<StepConfig | null> = new BehaviorSubject<StepConfig | null>(null);
-    public readonly currentStep$ = this._currentStep.asObservable();
-
     public unsubscribeToProjectListener?: () => void;
 
     constructor(private firebaseService: FirebaseService, private authenticationService: AuthenticationService) {}
@@ -24,20 +22,20 @@ export class ProjectService {
         return this._projectConfig.getValue();
     }
 
-    public set projectConfig(projectConfig: Project) {
-        this._projectConfig.next(projectConfig);
-    }
-
-    public get currentStep() {
-        return this._currentStep.getValue();
-    }
-
-    public set currentStep(currentStep: StepConfig | null) {
-        this._currentStep.next(currentStep);
+    public set projectConfig(project: Project) {
+        const projectCopy1 = _.cloneDeep(this.projectConfig);
+        const projectCopy2 = _.cloneDeep(project);
+        console.log('triggered');
+        if (!_.isEqual(projectCopy1, projectCopy2)) {
+            // this.updateProject(project);
+            console.log('project changed');
+        }
+        this._projectConfig.next(project);
     }
 
     ngOnDestroy() {
         if (this.unsubscribeToProjectListener) {
+            console.log('unsubscribing to project listener');
             this.unsubscribeToProjectListener();
         }
     }
@@ -49,7 +47,12 @@ export class ProjectService {
     ) {
         const config = configuration
             ? configuration
-            : [{ components: [createFieldConfig()], step: { title: '', icon: '', selected: true } }];
+            : [
+                  {
+                      components: [createFieldConfig()],
+                      step: { title: '', icon: '', selected: true, isCurrentStep: true },
+                  },
+              ];
 
         const baseProject: Project = {
             name: projectName,
@@ -59,6 +62,22 @@ export class ProjectService {
         };
 
         return baseProject;
+    }
+
+    public swapBlockOrder(currentBlockIndex: number, toIndex: number) {
+        const currentStepIndex =
+            this.projectConfig.configuration?.findIndex(step => {
+                step.step.isCurrentStep;
+            }) || 0;
+
+        const currentStepComponents = this.projectConfig.configuration?.[currentStepIndex].components;
+        const swappedStepComponents = currentStepComponents!.splice(
+            toIndex,
+            0,
+            currentStepComponents!.splice(currentBlockIndex, 1)[0]
+        );
+
+        this.projectConfig.configuration![currentStepIndex].components = swappedStepComponents;
     }
 
     public createNewProjectStep(
@@ -81,11 +100,10 @@ export class ProjectService {
         return step;
     }
 
-    //Call this on creating a new project, `shouldPersistAndGenerateId` indicates whether we should pre-generate and pre-persist the project
-    public createNewProject(shouldPersistAndGenerateId = false) {
+    public createNewProject(saveAndGenerateProjectId = false) {
         const baseProject = this.createBaseProject(this.authenticationService.user!.id);
 
-        if (!shouldPersistAndGenerateId) {
+        if (!saveAndGenerateProjectId) {
             this.projectConfig = baseProject;
         }
 
@@ -108,8 +126,6 @@ export class ProjectService {
                     return baseProject;
                 }
             );
-
-        //TODO: Return the project itself rather than setting it within this service, for the component to pick up
     }
 
     //TODO: Add firebase rule to check that users are authorized to edit this project
@@ -131,6 +147,8 @@ export class ProjectService {
             );
     }
 
+    public deleteProject(projectId: string) {}
+
     public getAllProjectIds() {
         return from(
             this.firebaseService
@@ -138,6 +156,50 @@ export class ProjectService {
                 .collection(`${this.PROJECT_COLLECTION_NAME}`)
                 .get()
         );
+    }
+
+    public addProjectBlock(projectBlock: FieldConfig) {
+        const currentStepIndex = this.getCurrentStepIndex();
+
+        if (currentStepIndex && currentStepIndex > -1) {
+            this.projectConfig.configuration![currentStepIndex].components?.push(projectBlock);
+        }
+
+        this.projectConfig = this.projectConfig;
+    }
+
+    public addProjectStep(newStep: StepConfig) {
+        this.projectConfig.configuration?.push(newStep);
+        this.setNewCurrentProjectStep(
+            this.projectConfig.configuration ? this.projectConfig.configuration.length - 1 : 0
+        );
+    }
+
+    private getCurrentStepIndex() {
+        const currentStepIndex = this.projectConfig.configuration?.findIndex(config => {
+            return config.step.isCurrentStep;
+        });
+
+        return currentStepIndex;
+    }
+    private resetCurrentProjectSteps() {
+        this.projectConfig.configuration?.forEach(stepConfig => {
+            if (stepConfig.step.isCurrentStep) {
+                stepConfig.step.isCurrentStep = false;
+            }
+        });
+    }
+
+    public setNewCurrentProjectStep(stepIndex: number) {
+        this.resetCurrentProjectSteps();
+
+        if (this.projectConfig.configuration?.[stepIndex]) {
+            this.projectConfig.configuration[stepIndex].step.isCurrentStep = true;
+        } else {
+            this.projectConfig.configuration![0].step.isCurrentStep = true;
+        }
+
+        this.projectConfig = this.projectConfig;
     }
 
     //TODO: Add firebase rule to only return authorized projects
@@ -172,29 +234,6 @@ export class ProjectService {
         return allProjectsForUser$;
     }
 
-    public getProject(projectId: string) {
-        console.log(`get project called with id: ${projectId}`);
-
-        this.subscribeAndSetProject(projectId);
-
-        // return from(
-        //     this.firebaseService
-        //         .getDbInstance()!
-        //         .collection(this.PROJECT_COLLECTION_NAME)
-        //         .doc(projectId)
-        //         .get()
-        //         .then(
-        //             project => {
-        //                 return project.data() as Project;
-        //             },
-        //             error => {
-        //                 console.log(`Error while fetching project: ${projectId}`, error);
-        //                 return null;
-        //             }
-        //         )
-        // );
-    }
-
     public subscribeAndSetProject(projectId: string) {
         console.log(`Subscribing to project: ${projectId}`);
 
@@ -205,11 +244,17 @@ export class ProjectService {
             .onSnapshot(
                 document => {
                     const project = document.data() as Project;
+                    const currentStepSet = project.configuration?.some(stepConfig => {
+                        return stepConfig.step.isCurrentStep;
+                    });
+
+                    if (!currentStepSet) {
+                        if (project.configuration?.[0].step) {
+                            project.configuration[0].step.isCurrentStep = true;
+                        }
+                    }
 
                     this.projectConfig = project;
-                    this.currentStep = project.configuration?.[0] ? project.configuration[0] : null;
-
-                    console.log(`Subscription result:`, project);
                 },
                 error => {
                     console.log(error);
