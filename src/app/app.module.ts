@@ -1,3 +1,4 @@
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
@@ -15,12 +16,12 @@ import { PrimengModule } from './primeng/primeng.module';
 import { BlockPanelOverlayComponent } from './project/block-overlay/block-overlay.component';
 import { ControlsComponent } from './project/controls/controls.component';
 import { ProjectCardComponent } from './project/project-card/project-card.component';
+import { ProjectControlsComponent } from './project/project-controls/project-controls.component';
 import { ProjectComponent } from './project/project.component';
 import { StepDialogComponent } from './project/step-dialog/step-dialog.component';
 import { StepsComponent } from './project/steps/steps.component';
 import { ViewerComponent } from './project/viewer/viewer.component';
 import { ProtectedRoutingModule } from './protected-routing.module';
-import { ProjectControlsComponent } from './project/project-controls/project-controls.component';
 import { UserMenuComponent } from './user-menu/user-menu.component';
 
 @NgModule({
@@ -51,6 +52,7 @@ import { UserMenuComponent } from './user-menu/user-menu.component';
         HttpClientModule,
         CommonModule,
         FormsModule,
+        DragDropModule,
     ],
     providers: [],
     bootstrap: [AppComponent],
