@@ -14,9 +14,6 @@ export class ProjectService {
     private _projectConfig: BehaviorSubject<Project> = new BehaviorSubject<Project>(this.createBaseProject());
     public readonly projectConfig$ = this._projectConfig.asObservable();
 
-    // private _currentStep: BehaviorSubject<StepConfig | null> = new BehaviorSubject<StepConfig | null>(null);
-    // public readonly currentStep$ = this._currentStep.asObservable();
-
     public unsubscribeToProjectListener?: () => void;
 
     constructor(private firebaseService: FirebaseService, private authenticationService: AuthenticationService) {}
@@ -35,14 +32,6 @@ export class ProjectService {
         }
         this._projectConfig.next(project);
     }
-
-    // public get currentStep() {
-    //     return this._currentStep.getValue();
-    // }
-
-    // public set currentStep(currentStep: StepConfig | null) {
-    //     this._currentStep.next(currentStep);
-    // }
 
     ngOnDestroy() {
         if (this.unsubscribeToProjectListener) {
@@ -111,11 +100,10 @@ export class ProjectService {
         return step;
     }
 
-    //Call this on creating a new project, `shouldPersistAndGenerateId` indicates whether we should pre-generate and pre-persist the project
-    public createNewProject(shouldPersistAndGenerateId = false) {
+    public createNewProject(saveAndGenerateProjectId = false) {
         const baseProject = this.createBaseProject(this.authenticationService.user!.id);
 
-        if (!shouldPersistAndGenerateId) {
+        if (!saveAndGenerateProjectId) {
             this.projectConfig = baseProject;
         }
 
@@ -138,8 +126,6 @@ export class ProjectService {
                     return baseProject;
                 }
             );
-
-        //TODO: Return the project itself rather than setting it within this service, for the component to pick up
     }
 
     //TODO: Add firebase rule to check that users are authorized to edit this project
@@ -269,9 +255,6 @@ export class ProjectService {
                     }
 
                     this.projectConfig = project;
-
-                    // this.currentStep = project.configuration?.[0] ? project.configuration[0] : null;
-                    // console.log(`Subscription result:`, project);
                 },
                 error => {
                     console.log(error);

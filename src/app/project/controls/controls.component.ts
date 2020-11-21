@@ -54,10 +54,5 @@ export class ControlsComponent implements OnInit {
         const newBlock = createFieldConfig(label, name, inputType, options, collections, componentType, value);
 
         this.projectService.addProjectBlock(newBlock);
-
-        // if (this.currentStep?.components) {
-        //     this.currentStep.components.push(newBlock);
-        //     this.projectService.currentStep = this.currentStep;
-        // }
     }
 }

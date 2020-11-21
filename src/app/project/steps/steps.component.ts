@@ -19,7 +19,6 @@ export class StepsComponent implements OnInit {
 
     ngOnInit() {
         this.initializeProject();
-        // this.initializeCurrentStep();
     }
 
     ngOnDestroy() {
@@ -38,21 +37,8 @@ export class StepsComponent implements OnInit {
         );
     }
 
-    // private initializeCurrentStep() {
-    //     this.subscriptions.add(
-    //         this.projectService.currentStep$.subscribe(_currentStep => {
-    //             if (_currentStep) {
-    //                 this.currentStep = _currentStep;
-    //             }
-    //         })
-    //     );
-    // }
-
     public onStepPress(stepIndex: number) {
         this.projectService.setNewCurrentProjectStep(stepIndex);
-
-        // this.projectService.currentStep = step;
-        // this.currentStep = step;
     }
 
     public onSavePress(event: { title: string; description: string }) {
