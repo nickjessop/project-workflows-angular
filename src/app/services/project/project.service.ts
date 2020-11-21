@@ -178,16 +178,20 @@ export class ProjectService {
         if (currentStepIndex && currentStepIndex > -1) {
             this.projectConfig.configuration![currentStepIndex].components?.push(projectBlock);
         }
+
+        this.projectConfig = this.projectConfig;
     }
 
     public addProjectStep(newStep: StepConfig) {
         this.projectConfig.configuration?.push(newStep);
-        this.setNewCurrentProjectStep(this.projectConfig.configuration?.length || 0);
+        this.setNewCurrentProjectStep(
+            this.projectConfig.configuration ? this.projectConfig.configuration.length - 1 : 0
+        );
     }
 
     private getCurrentStepIndex() {
-        const currentStepIndex = this.projectConfig.configuration?.findIndex(stepConfig => {
-            stepConfig.step.isCurrentStep;
+        const currentStepIndex = this.projectConfig.configuration?.findIndex(config => {
+            return config.step.isCurrentStep;
         });
 
         return currentStepIndex;
@@ -208,6 +212,8 @@ export class ProjectService {
         } else {
             this.projectConfig.configuration![0].step.isCurrentStep = true;
         }
+
+        this.projectConfig = this.projectConfig;
     }
 
     //TODO: Add firebase rule to only return authorized projects
