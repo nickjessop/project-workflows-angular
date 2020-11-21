@@ -19,24 +19,17 @@ export class ViewerComponent implements OnInit {
     constructor(private projectService: ProjectService, private route: ActivatedRoute) {}
 
     ngOnInit() {
-        this.initCurrentStep();
         this.initProject();
         this.initRouteData();
     }
 
-    private initCurrentStep() {
-        this.subscriptions.add(
-            this.projectService.currentStep$.subscribe(_currentStep => {
-                if (_currentStep) {
-                    this.currentStep = _currentStep;
-                }
-            })
-        );
-    }
     private initProject() {
         this.subscriptions.add(
             this.projectService.projectConfig$.subscribe(_project => {
                 this.project = _project;
+                this.currentStep = _project.configuration?.find(stepConfig => {
+                    return stepConfig.step.isCurrentStep;
+                });
             })
         );
     }
@@ -51,22 +44,7 @@ export class ViewerComponent implements OnInit {
         this.subscriptions.unsubscribe();
     }
 
-    // private setCurrentProjectStep(step: FieldConfig[] | null, index?: number) {
-    // this.currentStepIndex = index ? index : 0;
-    //     this.projectService.currentStep = step;
-    // }
-
     public getCurrentProjectConfig() {
         console.log(this.projectService.projectConfig);
     }
-
-    // private initProject(isNewProject: boolean) {
-    //     this.projectConfigSubscription = this.projectService.projectConfig$.subscribe(projectConfig => {
-    //         this.projectConfig = projectConfig;
-    //     });
-
-    //     if (isNewProject) {
-    //         this.projectService.createNewProject(true);
-    //     }
-    // }
 }

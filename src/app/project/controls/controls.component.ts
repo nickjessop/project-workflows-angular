@@ -25,10 +25,13 @@ export class ControlsComponent implements OnInit {
 
     private initCurrentStep() {
         this.subscriptions.add(
-            this.projectService.currentStep$.subscribe(_currentStep => {
-                if (_currentStep) {
-                    this.currentStep = _currentStep;
-                }
+            this.projectService.projectConfig$.subscribe(project => {
+                project.configuration?.forEach(stepConfig => {
+                    if (stepConfig.step.isCurrentStep) {
+                        this.currentStep = stepConfig;
+                        return;
+                    }
+                });
             })
         );
     }
@@ -50,9 +53,6 @@ export class ControlsComponent implements OnInit {
         const componentType = type || 'largeTextInput';
         const newBlock = createFieldConfig(label, name, inputType, options, collections, componentType, value);
 
-        if (this.currentStep?.components) {
-            this.currentStep.components.push(newBlock);
-            this.projectService.currentStep = this.currentStep;
-        }
+        this.projectService.addProjectBlock(newBlock);
     }
 }
