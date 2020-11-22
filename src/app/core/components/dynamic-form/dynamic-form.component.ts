@@ -1,3 +1,4 @@
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { FieldConfig, Validator } from '../../../models/interfaces/core-component';
@@ -17,6 +18,7 @@ export class DynamicFormComponent implements OnInit {
 
     ngOnInit() {
         this.form = this.createControl();
+        console.log(this.fields);
     }
 
     get value() {
@@ -25,7 +27,6 @@ export class DynamicFormComponent implements OnInit {
 
     createControl() {
         const group = this.formBuilder.group({});
-
         if (this.fields && this.fields.length > 0) {
             this.fields.forEach(field => {
                 const control = this.formBuilder.control(field, this.bindValidations(field.validations || []));
@@ -70,5 +71,9 @@ export class DynamicFormComponent implements OnInit {
                 control.markAsTouched({ onlySelf: true });
             }
         });
+    }
+    drop(event: CdkDragDrop<string[]>) {
+        moveItemInArray(this.fields, event.previousIndex, event.currentIndex);
+        console.log(this.fields);
     }
 }
