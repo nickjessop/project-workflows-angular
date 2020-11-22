@@ -1,3 +1,4 @@
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -31,7 +32,7 @@ import { UrlComponent } from './fields/url/url.component';
         PlaceholderComponent,
         UrlComponent,
     ],
-    imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, PrimengModule],
+    imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, PrimengModule, DragDropModule],
     exports: [
         LargeTextInputComponent,
         SmallTextInputComponent,
