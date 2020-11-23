@@ -18,8 +18,6 @@ export class ProjectComponent implements OnInit {
     }
 
     public saveProject() {
-        console.log('saving project test');
-
         this.projectService.saveDemoProject();
     }
 

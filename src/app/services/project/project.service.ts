@@ -1,3 +1,4 @@
+import { moveItemInArray } from '@angular/cdk/drag-drop';
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { BehaviorSubject, combineLatest, from, Subject } from 'rxjs';
@@ -25,7 +26,10 @@ export class ProjectService {
     public set projectConfig(project: Project) {
         const projectCopy1 = _.cloneDeep(this.projectConfig);
         const projectCopy2 = _.cloneDeep(project);
-        console.log('triggered');
+
+        console.log(projectCopy1);
+        console.log(projectCopy2);
+
         if (!_.isEqual(projectCopy1, projectCopy2)) {
             // this.updateProject(project);
             console.log('project changed');
@@ -64,20 +68,15 @@ export class ProjectService {
         return baseProject;
     }
 
-    public swapBlockOrder(currentBlockIndex: number, toIndex: number) {
+    public swapBlockOrder(previousIndex: number, currentIndex: number) {
+        // moveItemInArray(this.fields, event.previousIndex, event.currentIndex);
         const currentStepIndex =
-            this.projectConfig.configuration?.findIndex(step => {
-                step.step.isCurrentStep;
+            this.projectConfig.configuration?.findIndex(config => {
+                return config.step.isCurrentStep;
             }) || 0;
 
-        const currentStepComponents = this.projectConfig.configuration?.[currentStepIndex].components;
-        const swappedStepComponents = currentStepComponents!.splice(
-            toIndex,
-            0,
-            currentStepComponents!.splice(currentBlockIndex, 1)[0]
-        );
-
-        this.projectConfig.configuration![currentStepIndex].components = swappedStepComponents;
+        moveItemInArray(this.projectConfig.configuration![currentStepIndex].components!, previousIndex, currentIndex);
+        this.projectConfig = this.projectConfig;
     }
 
     public createNewProjectStep(
@@ -159,11 +158,8 @@ export class ProjectService {
     }
 
     public addProjectBlock(projectBlock: FieldConfig) {
-        const currentStepIndex = this.getCurrentStepIndex();
-
-        if (currentStepIndex && currentStepIndex > -1) {
-            this.projectConfig.configuration![currentStepIndex].components?.push(projectBlock);
-        }
+        const currentStepIndex = this.getCurrentStepIndex() || 0;
+        this.projectConfig.configuration![currentStepIndex].components?.push(projectBlock);
 
         this.projectConfig = this.projectConfig;
     }
@@ -179,6 +175,8 @@ export class ProjectService {
         const currentStepIndex = this.projectConfig.configuration?.findIndex(config => {
             return config.step.isCurrentStep;
         });
+
+        console.log(`current index: ${currentStepIndex}`);
 
         return currentStepIndex;
     }

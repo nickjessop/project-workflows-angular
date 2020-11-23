@@ -1,5 +1,5 @@
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Component, Input, OnInit } from '@angular/core';
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { FieldConfig, Validator } from '../../../models/interfaces/core-component';
 
@@ -12,13 +12,16 @@ export class DynamicFormComponent implements OnInit {
     @Input() fields: FieldConfig[] = [];
     // @Output() submitEvent: EventEmitter<any> = new EventEmitter<any>();
 
+    @Output() dragAndDropEvent: EventEmitter<{
+        previousIndex: number;
+        currentIndex: number;
+    }> = new EventEmitter();
     form?: FormGroup;
 
     constructor(private formBuilder: FormBuilder) {}
 
     ngOnInit() {
         this.form = this.createControl();
-        console.log(this.fields);
     }
 
     get value() {
@@ -72,8 +75,10 @@ export class DynamicFormComponent implements OnInit {
             }
         });
     }
-    drop(event: CdkDragDrop<string[]>) {
-        moveItemInArray(this.fields, event.previousIndex, event.currentIndex);
-        console.log(this.fields);
+    drop(event: CdkDragDrop<any>) {
+        this.dragAndDropEvent.emit({
+            previousIndex: event.previousIndex,
+            currentIndex: event.currentIndex,
+        });
     }
 }

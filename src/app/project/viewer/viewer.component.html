@@ -20,7 +20,7 @@
                     <hr class="p-mt-0 p-mb-4" />
                 </p-header>
                 <div class="p-px-2">
-                    <project-dynamic-form [fields]="currentStep.components"></project-dynamic-form>
+                    <project-dynamic-form [fields]="currentStep.components" (dragAndDropEvent)="onDragAndDropEvent($event)"></project-dynamic-form>
                 </div>
             </div>
         </div>
