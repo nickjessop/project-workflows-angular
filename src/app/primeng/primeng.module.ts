@@ -16,6 +16,7 @@ import { MessageModule } from 'primeng/message';
 import { MessagesModule } from 'primeng/messages';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { SidebarModule } from 'primeng/sidebar';
 import { TableModule } from 'primeng/table';
 import { TabViewModule } from 'primeng/tabview';
 import { ToastModule } from 'primeng/toast';
@@ -45,6 +46,7 @@ import { ToolbarModule } from 'primeng/toolbar';
         MessagesModule,
         MessageModule,
         ToastModule,
+        SidebarModule,
     ],
     exports: [
         AccordionModule,
@@ -66,6 +68,7 @@ import { ToolbarModule } from 'primeng/toolbar';
         MessagesModule,
         MessageModule,
         ToastModule,
+        SidebarModule,
     ],
 })
 export class PrimengModule {}

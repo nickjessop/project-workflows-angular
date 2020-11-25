@@ -1,15 +1,14 @@
-<p-overlayPanel #overlay [dismissable]="true" [showCloseIcon]="true" styleClass="block-overlayPanel">
-    <ng-template pTemplate>
-        <div class="p-grid p-nogutter block-overlay">
-            <div class="p-col-4" *ngFor="let blockOption of blockOptions">
-                <div class="p-d-flex p-flex-column p-jc-center p-my-2 p-mx-2 block-overlay__item" (click)="onAddNewBlockPress(blockOption.component)">
-                    <i class="pi {{ blockOption.icon }} ms-4"></i>
-                    <div class="block-label ms-01 p-mt-2">{{ blockOption.label }}</div>
-                </div>
+<p-sidebar [(visible)]="displayBlockSidebar" position="right">
+    <div class="ms-1 p-pt-2">Add block</div>
+    <div class="p-grid p-nogutter block-overlay p-mt-3">
+        <div class="p-col-4" *ngFor="let blockOption of blockOptions">
+            <div class="p-d-flex p-flex-column p-jc-center p-my-2 p-mx-2 block-overlay__item" (click)="onAddNewBlockPress(blockOption.component)">
+                <i class="pi {{ blockOption.icon }} ms-4"></i>
+                <div class="block-label ms-01 p-mt-2">{{ blockOption.label }}</div>
             </div>
         </div>
-    </ng-template>
-</p-overlayPanel>
+    </div>
+</p-sidebar>
 
 <button
     pButton

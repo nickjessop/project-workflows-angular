@@ -1,4 +1,4 @@
-<div class="viewer">
+<div class="viewer" #viewer>
     <app-project-controls projectName="{{ project.name }}" projectDescription="{{ project.description }}"></app-project-controls>
     <div class="p-grid p-nogutter viewer-container p-px-5 p-pt-6">
         <div class="p-col-3">
@@ -13,7 +13,7 @@
                         </div>
                         <div class="p-col-6 p-d-flex p-jc-end p-ai-center">
                             <div class="p-pr-3">
-                                <project-controls></project-controls>
+                                <step-controls template="viewer"></step-controls>
                             </div>
                         </div>
                     </div>

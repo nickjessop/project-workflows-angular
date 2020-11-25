@@ -5,7 +5,7 @@ import { StepConfig } from 'src/app/models/interfaces/project';
 import { ProjectService } from 'src/app/services/project/project.service';
 
 @Component({
-    selector: 'project-controls',
+    selector: 'step-controls',
     templateUrl: './controls.component.html',
     styleUrls: ['./controls.component.scss'],
 })

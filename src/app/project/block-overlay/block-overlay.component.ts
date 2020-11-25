@@ -1,5 +1,4 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
-import { Event } from '@angular/router';
 import { OverlayPanel } from 'primeng/overlaypanel';
 import { ComponentType } from 'src/app/models/interfaces/core-component';
 
@@ -14,6 +13,8 @@ export class BlockPanelOverlayComponent implements OnInit {
     @Output() onSelectNewBlock = new EventEmitter<ComponentType>();
 
     public blockOptions = this.getBlockOptions();
+
+    displayBlockSidebar = false;
 
     constructor() {}
 
@@ -33,12 +34,12 @@ export class BlockPanelOverlayComponent implements OnInit {
         return options;
     }
 
-    public showAddNewBlockDialog($event: Event, target?: ViewChild) {
-        this.overlayPanel?.show($event);
+    public showAddNewBlockDialog(target?: ViewChild) {
+        this.displayBlockSidebar = true;
     }
 
     public onAddNewBlockPress(componentType: ComponentType) {
         this.onSelectNewBlock.emit(componentType);
-        this.overlayPanel?.hide();
+        this.displayBlockSidebar = false;
     }
 }
