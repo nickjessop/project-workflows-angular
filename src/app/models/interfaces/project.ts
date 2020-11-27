@@ -25,3 +25,4 @@ export interface Step {
 }
 
 export type Role = 'admin' | 'editor' | 'viewer' | 'guest';
+export type Status = 'active' | 'important' | 'upcoming' | 'completed';
