@@ -147,24 +147,14 @@ export class ProjectService {
         value?: string
     ) {
         const fieldConfig = createFieldConfig(label, name, inputType, options, collections, type, value);
-        if (status) {
-            return {
-                step: {
-                    title: stepTitle || '(Untitled Step)',
-                    description: stepDescription || '',
-                    status,
-                },
-                components: [fieldConfig],
-            };
-        } else {
-            return {
-                step: {
-                    title: stepTitle || '(Untitled Step)',
-                    description: stepDescription || '',
-                },
-                components: [fieldConfig],
-            };
-        }
+        return {
+            step: {
+                title: stepTitle || '(Untitled Step)',
+                description: stepDescription || '',
+                status: status || { label: 'active', icon: 'pi-circle-off' },
+            },
+            components: [fieldConfig],
+        };
     }
 
     public createNewProject(saveAndGenerateProjectId = false) {
@@ -384,16 +374,16 @@ export class ProjectService {
             },
         ];
 
-        const projectConfig = {
+        const stepConfig = {
             components: defaultConfig,
             step: {
                 title: 'Insert title here',
                 description: 'This is just a test step',
-                status: { label: 'default', icon: 'pi-circle-off' },
+                status: { label: '', icon: 'pi-circle-off' },
                 selected: true,
             },
         };
 
-        return projectConfig;
+        return stepConfig;
     }
 }
