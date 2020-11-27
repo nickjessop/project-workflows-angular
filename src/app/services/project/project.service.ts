@@ -24,17 +24,63 @@ export class ProjectService {
     }
 
     public set projectConfig(project: Project) {
+        this._projectConfig.next(project);
+    }
+
+    private setProject(project: Project) {
         const projectCopy1 = _.cloneDeep(this.projectConfig);
         const projectCopy2 = _.cloneDeep(project);
 
-        console.log(projectCopy1);
-        console.log(projectCopy2);
+        const didProjectChange = this.areProjectsDifferent(projectCopy1, projectCopy2);
 
-        if (!_.isEqual(projectCopy1, projectCopy2)) {
-            // this.updateProject(project);
-            console.log('project changed');
+        if (didProjectChange) {
+            console.log('project change detected');
+            this.updateProject(project);
         }
-        this._projectConfig.next(project);
+
+        this.projectConfig = project;
+    }
+
+    private areProjectsDifferent(project1: Project, project2: Project) {
+        // Drop values we shouldn't save or compare
+        project1.configuration?.forEach(config => {
+            config.step.isCurrentStep = false;
+        });
+        project2.configuration?.forEach(config => {
+            config.step.isCurrentStep = false;
+        });
+
+        // Did the number of steps change?
+        // Did the number of blocks change?
+        // Did the steps or blocks get modified?
+
+        const project1Len = project1.configuration?.length || 0;
+        const project2Len = project2.configuration?.length || 0;
+
+        if (project1Len !== project2Len) {
+            return true;
+        }
+
+        for (let i = 0; i < (project1.configuration || []).length; i++) {
+            const config1 = project1.configuration?.[i].components;
+            const config2 = project2.configuration?.[i].components;
+
+            if (!config2 || !config1) {
+                return true;
+            }
+
+            if (config2.length !== config1.length) {
+                return true;
+            }
+
+            const test = _.differenceWith(config1, config2, _.isEqual);
+
+            if (test.length > 0) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     ngOnDestroy() {
@@ -75,8 +121,11 @@ export class ProjectService {
                 return config.step.isCurrentStep;
             }) || 0;
 
-        moveItemInArray(this.projectConfig.configuration![currentStepIndex].components!, previousIndex, currentIndex);
-        this.projectConfig = this.projectConfig;
+        const _projectConfig = _.cloneDeep(this.projectConfig);
+
+        moveItemInArray(_projectConfig.configuration![currentStepIndex].components!, previousIndex, currentIndex);
+        // this.projectConfig = _projectConfig;
+        this.setProject(_projectConfig);
     }
 
     public createNewProjectStep(
@@ -159,15 +208,21 @@ export class ProjectService {
 
     public addProjectBlock(projectBlock: FieldConfig) {
         const currentStepIndex = this.getCurrentStepIndex() || 0;
-        this.projectConfig.configuration![currentStepIndex].components?.push(projectBlock);
 
-        this.projectConfig = this.projectConfig;
+        const _projectConfig = _.cloneDeep(this.projectConfig);
+        _projectConfig.configuration![currentStepIndex].components?.push(projectBlock);
+
+        // this.projectConfig = _projectConfig;
+        this.setProject(_projectConfig);
     }
 
     public addProjectStep(newStep: StepConfig) {
-        this.projectConfig.configuration?.push(newStep);
+        const _projectConfig = _.cloneDeep(this.projectConfig);
+        _projectConfig.configuration?.push(newStep);
+
         this.setNewCurrentProjectStep(
-            this.projectConfig.configuration ? this.projectConfig.configuration.length - 1 : 0
+            _projectConfig.configuration ? _projectConfig.configuration.length - 1 : 0,
+            _projectConfig
         );
     }
 
@@ -176,28 +231,32 @@ export class ProjectService {
             return config.step.isCurrentStep;
         });
 
-        console.log(`current index: ${currentStepIndex}`);
-
         return currentStepIndex;
     }
-    private resetCurrentProjectSteps() {
-        this.projectConfig.configuration?.forEach(stepConfig => {
+
+    private resetCurrentProjectSteps(projectConfig: Project) {
+        const _projectConfig = _.cloneDeep(projectConfig);
+        _projectConfig.configuration?.forEach(stepConfig => {
             if (stepConfig.step.isCurrentStep) {
                 stepConfig.step.isCurrentStep = false;
             }
         });
+
+        return _projectConfig;
     }
 
-    public setNewCurrentProjectStep(stepIndex: number) {
-        this.resetCurrentProjectSteps();
+    public setNewCurrentProjectStep(stepIndex: number, projectConfig?: Project) {
+        const _projectConfig = projectConfig
+            ? this.resetCurrentProjectSteps(projectConfig)
+            : this.resetCurrentProjectSteps(_.cloneDeep(this.projectConfig));
 
-        if (this.projectConfig.configuration?.[stepIndex]) {
-            this.projectConfig.configuration[stepIndex].step.isCurrentStep = true;
+        if (_projectConfig.configuration?.[stepIndex]) {
+            _projectConfig.configuration[stepIndex].step.isCurrentStep = true;
         } else {
-            this.projectConfig.configuration![0].step.isCurrentStep = true;
+            _projectConfig.configuration![0].step.isCurrentStep = true;
         }
 
-        this.projectConfig = this.projectConfig;
+        this.setProject(_projectConfig);
     }
 
     //TODO: Add firebase rule to only return authorized projects
