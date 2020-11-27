@@ -8,12 +8,20 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 export class StepDialogComponent implements OnInit {
     @Input() title = '';
     @Input() description = '';
+    @Input() selectedStatus = '';
     @Output() onSavePress = new EventEmitter<{ title: string; description: string }>();
 
     public showDialog = false;
     public visibilityOptions = [
         { label: 'show', value: 'show' },
         { label: 'hide', value: 'hide' },
+    ];
+
+    public statusOptions = [
+        { label: 'Active', value: 'active' },
+        { label: 'Important', value: 'important' },
+        { label: 'Upcoming', value: 'upcoming' },
+        { label: 'Completed', value: 'completed' },
     ];
 
     constructor() {}

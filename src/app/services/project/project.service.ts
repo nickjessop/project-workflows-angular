@@ -54,7 +54,13 @@ export class ProjectService {
             : [
                   {
                       components: [createFieldConfig()],
-                      step: { title: '', icon: '', selected: true, isCurrentStep: true },
+                      step: {
+                          title: '',
+                          description: '',
+                          status: { label: 'default', icon: 'pi-circle-off' },
+                          selected: true,
+                          isCurrentStep: true,
+                      },
                   },
               ];
 
@@ -81,22 +87,35 @@ export class ProjectService {
 
     public createNewProjectStep(
         stepTitle?: string,
+        stepDescription?: string,
+        status?: { label: string; icon: string },
         label?: string,
         name?: string,
         inputType?: string,
         options?: string[],
         collections?: string,
         type?: ComponentType,
-        value?: string,
-        stepDescription?: string
+        value?: string
     ) {
         const fieldConfig = createFieldConfig(label, name, inputType, options, collections, type, value);
-        const step = {
-            step: { title: stepTitle || '(Untitled Step)', description: stepDescription || '' },
-            components: [fieldConfig],
-        };
-
-        return step;
+        if (status) {
+            return {
+                step: {
+                    title: stepTitle || '(Untitled Step)',
+                    description: stepDescription || '',
+                    status,
+                },
+                components: [fieldConfig],
+            };
+        } else {
+            return {
+                step: {
+                    title: stepTitle || '(Untitled Step)',
+                    description: stepDescription || '',
+                },
+                components: [fieldConfig],
+            };
+        }
     }
 
     public createNewProject(saveAndGenerateProjectId = false) {
@@ -308,7 +327,12 @@ export class ProjectService {
 
         const projectConfig = {
             components: defaultConfig,
-            step: { title: 'Insert title here', icon: '', selected: true },
+            step: {
+                title: 'Insert title here',
+                description: 'This is just a test step',
+                status: { label: 'default', icon: 'pi-circle-off' },
+                selected: true,
+            },
         };
 
         return projectConfig;
