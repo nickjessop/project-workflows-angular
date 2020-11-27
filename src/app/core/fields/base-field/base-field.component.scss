@@ -2,11 +2,11 @@
 
 .field {
     position: relative;
-    border: 1px solid transparent;
+    border: 0.065rem solid var(--surface-d);
+    border-radius: 6px;
     &:hover,
     &:focus-within {
-        border-radius: 6px;
-        border: 1px solid rgba(33, 150, 243, 0.25);
+        border: 0.065rem solid rgba(33, 150, 243, 0.25);
         .field__settings,
         .field__handle {
             display: block;

@@ -1,24 +1,21 @@
 <div class="viewer" #viewer>
     <app-project-controls projectName="{{ project.name }}" projectDescription="{{ project.description }}"></app-project-controls>
-    <div class="p-grid p-nogutter viewer-container p-px-5 p-pt-6">
-        <div class="p-col-3">
+    <div class="p-grid p-nogutter viewer-container">
+        <div class="p-col-3 p-pt-5 p-pl-4">
             <project-steps></project-steps>
         </div>
-        <div class="p-col-9 p-pl-4" *ngIf="currentStep; else showLoading">
-            <div class="p-card step-container p-mb-4 p-shadow-2">
-                <p-header class="p-mb-2">
-                    <div class="p-grid p-nogutter p-py-2">
+        <div class="p-col-9 p-pl-3 p-pr-2 p-pt-5 viewer-container__step" *ngIf="currentStep; else showLoading">
+            <div class="step-container p-pb-3">
+                <div class="p-mb-2 p-px-2">
+                    <div class="p-grid p-nogutter p-pb-3">
                         <div class="p-col-6 p-d-flex p-ai-center">
-                            <h2 class="p-pl-3 ms-2">{{ currentStep.step.title }}</h2>
+                            <h2 class="ms-2 p-my-0">{{ currentStep.step.title }}</h2>
                         </div>
                         <div class="p-col-6 p-d-flex p-jc-end p-ai-center">
-                            <div class="p-pr-3">
-                                <step-controls template="viewer"></step-controls>
-                            </div>
+                            <step-controls></step-controls>
                         </div>
                     </div>
-                    <hr class="p-mt-0 p-mb-4" />
-                </p-header>
+                </div>
                 <div class="p-px-2">
                     <project-dynamic-form [fields]="currentStep.components" (dragAndDropEvent)="onDragAndDropEvent($event)"></project-dynamic-form>
                 </div>
