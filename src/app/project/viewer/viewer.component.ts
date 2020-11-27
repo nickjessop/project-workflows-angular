@@ -44,10 +44,6 @@ export class ViewerComponent implements OnInit {
         this.subscriptions.unsubscribe();
     }
 
-    public getCurrentProjectConfig() {
-        console.log(this.projectService.projectConfig);
-    }
-
     public onDragAndDropEvent(event: any) {
         this.projectService.swapBlockOrder(event.previousIndex, event.currentIndex);
     }
