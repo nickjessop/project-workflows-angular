@@ -379,7 +379,7 @@ export class ProjectService {
             step: {
                 title: 'Insert title here',
                 description: 'This is just a test step',
-                status: statusOptions.active,
+                status: statusOptions['active'],
                 selected: true,
             },
         };
