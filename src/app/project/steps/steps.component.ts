@@ -17,6 +17,10 @@ export class StepsComponent implements OnInit {
 
     constructor(private projectService: ProjectService) {}
 
+    //TODO
+    // STEP STATUSES: COMPLETED, UPCOMING, AND IMPORTANT - these aren't functional but convey info (icon + badge in step header)
+    // STEP STATES: LOCKED AND HIDDEN - these are functional. one makes the step read-only for particpants+, the other hides from participants+
+
     ngOnInit() {
         this.initializeProject();
     }
