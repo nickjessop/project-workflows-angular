@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { BehaviorSubject, combineLatest, from, Subject } from 'rxjs';
 import { ComponentType, createFieldConfig, FieldConfig } from '../../models/interfaces/core-component';
-import { Project, StepConfig } from '../../models/interfaces/project';
+import { Project, Status, statusOptions, StepConfig } from '../../models/interfaces/project';
 import { AuthenticationService } from '../authentication/authentication.service';
 import { FirebaseService } from '../firebase/firebase.service';
 
@@ -103,7 +103,7 @@ export class ProjectService {
                       step: {
                           title: '',
                           description: '',
-                          status: { label: 'default', icon: 'pi-circle-off' },
+                          status: statusOptions['active'],
                           selected: true,
                           isCurrentStep: true,
                       },
@@ -137,7 +137,7 @@ export class ProjectService {
     public createNewProjectStep(
         stepTitle?: string,
         stepDescription?: string,
-        status?: { label: string; icon: string },
+        status?: Status,
         label?: string,
         name?: string,
         inputType?: string,
@@ -151,7 +151,7 @@ export class ProjectService {
             step: {
                 title: stepTitle || '(Untitled Step)',
                 description: stepDescription || '',
-                status: status || { label: 'active', icon: 'pi-circle-off' },
+                status: status || statusOptions['active'],
             },
             components: [fieldConfig],
         };
@@ -379,7 +379,7 @@ export class ProjectService {
             step: {
                 title: 'Insert title here',
                 description: 'This is just a test step',
-                status: { label: '', icon: 'pi-circle-off' },
+                status: statusOptions.active,
                 selected: true,
             },
         };

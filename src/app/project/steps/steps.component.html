@@ -1,7 +1,12 @@
 <div class="steps-container">
     <ng-container *ngFor="let stepConfig of steps; index as i">
         <div class="step p-d-flex p-ai-center p-mb-3" [class.step-selected]="stepConfig.step.isCurrentStep" (click)="onStepPress(i)">
-            <i class="material-icons">{{ stepConfig.step.icon }}</i>
+            {{ stepConfig.step.status }}
+            <ng-container *ngFor="let stepStatus of stepConfig.step.status">
+                {{ stepStatus }}
+                {{ stepStatus.icon }}
+                <i class="pi {{ stepStatus.icon }}"></i>
+            </ng-container>
             <div class="ms-0 p-p-2">{{ stepConfig.step.title }}</div>
         </div>
     </ng-container>

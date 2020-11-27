@@ -8,8 +8,8 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 export class StepDialogComponent implements OnInit {
     @Input() title = '';
     @Input() description = '';
-    @Input() selectedStatus = '';
-    @Output() onSavePress = new EventEmitter<{ title: string; description: string }>();
+    @Input() status = '';
+    @Output() onSavePress = new EventEmitter<{ title: string; description: string; status: string }>();
 
     public showDialog = false;
     public visibilityOptions = [
@@ -37,7 +37,7 @@ export class StepDialogComponent implements OnInit {
             return;
         }
 
-        this.onSavePress.emit({ title: this.title, description: this.description });
+        this.onSavePress.emit({ title: this.title, description: this.description, status: this.status });
         this.clearStepDialog();
         this.showDialog = false;
     }
@@ -45,5 +45,6 @@ export class StepDialogComponent implements OnInit {
     private clearStepDialog() {
         this.title = '';
         this.description = '';
+        this.status = '';
     }
 }
