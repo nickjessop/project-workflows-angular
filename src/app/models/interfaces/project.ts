@@ -21,8 +21,18 @@ export interface Step {
     visibility?: 'show' | 'hide';
     interaction?: 'document' | 'form';
     isCurrentStep?: boolean;
-    status: { label: string; icon: string };
+    status: Status;
 }
 
 export type Role = 'admin' | 'editor' | 'viewer' | 'guest';
-export type Status = 'active' | 'important' | 'upcoming' | 'completed';
+
+export type Status = {
+    [name: string]: { label: string; icon: string };
+};
+
+export const statusOptions: Status = {
+    active: { label: 'Active', icon: 'pi-circle-off' },
+    important: { label: 'Important', icon: 'pi-exclamation-circle' },
+    upcoming: { label: 'Upcoming', icon: 'pi-clock' },
+    completed: { label: 'Completed', icon: 'pi-check-circle' },
+};

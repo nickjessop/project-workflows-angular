@@ -5,10 +5,13 @@
         <input id="title" type="text" pInputText [(ngModel)]='title' style="width: 100%">
     </div>
     <div class="p-field p-pt-2">
-        <label for="description" aria-describedby="Add a description for your step" styleClass="labelBlock">Description</label>
+        <label for="description" aria-describedby="Add a description" styleClass="labelBlock">Description</label>
         <input id="description" type="text" pInputText [(ngModel)]='description' style="width: 100%">
     </div>
-    <p-dropdown [options]="statusOptions" [(ngModel)]="selectedStatus" appendTo='body' class='p-my-3'></p-dropdown>
+    <div class="p-field p-pt-2">
+        <label for="description" aria-describedby="Select the status" styleClass="labelBlock">Status</label>
+        <p-dropdown [options]="statusOptions" [(ngModel)]="status" appendTo='body' class='p-my-3'></p-dropdown>
+    </div>
     <!-- <p-dropdown [options]="visibilityOptions" class='p-my-3'></p-dropdown> -->
     <p-footer>
         <button type="button" pButton label="Save" (click)="onStepSave()"></button>
