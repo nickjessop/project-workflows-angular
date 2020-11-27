@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { Project, StepConfig } from 'src/app/models/interfaces/project';
+import { Project, Step, StepConfig } from 'src/app/models/interfaces/project';
 import { ProjectService } from 'src/app/services/project/project.service';
 
 @Component({
@@ -45,15 +45,16 @@ export class StepsComponent implements OnInit {
         this.projectService.setNewCurrentProjectStep(stepIndex);
     }
 
-    public onSavePress(event: { title: string; description: string }) {
+    public onSavePress(event: Step) {
         console.log(`Saved pressed with title: ${event.title} and description: ${event.description}`);
         this.onNewStepPress(event);
     }
 
-    private onNewStepPress(stepConfig: { title: string; description: string }) {
+    private onNewStepPress(stepConfig: Step) {
         const newStep = this.projectService.createNewProjectStep();
         newStep.step.description = stepConfig.description;
         newStep.step.title = stepConfig.title;
+        newStep.step.status = stepConfig.status;
 
         this.projectService.addProjectStep(newStep);
     }

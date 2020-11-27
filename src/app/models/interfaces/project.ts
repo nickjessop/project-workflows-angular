@@ -15,12 +15,13 @@ export interface StepConfig {
 }
 
 export interface Step {
-    title?: string;
+    title: string;
     icon?: string;
-    description?: string;
+    description: string;
     visibility?: 'show' | 'hide';
     interaction?: 'document' | 'form';
     isCurrentStep?: boolean;
+    status: { label: string; icon: string };
 }
 
 export type Role = 'admin' | 'editor' | 'viewer' | 'guest';
