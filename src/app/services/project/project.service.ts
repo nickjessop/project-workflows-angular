@@ -105,7 +105,7 @@ export class ProjectService {
                       step: {
                           title: '',
                           description: '',
-                          status: { label: 'Active', icon: 'pi-circle-off' },
+                          status: { label: 'Active', value: 'active', icon: 'pi-circle-off' },
                           isCurrentStep: true,
                       },
                   },
@@ -153,7 +153,7 @@ export class ProjectService {
             step: {
                 title: stepTitle || '(Untitled Step)',
                 description: stepDescription || '',
-                status: status || { label: 'Active', icon: 'pi-circle-off' },
+                status: status || { label: 'Active', value: 'active', icon: 'pi-circle-off' },
             },
             components: [fieldConfig],
         };
@@ -383,7 +383,7 @@ export class ProjectService {
             step: {
                 title: 'Insert title here',
                 description: 'This is just a test step',
-                status: { label: 'Active', icon: 'pi-circle-off' },
+                status: { label: 'Active', value: 'active', icon: 'pi-circle-off' },
                 isCurrentStep: true,
             },
         };

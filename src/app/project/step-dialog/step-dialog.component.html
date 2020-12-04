@@ -2,15 +2,15 @@
 <p-dialog header="Add Step" [(visible)]="showDialog" styleClass="dialog" focusTrap="true" modal="true">
     <div class="p-field">
         <label for="title" aria-describedby="Name your step" styleClass="labelBlock">Title</label>
-        <input id="title" type="text" pInputText [(ngModel)]='title' style="width: 100%">
+        <input id="title" type="text" pInputText [(ngModel)]='titleInput' style="width: 100%">
     </div>
     <div class="p-field p-pt-2">
         <label for="description" aria-describedby="Add a description" styleClass="labelBlock">Description</label>
-        <input id="description" type="text" pInputText [(ngModel)]='description' style="width: 100%">
+        <input id="description" type="text" pInputText [(ngModel)]='descriptionInput' style="width: 100%">
     </div>
     <div class="p-field p-pt-2">
         <label for="description" aria-describedby="Select the status" styleClass="labelBlock">Status</label>
-        <p-dropdown [options]="statusOptions" [(ngModel)]="status" appendTo='body' class='p-my-3'></p-dropdown>
+        <p-dropdown [options]="statusOptions" [(ngModel)]="statusInput" appendTo='body' class='p-my-3'></p-dropdown>
     </div>
     <!-- <p-dropdown [options]="visibilityOptions" class='p-my-3'></p-dropdown> -->
     <p-footer>
