@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -11,6 +11,9 @@ export class ProjectCardComponent implements OnInit {
     @Input() openedDate = '';
     @Input() projectDescription = '';
     @Input() link = '';
+    @Input() projectId = '';
+
+    @Output() onDeleteProjectByIdEvent = new EventEmitter<{ id: string }>();
 
     constructor(private router: Router) {}
 
@@ -18,5 +21,9 @@ export class ProjectCardComponent implements OnInit {
 
     navigate() {
         this.router.navigateByUrl(this.link);
+    }
+
+    onDeleteProjectPress() {
+        this.onDeleteProjectByIdEvent.emit({ id: this.projectId });
     }
 }
