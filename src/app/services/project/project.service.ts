@@ -17,9 +17,7 @@ export class ProjectService {
 
     public unsubscribeToProjectListener?: () => void;
 
-    constructor(private firebaseService: FirebaseService, private authenticationService: AuthenticationService) {
-        // this.createBaseProject();
-    }
+    constructor(private firebaseService: FirebaseService, private authenticationService: AuthenticationService) {}
 
     public get projectConfig() {
         return this._projectConfig.getValue();
@@ -95,6 +93,7 @@ export class ProjectService {
     public createBaseProject(
         creatorId: string = this.authenticationService.user!.id,
         projectName = '',
+        description = '',
         configuration?: StepConfig[]
     ) {
         const config: StepConfig[] = configuration
@@ -113,7 +112,7 @@ export class ProjectService {
 
         const baseProject: Project = {
             name: projectName,
-            description: 'Test dummy description',
+            description,
             ownerIds: [creatorId],
             configuration: config,
         };
@@ -161,8 +160,12 @@ export class ProjectService {
         return stepConfig;
     }
 
-    public createNewProject() {
-        const baseProject = this.createBaseProject(this.authenticationService.user!.id);
+    public createNewProject(projectName?: string, projectDescription?: string) {
+        const baseProject = this.createBaseProject(
+            this.authenticationService.user!.id,
+            projectName,
+            projectDescription
+        );
 
         return this.firebaseService
             .getDbInstance()!
