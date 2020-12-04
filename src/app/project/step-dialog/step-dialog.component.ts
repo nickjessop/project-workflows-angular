@@ -39,7 +39,6 @@ export class StepDialogComponent implements OnInit {
         if (!this.titleInput && !this.descriptionInput) {
             return;
         }
-        console.log(this.statusInput);
         this.onSavePress.emit({ title: this.titleInput, description: this.descriptionInput, status: this.statusInput });
         this.clearStepDialog();
         this.showDialog = false;
