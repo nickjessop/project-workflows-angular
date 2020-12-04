@@ -18,14 +18,16 @@ export class StepDialogComponent implements OnInit {
         { label: 'hide', value: 'hide' },
     ];
 
-    public statusOptions: Status[] = [
-        { label: 'Active', value: 'active', icon: 'pi-circle-off' },
-        { label: 'Important', value: 'important', icon: 'pi-exclamation-circle' },
-        { label: 'Upcoming', value: 'upcoming', icon: 'pi-clock' },
-        { label: 'Completed', value: 'completed', icon: 'pi-check-circle' },
-    ];
+    statusOptions: Status[];
 
-    constructor() {}
+    constructor() {
+        this.statusOptions = [
+            { label: 'Active', value: 'active', icon: 'pi-circle-off' },
+            { label: 'Important', value: 'important', icon: 'pi-exclamation-circle' },
+            { label: 'Upcoming', value: 'upcoming', icon: 'pi-clock' },
+            { label: 'Completed', value: 'completed', icon: 'pi-check-circle' },
+        ];
+    }
 
     ngOnInit(): void {}
 
@@ -37,6 +39,7 @@ export class StepDialogComponent implements OnInit {
         if (!this.titleInput && !this.descriptionInput) {
             return;
         }
+        console.log(this.statusInput);
         this.onSavePress.emit({ title: this.titleInput, description: this.descriptionInput, status: this.statusInput });
         this.clearStepDialog();
         this.showDialog = false;
