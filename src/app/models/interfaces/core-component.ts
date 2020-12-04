@@ -32,7 +32,7 @@ export function createFieldConfig(
         inputType: inputType || '',
         options: options || [''],
         collections: collections || '',
-        type: type || ('empty' as ComponentType),
+        type: type || 'smallTextInput',
         value: value || '',
     };
 
@@ -46,7 +46,6 @@ export type ComponentType =
     | 'largeTextInput'
     | 'smallTextInput'
     | 'table'
-    | 'url'
-    | 'empty';
+    | 'url';
 
 export type ComponentMode = 'edit' | 'view' | 'interact';
