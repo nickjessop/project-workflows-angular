@@ -23,6 +23,7 @@ import { StepsComponent } from './project/steps/steps.component';
 import { ViewerComponent } from './project/viewer/viewer.component';
 import { ProtectedRoutingModule } from './protected-routing.module';
 import { UserMenuComponent } from './user-menu/user-menu.component';
+import { NewProjectDialogComponent } from './project/new-project-dialog/new-project-dialog.component';
 
 @NgModule({
     declarations: [
@@ -41,6 +42,7 @@ import { UserMenuComponent } from './user-menu/user-menu.component';
         StepDialogComponent,
         ProjectControlsComponent,
         UserMenuComponent,
+        NewProjectDialogComponent,
     ],
     imports: [
         ProtectedRoutingModule,

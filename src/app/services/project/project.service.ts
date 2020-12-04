@@ -17,9 +17,7 @@ export class ProjectService {
 
     public unsubscribeToProjectListener?: () => void;
 
-    constructor(private firebaseService: FirebaseService, private authenticationService: AuthenticationService) {
-        // this.createBaseProject();
-    }
+    constructor(private firebaseService: FirebaseService, private authenticationService: AuthenticationService) {}
 
     public get projectConfig() {
         return this._projectConfig.getValue();
@@ -95,6 +93,7 @@ export class ProjectService {
     public createBaseProject(
         creatorId: string = this.authenticationService.user!.id,
         projectName = '',
+        description = '',
         configuration?: StepConfig[]
     ) {
         const config: StepConfig[] = configuration
@@ -113,7 +112,7 @@ export class ProjectService {
 
         const baseProject: Project = {
             name: projectName,
-            description: 'Test dummy description',
+            description,
             ownerIds: [creatorId],
             configuration: config,
         };
@@ -161,12 +160,12 @@ export class ProjectService {
         return stepConfig;
     }
 
-    public createNewProject(saveAndGenerateProjectId = false) {
-        const baseProject = this.createBaseProject(this.authenticationService.user!.id);
-
-        if (!saveAndGenerateProjectId) {
-            this.projectConfig = baseProject;
-        }
+    public createNewProject(projectName?: string, projectDescription?: string) {
+        const baseProject = this.createBaseProject(
+            this.authenticationService.user!.id,
+            projectName,
+            projectDescription
+        );
 
         return this.firebaseService
             .getDbInstance()!
@@ -175,16 +174,12 @@ export class ProjectService {
             .then(
                 documentRef => {
                     baseProject.id = documentRef.id;
-                    this.projectConfig = baseProject;
-
+                    documentRef.update({ id: documentRef.id });
+                    // this.projectConfig = baseProject;
                     return baseProject;
                 },
                 error => {
-                    console.log(`Error while saving project to generate id: ${error}`);
-
-                    this.projectConfig = baseProject;
-
-                    return baseProject;
+                    console.log(`Error occurred while creating a new project: ${error}`);
                 }
             );
     }
@@ -332,62 +327,62 @@ export class ProjectService {
             );
     }
 
-    public saveDemoProject() {
-        const demoConfig = this.generateDemoProjectConfig();
-        const demoConfigs = [demoConfig, demoConfig, demoConfig, demoConfig];
+    // public saveDemoProject() {
+    //     const demoConfig = this.generateDemoProjectConfig();
+    //     const demoConfigs = [demoConfig, demoConfig, demoConfig, demoConfig];
 
-        const projectConfig: Project = this.createBaseProject(
-            this.authenticationService.user!.id,
-            'Testing Project',
-            demoConfigs
-        );
+    //     const projectConfig: Project = this.createBaseProject(
+    //         this.authenticationService.user!.id,
+    //         'Testing Project',
+    //         demoConfigs
+    //     );
 
-        const project = this.createNewProject(true).then(newProject => {
-            projectConfig.id = newProject.id;
-            this.updateProject(projectConfig);
-        });
-    }
+    //     const project = this.createNewProject().then(newProject => {
+    //         projectConfig.id = newProject.id;
+    //         this.updateProject(projectConfig);
+    //     });
+    // }
 
-    private generateDemoProjectConfig() {
-        const defaultConfig: FieldConfig[] = [
-            {
-                type: 'smallTextInput',
-                label: 'Title',
-                inputType: 'text',
-                name: '',
-                value: 'TTC Management System',
-            },
-            {
-                type: 'largeTextInput',
-                label: 'Introduction Summary',
-                inputType: 'text',
-                name: '',
-                value:
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor ' +
-                    'incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud ' +
-                    'exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure ' +
-                    'dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. ' +
-                    'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum',
-            },
-            {
-                type: 'smallTextInput',
-                label: 'Cost Summary',
-                inputType: 'text',
-                name: '',
-                value: 'Additional $56,656 cost for travel allowance around GTA.',
-            },
-        ];
+    // private generateDemoProjectConfig() {
+    //     const defaultConfig: FieldConfig[] = [
+    //         {
+    //             type: 'smallTextInput',
+    //             label: 'Title',
+    //             inputType: 'text',
+    //             name: '',
+    //             value: 'TTC Management System',
+    //         },
+    //         {
+    //             type: 'largeTextInput',
+    //             label: 'Introduction Summary',
+    //             inputType: 'text',
+    //             name: '',
+    //             value:
+    //                 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor ' +
+    //                 'incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud ' +
+    //                 'exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure ' +
+    //                 'dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. ' +
+    //                 'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum',
+    //         },
+    //         {
+    //             type: 'smallTextInput',
+    //             label: 'Cost Summary',
+    //             inputType: 'text',
+    //             name: '',
+    //             value: 'Additional $56,656 cost for travel allowance around GTA.',
+    //         },
+    //     ];
 
-        const stepConfig: StepConfig = {
-            components: defaultConfig,
-            step: {
-                title: 'Insert title here',
-                description: 'This is just a test step',
-                status: { label: 'Active', value: 'active', icon: 'pi-circle-off' },
-                isCurrentStep: true,
-            },
-        };
+    // const stepConfig: StepConfig = {
+    //         components: defaultConfig,
+    //         step: {
+    //             title: 'Insert title here',
+    //             description: 'This is just a test step',
+    //             status: { label: 'Active', icon: 'pi-circle-off' },
+    //             isCurrentStep: true,
+    //         },
+    //     };
 
-        return stepConfig;
-    }
+    //     return stepConfig;
+    // }
 }
