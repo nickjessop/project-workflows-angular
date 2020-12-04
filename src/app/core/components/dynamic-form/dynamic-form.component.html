@@ -1,4 +1,6 @@
 <form class="dynamic-form" cdkDropList (cdkDropListDropped)="drop($event)" [formGroup]="form" (submit)="onSubmit($event)">
     <ng-content></ng-content>
-    <ng-container *ngFor="let field of fields" appCoreComponentResolver [field]="field" [group]="form"> </ng-container>
+    <ng-container *ngIf="fields?.length">
+        <ng-container *ngFor="let field of fields" appCoreComponentResolver [field]="field" [group]="form"> </ng-container>
+    </ng-container>
 </form>
