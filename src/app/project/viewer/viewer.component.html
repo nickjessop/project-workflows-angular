@@ -4,7 +4,7 @@
         <div class="p-col-3 p-pt-5 p-pl-4">
             <project-steps></project-steps>
         </div>
-        <div class="p-col-9 p-pl-3 p-pr-2 p-pt-5 viewer-container__step" *ngIf="currentStep; else showLoading">
+        <div class="p-col-9 p-pl-3 p-pr-2 p-pt-5 viewer-container__step" *ngIf="currentStep; else showErrorState">
             <div class="step-container p-pb-3">
                 <div class="p-mb-2 p-px-2">
                     <div class="p-grid p-nogutter p-pb-3">
@@ -21,8 +21,10 @@
                 </div>
             </div>
         </div>
-         <ng-template #showLoading>
-            Loading...
+         <ng-template #showErrorState>
+            <div class="p-col-6 p-d-flex p-ai-center">
+                Failed to load current step
+            </div>
         </ng-template>
     </div>
 </div>
