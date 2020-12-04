@@ -73,9 +73,7 @@ export class ProjectService {
                 return true;
             }
 
-            const test = _.differenceWith(config1, config2, _.isEqual);
-
-            if (test.length > 0) {
+            if (JSON.stringify(config1) !== JSON.stringify(config2)) {
                 return true;
             }
         }
@@ -309,6 +307,7 @@ export class ProjectService {
             .onSnapshot(
                 document => {
                     const project = document.data() as Project;
+                    console.log('change', project);
                     const currentStepSet = project.configuration?.some(stepConfig => {
                         return stepConfig.step.isCurrentStep;
                     });
