@@ -9,7 +9,7 @@ import { Status, Step } from 'src/app/models/interfaces/project';
 export class StepDialogComponent implements OnInit {
     @Input() titleInput = '';
     @Input() descriptionInput = '';
-    @Input() statusInput: Status = { label: 'Upcoming', value: 'upcoming', icon: 'pi-clock' };
+    @Input() statusInput: Status = { label: 'Active', value: 'active', icon: 'pi-circle-off' };
     @Output() onSavePress = new EventEmitter<Step>();
 
     public showDialog = false;
