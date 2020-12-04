@@ -46,7 +46,7 @@ export class StepsComponent implements OnInit {
     }
 
     public onSavePress(event: Step) {
-        console.log(`Saved pressed with title: ${event.title} and description: ${event.description}`);
+        console.log('Save step pressed with step value: ', event);
         this.onNewStepPress(event);
     }
 
