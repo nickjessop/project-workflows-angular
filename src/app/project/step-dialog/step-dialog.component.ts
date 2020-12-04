@@ -9,7 +9,7 @@ import { Status, Step } from 'src/app/models/interfaces/project';
 export class StepDialogComponent implements OnInit {
     @Input() titleInput = '';
     @Input() descriptionInput = '';
-    @Input() statusInput: Status = { label: 'Upcoming', value: 'upcoming', icon: 'pi-clock' };
+    @Input() statusInput: Status = { label: 'Active', value: 'active', icon: 'pi-circle-off' };
     @Output() onSavePress = new EventEmitter<Step>();
 
     public showDialog = false;
@@ -18,14 +18,16 @@ export class StepDialogComponent implements OnInit {
         { label: 'hide', value: 'hide' },
     ];
 
-    public statusOptions: Status[] = [
-        { label: 'Active', value: 'active', icon: 'pi-circle-off' },
-        { label: 'Important', value: 'important', icon: 'pi-exclamation-circle' },
-        { label: 'Upcoming', value: 'upcoming', icon: 'pi-clock' },
-        { label: 'Completed', value: 'completed', icon: 'pi-check-circle' },
-    ];
+    statusOptions: Status[];
 
-    constructor() {}
+    constructor() {
+        this.statusOptions = [
+            { label: 'Active', value: 'active', icon: 'pi-circle-off' },
+            { label: 'Important', value: 'important', icon: 'pi-exclamation-circle' },
+            { label: 'Upcoming', value: 'upcoming', icon: 'pi-clock' },
+            { label: 'Completed', value: 'completed', icon: 'pi-check-circle' },
+        ];
+    }
 
     ngOnInit(): void {}
 
