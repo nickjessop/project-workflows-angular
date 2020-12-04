@@ -9,7 +9,12 @@
                 <div class="p-mb-2 p-px-2">
                     <div class="p-grid p-nogutter p-pb-3">
                         <div class="p-col-6 p-d-flex p-ai-center">
-                            <h2 class="ms-2 p-my-0">{{ currentStep.step.title }}</h2>
+                            <h2 class="ms-2 p-my-0 p-pr-2">{{ currentStep.step.title }}</h2>
+                            <ng-container [ngSwitch]="currentStep.step.status.value">
+                                <span *ngSwitchCase="'upcoming'" class="p-tag p-tag-rounded ms-03">{{ currentStep.step.status.label }}</span>
+                                <span *ngSwitchCase="'completed'" class="p-tag p-tag-rounded p-tag-success ms-03">{{ currentStep.step.status.label }}</span>
+                                <span *ngSwitchCase="'important'" class="p-tag p-tag-rounded p-tag-danger ms-03">{{ currentStep.step.status.label }}</span>
+                            </ng-container>
                         </div>
                         <div class="p-col-6 p-d-flex p-jc-end p-ai-center">
                             <step-controls></step-controls>
