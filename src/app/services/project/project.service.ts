@@ -100,8 +100,8 @@ export class ProjectService {
                   {
                       components: [createFieldConfig()],
                       step: {
-                          title: '',
-                          description: '',
+                          title: '(Untitled Step)',
+                          description: '(Untitled Step Description)',
                           status: { label: 'Active', value: 'active', icon: 'pi-circle-off' },
                           isCurrentStep: true,
                       },

@@ -18,7 +18,7 @@
     </ng-container>
 
     <ng-template #showProjects>
-        <div class="project" *ngIf="projects">
+        <div class="project" *ngIf="projects; else showNoProjects">
             <p-tabView>
                 <p-tabPanel header="All projects">
                     <p-table [value]="projects" styleClass="p-datatable-gridlines p-datatable-lg p-py-3">
@@ -37,6 +37,9 @@
                 </p-tabPanel>
             </p-tabView>
         </div>
+    </ng-template>
+    <ng-template #showNoProjects>
+        <div class="p-py-3">Looks like you don't have any projects.</div>
     </ng-template>
 
 </div>
