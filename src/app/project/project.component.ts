@@ -17,10 +17,6 @@ export class ProjectComponent implements OnInit {
         this.getProjects();
     }
 
-    public saveProject() {
-        this.projectService.saveDemoProject();
-    }
-
     public updateProject() {
         console.log('updating project test');
     }
@@ -52,7 +48,7 @@ export class ProjectComponent implements OnInit {
     }
 
     public createNewProject() {
-        this.projectService.createNewProject(true).then(
+        this.projectService.createNewProject().then(
             success => {
                 this.getProjects();
             },
