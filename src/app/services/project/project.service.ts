@@ -176,11 +176,7 @@ export class ProjectService {
                     return baseProject;
                 },
                 error => {
-                    console.log(`Error while saving project to generate id: ${error}`);
-
-                    this.projectConfig = baseProject;
-
-                    return baseProject;
+                    console.log(`Error occurred while creating a new project: ${error}`);
                 }
             );
     }
