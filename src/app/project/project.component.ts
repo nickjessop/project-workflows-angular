@@ -17,14 +17,6 @@ export class ProjectComponent implements OnInit {
         this.getProjects();
     }
 
-    public saveProject() {
-        this.projectService.saveDemoProject();
-    }
-
-    public updateProject() {
-        console.log('updating project test');
-    }
-
     public getProjects() {
         this.isLoadingProjects = true;
 
@@ -51,8 +43,8 @@ export class ProjectComponent implements OnInit {
         );
     }
 
-    public createNewProject() {
-        this.projectService.createNewProject(true).then(
+    public onCreateNewProjectEvent($event: { projectName: string; description: string }) {
+        this.projectService.createNewProject($event.projectName, $event.description).then(
             success => {
                 this.getProjects();
             },
