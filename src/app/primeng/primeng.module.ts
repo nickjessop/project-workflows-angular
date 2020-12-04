@@ -2,8 +2,10 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AccordionModule } from 'primeng/accordion';
+import { ConfirmationService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
 import { FileUploadModule } from 'primeng/fileupload';
@@ -21,7 +23,6 @@ import { TableModule } from 'primeng/table';
 import { TabViewModule } from 'primeng/tabview';
 import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
-
 @NgModule({
     declarations: [],
     imports: [
@@ -47,6 +48,7 @@ import { ToolbarModule } from 'primeng/toolbar';
         MessageModule,
         ToastModule,
         SidebarModule,
+        ConfirmDialogModule,
     ],
     exports: [
         AccordionModule,
@@ -69,6 +71,8 @@ import { ToolbarModule } from 'primeng/toolbar';
         MessageModule,
         ToastModule,
         SidebarModule,
+        ConfirmDialogModule,
     ],
+    providers: [ConfirmationService],
 })
 export class PrimengModule {}

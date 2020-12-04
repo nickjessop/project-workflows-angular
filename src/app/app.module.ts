@@ -15,6 +15,7 @@ import { SliceEllipsisPipe } from './pipes/slice-ellipsis.pipe';
 import { PrimengModule } from './primeng/primeng.module';
 import { BlockPanelOverlayComponent } from './project/block-overlay/block-overlay.component';
 import { ControlsComponent } from './project/controls/controls.component';
+import { NewProjectDialogComponent } from './project/new-project-dialog/new-project-dialog.component';
 import { ProjectCardComponent } from './project/project-card/project-card.component';
 import { ProjectControlsComponent } from './project/project-controls/project-controls.component';
 import { ProjectComponent } from './project/project.component';
@@ -23,8 +24,6 @@ import { StepsComponent } from './project/steps/steps.component';
 import { ViewerComponent } from './project/viewer/viewer.component';
 import { ProtectedRoutingModule } from './protected-routing.module';
 import { UserMenuComponent } from './user-menu/user-menu.component';
-import { NewProjectDialogComponent } from './project/new-project-dialog/new-project-dialog.component';
-
 @NgModule({
     declarations: [
         AppComponent,
