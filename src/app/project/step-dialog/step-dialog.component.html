@@ -10,7 +10,20 @@
     </div>
     <div class="p-field p-pt-2">
         <label for="description" aria-describedby="Select the status" styleClass="labelBlock">Status</label>
-        <p-dropdown [options]="statusOptions" [(ngModel)]="statusInput" appendTo='body' class='p-my-3'></p-dropdown>
+        <p-dropdown [options]="statusOptions" [(ngModel)]="statusInput" optionLabel="label" appendTo='body' class='p-my-3'>
+            <ng-template pTemplate="selectedItem" *ngIf="statusInput">
+                <div class="p-d-flex">
+                    <i class="pi {{statusInput.icon}} p-mr-2"></i>
+                    <span> {{statusInput.label}}</span>
+                </div>
+            </ng-template>
+            <ng-template let-status pTemplate="item">
+                <div class="p-d-flex">
+                    <i class="pi {{status.icon}} p-mr-2"></i>
+                    <span> {{status.label}}</span>
+                </div>
+            </ng-template>
+        </p-dropdown>
     </div>
     <!-- <p-dropdown [options]="visibilityOptions" class='p-my-3'></p-dropdown> -->
     <p-footer>
