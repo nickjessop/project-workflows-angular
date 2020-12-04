@@ -23,16 +23,11 @@ export interface Step {
     isCurrentStep?: boolean;
     status: Status;
 }
-
 export type Role = 'admin' | 'editor' | 'viewer' | 'guest';
 
-export type Status = {
-    [name: string]: { label: string; icon: string };
-};
+export type Status = typeof Active | typeof Important | typeof Upcoming | typeof Complete;
 
-export const statusOptions: Status = {
-    active: { label: 'Active', icon: 'pi-circle-off' },
-    important: { label: 'Important', icon: 'pi-exclamation-circle' },
-    upcoming: { label: 'Upcoming', icon: 'pi-clock' },
-    completed: { label: 'Completed', icon: 'pi-check-circle' },
-};
+export const Active = { label: 'Active', icon: 'pi-circle-off' } as const;
+export const Important = { label: 'Important', icon: 'pi-exclamation-circle' } as const;
+export const Upcoming = { label: 'Upcoming', icon: 'pi-clock' } as const;
+export const Complete = { label: 'Completed', icon: 'pi-check-circle' } as const;

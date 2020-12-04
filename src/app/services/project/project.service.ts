@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { BehaviorSubject, combineLatest, from, Subject } from 'rxjs';
 import { ComponentType, createFieldConfig, FieldConfig } from '../../models/interfaces/core-component';
-import { Project, Status, statusOptions, StepConfig } from '../../models/interfaces/project';
+import { Project, Status, StepConfig } from '../../models/interfaces/project';
 import { AuthenticationService } from '../authentication/authentication.service';
 import { FirebaseService } from '../firebase/firebase.service';
 
@@ -95,7 +95,7 @@ export class ProjectService {
         projectName = '',
         configuration?: StepConfig[]
     ) {
-        const config = configuration
+        const config: StepConfig[] = configuration
             ? configuration
             : [
                   {
@@ -103,8 +103,7 @@ export class ProjectService {
                       step: {
                           title: '',
                           description: '',
-                          status: statusOptions['active'],
-                          selected: true,
+                          status: { label: 'Active', icon: 'pi-circle-off' },
                           isCurrentStep: true,
                       },
                   },
@@ -147,14 +146,17 @@ export class ProjectService {
         value?: string
     ) {
         const fieldConfig = createFieldConfig(label, name, inputType, options, collections, type, value);
-        return {
+
+        const stepConfig: StepConfig = {
             step: {
                 title: stepTitle || '(Untitled Step)',
                 description: stepDescription || '',
-                status: status || statusOptions['active'],
+                status: status || { label: 'Active', icon: 'pi-circle-off' },
             },
             components: [fieldConfig],
         };
+
+        return stepConfig;
     }
 
     public createNewProject(saveAndGenerateProjectId = false) {
@@ -374,13 +376,13 @@ export class ProjectService {
             },
         ];
 
-        const stepConfig = {
+        const stepConfig: StepConfig = {
             components: defaultConfig,
             step: {
                 title: 'Insert title here',
                 description: 'This is just a test step',
-                status: statusOptions['active'],
-                selected: true,
+                status: { label: 'Active', icon: 'pi-circle-off' },
+                isCurrentStep: true,
             },
         };
 

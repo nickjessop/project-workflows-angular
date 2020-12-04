@@ -26,7 +26,7 @@ export function createFieldConfig(
     type?: ComponentType,
     value?: string
 ) {
-    const fieldConfig = {
+    const fieldConfig: FieldConfig = {
         label: label || '',
         name: name || '',
         inputType: inputType || '',
