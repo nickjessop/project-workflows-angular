@@ -17,7 +17,9 @@ export class ProjectService {
 
     public unsubscribeToProjectListener?: () => void;
 
-    constructor(private firebaseService: FirebaseService, private authenticationService: AuthenticationService) {}
+    constructor(private firebaseService: FirebaseService, private authenticationService: AuthenticationService) {
+        // this.createBaseProject();
+    }
 
     public get projectConfig() {
         return this._projectConfig.getValue();
