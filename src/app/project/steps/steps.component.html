@@ -32,3 +32,12 @@
         </div>
     </ng-template>
 </div>
+
+<project-step-dialog
+    [dialogTitle]="dialogTitle"
+    [showDialog]="showDialog"
+    [dialogMode]="dialogMode"
+    (onSavePress)="onSavePress($event)"
+    (displayChange)="onDialogClose($event)"
+>
+</project-step-dialog>
