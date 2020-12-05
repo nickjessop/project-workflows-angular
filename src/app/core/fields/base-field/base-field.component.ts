@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { MenuItem } from 'primeng/api';
 
 @Component({
     selector: 'app-base-field',
@@ -8,7 +9,21 @@ import { Component, Input } from '@angular/core';
 export class BaseFieldComponent {
     @Input() label = '';
 
+    public items: MenuItem[] = [
+        {
+            label: 'Delete Block',
+            icon: 'pi pi-times',
+            command: () => {
+                this.onDeleteBlock();
+            },
+        },
+    ];
+
     constructor() {}
 
     ngOnInit() {}
+
+    public onDeleteBlock() {
+        console.log('block deleted');
+    }
 }
