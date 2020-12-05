@@ -1,17 +1,26 @@
 <div class="field p-mb-3 p-py-4 p-px-2" cdkDrag #fieldContainer>
-
-    <div class="p-mb-3">
-        <p-inplace closable="closable">
-            <ng-template pTemplate="display">
-                Name your field
-            </ng-template>
-            <ng-template pTemplate="content">
-                <input type="text" class="p-inputtext" value="Name your field" pInputText />
-            </ng-template>
-        </p-inplace>
+    <div class="p-d-flex p-jc-md-between">
+        <div class="p-mb-3">
+            <p-inplace closable="closable">
+                <ng-template pTemplate="display">
+                    Name your field
+                </ng-template>
+                <ng-template pTemplate="content">
+                    <input type="text" class="p-inputtext" value="Name your field" pInputText />
+                </ng-template>
+            </p-inplace>
+        </div>
+        <div>
+            <button
+                type="button"
+                class="p-button-text p-button-plain"
+                pButton
+                icon="pi pi-ellipsis-h"
+                (click)="menu.toggle($event)"
+            ></button>
+            <p-menu #menu [popup]="true" [model]="items" appendTo="body"></p-menu>
+        </div>
     </div>
     <div class="field__description mb-2">Description</div>
     <ng-content></ng-content>
-    <button type="button" class="p-button-text p-button-plain" pButton icon="pi pi-ellipsis-h" (click)="menu.toggle($event)"></button>
-    <p-menu #menu [popup]="true" [model]="items" appendTo="body"></p-menu>
 </div>
