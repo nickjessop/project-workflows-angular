@@ -12,7 +12,11 @@ export class StepDialogComponent implements OnInit {
     @Input() statusInput: Status = { label: 'Active', value: 'active', icon: 'pi-circle-off' };
     @Output() onSavePress = new EventEmitter<Step>();
 
-    public showDialog = false;
+    @Input() showDialog!: boolean;
+    @Input() dialogTitle!: string;
+    @Input() dialogMode!: boolean;
+    @Output() displayChange = new EventEmitter<boolean>();
+
     public visibilityOptions = [
         { label: 'show', value: 'show' },
         { label: 'hide', value: 'hide' },
@@ -31,22 +35,26 @@ export class StepDialogComponent implements OnInit {
 
     ngOnInit(): void {}
 
-    public onNewStepPress() {
-        this.showDialog = true;
-    }
-
     public onStepSave() {
         if (!this.titleInput && !this.descriptionInput) {
             return;
         }
         this.onSavePress.emit({ title: this.titleInput, description: this.descriptionInput, status: this.statusInput });
-        this.clearStepDialog();
-        this.showDialog = false;
+        this.onHide();
     }
 
     private clearStepDialog() {
         this.titleInput = '';
         this.descriptionInput = '';
         this.statusInput = { label: 'Active', value: 'active', icon: 'pi-circle-off' };
+    }
+
+    public onHide() {
+        this.clearStepDialog();
+        this.displayChange.emit(false);
+    }
+
+    ngOnDestroy() {
+        this.displayChange.unsubscribe();
     }
 }

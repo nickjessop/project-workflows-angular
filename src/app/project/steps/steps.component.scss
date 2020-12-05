@@ -5,6 +5,13 @@
             cursor: pointer;
             background: rgba(33, 150, 243, 0.04);
             border-radius: 6px;
+            .step__edit-step {
+                opacity: 0.6;
+            }
+        }
+        &__edit-step {
+            opacity: 0;
+            transition: 0.1s;
         }
     }
     .step-selected {
