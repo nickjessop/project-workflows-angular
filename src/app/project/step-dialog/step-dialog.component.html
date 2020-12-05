@@ -1,5 +1,5 @@
 
-<p-dialog header="Add Step" [(visible)]="showDialog" styleClass="dialog" focusTrap="true" modal="true">
+<p-dialog [header]="dialogTitle" [(visible)]="showDialog" styleClass="dialog" focusTrap="true" modal="true" (onHide)="onHide($event)">
     <div class="p-field">
         <label for="title" aria-describedby="Name your step" styleClass="labelBlock">Title</label>
         <input id="title" type="text" pInputText [(ngModel)]='titleInput' style="width: 100%">
@@ -27,16 +27,6 @@
     </div>
     <!-- <p-dropdown [options]="visibilityOptions" class='p-my-3'></p-dropdown> -->
     <p-footer>
-        <button type="button" pButton label="Save" (click)="onStepSave()"></button>
+        <button type="button" pButton label=" " (click)="onStepSave()">{{ dialogMode ? 'Save' : 'Add' }}</button>
     </p-footer>
 </p-dialog>
-
-<div class="step">
-    <button
-        pButton
-        type="button"
-        icon="pi pi-plus"
-        class="p-button-rounded p-button-text"
-        (click)="onNewStepPress()"
-    ></button>
-</div>
