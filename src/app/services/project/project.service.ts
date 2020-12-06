@@ -244,6 +244,15 @@ export class ProjectService {
         );
     }
 
+    public deleteProjectBlock(blockIndex: number) {
+        const currentStepIndex = this.getCurrentStepIndex() || 0;
+
+        const _projectConfig = _.cloneDeep(this.projectConfig);
+        delete _projectConfig.configuration![currentStepIndex].components![blockIndex];
+
+        this.setProject(_projectConfig);
+    }
+
     private getCurrentStepIndex() {
         const currentStepIndex = this.projectConfig.configuration?.findIndex(config => {
             return config.step.isCurrentStep;

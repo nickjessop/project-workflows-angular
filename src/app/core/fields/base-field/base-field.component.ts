@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { MenuItem } from 'primeng/api';
+import { ProjectService } from 'src/app/services/project/project.service';
 
 @Component({
     selector: 'app-base-field',
@@ -8,6 +9,7 @@ import { MenuItem } from 'primeng/api';
 })
 export class BaseFieldComponent {
     @Input() label = '';
+    @Input() index?: number;
 
     public items: MenuItem[] = [
         {
@@ -19,11 +21,13 @@ export class BaseFieldComponent {
         },
     ];
 
-    constructor() {}
+    constructor(public projectService: ProjectService) {}
 
     ngOnInit() {}
 
     public onDeleteBlock() {
-        console.log('block deleted');
+        if (this.index) {
+            this.projectService.deleteProjectBlock(this.index);
+        }
     }
 }
