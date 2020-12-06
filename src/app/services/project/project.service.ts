@@ -245,10 +245,11 @@ export class ProjectService {
     }
 
     public deleteProjectBlock(blockIndex: number) {
+        console.log(`Deleting block at index: ${blockIndex}`);
         const currentStepIndex = this.getCurrentStepIndex() || 0;
 
         const _projectConfig = _.cloneDeep(this.projectConfig);
-        delete _projectConfig.configuration![currentStepIndex].components![blockIndex];
+        _projectConfig.configuration![currentStepIndex].components!.splice(blockIndex, 1);
 
         this.setProject(_projectConfig);
     }
