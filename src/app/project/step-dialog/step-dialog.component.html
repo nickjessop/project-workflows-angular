@@ -1,5 +1,13 @@
 
-<p-dialog [header]="dialogTitle" [(visible)]="showDialog" styleClass="dialog" focusTrap="true" modal="true" (onHide)="onHide($event)">
+<p-dialog
+    [header]="dialogTitle + ' \'' + dialogStep.title + '\''"
+    [(visible)]="showDialog"
+    styleClass="dialog"
+    focusTrap="true"
+    modal="true"
+    (onHide)="onHide($event)"
+    (onShow)="setStepValues($event)"
+>
     <div class="p-field">
         <label for="title" aria-describedby="Name your step" styleClass="labelBlock">Title</label>
         <input id="title" type="text" pInputText [(ngModel)]='titleInput' style="width: 100%">

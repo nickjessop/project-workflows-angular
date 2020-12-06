@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { BehaviorSubject, combineLatest, from, Subject } from 'rxjs';
 import { ComponentType, createFieldConfig, FieldConfig } from '../../models/interfaces/core-component';
-import { Project, Status, StepConfig } from '../../models/interfaces/project';
+import { Project, Status, Step, StepConfig } from '../../models/interfaces/project';
 import { AuthenticationService } from '../authentication/authentication.service';
 import { FirebaseService } from '../firebase/firebase.service';
 
@@ -154,6 +154,11 @@ export class ProjectService {
         };
 
         return stepConfig;
+    }
+
+    public editProjectStep(step: Step) {
+        // step = {
+        // }
     }
 
     public createNewProject(projectName?: string, projectDescription?: string) {

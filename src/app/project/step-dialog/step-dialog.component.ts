@@ -17,6 +17,8 @@ export class StepDialogComponent implements OnInit {
     @Input() dialogMode!: boolean;
     @Output() displayChange = new EventEmitter<boolean>();
 
+    @Input() dialogStep!: Step;
+
     public visibilityOptions = [
         { label: 'show', value: 'show' },
         { label: 'hide', value: 'hide' },
@@ -33,7 +35,24 @@ export class StepDialogComponent implements OnInit {
         ];
     }
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        this.setStepValues();
+    }
+
+    public setStepValues() {
+        // set initial step values unless we receive them from step.component
+        if (!this.dialogStep) {
+            this.dialogStep = {
+                title: '',
+                description: '',
+                status: this.statusInput,
+            };
+        } else {
+            this.titleInput = this.dialogStep.title;
+            this.descriptionInput = this.dialogStep.description;
+            this.statusInput = this.dialogStep.status;
+        }
+    }
 
     public onStepSave() {
         if (!this.titleInput && !this.descriptionInput) {
@@ -47,6 +66,11 @@ export class StepDialogComponent implements OnInit {
         this.titleInput = '';
         this.descriptionInput = '';
         this.statusInput = { label: 'Active', value: 'active', icon: 'pi-circle-off' };
+        this.dialogStep = {
+            title: '',
+            description: '',
+            status: this.statusInput,
+        };
     }
 
     public onHide() {
