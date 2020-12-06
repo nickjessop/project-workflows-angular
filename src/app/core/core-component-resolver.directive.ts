@@ -14,7 +14,7 @@ import { UrlComponent } from './fields/url/url.component';
 export class CoreComponentResolverDirective implements OnInit {
     @Input() field!: FieldConfig;
     @Input() group!: FormGroup;
-    @Input() index?: number;
+    @Input() index = 0;
 
     componentRef?: ComponentRef<
         | FileUploaderComponent
@@ -67,6 +67,7 @@ export class CoreComponentResolverDirective implements OnInit {
             const _componentRef = this.viewContainerRef.createComponent<SmallTextInputComponent>(factory);
             _componentRef.instance.field = this.field;
             _componentRef.instance.group = this.group;
+            _componentRef.instance.index = this.index;
 
             this.componentRef = _componentRef;
         } else if (componentType === 'table') {

@@ -1,7 +1,19 @@
-<form class="dynamic-form" cdkDropList (cdkDropListDropped)="drop($event)" [formGroup]="form" (submit)="onSubmit($event)">
+<form
+    class="dynamic-form"
+    cdkDropList
+    (cdkDropListDropped)="drop($event)"
+    [formGroup]="form"
+    (submit)="onSubmit($event)"
+>
     <ng-content></ng-content>
     <ng-container *ngIf="fields?.length; else showEmptyState">
-        <ng-container *ngFor="let field of fields" appCoreComponentResolver [field]="field" [group]="form"></ng-container>
+        <ng-container
+            *ngFor="let field of fields; index as index"
+            appCoreComponentResolver
+            [field]="field"
+            [group]="form"
+            [index]="index"
+        ></ng-container>
     </ng-container>
     <ng-template #showEmptyState>
         Looks like you haven't added any blocks yet
