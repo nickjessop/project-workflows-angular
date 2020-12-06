@@ -23,6 +23,7 @@ export class StepsComponent implements OnInit {
     showDialog: boolean = false;
     dialogTitle: string = 'Step';
     dialogMode: boolean = false;
+    dialogStep!: Step;
 
     ngOnInit() {
         this.initializeProject();
@@ -57,11 +58,13 @@ export class StepsComponent implements OnInit {
         this.showDialog = true;
         this.dialogTitle = dialogOptions.title;
         this.dialogMode = dialogOptions.edit;
+        if (dialogOptions.step) {
+            this.dialogStep = dialogOptions.step;
+        }
     }
 
     onDialogClose(event: boolean) {
         this.showDialog = event;
-        console.log(event);
     }
 
     public onNewStepPress(stepConfig: Step) {
