@@ -20,6 +20,9 @@ export class StepsComponent implements OnInit {
     //TODO
     // STEP STATUSES: COMPLETED, UPCOMING, AND IMPORTANT - these aren't functional but convey info (icon + badge in step header)
     // STEP STATES: LOCKED AND HIDDEN - these are functional. one makes the step read-only for particpants+, the other hides from participants+
+    showDialog: boolean = false;
+    dialogTitle: string = 'Step';
+    dialogMode: boolean = false;
 
     ngOnInit() {
         this.initializeProject();
@@ -50,7 +53,19 @@ export class StepsComponent implements OnInit {
         this.onNewStepPress(event);
     }
 
-    private onNewStepPress(stepConfig: Step) {
+    openDialog(dialogOptions: any) {
+        this.showDialog = true;
+        this.dialogTitle = dialogOptions.title;
+        this.dialogMode = dialogOptions.edit;
+    }
+
+    onDialogClose(event: boolean) {
+        this.showDialog = event;
+        console.log(event);
+    }
+
+    public onNewStepPress(stepConfig: Step) {
+        console.log(this.showDialog);
         const newStep = this.projectService.createNewProjectStep();
         newStep.step.description = stepConfig.description;
         newStep.step.title = stepConfig.title;
