@@ -1,14 +1,28 @@
 <div class="steps-container">
     <div class="p-d-flex p-ai-center p-jc-between p-pb-2">
         <div class="ms-1">Steps</div>
-        <project-step-dialog (onSavePress)="onSavePress($event)"></project-step-dialog>
+        <div class="step">
+            <button
+                pButton
+                type="button"
+                icon="pi pi-plus"
+                class="p-button-rounded p-button-text"
+                (click)="openDialog({title: 'Add Step', edit: false})"
+            ></button>
+        </div>
     </div>
     <ng-container *ngIf="steps?.length; else showEmptyState">
         <ng-container *ngFor="let stepConfig of steps; index as i">
-            <div class="step p-d-flex p-ai-center p-mb-3 p-p-2" [class.step-selected]="stepConfig.step.isCurrentStep"
+            <div class="step p-d-flex p-ai-center p-jc-between p-mb-3 p-p-2" [class.step-selected]="stepConfig.step.isCurrentStep"
                 (click)="onStepPress(i)">
-                <i class="pi {{ stepConfig.step.status.icon }} p-pr-2"></i>
-                <div class="ms-0">{{ stepConfig.step.title }}</div>
+                <div class="p-d-flex">
+                    <i class="pi {{ stepConfig.step.status.icon }} p-pr-2"></i>
+                    <div class="ms-0">{{ stepConfig.step.title }}</div>
+                </div>
+                <i
+                    class="pi pi-pencil step__edit-step"
+                    (click)="openDialog({title: 'Edit Step', edit: true})"
+                ></i>
             </div>
         </ng-container>
     </ng-container>
@@ -18,3 +32,12 @@
         </div>
     </ng-template>
 </div>
+
+<project-step-dialog
+    [dialogTitle]="dialogTitle"
+    [showDialog]="showDialog"
+    [dialogMode]="dialogMode"
+    (onSavePress)="onSavePress($event)"
+    (displayChange)="onDialogClose($event)"
+>
+</project-step-dialog>
