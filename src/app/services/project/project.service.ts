@@ -156,9 +156,12 @@ export class ProjectService {
         return stepConfig;
     }
 
-    public editProjectStep(step: Step) {
-        // step = {
-        // }
+    public editProjectStep(editStep: Step) {
+        const currentStepIndex = this.getCurrentStepIndex() || 0;
+        const _projectConfig = _.cloneDeep(this.projectConfig);
+        _projectConfig.configuration![currentStepIndex].step = editStep;
+
+        this.setProject(_projectConfig);
     }
 
     public createNewProject(projectName?: string, projectDescription?: string) {

@@ -1,6 +1,6 @@
 
 <p-dialog
-    [header]="dialogTitle + ' \'' + dialogStep.title + '\''"
+    [header]="dialogTitle + dialogStep.title"
     [(visible)]="showDialog"
     styleClass="dialog"
     focusTrap="true"
@@ -35,6 +35,6 @@
     </div>
     <!-- <p-dropdown [options]="visibilityOptions" class='p-my-3'></p-dropdown> -->
     <p-footer>
-        <button type="button" pButton label=" " (click)="onStepSave()">{{ dialogMode ? 'Save' : 'Add' }}</button>
+        <button type="button" pButton [label]="dialogEdit ? 'Save' : 'Add'" (click)="onStepSave()"></button>
     </p-footer>
 </p-dialog>

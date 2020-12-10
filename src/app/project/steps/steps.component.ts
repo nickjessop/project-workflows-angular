@@ -22,7 +22,7 @@ export class StepsComponent implements OnInit {
     // STEP STATES: LOCKED AND HIDDEN - these are functional. one makes the step read-only for particpants+, the other hides from participants+
     showDialog: boolean = false;
     dialogTitle: string = 'Step';
-    dialogMode: boolean = false;
+    dialogEdit: boolean = false;
     dialogStep!: Step;
 
     ngOnInit() {
@@ -50,14 +50,14 @@ export class StepsComponent implements OnInit {
     }
 
     public onSavePress(event: Step) {
-        console.log('Save step pressed with step value: ', event);
+        console.log('Save step pressed with step values: ', event);
         this.onNewStepPress(event);
     }
 
     openDialog(dialogOptions: any) {
         this.showDialog = true;
         this.dialogTitle = dialogOptions.title;
-        this.dialogMode = dialogOptions.edit;
+        this.dialogEdit = dialogOptions.edit;
         if (dialogOptions.step) {
             this.dialogStep = dialogOptions.step;
         }
@@ -68,12 +68,15 @@ export class StepsComponent implements OnInit {
     }
 
     public onNewStepPress(stepConfig: Step) {
-        console.log(this.showDialog);
-        const newStep = this.projectService.createNewProjectStep();
-        newStep.step.description = stepConfig.description;
-        newStep.step.title = stepConfig.title;
-        newStep.step.status = stepConfig.status;
+        if (this.dialogEdit) {
+            this.projectService.editProjectStep(stepConfig);
+        } else {
+            const newStep = this.projectService.createNewProjectStep();
+            newStep.step.description = stepConfig.description;
+            newStep.step.title = stepConfig.title;
+            newStep.step.status = stepConfig.status;
 
-        this.projectService.addProjectStep(newStep);
+            this.projectService.addProjectStep(newStep);
+        }
     }
 }
