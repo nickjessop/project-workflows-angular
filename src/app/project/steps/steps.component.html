@@ -21,7 +21,7 @@
                 </div>
                 <i
                     class="pi pi-pencil step__edit-step"
-                    (click)="openDialog({title: 'Edit', edit: true, step: stepConfig.step})"
+                    (click)="openDialog({title: 'Edit: ', edit: true, step: stepConfig.step})"
                 ></i>
             </div>
         </ng-container>
@@ -36,7 +36,7 @@
 <project-step-dialog
     [dialogTitle]="dialogTitle"
     [showDialog]="showDialog"
-    [dialogMode]="dialogMode"
+    [dialogEdit]="dialogEdit"
     [dialogStep]="dialogStep"
     (onSavePress)="onSavePress($event)"
     (displayChange)="onDialogClose($event)"

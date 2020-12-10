@@ -108,3 +108,9 @@ a:visited {
 .cdk-drop-list-dragging {
     cursor: move !important;
 }
+
+.p-tag {
+    display: inline-flex !important;
+    align-items: center;
+    line-height: normal !important;
+}

@@ -14,7 +14,7 @@ export class StepDialogComponent implements OnInit {
 
     @Input() showDialog!: boolean;
     @Input() dialogTitle!: string;
-    @Input() dialogMode!: boolean;
+    @Input() dialogEdit!: boolean;
     @Output() displayChange = new EventEmitter<boolean>();
 
     @Input() dialogStep!: Step;

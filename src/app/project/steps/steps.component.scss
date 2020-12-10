@@ -5,13 +5,11 @@
             cursor: pointer;
             background: rgba(33, 150, 243, 0.04);
             border-radius: 6px;
-            .step__edit-step {
-                opacity: 0.6;
-            }
         }
         &__edit-step {
             opacity: 0;
             transition: 0.1s;
+            pointer-events: none;
         }
     }
     .step-selected {
@@ -19,6 +17,10 @@
         border-radius: 6px;
         &:hover {
             background: rgba(33, 150, 243, 0.1);
+            .step__edit-step {
+                opacity: 0.6;
+                pointer-events: initial;
+            }
         }
     }
 }
