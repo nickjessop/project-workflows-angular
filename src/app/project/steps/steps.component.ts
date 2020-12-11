@@ -16,16 +16,15 @@ export class StepsComponent implements OnInit {
     public steps: StepConfig[] = [];
     public currentStep?: StepConfig;
 
+    public showDialog = false;
+    public stepMode: 'edit' | 'new' | 'delete' = 'edit';
+    public focusStep: Step = { title: '', description: '' };
+
     constructor(private projectService: ProjectService) {}
 
     //TODO
     // STEP STATUSES: COMPLETED, UPCOMING, AND IMPORTANT - these aren't functional but convey info (icon + badge in step header)
     // STEP STATES: LOCKED AND HIDDEN - these are functional. one makes the step read-only for particpants+, the other hides from participants+
-    showDialog: boolean = false;
-    dialogTitle: string = 'Step';
-    dialogEdit: boolean = false;
-    dialogStep!: Step;
-
     ngOnInit() {
         this.initializeProject();
     }
@@ -46,18 +45,20 @@ export class StepsComponent implements OnInit {
         );
     }
 
-    public stepMenu: MenuItem[] = [
+    public stepMenuOptions: MenuItem[] = [
         {
             label: 'Edit Step',
             icon: 'pi pi-pencil',
             command: () => {
-                console.log();
-                this.openDialog({ title: 'Edit: ', edit: true });
+                this.onEditCurrentStep();
             },
         },
         {
             label: 'Delete Step',
             icon: 'pi pi-times',
+            command: () => {
+                this.onDeleteCurrentStep();
+            },
         },
     ];
 
@@ -65,35 +66,57 @@ export class StepsComponent implements OnInit {
         this.projectService.setNewCurrentProjectStep(stepIndex);
     }
 
-    public onSavePress(event: Step) {
-        console.log('Save step pressed with step values: ', event);
-        this.onNewStepPress(event);
+    public onAddNewStepPress() {
+        this.openDialog('new');
     }
 
-    openDialog(dialogOptions: any) {
-        console.log(dialogOptions);
-        this.showDialog = true;
-        this.dialogTitle = dialogOptions.title;
-        this.dialogEdit = dialogOptions.edit;
-        if (dialogOptions.step) {
-            this.dialogStep = dialogOptions.step;
+    private onEditCurrentStep() {
+        const currentStep = this.projectService.getCurrentStep();
+
+        this.openDialog('edit', currentStep);
+    }
+
+    private onDeleteCurrentStep() {
+        this.openDialog('delete');
+    }
+
+    public openDialog(stepMode: 'edit' | 'new' | 'delete', step?: Step) {
+        if (stepMode === 'edit' && step) {
+            this.focusStep = step;
+            this.stepMode = 'edit';
+            this.showDialog = true;
+        } else if (stepMode === 'new') {
+            this.focusStep = { description: '', title: '' };
+            this.stepMode = 'new';
+            this.showDialog = true;
+        } else if (stepMode == 'delete') {
+            this.stepMode = 'delete';
+            console.log('Delete triggered');
         }
     }
 
-    onDialogClose(event: boolean) {
-        this.showDialog = event;
+    public onDialogSubmitEvent($event: { step?: Step; mode: 'edit' | 'new' | 'delete' }) {
+        this.showDialog = false;
+
+        const mode = $event.mode;
+        if (mode === 'edit') {
+            console.log('Edit submit event called', $event);
+            if ($event.step) {
+                this.projectService.updateProjectStep($event.step);
+            }
+        } else if (mode === 'new') {
+            console.log('New submit event called', $event);
+            if ($event.step) {
+                const newStep = this.projectService.createNewProjectStep();
+                newStep.step = $event.step;
+                this.projectService.addProjectStep(newStep);
+            }
+        } else if (mode === 'delete') {
+            console.log('Delete submit event called', $event);
+        }
     }
 
-    public onNewStepPress(stepConfig: Step) {
-        if (this.dialogEdit) {
-            this.projectService.editProjectStep(stepConfig);
-        } else {
-            const newStep = this.projectService.createNewProjectStep();
-            newStep.step.description = stepConfig.description;
-            newStep.step.title = stepConfig.title;
-            newStep.step.status = stepConfig.status;
-
-            this.projectService.addProjectStep(newStep);
-        }
+    public onHideEvent($event: true) {
+        this.showDialog = false;
     }
 }
