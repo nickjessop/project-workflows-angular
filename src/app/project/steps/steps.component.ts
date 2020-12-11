@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import { Project, Step, StepConfig } from 'src/app/models/interfaces/project';
@@ -15,6 +16,11 @@ export class StepsComponent implements OnInit {
     public project?: Project;
     public steps: StepConfig[] = [];
     public currentStep?: StepConfig;
+
+    @Output() dragAndDropStepEvent: EventEmitter<{
+        previousIndex: number;
+        currentIndex: number;
+    }> = new EventEmitter();
 
     constructor(private projectService: ProjectService) {}
 
@@ -95,5 +101,12 @@ export class StepsComponent implements OnInit {
 
             this.projectService.addProjectStep(newStep);
         }
+    }
+
+    drop(event: CdkDragDrop<any>) {
+        this.dragAndDropStepEvent.emit({
+            previousIndex: event.previousIndex,
+            currentIndex: event.currentIndex,
+        });
     }
 }
