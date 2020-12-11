@@ -47,4 +47,8 @@ export class ViewerComponent implements OnInit {
     public onDragAndDropEvent(event: any) {
         this.projectService.swapBlockOrder(event.previousIndex, event.currentIndex);
     }
+
+    public onDragAndDropStepEvent(event: any) {
+        this.projectService.swapStepOrder(event.previousIndex, event.currentIndex);
+    }
 }
