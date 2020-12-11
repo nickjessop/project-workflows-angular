@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MenuItem } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import { Project, Step, StepConfig } from 'src/app/models/interfaces/project';
 import { ProjectService } from 'src/app/services/project/project.service';
@@ -45,6 +46,21 @@ export class StepsComponent implements OnInit {
         );
     }
 
+    public stepMenu: MenuItem[] = [
+        {
+            label: 'Edit Step',
+            icon: 'pi pi-pencil',
+            command: () => {
+                console.log();
+                this.openDialog({ title: 'Edit: ', edit: true });
+            },
+        },
+        {
+            label: 'Delete Step',
+            icon: 'pi pi-times',
+        },
+    ];
+
     public onStepPress(stepIndex: number) {
         this.projectService.setNewCurrentProjectStep(stepIndex);
     }
@@ -55,6 +71,7 @@ export class StepsComponent implements OnInit {
     }
 
     openDialog(dialogOptions: any) {
+        console.log(dialogOptions);
         this.showDialog = true;
         this.dialogTitle = dialogOptions.title;
         this.dialogEdit = dialogOptions.edit;

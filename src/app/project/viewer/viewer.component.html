@@ -12,7 +12,7 @@
                             <div class="p-d-flex p-flex-column">
                                 <div class="p-d-flex">
                                     <h2 class="ms-3 p-my-0 p-pr-2">{{ currentStep.step.title }}</h2>
-                                    <ng-container [ngSwitch]="currentStep.step.status.value">
+                                    <ng-container *ngIf="currentStep.step.status != undefined" [ngSwitch]="currentStep.step.status.value">
                                         <span *ngSwitchCase="'in-progress'" class="p-tag p-tag-rounded p-tag-warning ms-03">
                                             <i class="pi {{ currentStep.step.status.icon }} p-pr-1"></i>{{ currentStep.step.status.label }}
                                         </span>
