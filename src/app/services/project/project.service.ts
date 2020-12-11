@@ -104,8 +104,8 @@ export class ProjectService {
                   {
                       components: [createFieldConfig()],
                       step: {
-                          title: '(Untitled Step)',
-                          description: '(Untitled Step Description)',
+                          title: 'Untitled Step',
+                          description: 'Untitled Step Description',
                           isCurrentStep: true,
                       },
                   },
@@ -135,6 +135,12 @@ export class ProjectService {
         this.setProject(_projectConfig);
     }
 
+    public swapStepOrder(previousIndex: number, currentIndex: number) {
+        const _projectConfig = _.cloneDeep(this.projectConfig);
+        moveItemInArray(_projectConfig.configuration!, previousIndex, currentIndex);
+        this.setProject(_projectConfig);
+    }
+
     public createNewProjectStep(
         stepTitle?: string,
         stepDescription?: string,
@@ -151,7 +157,7 @@ export class ProjectService {
 
         const stepConfig: StepConfig = {
             step: {
-                title: stepTitle || '(Untitled Step)',
+                title: stepTitle || 'Untitled Step',
                 description: stepDescription || '',
                 status: status || undefined,
             },
