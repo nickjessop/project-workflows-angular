@@ -26,9 +26,9 @@
             showClear="true"
         >
             <ng-template pTemplate="selectedItem">
-                <div class="p-d-flex" *ngIf="selectedStatus">
-                    <i class="pi {{ selectedStatus.icon }} p-mr-2"></i>
-                    <span> {{ selectedStatus.label }}</span>
+                <div class="p-d-flex" *ngIf="step.status">
+                    <i class="pi {{ step.status.icon }} p-mr-2"></i>
+                    <span> {{ step.status.label }}</span>
                 </div>
             </ng-template>
             <ng-template let-status pTemplate="item">
