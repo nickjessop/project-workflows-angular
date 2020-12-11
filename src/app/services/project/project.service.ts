@@ -61,18 +61,24 @@ export class ProjectService {
         }
 
         for (let i = 0; i < (project1.configuration || []).length; i++) {
-            const config1 = project1.configuration?.[i].components;
-            const config2 = project2.configuration?.[i].components;
+            const components1 = project1.configuration?.[i].components;
+            const components2 = project2.configuration?.[i].components;
 
-            if (!config2 || !config1) {
+            const step1 = project1.configuration?.[i].step;
+            const step2 = project2.configuration?.[i].step;
+
+            if (!components2 || !components1) {
                 return true;
             }
 
-            if (config2.length !== config1.length) {
+            if (components2.length !== components2.length) {
                 return true;
             }
 
-            if (JSON.stringify(config1) !== JSON.stringify(config2)) {
+            if (JSON.stringify(components1) !== JSON.stringify(components2)) {
+                return true;
+            }
+            if (JSON.stringify(step1) !== JSON.stringify(step2)) {
                 return true;
             }
         }

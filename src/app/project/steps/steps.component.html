@@ -44,11 +44,13 @@
     </ng-template>
 </div>
 
-<project-step-dialog
-    (dialogSubmitEvent)="onDialogSubmitEvent($event)"
-    (onHideEvent)="onHideEvent($event)"
-    [(step)]="focusStep"
-    [mode]="stepMode"
-    [(showDialog)]="showDialog"
->
-</project-step-dialog>
+<ng-container *ngIf="showDialog">
+    <project-step-dialog
+        (dialogSubmitEvent)="onDialogSubmitEvent($event)"
+        (onHideEvent)="onHideEvent($event)"
+        [step]="focusStep"
+        [mode]="stepMode"
+        [(showDialog)]="showDialog"
+    >
+    </project-step-dialog>
+</ng-container>
