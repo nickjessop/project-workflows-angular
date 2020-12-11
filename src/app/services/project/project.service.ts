@@ -273,6 +273,15 @@ export class ProjectService {
         this.setProject(_projectConfig);
     }
 
+    public deleteCurrentProjectStep() {
+        const currentStepIndex = this.getCurrentStepIndex() || 0;
+
+        const _projectConfig = _.cloneDeep(this.projectConfig);
+        _projectConfig.configuration?.splice(currentStepIndex, 1);
+
+        this.setProject(_projectConfig);
+    }
+
     private getCurrentStepIndex() {
         const currentStepIndex = this.projectConfig.configuration?.findIndex(config => {
             return config.step.isCurrentStep;

@@ -44,7 +44,7 @@ export class StepDialogComponent implements OnInit {
     }
 
     public onDialogSubmit() {
-        if (!this.step.title || !this.step.description) {
+        if (this.mode !== 'delete' && (!this.step.title || !this.step.description)) {
             return;
         }
 
