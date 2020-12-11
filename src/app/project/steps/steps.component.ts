@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import * as _ from 'lodash';
 import { MenuItem } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import { Project, Step, StepConfig } from 'src/app/models/interfaces/project';
 import { ProjectService } from 'src/app/services/project/project.service';
-
 @Component({
     selector: 'project-steps',
     templateUrl: './steps.component.html',
@@ -82,7 +82,7 @@ export class StepsComponent implements OnInit {
 
     public openDialog(stepMode: 'edit' | 'new' | 'delete', step?: Step) {
         if (stepMode === 'edit' && step) {
-            this.focusStep = step;
+            this.focusStep = _.cloneDeep(step);
             this.stepMode = 'edit';
             this.showDialog = true;
         } else if (stepMode === 'new') {
@@ -98,6 +98,7 @@ export class StepsComponent implements OnInit {
     public onDialogSubmitEvent($event: { step?: Step; mode: 'edit' | 'new' | 'delete' }) {
         this.showDialog = false;
 
+        console.log($event);
         const mode = $event.mode;
         if (mode === 'edit') {
             console.log('Edit submit event called', $event);

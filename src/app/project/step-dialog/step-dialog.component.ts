@@ -13,6 +13,7 @@ export class StepDialogComponent implements OnInit {
     @Output() dialogSubmitEvent = new EventEmitter<{ step?: Step; mode: 'edit' | 'new' | 'delete' }>();
     @Output() onHideEvent = new EventEmitter<true>();
 
+    // stepCopy?: Step;
     selectedStatus?: Status;
     statusOptions: Status[];
 
@@ -25,7 +26,9 @@ export class StepDialogComponent implements OnInit {
         ];
     }
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        // this.stepCopy = this.step;
+    }
 
     public getButtonLabel() {
         const componentMode = this.mode;
@@ -40,20 +43,12 @@ export class StepDialogComponent implements OnInit {
         return '';
     }
 
-    private clearStepDialog() {
-        this.step.description = '';
-        this.step.title = '';
-        this.step.status = undefined;
-    }
-
     public onDialogSubmit() {
         if (!this.step.title || !this.step.description) {
             return;
         }
 
         this.dialogSubmitEvent.emit({ step: this.step, mode: this.mode });
-
-        this.clearStepDialog();
     }
 
     public onHide() {
