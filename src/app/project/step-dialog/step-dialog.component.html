@@ -18,11 +18,11 @@
     </div>
     <div class="p-field p-pt-2">
         <label for="description" aria-describedby="Select the status" styleClass="labelBlock">Status</label>
-        <p-dropdown [options]="statusOptions" [(ngModel)]="statusInput" optionLabel="label" appendTo='body' class='p-my-3'>
-            <ng-template pTemplate="selectedItem" *ngIf="statusInput">
-                <div class="p-d-flex">
-                    <i class="pi {{statusInput.icon}} p-mr-2"></i>
-                    <span> {{statusInput.label}}</span>
+        <p-dropdown [options]="statusOptions" [(ngModel)]="selectedStatus" placeholder="No status" optionLabel="label" appendTo='body' class='p-my-3'>
+            <ng-template pTemplate="selectedItem">
+                <div class="p-d-flex" *ngIf="selectedStatus">
+                    <i class="pi {{selectedStatus.icon}} p-mr-2"></i>
+                    <span> {{selectedStatus.label}}</span>
                 </div>
             </ng-template>
             <ng-template let-status pTemplate="item">
