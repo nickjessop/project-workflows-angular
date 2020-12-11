@@ -21,13 +21,13 @@ export interface Step {
     visibility?: 'show' | 'hide';
     interaction?: 'document' | 'form';
     isCurrentStep?: boolean;
-    status: Status;
+    status?: Status;
 }
 export type Role = 'admin' | 'editor' | 'viewer' | 'guest';
 
-export type Status = typeof Active | typeof Important | typeof Upcoming | typeof Complete;
+export type Status = typeof InProgress | typeof Important | typeof Upcoming | typeof Complete;
 
-export const Active = { label: 'Active', value: 'active', icon: 'pi-circle-off' } as const;
+export const InProgress = { label: 'In progress', value: 'in-progress', icon: 'pi-spinner' } as const;
 export const Important = { label: 'Important', value: 'important', icon: 'pi-exclamation-circle' } as const;
 export const Upcoming = { label: 'Upcoming', value: 'upcoming', icon: 'pi-clock' } as const;
 export const Complete = { label: 'Completed', value: 'completed', icon: 'pi-check-circle' } as const;

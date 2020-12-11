@@ -9,7 +9,6 @@ import { Status, Step } from 'src/app/models/interfaces/project';
 export class StepDialogComponent implements OnInit {
     @Input() titleInput = '';
     @Input() descriptionInput = '';
-    @Input() statusInput: Status = { label: 'Active', value: 'active', icon: 'pi-circle-off' };
     @Output() onSavePress = new EventEmitter<Step>();
 
     @Input() showDialog!: boolean;
@@ -24,11 +23,12 @@ export class StepDialogComponent implements OnInit {
         { label: 'hide', value: 'hide' },
     ];
 
+    selectedStatus: Status | undefined;
     statusOptions: Status[];
 
     constructor() {
         this.statusOptions = [
-            { label: 'Active', value: 'active', icon: 'pi-circle-off' },
+            { label: 'In progress', value: 'in-progress', icon: 'pi-spinner' },
             { label: 'Important', value: 'important', icon: 'pi-exclamation-circle' },
             { label: 'Upcoming', value: 'upcoming', icon: 'pi-clock' },
             { label: 'Completed', value: 'completed', icon: 'pi-check-circle' },
@@ -45,12 +45,12 @@ export class StepDialogComponent implements OnInit {
             this.dialogStep = {
                 title: '',
                 description: '',
-                status: this.statusInput,
+                status: this.selectedStatus,
             };
         } else {
             this.titleInput = this.dialogStep.title;
             this.descriptionInput = this.dialogStep.description;
-            this.statusInput = this.dialogStep.status;
+            this.selectedStatus = this.dialogStep.status;
         }
     }
 
@@ -58,18 +58,21 @@ export class StepDialogComponent implements OnInit {
         if (!this.titleInput && !this.descriptionInput) {
             return;
         }
-        this.onSavePress.emit({ title: this.titleInput, description: this.descriptionInput, status: this.statusInput });
+        this.onSavePress.emit({
+            title: this.titleInput,
+            description: this.descriptionInput,
+            status: this.selectedStatus,
+        });
         this.onHide();
     }
 
     private clearStepDialog() {
         this.titleInput = '';
         this.descriptionInput = '';
-        this.statusInput = { label: 'Active', value: 'active', icon: 'pi-circle-off' };
+        // this.selectedStatus = '';
         this.dialogStep = {
             title: '',
             description: '',
-            status: this.statusInput,
         };
     }
 
