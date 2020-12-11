@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import * as _ from 'lodash';
 import { MenuItem } from 'primeng/api';
 import { Subscription } from 'rxjs';
@@ -15,6 +16,11 @@ export class StepsComponent implements OnInit {
     public project?: Project;
     public steps: StepConfig[] = [];
     public currentStep?: StepConfig;
+
+    @Output() dragAndDropStepEvent: EventEmitter<{
+        previousIndex: number;
+        currentIndex: number;
+    }> = new EventEmitter();
 
     public showDialog = false;
     public stepMode: 'edit' | 'new' | 'delete' = 'edit';
@@ -115,6 +121,13 @@ export class StepsComponent implements OnInit {
         } else if (mode === 'delete') {
             console.log('Delete submit event called', $event);
         }
+    }
+
+    drop(event: CdkDragDrop<any>) {
+        this.dragAndDropStepEvent.emit({
+            previousIndex: event.previousIndex,
+            currentIndex: event.currentIndex,
+        });
     }
 
     public onHideEvent($event: true) {
