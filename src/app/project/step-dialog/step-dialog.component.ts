@@ -7,23 +7,13 @@ import { Status, Step } from 'src/app/models/interfaces/project';
     styleUrls: ['./step-dialog.component.scss'],
 })
 export class StepDialogComponent implements OnInit {
-    @Input() titleInput = '';
-    @Input() descriptionInput = '';
-    @Output() onSavePress = new EventEmitter<Step>();
+    @Input() step: Step = { title: '', description: '' };
+    @Input() mode: 'edit' | 'new' | 'delete' = 'new';
+    @Input() showDialog = false;
+    @Output() dialogSubmitEvent = new EventEmitter<{ step?: Step; mode: 'edit' | 'new' | 'delete' }>();
+    @Output() onHideEvent = new EventEmitter<true>();
 
-    @Input() showDialog!: boolean;
-    @Input() dialogTitle!: string;
-    @Input() dialogEdit!: boolean;
-    @Output() displayChange = new EventEmitter<boolean>();
-
-    @Input() dialogStep!: Step;
-
-    public visibilityOptions = [
-        { label: 'show', value: 'show' },
-        { label: 'hide', value: 'hide' },
-    ];
-
-    selectedStatus: Status | undefined;
+    selectedStatus?: Status;
     statusOptions: Status[];
 
     constructor() {
@@ -35,53 +25,38 @@ export class StepDialogComponent implements OnInit {
         ];
     }
 
-    ngOnInit(): void {
-        this.setStepValues();
-    }
+    ngOnInit(): void {}
 
-    public setStepValues() {
-        // set initial step values unless we receive them from step.component
-        if (!this.dialogStep) {
-            this.dialogStep = {
-                title: '',
-                description: '',
-                status: this.selectedStatus,
-            };
-        } else {
-            this.titleInput = this.dialogStep.title;
-            this.descriptionInput = this.dialogStep.description;
-            this.selectedStatus = this.dialogStep.status;
+    public getButtonLabel() {
+        const componentMode = this.mode;
+        if (componentMode === 'new') {
+            return 'Add';
+        } else if (componentMode === 'edit') {
+            return 'Save';
+        } else if (componentMode === 'delete') {
+            return 'Delete';
         }
-    }
 
-    public onStepSave() {
-        if (!this.titleInput && !this.descriptionInput) {
-            return;
-        }
-        this.onSavePress.emit({
-            title: this.titleInput,
-            description: this.descriptionInput,
-            status: this.selectedStatus,
-        });
-        this.onHide();
+        return '';
     }
 
     private clearStepDialog() {
-        this.titleInput = '';
-        this.descriptionInput = '';
-        // this.selectedStatus = '';
-        this.dialogStep = {
-            title: '',
-            description: '',
-        };
+        this.step.description = '';
+        this.step.title = '';
+        this.step.status = undefined;
+    }
+
+    public onDialogSubmit() {
+        if (!this.step.title || !this.step.description) {
+            return;
+        }
+
+        this.dialogSubmitEvent.emit({ step: this.step, mode: this.mode });
+
+        this.clearStepDialog();
     }
 
     public onHide() {
-        this.clearStepDialog();
-        this.displayChange.emit(false);
-    }
-
-    ngOnDestroy() {
-        this.displayChange.unsubscribe();
+        this.onHideEvent.emit(true);
     }
 }
