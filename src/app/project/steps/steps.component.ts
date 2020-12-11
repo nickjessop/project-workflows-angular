@@ -97,7 +97,7 @@ export class StepsComponent implements OnInit {
             this.showDialog = true;
         } else if (stepMode == 'delete') {
             this.stepMode = 'delete';
-            console.log('Delete triggered');
+            this.showDialog = true;
         }
     }
 
@@ -120,6 +120,7 @@ export class StepsComponent implements OnInit {
             }
         } else if (mode === 'delete') {
             console.log('Delete submit event called', $event);
+            this.projectService.deleteCurrentProjectStep();
         }
     }
 
