@@ -161,10 +161,10 @@ export class ProjectService {
         return stepConfig;
     }
 
-    public editProjectStep(editStep: Step) {
+    public updateProjectStep(step: Step) {
         const currentStepIndex = this.getCurrentStepIndex() || 0;
         const _projectConfig = _.cloneDeep(this.projectConfig);
-        _projectConfig.configuration![currentStepIndex].step = editStep;
+        _projectConfig.configuration![currentStepIndex].step = step;
 
         this.setProject(_projectConfig);
     }
@@ -275,6 +275,12 @@ export class ProjectService {
         return currentStepIndex;
     }
 
+    public getCurrentStep() {
+        const index = this.getCurrentStepIndex() || 0;
+
+        return this.projectConfig.configuration![index].step;
+    }
+
     private resetCurrentProjectSteps(projectConfig: Project) {
         const _projectConfig = _.cloneDeep(projectConfig);
         _projectConfig.configuration?.forEach(stepConfig => {
@@ -357,63 +363,4 @@ export class ProjectService {
                 }
             );
     }
-
-    // public saveDemoProject() {
-    //     const demoConfig = this.generateDemoProjectConfig();
-    //     const demoConfigs = [demoConfig, demoConfig, demoConfig, demoConfig];
-
-    //     const projectConfig: Project = this.createBaseProject(
-    //         this.authenticationService.user!.id,
-    //         'Testing Project',
-    //         demoConfigs
-    //     );
-
-    //     const project = this.createNewProject().then(newProject => {
-    //         projectConfig.id = newProject.id;
-    //         this.updateProject(projectConfig);
-    //     });
-    // }
-
-    // private generateDemoProjectConfig() {
-    //     const defaultConfig: FieldConfig[] = [
-    //         {
-    //             type: 'smallTextInput',
-    //             label: 'Title',
-    //             inputType: 'text',
-    //             name: '',
-    //             value: 'TTC Management System',
-    //         },
-    //         {
-    //             type: 'largeTextInput',
-    //             label: 'Introduction Summary',
-    //             inputType: 'text',
-    //             name: '',
-    //             value:
-    //                 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor ' +
-    //                 'incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud ' +
-    //                 'exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure ' +
-    //                 'dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. ' +
-    //                 'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum',
-    //         },
-    //         {
-    //             type: 'smallTextInput',
-    //             label: 'Cost Summary',
-    //             inputType: 'text',
-    //             name: '',
-    //             value: 'Additional $56,656 cost for travel allowance around GTA.',
-    //         },
-    //     ];
-
-    // const stepConfig: StepConfig = {
-    //         components: defaultConfig,
-    //         step: {
-    //             title: 'Insert title here',
-    //             description: 'This is just a test step',
-    //             status: { label: 'Active', icon: 'pi-circle-off' },
-    //             isCurrentStep: true,
-    //         },
-    //     };
-
-    //     return stepConfig;
-    // }
 }

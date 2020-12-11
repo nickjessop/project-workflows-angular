@@ -7,15 +7,19 @@
                 type="button"
                 icon="pi pi-plus"
                 class="p-button-rounded p-button-text"
-                (click)="openDialog({title: 'Add Step', edit: false})"
+                (click)="onAddNewStepPress()"
             ></button>
         </div>
     </div>
     <ng-container *ngIf="steps?.length; else showEmptyState">
         <div cdkDropList (cdkDropListDropped)="drop($event)">
             <div *ngFor="let stepConfig of steps; index as i">
-                <div cdkDrag class="step p-d-flex p-ai-center p-jc-between p-mb-3 p-p-2" [class.step-selected]="stepConfig.step.isCurrentStep"
-                    (click)="onStepPress(i)">
+                <div
+                    cdkDrag
+                    class="step p-d-flex p-ai-center p-jc-between p-mb-3 p-p-2"
+                    [class.step-selected]="stepConfig.step.isCurrentStep"
+                    (click)="onStepPress(i)"
+                >
                     <div class="p-d-flex">
                         <i *ngIf="stepConfig.step.status != undefined; else defaultIcon" class="pi {{ stepConfig.step.status.icon }} p-pr-2"></i>
                         <ng-template #defaultIcon><i class="pi pi-active p-pr-2"></i></ng-template>
@@ -31,7 +35,7 @@
                 </div>
             </div>
         </div>
-        <p-menu #menu [popup]="true" [model]="stepMenu" appendTo="body"></p-menu>
+        <p-menu #menu [popup]="true" [model]="stepMenuOptions" appendTo="body"></p-menu>
     </ng-container>
     <ng-template #showEmptyState>
         <div class="p-col-6 p-d-flex p-ai-center">
@@ -41,11 +45,10 @@
 </div>
 
 <project-step-dialog
-    [dialogTitle]="dialogTitle"
-    [showDialog]="showDialog"
-    [dialogEdit]="dialogEdit"
-    [dialogStep]="dialogStep"
-    (onSavePress)="onSavePress($event)"
-    (displayChange)="onDialogClose($event)"
+    (dialogSubmitEvent)="onDialogSubmitEvent($event)"
+    (onHideEvent)="onHideEvent($event)"
+    [(step)]="focusStep"
+    [mode]="stepMode"
+    [(showDialog)]="showDialog"
 >
 </project-step-dialog>

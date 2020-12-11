@@ -1,40 +1,44 @@
-
 <p-dialog
-    [header]="dialogTitle + dialogStep.title"
     [(visible)]="showDialog"
+    (onHide)="onHide($event)"
+    [header]="step.title"
     styleClass="dialog"
     focusTrap="true"
     modal="true"
-    (onHide)="onHide($event)"
-    (onShow)="setStepValues($event)"
 >
     <div class="p-field">
         <label for="title" aria-describedby="Name your step" styleClass="labelBlock">Title</label>
-        <input id="title" type="text" pInputText [(ngModel)]='titleInput' style="width: 100%">
+        <input id="title" type="text" pInputText [(ngModel)]="step.title" style="width: 100%" />
     </div>
     <div class="p-field p-pt-2">
         <label for="description" aria-describedby="Add a description" styleClass="labelBlock">Description</label>
-        <input id="description" type="text" pInputText [(ngModel)]='descriptionInput' style="width: 100%">
+        <input id="description" type="text" pInputText [(ngModel)]="step.description" style="width: 100%" />
     </div>
     <div class="p-field p-pt-2">
         <label for="description" aria-describedby="Select the status" styleClass="labelBlock">Status</label>
-        <p-dropdown [options]="statusOptions" [(ngModel)]="selectedStatus" placeholder="No status" optionLabel="label" appendTo='body' class='p-my-3'>
+        <p-dropdown
+            [options]="statusOptions"
+            [(ngModel)]="step.status"
+            placeholder="No status"
+            optionLabel="label"
+            appendTo="body"
+            class="p-my-3"
+        >
             <ng-template pTemplate="selectedItem">
                 <div class="p-d-flex" *ngIf="selectedStatus">
-                    <i class="pi {{selectedStatus.icon}} p-mr-2"></i>
-                    <span> {{selectedStatus.label}}</span>
+                    <i class="pi {{ selectedStatus.icon }} p-mr-2"></i>
+                    <span> {{ selectedStatus.label }}</span>
                 </div>
             </ng-template>
             <ng-template let-status pTemplate="item">
                 <div class="p-d-flex">
-                    <i class="pi {{status.icon}} p-mr-2"></i>
-                    <span> {{status.label}}</span>
+                    <i class="pi {{ status.icon }} p-mr-2"></i>
+                    <span> {{ status.label }}</span>
                 </div>
             </ng-template>
         </p-dropdown>
     </div>
-    <!-- <p-dropdown [options]="visibilityOptions" class='p-my-3'></p-dropdown> -->
     <p-footer>
-        <button type="button" pButton [label]="dialogEdit ? 'Save' : 'Add'" (click)="onStepSave()"></button>
+        <button type="button" pButton [label]="getButtonLabel()" (click)="onDialogSubmit($event)"></button>
     </p-footer>
 </p-dialog>
