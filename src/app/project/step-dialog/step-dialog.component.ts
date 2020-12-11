@@ -18,7 +18,7 @@ export class StepDialogComponent implements OnInit {
 
     constructor() {
         this.statusOptions = [
-            { label: 'In progress', value: 'in-progress', icon: 'pi-spinner' },
+            { label: 'In progress', value: 'in-progress', icon: 'pi-progress' },
             { label: 'Important', value: 'important', icon: 'pi-exclamation-circle' },
             { label: 'Upcoming', value: 'upcoming', icon: 'pi-clock' },
             { label: 'Completed', value: 'completed', icon: 'pi-check-circle' },

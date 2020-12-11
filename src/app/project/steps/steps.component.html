@@ -20,9 +20,10 @@
             >
                 <div class="p-d-flex">
                     <i
-                        *ngIf="stepConfig.step.status != undefined"
+                        *ngIf="stepConfig.step.status; else defaultIcon"
                         class="pi {{ stepConfig.step.status.icon }} p-pr-2"
                     ></i>
+                    <ng-template #defaultIcon><i class="pi pi-active p-pr-2"></i></ng-template>
                     <div class="ms-0">{{ stepConfig.step.title }}</div>
                 </div>
                 <button
