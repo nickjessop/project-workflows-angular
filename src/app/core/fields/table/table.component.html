@@ -1,4 +1,4 @@
-<app-base-field>
+<app-base-field [index]="index">
     <div class="table">
         <p-table [value]="tableData" [resizableColumns]="true" styleClass="p-datatable-gridlines">
             <ng-template pTemplate="header">
@@ -14,40 +14,48 @@
                     <td pEditableColumn>
                         <p-cellEditor>
                             <ng-template pTemplate="input">
-                                <div contenteditable pInputText type="text" [(ngModel)]="tableData.name">{{tableData.name}}</div>
+                                <div contenteditable pInputText type="text" [(ngModel)]="tableData.name">
+                                    {{ tableData.name }}
+                                </div>
                             </ng-template>
                             <ng-template pTemplate="output">
-                                {{tableData.name}}
+                                {{ tableData.name }}
                             </ng-template>
                         </p-cellEditor>
                     </td>
                     <td pEditableColumn>
                         <p-cellEditor>
                             <ng-template pTemplate="input">
-                                <div contenteditable pInputText type="text" [(ngModel)]="tableData.description">{{tableData.description}}</div>
+                                <div contenteditable pInputText type="text" [(ngModel)]="tableData.description">
+                                    {{ tableData.description }}
+                                </div>
                             </ng-template>
                             <ng-template pTemplate="output">
-                                {{tableData.description}}
+                                {{ tableData.description }}
                             </ng-template>
                         </p-cellEditor>
                     </td>
                     <td pEditableColumn>
                         <p-cellEditor>
                             <ng-template pTemplate="input">
-                                <div contenteditable pInputText type="text" [(ngModel)]="tableData.hours">{{tableData.hours}}</div>
+                                <div contenteditable pInputText type="text" [(ngModel)]="tableData.hours">
+                                    {{ tableData.hours }}
+                                </div>
                             </ng-template>
                             <ng-template pTemplate="output">
-                                {{tableData.hours}}
+                                {{ tableData.hours }}
                             </ng-template>
                         </p-cellEditor>
                     </td>
                     <td pEditableColumn>
                         <p-cellEditor>
                             <ng-template pTemplate="input">
-                                <div contenteditable pInputText type="text" [(ngModel)]="tableData.price">{{tableData.price}}</div>
+                                <div contenteditable pInputText type="text" [(ngModel)]="tableData.price">
+                                    {{ tableData.price }}
+                                </div>
                             </ng-template>
                             <ng-template pTemplate="output">
-                                {{tableData.price}}
+                                {{ tableData.price }}
                             </ng-template>
                         </p-cellEditor>
                     </td>

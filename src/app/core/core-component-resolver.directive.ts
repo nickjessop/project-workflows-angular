@@ -39,11 +39,13 @@ export class CoreComponentResolverDirective implements OnInit {
             const _componentRef = this.viewContainerRef.createComponent<FileUploaderComponent>(factory);
             _componentRef.instance.field = this.field;
             _componentRef.instance.group = this.group;
+            _componentRef.instance.index = this.index;
 
             this.componentRef = _componentRef;
         } else if (componentType === 'checkboxes') {
             const factory = this.componentFactoryResolver.resolveComponentFactory(CheckboxesComponent);
             const _componentRef = this.viewContainerRef.createComponent<CheckboxesComponent>(factory);
+            _componentRef.instance.index = this.index;
             // _componentRef.instance.field = this.field;
             // _componentRef.instance.group = this.group;
 
@@ -53,6 +55,7 @@ export class CoreComponentResolverDirective implements OnInit {
             const _componentRef = this.viewContainerRef.createComponent<ImageUploaderComponent>(factory);
             _componentRef.instance.field = this.field;
             _componentRef.instance.group = this.group;
+            _componentRef.instance.index = this.index;
 
             this.componentRef = _componentRef;
         } else if (componentType === 'largeTextInput') {
@@ -60,6 +63,7 @@ export class CoreComponentResolverDirective implements OnInit {
             const _componentRef = this.viewContainerRef.createComponent<LargeTextInputComponent>(factory);
             _componentRef.instance.field = this.field;
             _componentRef.instance.group = this.group;
+            _componentRef.instance.index = this.index;
 
             this.componentRef = _componentRef;
         } else if (componentType === 'smallTextInput') {
@@ -75,6 +79,7 @@ export class CoreComponentResolverDirective implements OnInit {
             const _componentRef = this.viewContainerRef.createComponent<TableComponent>(factory);
             _componentRef.instance.field = this.field;
             _componentRef.instance.group = this.group;
+            _componentRef.instance.index = this.index;
 
             this.componentRef = _componentRef;
         } else if (componentType === 'url') {
@@ -82,6 +87,7 @@ export class CoreComponentResolverDirective implements OnInit {
             const _componentRef = this.viewContainerRef.createComponent<UrlComponent>(factory);
             _componentRef.instance.field = this.field;
             _componentRef.instance.group = this.group;
+            _componentRef.instance.index = this.index;
 
             this.componentRef = _componentRef;
         }

@@ -1,13 +1,8 @@
-<app-base-field>
+<app-base-field [index]="index">
     <div class="images view p-p-2">
         <div *ngIf="images" class="p-grid" style="max-width: 400px;">
             <div *ngFor="let image of images; let index = index" class="p-col-3" key="index">
-                <img
-                    [src]="image.thumbnail"
-                    [alt]="image.alt"
-                    style="cursor: pointer"
-                    (click)="imageClick(index)"
-                />
+                <img [src]="image.thumbnail" [alt]="image.alt" style="cursor: pointer" (click)="imageClick(index)" />
             </div>
         </div>
         <p-galleria
@@ -41,7 +36,16 @@
     <ng-container *ngIf="componentMode === 'edit'">
         <p-toolbar>
             <div class="p-toolbar-group-left">
-                <p-fileUpload  mode="basic" name="images[]" url="/" accept="image/*" maxFileSize="1000000" multiple="multiple" [auto]="true" chooseLabel="Upload images"></p-fileUpload>
+                <p-fileUpload
+                    mode="basic"
+                    name="images[]"
+                    url="/"
+                    accept="image/*"
+                    maxFileSize="1000000"
+                    multiple="multiple"
+                    [auto]="true"
+                    chooseLabel="Upload images"
+                ></p-fileUpload>
             </div>
 
             <div class="p-toolbar-group-right">

@@ -1,13 +1,20 @@
-<app-base-field [(label)]="field.label">
+<app-base-field [(label)]="field.label" [index]="index">
     <ng-container *ngIf="componentMode === 'view'">
         <div class="url view">
             <p-card>
                 <p-header>
-                    <img class="p-px-2 p-pt-2"src="https://www.figma.com/file/7OAFPEUcJYdTjctHP5Egkw/thumbnail?ver=thumbnails/11fa6ef9-5373-46de-9a9d-7a8d76175f0a" alt="website title" />
+                    <img
+                        class="p-px-2 p-pt-2"
+                        src="https://www.figma.com/file/7OAFPEUcJYdTjctHP5Egkw/thumbnail?ver=thumbnails/11fa6ef9-5373-46de-9a9d-7a8d76175f0a"
+                        alt="website title"
+                    />
                 </p-header>
                 <strong>Figma</strong>
                 <p>Created with Figma</p>
-                <a href="http://figma.com/file/7OAFPEUcJYdTjctHP5Egkw/Pitch-Deck" target="_blank">http://figma.com/file/7OAFPEUcJYdTjctHP5Egkw/Pitch-Deck </a> <i class="pi pi-external-link"></i>
+                <a href="http://figma.com/file/7OAFPEUcJYdTjctHP5Egkw/Pitch-Deck" target="_blank"
+                    >http://figma.com/file/7OAFPEUcJYdTjctHP5Egkw/Pitch-Deck
+                </a>
+                <i class="pi pi-external-link"></i>
             </p-card>
         </div>
     </ng-container>

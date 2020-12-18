@@ -1,16 +1,19 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ComponentMode, createFieldConfig, FieldConfig } from 'src/app/models/interfaces/core-component';
+import { ProjectService } from 'src/app/services/project/project.service';
+import { BaseFieldComponent } from '../base-field/base-field.component';
 
 @Component({
     selector: 'app-table',
     templateUrl: './table.component.html',
     styleUrls: ['./table.component.scss'],
 })
-export class TableComponent implements OnInit {
+export class TableComponent extends BaseFieldComponent implements OnInit {
     @Input() field: FieldConfig = createFieldConfig();
     @Input() group!: FormGroup;
     @Input() componentMode: ComponentMode = 'view';
+    @Input() index = 0;
 
     tableData = [
         {
@@ -48,7 +51,9 @@ export class TableComponent implements OnInit {
             price: '1600',
         },
     ];
-    constructor() {}
+    constructor(public projectService: ProjectService) {
+        super(projectService);
+    }
 
     ngOnInit() {}
 }
