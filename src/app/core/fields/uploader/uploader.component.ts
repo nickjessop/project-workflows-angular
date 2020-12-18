@@ -9,7 +9,7 @@ import { BaseFieldComponent } from '../base-field/base-field.component';
 })
 export class UploaderComponent extends BaseFieldComponent implements OnInit {
     @Input() icon = 'cloud_upload';
-    @Input() index?: number;
+    // @Input() index?: number;
 
     constructor(public projectService: ProjectService) {
         super(projectService);

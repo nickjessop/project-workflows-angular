@@ -1,4 +1,4 @@
-<app-base-field [index]="index">
+<app-base-field [(field)]="field" [index]="index">
     <div class="images view p-p-2">
         <div *ngIf="images" class="p-grid" style="max-width: 400px;">
             <div *ngFor="let image of images; let index = index" class="p-col-3" key="index">

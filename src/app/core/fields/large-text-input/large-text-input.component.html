@@ -1,7 +1,13 @@
-<app-base-field [(label)]="field.label" [index]="index">
+<app-base-field [(field)]="field" [index]="index">
     <ng-container *ngIf="componentMode === 'view'">
         <div class="large-text view">
-            <textarea pInputTextarea placeholder="No content" readonly class="large-text__input"></textarea>
+            <textarea
+                pInputTextarea
+                [ngModel]="field.value"
+                placeholder="No content"
+                readonly
+                class="large-text__input"
+            ></textarea>
         </div>
     </ng-container>
     <ng-container *ngIf="componentMode === 'edit'">

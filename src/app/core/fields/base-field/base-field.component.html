@@ -1,12 +1,12 @@
 <div class="field p-mb-3 p-py-4 p-px-2" cdkDrag #fieldContainer>
     <div class="p-d-flex p-jc-md-between">
         <div class="p-mb-3">
-            <p-inplace closable="closable">
+            <p-inplace closable="true">
                 <ng-template pTemplate="display">
-                    Name your field
+                    {{ field?.label ? field.label : 'Name your field' }}
                 </ng-template>
                 <ng-template pTemplate="content">
-                    <input type="text" class="p-inputtext" value="Name your field" pInputText />
+                    <input type="text" class="p-inputtext" [(ngModel)]="field.label" pInputText />
                 </ng-template>
             </p-inplace>
         </div>

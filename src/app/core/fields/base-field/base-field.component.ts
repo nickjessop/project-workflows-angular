@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { MenuItem } from 'primeng/api';
+import { createFieldConfig, FieldConfig } from 'src/app/models/interfaces/core-component';
 import { ProjectService } from 'src/app/services/project/project.service';
 
 @Component({
@@ -8,7 +9,7 @@ import { ProjectService } from 'src/app/services/project/project.service';
     styleUrls: ['./base-field.component.scss'],
 })
 export class BaseFieldComponent {
-    @Input() label = '';
+    @Input() field: FieldConfig = createFieldConfig();
     @Input() index?: number;
 
     public items: MenuItem[] = [
