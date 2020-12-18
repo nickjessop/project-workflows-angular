@@ -11,7 +11,6 @@ import { CheckboxesComponent } from './fields/checkboxes/checkboxes.component';
 import { FileUploaderComponent } from './fields/file-uploader/file-uploader.component';
 import { ImageUploaderComponent } from './fields/image-uploader/image-uploader.component';
 import { LargeTextInputComponent } from './fields/large-text-input/large-text-input.component';
-import { PlaceholderComponent } from './fields/placeholder/placeholder.component';
 import { SmallTextInputComponent } from './fields/small-text-input/small-text-input.component';
 import { TableComponent } from './fields/table/table.component';
 import { UploaderComponent } from './fields/uploader/uploader.component';
@@ -29,7 +28,7 @@ import { UrlComponent } from './fields/url/url.component';
         UploaderComponent,
         CheckboxesComponent,
         BaseFieldComponent,
-        PlaceholderComponent,
+
         UrlComponent,
     ],
     imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, PrimengModule, DragDropModule],

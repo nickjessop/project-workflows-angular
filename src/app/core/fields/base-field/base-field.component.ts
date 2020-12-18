@@ -9,7 +9,7 @@ import { ProjectService } from 'src/app/services/project/project.service';
 })
 export class BaseFieldComponent {
     @Input() label = '';
-    @Input() index = 0;
+    @Input() index?: number;
 
     public items: MenuItem[] = [
         {
@@ -26,6 +26,10 @@ export class BaseFieldComponent {
     ngOnInit() {}
 
     public onDeleteBlock() {
-        this.projectService.deleteProjectBlock(this.index);
+        if (this.index) {
+            this.projectService.deleteProjectBlock(this.index);
+        } else {
+            console.log('No index for delete block was supplied');
+        }
     }
 }

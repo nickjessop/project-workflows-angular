@@ -1,4 +1,4 @@
-<app-base-field [(label)]="field.label">
+<app-base-field [(label)]="field.label" [index]="index">
     <ng-container *ngIf="componentMode === 'view'">
         <div class="large-text view">
             <textarea pInputTextarea placeholder="No content" readonly class="large-text__input"></textarea>

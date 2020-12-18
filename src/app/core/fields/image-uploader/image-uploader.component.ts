@@ -1,16 +1,19 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ComponentMode, createFieldConfig, FieldConfig } from 'src/app/models/interfaces/core-component';
+import { ProjectService } from 'src/app/services/project/project.service';
+import { BaseFieldComponent } from '../base-field/base-field.component';
 
 @Component({
     selector: 'app-image-uploader',
     templateUrl: './image-uploader.component.html',
     styleUrls: ['./image-uploader.component.scss'],
 })
-export class ImageUploaderComponent implements OnInit {
+export class ImageUploaderComponent extends BaseFieldComponent implements OnInit {
     @Input() field: FieldConfig = createFieldConfig();
     @Input() group!: FormGroup;
     @Input() componentMode: ComponentMode = 'view';
+    @Input() index = 0;
 
     images = [
         {
@@ -58,7 +61,9 @@ export class ImageUploaderComponent implements OnInit {
 
     displayLightbox: boolean = false;
 
-    constructor() {}
+    constructor(public projectService: ProjectService) {
+        super(projectService);
+    }
 
     ngOnInit() {}
 

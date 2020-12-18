@@ -1,16 +1,19 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ComponentMode, createFieldConfig, FieldConfig } from 'src/app/models/interfaces/core-component';
+import { ProjectService } from 'src/app/services/project/project.service';
+import { BaseFieldComponent } from '../base-field/base-field.component';
 
 @Component({
     selector: 'app-file-uploader',
     templateUrl: './file-uploader.component.html',
     styleUrls: ['./file-uploader.component.scss'],
 })
-export class FileUploaderComponent implements OnInit {
+export class FileUploaderComponent extends BaseFieldComponent implements OnInit {
     @Input() field: FieldConfig = createFieldConfig();
     @Input() group!: FormGroup;
     @Input() componentMode: ComponentMode = 'view';
+    @Input() index = 0;
 
     files: any[] | undefined;
 
@@ -20,7 +23,9 @@ export class FileUploaderComponent implements OnInit {
         console.log(val);
     }
 
-    constructor() {}
+    constructor(public projectService: ProjectService) {
+        super(projectService);
+    }
 
     ngOnInit() {
         this.cols = [
