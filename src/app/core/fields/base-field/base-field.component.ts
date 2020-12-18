@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { MenuItem } from 'primeng/api';
-import { createFieldConfig, FieldConfig } from 'src/app/models/interfaces/core-component';
+import { ComponentMode, createFieldConfig, FieldConfig } from 'src/app/models/interfaces/core-component';
 import { ProjectService } from 'src/app/services/project/project.service';
 
 @Component({
@@ -11,6 +11,7 @@ import { ProjectService } from 'src/app/services/project/project.service';
 export class BaseFieldComponent {
     @Input() field: FieldConfig = createFieldConfig();
     @Input() index?: number;
+    @Input() componentMode: ComponentMode = 'edit';
 
     public items: MenuItem[] = [
         {
@@ -27,10 +28,7 @@ export class BaseFieldComponent {
     ngOnInit() {}
 
     public onDeleteBlock() {
-        if (this.index) {
-            this.projectService.deleteProjectBlock(this.index);
-        } else {
-            console.log('No index for delete block was supplied');
-        }
+        const index = this.index ? this.index : 0;
+        this.projectService.deleteProjectBlock(index);
     }
 }
