@@ -12,14 +12,11 @@ export interface BlockConfig {
     metadata: ComponentMetadata;
 }
 
-export function createBlockConfig(label?: string, name?: string, metadata?: ComponentMetadata) {
+export function createBlockConfig(type: ComponentType, label?: string, name?: string) {
     const block: BlockConfig = {
         label: label || '',
         name: name || '',
-        metadata: metadata || {
-            component: 'smallTextInput',
-            data: { value: '' },
-        },
+        metadata: createComponentMetadataTemplate(type),
     };
 
     return block;
@@ -97,9 +94,17 @@ export function createComponentMetadataTemplate(componentType: ComponentType, va
             _component.validation = validation;
         }
         return _component;
-    }
+    } else {
+        const _component: SmallTextInput = {
+            data: { value: '' },
+            component: 'smallTextInput',
+        };
 
-    return undefined;
+        if (validation) {
+            _component.validation = validation;
+        }
+        return _component;
+    }
 }
 
 export type ComponentType =

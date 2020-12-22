@@ -2,7 +2,7 @@ import { moveItemInArray } from '@angular/cdk/drag-drop';
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { BehaviorSubject, combineLatest, from, Subject } from 'rxjs';
-import { BlockConfig, ComponentMetadata, createBlockConfig } from '../../core/interfaces/core-component';
+import { BlockConfig, createBlockConfig } from '../../core/interfaces/core-component';
 import { Project, Status, Step, StepConfig } from '../../models/interfaces/project';
 import { AuthenticationService } from '../authentication/authentication.service';
 import { FirebaseService } from '../firebase/firebase.service';
@@ -102,7 +102,7 @@ export class ProjectService {
             ? configuration
             : [
                   {
-                      components: [createBlockConfig()],
+                      components: [createBlockConfig('smallTextInput')],
                       step: {
                           title: 'Untitled Step',
                           description: 'Untitled Step Description',
@@ -146,10 +146,9 @@ export class ProjectService {
         stepDescription?: string,
         status?: Status,
         label?: string,
-        name?: string,
-        metaData?: ComponentMetadata
+        name?: string
     ) {
-        const fieldConfig = createBlockConfig(label, name, metaData);
+        const fieldConfig = createBlockConfig('smallTextInput', label, name);
 
         const stepConfig: StepConfig = {
             step: {
