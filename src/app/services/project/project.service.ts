@@ -2,7 +2,7 @@ import { moveItemInArray } from '@angular/cdk/drag-drop';
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { BehaviorSubject, combineLatest, from, Subject } from 'rxjs';
-import { ComponentType, createFieldConfig, FieldConfig } from '../../models/interfaces/core-component';
+import { BlockConfig, ComponentMetadata, createBlockConfig } from '../../core/interfaces/core-component';
 import { Project, Status, Step, StepConfig } from '../../models/interfaces/project';
 import { AuthenticationService } from '../authentication/authentication.service';
 import { FirebaseService } from '../firebase/firebase.service';
@@ -102,7 +102,7 @@ export class ProjectService {
             ? configuration
             : [
                   {
-                      components: [createFieldConfig()],
+                      components: [createBlockConfig()],
                       step: {
                           title: 'Untitled Step',
                           description: 'Untitled Step Description',
@@ -147,13 +147,9 @@ export class ProjectService {
         status?: Status,
         label?: string,
         name?: string,
-        inputType?: string,
-        options?: string[],
-        collections?: string,
-        type?: ComponentType,
-        value?: string
+        metaData?: ComponentMetadata
     ) {
-        const fieldConfig = createFieldConfig(label, name, inputType, options, collections, type, value);
+        const fieldConfig = createBlockConfig(label, name, metaData);
 
         const stepConfig: StepConfig = {
             step: {
@@ -243,7 +239,7 @@ export class ProjectService {
         );
     }
 
-    public addProjectBlock(projectBlock: FieldConfig) {
+    public addProjectBlock(projectBlock: BlockConfig) {
         const currentStepIndex = this.getCurrentStepIndex() || 0;
 
         const _projectConfig = _.cloneDeep(this.projectConfig);

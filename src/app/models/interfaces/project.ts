@@ -1,4 +1,4 @@
-import { FieldConfig } from '../interfaces/core-component';
+import { BlockConfig } from '../../core/interfaces/core-component';
 
 export interface Project {
     name: string;
@@ -10,7 +10,7 @@ export interface Project {
 }
 
 export interface StepConfig {
-    components?: FieldConfig[];
+    components?: BlockConfig[];
     step: Step;
 }
 
