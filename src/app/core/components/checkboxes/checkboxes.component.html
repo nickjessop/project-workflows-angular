@@ -8,7 +8,18 @@
     </ng-container>
     <ng-container *ngIf="componentMode === 'edit'">
         <div *ngFor="let val of field.metadata.data.value">
-            <p-checkbox [(value)]="val.item" label="test" [(ngModel)]="val.checked"></p-checkbox>
+            <p-inplace closable="true">
+                <ng-template pTemplate="display">
+                    <p-checkbox
+                        [(value)]="val.item"
+                        [label]="val.item ? val.item : '(Untitled Checkbox)'"
+                        [(ngModel)]="val.checked"
+                    ></p-checkbox
+                ></ng-template>
+                <ng-template pTemplate="content">
+                    <input type="text" class="p-inputtext" [(ngModel)]="val.item" pInputText />
+                </ng-template>
+            </p-inplace>
         </div>
         <div>
             <button
