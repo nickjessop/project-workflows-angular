@@ -1,11 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import {
-    ComponentMetadata,
-    ComponentType,
-    createBlockConfig,
-    createComponentMetadataTemplate,
-} from 'src/app/core/interfaces/core-component';
+import { ComponentType, createBlockConfig } from 'src/app/core/interfaces/core-component';
 import { StepConfig } from 'src/app/models/interfaces/project';
 import { ProjectService } from 'src/app/services/project/project.service';
 
@@ -43,17 +38,12 @@ export class ControlsComponent implements OnInit {
 
     public onSelectNewBlock(blockType: ComponentType) {
         console.log(`adding new block: ${blockType}`);
-        const componentMetadata = createComponentMetadataTemplate(blockType);
-
-        if (componentMetadata) {
-            this.addNewBlock(componentMetadata);
-        } else {
-            console.log('Missing component metadata for block');
-        }
+        // const componentMetadata = createComponentMetadataTemplate(blockType);
+        this.addNewBlock(blockType);
     }
 
-    public addNewBlock(metadata: ComponentMetadata, label?: string, name?: string) {
-        const newBlock = createBlockConfig(label, name, metadata);
+    public addNewBlock(metadata: ComponentType, label?: string, name?: string) {
+        const newBlock = createBlockConfig(metadata, label, name);
 
         this.projectService.addProjectBlock(newBlock);
     }

@@ -9,7 +9,7 @@ import { ProjectService } from 'src/app/services/project/project.service';
     styleUrls: ['./base-field.component.scss'],
 })
 export class BaseFieldComponent {
-    @Input() field: BlockConfig = createBlockConfig();
+    @Input() field: BlockConfig = createBlockConfig('smallTextInput');
     @Input() index?: number;
     @Input() componentMode: ComponentMode = 'edit';
 

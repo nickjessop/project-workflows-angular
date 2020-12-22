@@ -1,15 +1,22 @@
 <div class="project__row p-d-flex">
     <div class="p-col-6 p-d-flex" (click)="navigate()">
         <td>
-            <strong>{{ projectName | sliceEllipsis: 0:80 }}</strong><br />
-            <span>{{ projectDescription | sliceEllipsis: 1:40 }}</span>
+            <strong>{{ projectName | sliceEllipsis: 0:80 }}</strong
+            ><br />
+            <span>{{ projectDescription | sliceEllipsis: 0:40 }}</span>
         </td>
         <td>
             <span title="{{ openedDate }}">{{ openedDate | sliceEllipsis: 0:40 }}</span>
         </td>
     </div>
     <div *ngIf="projectId?.length > 0" class="p-col-6 p-d-flex p-jc-end">
-        <button pButton type="button" label="Delete Project" icon="pi pi-times" class="p-button-text"
-            (click)="onDeleteProjectPress()"></button>
+        <button
+            pButton
+            type="button"
+            label="Delete Project"
+            icon="pi pi-times"
+            class="p-button-text"
+            (click)="onDeleteProjectPress()"
+        ></button>
     </div>
 </div>
