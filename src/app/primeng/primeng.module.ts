@@ -5,6 +5,7 @@ import { AccordionModule } from 'primeng/accordion';
 import { ConfirmationService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
+import { CheckboxModule } from 'primeng/checkbox';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
@@ -49,6 +50,7 @@ import { ToolbarModule } from 'primeng/toolbar';
         ToastModule,
         SidebarModule,
         ConfirmDialogModule,
+        CheckboxModule,
     ],
     exports: [
         AccordionModule,
@@ -72,6 +74,7 @@ import { ToolbarModule } from 'primeng/toolbar';
         ToastModule,
         SidebarModule,
         ConfirmDialogModule,
+        CheckboxModule,
     ],
     providers: [ConfirmationService],
 })

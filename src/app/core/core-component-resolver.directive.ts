@@ -35,6 +35,7 @@ export class CoreComponentResolverDirective implements OnInit {
     ngOnInit() {
         const componentType: ComponentType = this.field.metadata.component;
 
+        console.log(componentType);
         if (componentType === 'fileUploader') {
             const factory = this.componentFactoryResolver.resolveComponentFactory(FileUploaderComponent);
             const _componentRef = this.viewContainerRef.createComponent<FileUploaderComponent>(factory);
@@ -47,8 +48,7 @@ export class CoreComponentResolverDirective implements OnInit {
             const factory = this.componentFactoryResolver.resolveComponentFactory(CheckboxesComponent);
             const _componentRef = this.viewContainerRef.createComponent<CheckboxesComponent>(factory);
             _componentRef.instance.index = this.index;
-            // _componentRef.instance.field = this.field;
-            // _componentRef.instance.group = this.group;
+            _componentRef.instance.field = this.field;
 
             this.componentRef = _componentRef;
         } else if (componentType === 'imageUploader') {

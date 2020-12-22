@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ProjectService } from 'src/app/services/project/project.service';
+import { Checkboxes } from '../../interfaces/core-component';
 import { BaseFieldComponent } from '../base-field/base-field.component';
 
 @Component({
@@ -15,4 +16,8 @@ export class CheckboxesComponent extends BaseFieldComponent implements OnInit {
     }
 
     ngOnInit() {}
+
+    public onAddCheckboxPress() {
+        (this.field.metadata as Checkboxes).data.value.push({ item: '', checked: false });
+    }
 }
