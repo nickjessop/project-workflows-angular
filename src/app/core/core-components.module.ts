@@ -4,17 +4,17 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { PrimengModule } from '../primeng/primeng.module';
+import { BaseFieldComponent } from './components/base-field/base-field.component';
+import { CheckboxesComponent } from './components/checkboxes/checkboxes.component';
 import { DynamicFormComponent } from './components/dynamic-form/dynamic-form.component';
+import { FileUploaderComponent } from './components/file-uploader/file-uploader.component';
+import { ImageUploaderComponent } from './components/image-uploader/image-uploader.component';
+import { LargeTextInputComponent } from './components/large-text-input/large-text-input.component';
+import { SmallTextInputComponent } from './components/small-text-input/small-text-input.component';
+import { TableComponent } from './components/table/table.component';
+import { UploaderComponent } from './components/uploader/uploader.component';
+import { UrlComponent } from './components/url/url.component';
 import { CoreComponentResolverDirective } from './core-component-resolver.directive';
-import { BaseFieldComponent } from './fields/base-field/base-field.component';
-import { CheckboxesComponent } from './fields/checkboxes/checkboxes.component';
-import { FileUploaderComponent } from './fields/file-uploader/file-uploader.component';
-import { ImageUploaderComponent } from './fields/image-uploader/image-uploader.component';
-import { LargeTextInputComponent } from './fields/large-text-input/large-text-input.component';
-import { SmallTextInputComponent } from './fields/small-text-input/small-text-input.component';
-import { TableComponent } from './fields/table/table.component';
-import { UploaderComponent } from './fields/uploader/uploader.component';
-import { UrlComponent } from './fields/url/url.component';
 
 @NgModule({
     declarations: [
