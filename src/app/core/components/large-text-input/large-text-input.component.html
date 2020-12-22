@@ -1,9 +1,9 @@
-<app-base-field [(field)]="field" [index]="index">
+<app-base-field [index]="index">
     <ng-container *ngIf="componentMode === 'view'">
         <div class="large-text view">
             <textarea
                 pInputTextarea
-                [ngModel]="field.value"
+                [ngModel]="field.metadata.data.value"
                 placeholder="No content"
                 readonly
                 class="large-text__input"
@@ -12,7 +12,7 @@
     </ng-container>
     <ng-container *ngIf="componentMode === 'edit'">
         <div class="large-text edit">
-            <textarea pInputTextarea placeholder="Add content" [(ngModel)]="field.value"></textarea>
+            <textarea pInputTextarea placeholder="Add content" [(ngModel)]="field.metadata.data.value"></textarea>
         </div>
     </ng-container>
 </app-base-field>

@@ -1,4 +1,4 @@
-<app-base-field [(field)]="field" [index]="index">
+<app-base-field [index]="index">
     <ng-container *ngIf="componentMode === 'view'">
         <div class="url view">
             <p-card>
@@ -20,7 +20,7 @@
     </ng-container>
     <ng-container *ngIf="componentMode === 'edit'">
         <div class="url edit">
-            <input type="text" pInputText [(ngModel)]="field.value" placeholder="Add url" />
+            <input type="text" pInputText [(ngModel)]="field.metadata.data.value" placeholder="Add url" />
         </div>
     </ng-container>
 </app-base-field>
