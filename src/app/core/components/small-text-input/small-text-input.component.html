@@ -1,12 +1,12 @@
-<app-base-field [(field)]="field" [index]="index">
+<app-base-field [index]="index">
     <ng-container *ngIf="componentMode === 'view'">
         <div class="small-text view">
-            <p class="p-p-2">{{ field?.value ? field.value : 'No content' }}</p>
+            <p class="p-p-2">{{ field.metadata.data.value ? field.metadata.data.value : 'No content' }}</p>
         </div>
     </ng-container>
     <ng-container *ngIf="componentMode === 'edit'">
         <div class="small-text edit">
-            <input type="text" pInputText [(ngModel)]="field.value" placeholder="Add content" />
+            <input type="text" pInputText [(ngModel)]="field.metadata.data.value" placeholder="Add content" />
         </div>
     </ng-container>
 </app-base-field>
