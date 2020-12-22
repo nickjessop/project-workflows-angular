@@ -1,7 +1,6 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { OverlayPanel } from 'primeng/overlaypanel';
-import { ComponentType } from 'src/app/models/interfaces/core-component';
-
+import { ComponentType } from 'src/app/core/interfaces/core-component';
 @Component({
     selector: 'project-block-overlay',
     templateUrl: './block-overlay.component.html',

@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { ComponentType, createFieldConfig } from 'src/app/models/interfaces/core-component';
+import {
+    ComponentMetadata,
+    ComponentType,
+    createBlockConfig,
+    createComponentMetadataTemplate,
+} from 'src/app/core/interfaces/core-component';
 import { StepConfig } from 'src/app/models/interfaces/project';
 import { ProjectService } from 'src/app/services/project/project.service';
 
@@ -38,20 +43,17 @@ export class ControlsComponent implements OnInit {
 
     public onSelectNewBlock(blockType: ComponentType) {
         console.log(`adding new block: ${blockType}`);
-        this.addNewBlock(undefined, undefined, undefined, undefined, undefined, undefined, blockType);
+        const componentMetadata = createComponentMetadataTemplate(blockType);
+
+        if (componentMetadata) {
+            this.addNewBlock(componentMetadata);
+        } else {
+            console.log('Missing component metadata for block');
+        }
     }
 
-    public addNewBlock(
-        label?: string,
-        name?: string,
-        inputType?: string,
-        options?: string[],
-        collections?: string,
-        value?: string,
-        type?: ComponentType
-    ) {
-        const componentType = type || 'largeTextInput';
-        const newBlock = createFieldConfig(label, name, inputType, options, collections, componentType, value);
+    public addNewBlock(metadata: ComponentMetadata, label?: string, name?: string) {
+        const newBlock = createBlockConfig(label, name, metadata);
 
         this.projectService.addProjectBlock(newBlock);
     }

@@ -1,0 +1,174 @@
+import { ValidatorFn } from '@angular/forms';
+
+export interface Validator {
+    name: string;
+    validator: ValidatorFn;
+    message: string;
+}
+
+export interface BlockConfig {
+    label?: string;
+    name: string;
+    metadata: ComponentMetadata;
+}
+
+export function createBlockConfig(label?: string, name?: string, metadata?: ComponentMetadata) {
+    const block: BlockConfig = {
+        label: label || '',
+        name: name || '',
+        metadata: metadata || {
+            component: 'smallTextInput',
+            data: { value: '' },
+        },
+    };
+
+    return block;
+}
+
+export function createComponentMetadataTemplate(componentType: ComponentType, validation?: Validator[]) {
+    if (componentType === 'checkboxes') {
+        const _component: Checkboxes = {
+            component: 'checkboxes',
+            data: { value: [{ item: '', checked: false }] },
+        };
+
+        if (validation) {
+            _component.validation = validation;
+        }
+
+        return _component;
+    } else if (componentType === 'fileUploader') {
+        const _component: FileUploader = {
+            data: { value: [{ href: '' }] },
+            component: 'fileUploader',
+        };
+
+        if (validation) {
+            _component.validation = validation;
+        }
+        return _component;
+    } else if (componentType === 'imageUploader') {
+        const _component: ImageUploader = {
+            data: { value: [{ href: '' }] },
+            component: 'imageUploader',
+        };
+
+        if (validation) {
+            _component.validation = validation;
+        }
+        return _component;
+    } else if (componentType === 'largeTextInput') {
+        const _component: LargeTextInput = {
+            data: { value: '' },
+            component: 'largeTextInput',
+        };
+
+        if (validation) {
+            _component.validation = validation;
+        }
+        return _component;
+    } else if (componentType === 'smallTextInput') {
+        const _component: SmallTextInput = {
+            data: { value: '' },
+            component: 'smallTextInput',
+        };
+
+        if (validation) {
+            _component.validation = validation;
+        }
+        return _component;
+    } else if (componentType === 'table') {
+        const _component: Table = {
+            data: { value: [{ row: [{ item: '', isHeader: true }] }] },
+            component: 'table',
+        };
+
+        if (validation) {
+            _component.validation = validation;
+        }
+        return _component;
+    } else if (componentType === 'url') {
+        const _component: Url = {
+            data: { value: [{ href: '' }] },
+            component: 'url',
+        };
+
+        if (validation) {
+            _component.validation = validation;
+        }
+        return _component;
+    }
+
+    return undefined;
+}
+
+export type ComponentType =
+    | 'checkboxes'
+    | 'fileUploader'
+    | 'imageUploader'
+    | 'largeTextInput'
+    | 'smallTextInput'
+    | 'table'
+    | 'url';
+
+export type ComponentMode = 'edit' | 'view' | 'interact';
+
+export type ComponentMetadata =
+    | Checkboxes
+    | FileUploader
+    | ImageUploader
+    | LargeTextInput
+    | SmallTextInput
+    | Table
+    | Url;
+
+export type BaseComponent = {
+    component: ComponentType;
+    validation?: Validator[];
+};
+
+export interface Checkboxes extends BaseComponent {
+    component: 'checkboxes';
+    data: { value: { item: string; checked?: boolean }[] };
+    validation?: Validator[];
+}
+
+export interface FileUploader extends BaseComponent {
+    component: 'fileUploader';
+    data: { value: Link[] };
+    validation?: Validator[];
+}
+
+export interface ImageUploader extends BaseComponent {
+    component: 'imageUploader';
+    data: { value: Link[] };
+    validation?: Validator[];
+}
+
+export interface LargeTextInput extends BaseComponent {
+    component: 'largeTextInput';
+    data: { value: string };
+    validation?: Validator[];
+}
+
+export interface SmallTextInput extends BaseComponent {
+    component: 'smallTextInput';
+    data: { value: string };
+    validation?: Validator[];
+}
+
+export interface Table extends BaseComponent {
+    component: 'table';
+    data: { value: { row: { item: string; isHeader?: boolean }[] }[] };
+    validation?: Validator[];
+}
+
+export interface Url extends BaseComponent {
+    component: 'url';
+    data: { value: Link[] };
+    validation?: Validator[];
+}
+
+export type Link = {
+    href?: string;
+};

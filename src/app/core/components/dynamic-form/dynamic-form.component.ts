@@ -1,7 +1,7 @@
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
-import { FieldConfig, Validator } from '../../../models/interfaces/core-component';
+import { BlockConfig, Validator } from '../../interfaces/core-component';
 
 @Component({
     selector: 'project-dynamic-form',
@@ -9,7 +9,7 @@ import { FieldConfig, Validator } from '../../../models/interfaces/core-componen
     styleUrls: ['./dynamic-form.component.scss'],
 })
 export class DynamicFormComponent implements OnInit {
-    @Input() fields: FieldConfig[] = [];
+    @Input() fields: BlockConfig[] = [];
     // @Output() submitEvent: EventEmitter<any> = new EventEmitter<any>();
 
     @Output() dragAndDropEvent: EventEmitter<{
@@ -32,7 +32,7 @@ export class DynamicFormComponent implements OnInit {
         const group = this.formBuilder.group({});
         if (this.fields && this.fields.length > 0) {
             this.fields.forEach(field => {
-                const control = this.formBuilder.control(field, this.bindValidations(field.validations || []));
+                const control = this.formBuilder.control(field, this.bindValidations(field.metadata.validation || []));
                 group.addControl(field.name, control);
             });
         }
