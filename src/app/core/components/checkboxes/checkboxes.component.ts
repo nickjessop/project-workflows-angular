@@ -18,7 +18,9 @@ export class CheckboxesComponent extends BaseFieldComponent implements OnInit {
     ngOnInit() {}
 
     public onAddCheckboxPress() {
-        (this.field.metadata as Checkboxes).data.value.push({ item: '', checked: false });
+        const newCheckbox = { item: '', checked: false };
+
+        (this.field.metadata as Checkboxes).data.value.splice(0, 0, newCheckbox);
     }
 
     public onCheckboxPress() {
