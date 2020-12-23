@@ -3,7 +3,7 @@
         <div class="p-mb-3">
             <p-inplace closable="true">
                 <ng-template pTemplate="display">
-                    {{ field?.label ? field.label : 'Name your field' }}
+                    {{ field?.label ? field.label : '(Untitled block)' }}
                 </ng-template>
                 <ng-template pTemplate="content">
                     <input type="text" class="p-inputtext" [(ngModel)]="field.label" pInputText />
