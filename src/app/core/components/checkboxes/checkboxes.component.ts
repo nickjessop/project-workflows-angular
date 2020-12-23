@@ -20,4 +20,12 @@ export class CheckboxesComponent extends BaseFieldComponent implements OnInit {
     public onAddCheckboxPress() {
         (this.field.metadata as Checkboxes).data.value.push({ item: '', checked: false });
     }
+
+    public onCheckboxPress() {
+        const test = (this.field.metadata as Checkboxes).data.value.sort(o1 => {
+            return !!o1.checked ? 1 : -1;
+        });
+
+        this.field.metadata.data.value = test;
+    }
 }
