@@ -22,7 +22,7 @@ export class CheckboxesComponent extends BaseFieldComponent implements OnInit {
     }
 
     public onCheckboxPress() {
-        const test = (this.field.metadata as Checkboxes).data.value.sort((o1, o2) => {
+        const sortedData = (this.field.metadata as Checkboxes).data.value.sort((o1, o2) => {
             const o1Check = !!o1.checked;
             const o2Check = !!o2.checked;
             if ((o1Check ? 1 : -1) > (o2Check ? 1 : -1)) {
@@ -34,6 +34,10 @@ export class CheckboxesComponent extends BaseFieldComponent implements OnInit {
             return 0;
         });
 
-        this.field.metadata.data.value = test;
+        this.field.metadata.data.value = sortedData;
+    }
+
+    public onCheckboxDeletePress(index: number) {
+        (this.field.metadata as Checkboxes).data.value.splice(index, 1);
     }
 }
