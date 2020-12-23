@@ -1,4 +1,4 @@
-<app-base-field [index]="index">
+<app-base-field [field]="field" [index]="index">
     <ng-container *ngIf="componentMode === 'view'">
         <div class="small-text view">
             <p class="p-p-2">{{ field.metadata.data.value ? field.metadata.data.value : 'No content' }}</p>
