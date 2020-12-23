@@ -7,15 +7,17 @@
         </div>
     </ng-container>
     <ng-container *ngIf="componentMode === 'edit'">
-        <div *ngFor="let val of field.metadata.data.value">
+        <div class="p-d-flex" *ngFor="let val of field.metadata.data.value; index as index">
+            <p-checkbox
+                [inputId]="index"
+                [binary]="true"
+                [(ngModel)]="val.checked"
+                (onChange)="onCheckboxPress()"
+            ></p-checkbox>
             <p-inplace closable="true">
                 <ng-template pTemplate="display">
-                    <p-checkbox
-                        [(value)]="val.item"
-                        [label]="val.item ? val.item : '(Untitled Checkbox)'"
-                        [(ngModel)]="val.checked"
-                    ></p-checkbox
-                ></ng-template>
+                    <label [for]="index">{{ val.item ? val.item : '(Untitled Checkbox)' }}</label>
+                </ng-template>
                 <ng-template pTemplate="content">
                     <input type="text" class="p-inputtext" [(ngModel)]="val.item" pInputText />
                 </ng-template>

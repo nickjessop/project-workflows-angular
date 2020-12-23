@@ -35,7 +35,6 @@ export class CoreComponentResolverDirective implements OnInit {
     ngOnInit() {
         const componentType: ComponentType = this.field.metadata.component;
 
-        console.log(componentType);
         if (componentType === 'fileUploader') {
             const factory = this.componentFactoryResolver.resolveComponentFactory(FileUploaderComponent);
             const _componentRef = this.viewContainerRef.createComponent<FileUploaderComponent>(factory);
