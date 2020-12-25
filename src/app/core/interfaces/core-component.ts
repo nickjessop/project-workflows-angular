@@ -75,8 +75,38 @@ export function createComponentMetadataTemplate(componentType: ComponentType, va
         }
         return _component;
     } else if (componentType === 'table') {
+        //data: { value: { col:{ item :{text: string; isHeader?: boolean }[]}[] } };
         const _component: Table = {
-            data: { value: [{ row: [{ item: '', isHeader: true }] }] },
+            data: {
+                value: {
+                    row: [
+                        {
+                            item: [
+                                { text: 'header1', isHeader: true },
+                                { text: 'header2', isHeader: true },
+                            ],
+                        },
+                        {
+                            item: [
+                                { text: 'item1', isHeader: false },
+                                { text: 'item2', isHeader: false },
+                            ],
+                        },
+                        {
+                            item: [
+                                { text: 'item3', isHeader: false },
+                                { text: 'item4', isHeader: false },
+                            ],
+                        },
+                        {
+                            item: [
+                                { text: 'item5', isHeader: false },
+                                { text: 'item6', isHeader: false },
+                            ],
+                        },
+                    ],
+                },
+            },
             component: 'table',
         };
 
@@ -164,7 +194,7 @@ export interface SmallTextInput extends BaseComponent {
 
 export interface Table extends BaseComponent {
     component: 'table';
-    data: { value: { row: { item: string; isHeader?: boolean }[] }[] };
+    data: { value: { row?: { item: { text: string; isHeader?: boolean }[] }[] } };
     validation?: Validator[];
 }
 
