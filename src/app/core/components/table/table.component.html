@@ -1,64 +1,33 @@
 <app-base-field [field]="field" [index]="index">
     <div class="table">
-        <p-table [value]="tableData" [resizableColumns]="true" styleClass="p-datatable-gridlines">
+        <p-table [resizableColumns]="true" [value]="tableVals.row" styleClass="p-datatable-gridlines">
             <ng-template pTemplate="header">
                 <tr pEditableRow>
-                    <th pResizableColumn>Name</th>
-                    <th pResizableColumn>Description</th>
-                    <th pResizableColumn>Hours</th>
-                    <th pResizableColumn>Price</th>
+                    <ng-container *ngFor="let row of tableVals.row">
+                        <ng-container *ngFor="let col of row.item">
+                            <th pResizableColumn *ngIf="col.isHeader">
+                                {{ col.text }}
+                            </th>
+                        </ng-container>
+                    </ng-container>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-tableData>
+            <ng-template pTemplate="body" let-value>
                 <tr>
-                    <td pEditableColumn>
-                        <p-cellEditor>
-                            <ng-template pTemplate="input">
-                                <div contenteditable pInputText type="text" [(ngModel)]="tableData.name">
-                                    {{ tableData.name }}
-                                </div>
-                            </ng-template>
-                            <ng-template pTemplate="output">
-                                {{ tableData.name }}
-                            </ng-template>
-                        </p-cellEditor>
-                    </td>
-                    <td pEditableColumn>
-                        <p-cellEditor>
-                            <ng-template pTemplate="input">
-                                <div contenteditable pInputText type="text" [(ngModel)]="tableData.description">
-                                    {{ tableData.description }}
-                                </div>
-                            </ng-template>
-                            <ng-template pTemplate="output">
-                                {{ tableData.description }}
-                            </ng-template>
-                        </p-cellEditor>
-                    </td>
-                    <td pEditableColumn>
-                        <p-cellEditor>
-                            <ng-template pTemplate="input">
-                                <div contenteditable pInputText type="text" [(ngModel)]="tableData.hours">
-                                    {{ tableData.hours }}
-                                </div>
-                            </ng-template>
-                            <ng-template pTemplate="output">
-                                {{ tableData.hours }}
-                            </ng-template>
-                        </p-cellEditor>
-                    </td>
-                    <td pEditableColumn>
-                        <p-cellEditor>
-                            <ng-template pTemplate="input">
-                                <div contenteditable pInputText type="text" [(ngModel)]="tableData.price">
-                                    {{ tableData.price }}
-                                </div>
-                            </ng-template>
-                            <ng-template pTemplate="output">
-                                {{ tableData.price }}
-                            </ng-template>
-                        </p-cellEditor>
-                    </td>
+                    <ng-container *ngFor="let col of value.item">
+                        <td *ngIf="!col.isHeader">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <div contenteditable pInputText type="text" [(ngModel)]="col.text">
+                                        {{ col.text }}
+                                    </div>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{ col.text }}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                    </ng-container>
                 </tr>
             </ng-template>
         </p-table>
