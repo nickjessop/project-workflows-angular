@@ -15,14 +15,13 @@ export class TableComponent extends BaseFieldComponent implements OnInit {
     // @Input() componentMode: ComponentMode = 'view';
     // @Input() index = 0;
 
-    public tableVals?: { row?: { item: { text: string; isHeader?: boolean }[] }[] };
+    public tableValues?: { row?: { item: { text: string; isHeader?: boolean }[] }[] };
 
     constructor(public projectService: ProjectService) {
         super(projectService);
     }
 
     ngOnInit() {
-        this.tableVals = (this.field.metadata as Table).data.value;
-        console.log(this.tableVals);
+        this.tableValues = (this.field.metadata as Table).data.value;
     }
 }

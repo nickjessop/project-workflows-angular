@@ -1,9 +1,9 @@
 <app-base-field [field]="field" [index]="index">
     <div class="table">
-        <p-table [resizableColumns]="true" [value]="tableVals.row" styleClass="p-datatable-gridlines">
+        <p-table [resizableColumns]="true" [value]="tableValues.row" styleClass="p-datatable-gridlines">
             <ng-template pTemplate="header">
                 <tr pEditableRow>
-                    <ng-container *ngFor="let row of tableVals.row">
+                    <ng-container *ngFor="let row of tableValues.row">
                         <ng-container *ngFor="let col of row.item">
                             <th pEditableColumn pResizableColumn *ngIf="col.isHeader">
                                 <p-cellEditor>
