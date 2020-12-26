@@ -5,8 +5,15 @@
                 <tr pEditableRow>
                     <ng-container *ngFor="let row of tableVals.row">
                         <ng-container *ngFor="let col of row.item">
-                            <th pResizableColumn *ngIf="col.isHeader">
-                                {{ col.text }}
+                            <th pEditableColumn pResizableColumn *ngIf="col.isHeader">
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input pInputText type="text" [(ngModel)]="col.text" />
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{ col.text }}
+                                    </ng-template>
+                                </p-cellEditor>
                             </th>
                         </ng-container>
                     </ng-container>
@@ -15,12 +22,10 @@
             <ng-template pTemplate="body" let-value>
                 <tr>
                     <ng-container *ngFor="let col of value.item">
-                        <td *ngIf="!col.isHeader">
+                        <td pEditableColumn *ngIf="!col.isHeader">
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
-                                    <div contenteditable pInputText type="text" [(ngModel)]="col.text">
-                                        {{ col.text }}
-                                    </div>
+                                    <input pInputText type="text" [(ngModel)]="col.text" />
                                 </ng-template>
                                 <ng-template pTemplate="output">
                                     {{ col.text }}
