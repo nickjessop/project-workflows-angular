@@ -15,7 +15,7 @@ export class TableComponent extends BaseFieldComponent implements OnInit {
     @Input() group!: FormGroup;
     // @Input() componentMode: ComponentMode = 'view';
     // @Input() index = 0;
-    public menuItems: MenuItem[] = [
+    public menuAddItems: MenuItem[] = [
         {
             label: 'Add Row',
             icon: 'pi pi-plus',
@@ -30,23 +30,32 @@ export class TableComponent extends BaseFieldComponent implements OnInit {
                 this.addTableColumn();
             },
         },
+    ];
+
+    public menuRemoveItems: MenuItem[] = [
         {
             label: 'Delete Last Row',
             icon: 'pi pi-times',
             command: () => {
-                this.projectService.removeTableRow();
+                this.removeTableRow();
             },
         },
         {
             label: 'Delete Last Column',
             icon: 'pi pi-times',
             command: () => {
-                this.projectService.removeTableColumn();
+                this.removeTableColumn();
             },
         },
     ];
 
-    public tableValues?: { row?: { item: { text: string; isHeader?: boolean }[] }[] };
+    public tableValues?: { row?: { item?: { text: string; isHeader?: boolean }[] }[] } = {
+        row: [
+            {
+                item: [{ text: 'header1', isHeader: true }],
+            },
+        ],
+    };
 
     constructor(public projectService: ProjectService) {
         super(projectService);
@@ -56,33 +65,63 @@ export class TableComponent extends BaseFieldComponent implements OnInit {
         this.tableValues = (this.field.metadata as Table).data.value;
     }
 
-    public removeTableRow(addAtIndex?: number) {}
+    public removeTableRow(removeAtIndex?: number) {
+        const rows = this.tableValues?.row;
 
-    public removeTableColumn(addAtIndex?: number) {}
-
-    public addTableColumn(addAtIndex?: number) {
-        const table = this.tableValues?.row;
-
-        if (!table) {
+        if (!rows) {
             return;
         }
 
-        table.forEach(col => {
-            const isHeader = col.item[0].isHeader;
-            const newElement = this.createRowElements(1, !!isHeader);
-            col.item.splice(addAtIndex || col.item.length || 0, 0, newElement[0]);
+        rows.splice(removeAtIndex || rows.length - 1, 1);
+    }
+
+    public removeTableColumn(removeAtIndex?: number) {
+        const rows = this.tableValues?.row;
+
+        if (!rows) {
+            return;
+        }
+
+        rows.forEach(col => {
+            if (col.item) {
+                col.item.splice(removeAtIndex || col.item.length - 1 || 0, 1);
+            }
+        });
+    }
+
+    public addTableColumn(addAtIndex?: number) {
+        const rows = this.tableValues?.row;
+
+        if (!rows) {
+            const newElement = this.createRowElements(1, true);
+            if (this.tableValues) {
+                this.tableValues.row = [{ item: newElement }];
+            }
+            return;
+        }
+
+        rows.forEach(col => {
+            if (col.item) {
+                const isHeader = col.item[0].isHeader;
+                const newElement = this.createRowElements(1, !!isHeader);
+                col.item.splice(addAtIndex || col.item.length || 0, 0, newElement[0]);
+            }
         });
     }
 
     private addTableRow(addAtIndex?: number) {
-        const table = this.tableValues?.row;
+        const rows = this.tableValues?.row;
 
-        if (!table) {
+        if (!rows) {
+            const newElement = this.createRowElements(1, true);
+            if (this.tableValues) {
+                this.tableValues.row = [{ item: newElement }];
+            }
             return;
         }
 
-        const newRow = this.createRowElements(table[0].item.length, false);
-        table.splice(addAtIndex || table.length || 0, 0, { item: newRow });
+        const newRow = this.createRowElements(rows?.[0].item?.length || 1, false);
+        rows.splice(addAtIndex || rows.length || 0, 0, { item: newRow });
     }
 
     private createRowElements(amount: number, isHeader: boolean) {
