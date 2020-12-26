@@ -37,4 +37,8 @@
             </ng-template>
         </p-table>
     </div>
+    <div>
+        <button type="button" class="p-button-rounded" pButton icon="pi pi-plus" (click)="menu.toggle($event)"></button>
+        <p-menu #menu [popup]="true" [model]="menuItems" appendTo="body"></p-menu>
+    </div>
 </app-base-field>
