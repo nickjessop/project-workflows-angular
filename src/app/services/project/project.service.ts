@@ -373,4 +373,35 @@ export class ProjectService {
                 }
             );
     }
+
+    // public addTableRow(blockIndex: number, addAtIndex?: number) {
+    //     const currentStepIndex = this.getCurrentStepIndex() || 0;
+    //     const _projectConfig = _.cloneDeep(this.projectConfig);
+    //     const tableBlock = _projectConfig.configuration![currentStepIndex].components![blockIndex];
+
+    //     if (tableBlock.metadata.component !== 'table') {
+    //         return;
+    //     }
+
+    //     const table = (tableBlock.metadata as Table).data.value.row;
+    //     if (table) {
+    //         const newRow = this.createRowElements(table[0].item.length, false);
+    //         table.splice(addAtIndex || table.length || 0, 0, newRow);
+    //     }
+
+    //     this.setProject(_projectConfig);
+    // }
+    public addTableColumn(index?: number) {}
+    public removeTableRow(index?: number) {}
+
+    public removeTableColumn(index?: number) {}
+
+    // private createRowElements(amount: number, isHeader: boolean) {
+    //     let row: { text: string; isHeader?: boolean }[] = [];
+
+    //     for (let i = 0; i < amount; i++) {
+    //         row.push({ text: '(empty cell)', isHeader });
+    //     }
+    //     return { item: row };
+    // }
 }
