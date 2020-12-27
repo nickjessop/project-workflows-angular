@@ -94,8 +94,6 @@ export class TableComponent extends BaseFieldComponent implements OnInit {
         if (!rows[0].item || rows[0].item.length === 0) {
             delete this.tableValues?.row;
         }
-
-        console.log(this.tableValues);
     }
 
     public addTableColumn(addAtIndex?: number) {
@@ -115,7 +113,6 @@ export class TableComponent extends BaseFieldComponent implements OnInit {
                 col.item.splice(addAtIndex || col.item.length || 0, 0, newElement[0]);
             }
         });
-        console.log(this.tableValues?.row);
     }
 
     private addTableRow(addAtIndex?: number) {
@@ -130,7 +127,6 @@ export class TableComponent extends BaseFieldComponent implements OnInit {
 
         const newRow = this.createRowElements(rows?.[0].item?.length || 1, false);
         rows.splice(addAtIndex || rows.length || 0, 0, { item: newRow });
-        console.log(this.tableValues?.row);
     }
 
     private createRowElements(amount: number, isHeader: boolean) {
