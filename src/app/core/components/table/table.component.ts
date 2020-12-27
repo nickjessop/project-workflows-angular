@@ -17,14 +17,14 @@ export class TableComponent extends BaseFieldComponent implements OnInit {
     // @Input() index = 0;
     public menuAddItems: MenuItem[] = [
         {
-            label: 'Add Row',
+            label: 'Add Bottom Row',
             icon: 'pi pi-plus',
             command: () => {
                 this.addTableRow();
             },
         },
         {
-            label: 'Add Column',
+            label: 'Add Bottom Column',
             icon: 'pi pi-plus',
             command: () => {
                 this.addTableColumn();
