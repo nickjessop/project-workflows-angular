@@ -73,6 +73,9 @@ export class TableComponent extends BaseFieldComponent implements OnInit {
         }
 
         rows.splice(removeAtIndex || rows.length - 1, 1);
+        if (!rows || rows.length === 0) {
+            delete this.tableValues?.row;
+        }
     }
 
     public removeTableColumn(removeAtIndex?: number) {
@@ -87,6 +90,12 @@ export class TableComponent extends BaseFieldComponent implements OnInit {
                 col.item.splice(removeAtIndex || col.item.length - 1 || 0, 1);
             }
         });
+
+        if (!rows[0].item || rows[0].item.length === 0) {
+            delete this.tableValues?.row;
+        }
+
+        console.log(this.tableValues);
     }
 
     public addTableColumn(addAtIndex?: number) {
@@ -94,9 +103,8 @@ export class TableComponent extends BaseFieldComponent implements OnInit {
 
         if (!rows) {
             const newElement = this.createRowElements(1, true);
-            if (this.tableValues) {
-                this.tableValues.row = [{ item: newElement }];
-            }
+            this.tableValues = { row: [{ item: newElement }] };
+
             return;
         }
 
@@ -107,6 +115,7 @@ export class TableComponent extends BaseFieldComponent implements OnInit {
                 col.item.splice(addAtIndex || col.item.length || 0, 0, newElement[0]);
             }
         });
+        console.log(this.tableValues?.row);
     }
 
     private addTableRow(addAtIndex?: number) {
@@ -114,14 +123,14 @@ export class TableComponent extends BaseFieldComponent implements OnInit {
 
         if (!rows) {
             const newElement = this.createRowElements(1, true);
-            if (this.tableValues) {
-                this.tableValues.row = [{ item: newElement }];
-            }
+            this.tableValues = { row: [{ item: newElement }] };
+
             return;
         }
 
         const newRow = this.createRowElements(rows?.[0].item?.length || 1, false);
         rows.splice(addAtIndex || rows.length || 0, 0, { item: newRow });
+        console.log(this.tableValues?.row);
     }
 
     private createRowElements(amount: number, isHeader: boolean) {
