@@ -3,34 +3,32 @@
         <div class="url view">
             <p-card>
                 <p-header>
-                    <img
-                        class="p-px-2 p-pt-2"
-                        src="https://www.figma.com/file/7OAFPEUcJYdTjctHP5Egkw/thumbnail?ver=thumbnails/11fa6ef9-5373-46de-9a9d-7a8d76175f0a"
-                        alt="website title"
-                    />
+                    <img class="p-px-2 p-pt-2" src="" alt="dynamic screenshot" />
                 </p-header>
-                <strong>Figma</strong>
-                <p>Created with Figma</p>
-                <a href="http://figma.com/file/7OAFPEUcJYdTjctHP5Egkw/Pitch-Deck" target="_blank"
-                    >http://figma.com/file/7OAFPEUcJYdTjctHP5Egkw/Pitch-Deck
-                </a>
+                <strong>Dynamic title</strong>
+                <p>Dynamic description</p>
+                <a [href]="urlData.data.value[0].href" target="_blank">{{ urlData.data.value[0].href }} </a>
                 <i class="pi pi-external-link"></i>
             </p-card>
         </div>
     </ng-container>
     <ng-container *ngIf="componentMode === 'edit'">
-        <div class="url edit">
+        <div class="p-d-flex p-flex-column">
             <div *ngFor="let url of urlData.data.value; index as index">
-                {{ index + 1 }}. <input type="text" pInputText [(ngModel)]="url.href" placeholder="Add url" />
-                <button
-                    pButton
-                    class="p-button-rounded p-button-text"
-                    type="button"
-                    icon="pi pi-times"
-                    (click)="onRemoveUrlPress(index)"
-                ></button>
+                <span class="p-float-label">
+                    <input id="float-input-{{ index }}" type="text" pInputText [(ngModel)]="url.href" />
+                    <label for="float-input-{{ index }}">Url</label>
+                    <button
+                        pButton
+                        class="p-button-rounded p-button-text"
+                        type="button"
+                        icon="pi pi-times"
+                        (click)="onRemoveUrlPress(index)"
+                    ></button>
+                </span>
             </div>
         </div>
+
         <button
             pButton
             class="p-button-icon"
