@@ -101,7 +101,9 @@ export class TableComponent extends BaseFieldComponent implements OnInit {
 
         if (!rows) {
             const newElement = this.createRowElements(1, true);
-            this.tableValues = { row: [{ item: newElement }] };
+            if (this.tableValues) {
+                this.tableValues.row = [{ item: newElement }];
+            }
 
             return;
         }
@@ -120,7 +122,9 @@ export class TableComponent extends BaseFieldComponent implements OnInit {
 
         if (!rows) {
             const newElement = this.createRowElements(1, true);
-            this.tableValues = { row: [{ item: newElement }] };
+            if (this.tableValues) {
+                this.tableValues.row = [{ item: newElement }];
+            }
 
             return;
         }
