@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ProjectService } from 'src/app/services/project/project.service';
+import { createComponentMetadataTemplate, Url } from '../../interfaces/core-component';
 import { BaseFieldComponent } from '../base-field/base-field.component';
 
 @Component({
@@ -9,14 +10,22 @@ import { BaseFieldComponent } from '../base-field/base-field.component';
     styleUrls: ['./url.component.scss'],
 })
 export class UrlComponent extends BaseFieldComponent implements OnInit {
-    // @Input() field: FieldConfig = createFieldConfig();
     @Input() group!: FormGroup;
-    // @Input() componentMode: ComponentMode = 'view';
-    // @Input() index = 0;
+
+    public urlData = createComponentMetadataTemplate('url') as Url;
 
     constructor(public projectService: ProjectService) {
         super(projectService);
     }
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        this.urlData = this.field.metadata as Url;
+    }
+
+    public onAddNewUrlPress() {
+        this.urlData.data.value.push({ href: '' });
+    }
+    public onRemoveUrlPress(index: number) {
+        this.urlData.data.value.splice(index, 1);
+    }
 }

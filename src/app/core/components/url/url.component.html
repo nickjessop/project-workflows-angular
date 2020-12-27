@@ -20,7 +20,24 @@
     </ng-container>
     <ng-container *ngIf="componentMode === 'edit'">
         <div class="url edit">
-            <input type="text" pInputText [(ngModel)]="field.metadata.data.value" placeholder="Add url" />
+            <div *ngFor="let url of urlData.data.value; index as index">
+                {{ index + 1 }}. <input type="text" pInputText [(ngModel)]="url.href" placeholder="Add url" />
+                <button
+                    pButton
+                    class="p-button-rounded p-button-text"
+                    type="button"
+                    icon="pi pi-times"
+                    (click)="onRemoveUrlPress(index)"
+                ></button>
+            </div>
         </div>
+        <button
+            pButton
+            class="p-button-icon"
+            type="button"
+            icon="pi pi-plus"
+            label="Add URL"
+            (click)="onAddNewUrlPress()"
+        ></button>
     </ng-container>
 </app-base-field>
