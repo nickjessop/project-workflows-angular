@@ -4,8 +4,8 @@
         <ng-container *ngIf="blockOptions?.length">
             <div class="p-col-4" *ngFor="let blockOption of blockOptions">
                 <div class="p-d-flex p-flex-column p-jc-center p-my-2 p-mx-2 block-overlay__item" (click)="onAddNewBlockPress(blockOption.component)">
-                    <i class="pi {{ blockOption.icon }} ms-4"></i>
-                    <div class="block-label ms-01 p-mt-2">{{ blockOption.label }}</div>
+                    <i class="pi {{ blockOption.icon }} ms-4 block-icon"></i>
+                    <div class="block-label ms-01">{{ blockOption.label }}</div>
                 </div>
             </div>
         </ng-container>
