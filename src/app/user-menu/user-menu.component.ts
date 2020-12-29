@@ -14,9 +14,8 @@ export class UserMenuComponent implements OnInit {
 
     ngOnInit(): void {
         this.items = [
-            { label: 'Profile', icon: 'pi pi-fw pi-user' },
-            { label: 'Settings', icon: 'pi pi-fw pi-cog' },
-            { label: 'Tell a friend', icon: 'pi pi-fw pi-thumbs-up' },
+            { label: 'Profile', icon: 'pi pi-fw pi-user', routerLink: '/profile' },
+            // { label: 'Tell a friend', icon: 'pi pi-fw pi-thumbs-up', routerLink: '/share' },
             { label: 'Sign out', icon: 'pi pi-fw pi-sign-out' },
         ];
     }
