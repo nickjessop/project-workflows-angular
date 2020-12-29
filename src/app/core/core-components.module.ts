@@ -12,7 +12,6 @@ import { ImageUploaderComponent } from './components/image-uploader/image-upload
 import { LargeTextInputComponent } from './components/large-text-input/large-text-input.component';
 import { SmallTextInputComponent } from './components/small-text-input/small-text-input.component';
 import { TableComponent } from './components/table/table.component';
-import { UploaderComponent } from './components/uploader/uploader.component';
 import { UrlComponent } from './components/url/url.component';
 import { CoreComponentResolverDirective } from './core-component-resolver.directive';
 
@@ -25,7 +24,6 @@ import { CoreComponentResolverDirective } from './core-component-resolver.direct
         TableComponent,
         CoreComponentResolverDirective,
         DynamicFormComponent,
-        UploaderComponent,
         CheckboxesComponent,
         BaseFieldComponent,
 
@@ -39,7 +37,6 @@ import { CoreComponentResolverDirective } from './core-component-resolver.direct
         FileUploaderComponent,
         TableComponent,
         DynamicFormComponent,
-        UploaderComponent,
         CheckboxesComponent,
         UrlComponent,
     ],
@@ -50,7 +47,6 @@ import { CoreComponentResolverDirective } from './core-component-resolver.direct
         FileUploaderComponent,
         TableComponent,
         DynamicFormComponent,
-        UploaderComponent,
         CheckboxesComponent,
         UrlComponent,
     ],
