@@ -13,9 +13,9 @@
         </div>
     </ng-container>
     <ng-container *ngIf="componentMode === 'edit'">
-        <div class="p-d-flex p-flex-column">
+        <div class="p-d-flex p-flex-column p-mb-2">
             <div *ngFor="let url of urlData.data.value; index as index">
-                <span class="p-float-label">
+                <span class="p-mt-5 p-float-label">
                     <input id="float-input-{{ index }}" type="text" pInputText [(ngModel)]="url.href" />
                     <label for="float-input-{{ index }}">Url</label>
                     <button
@@ -28,7 +28,6 @@
                 </span>
             </div>
         </div>
-
         <button
             pButton
             class="p-button-icon"
