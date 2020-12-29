@@ -36,7 +36,7 @@ export function createComponentMetadataTemplate(componentType: ComponentType, va
         return _component;
     } else if (componentType === 'fileUploader') {
         const _component: FileUploader = {
-            data: { value: [{ href: '' }] },
+            data: { value: [{ href: '', description: '', title: '' }] },
             component: 'fileUploader',
         };
 
@@ -46,7 +46,7 @@ export function createComponentMetadataTemplate(componentType: ComponentType, va
         return _component;
     } else if (componentType === 'imageUploader') {
         const _component: ImageUploader = {
-            data: { value: [{ href: '' }] },
+            data: { value: [{ href: '', description: '', title: '' }] },
             component: 'imageUploader',
         };
 
@@ -116,7 +116,7 @@ export function createComponentMetadataTemplate(componentType: ComponentType, va
         return _component;
     } else if (componentType === 'url') {
         const _component: Url = {
-            data: { value: [{ href: '' }] },
+            data: { value: [{ href: '', description: '', title: '' }] },
             component: 'url',
         };
 
@@ -206,4 +206,6 @@ export interface Url extends BaseComponent {
 
 export type Link = {
     href?: string;
+    title?: string;
+    description?: string;
 };
