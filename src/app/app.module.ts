@@ -24,6 +24,7 @@ import { StepsComponent } from './project/steps/steps.component';
 import { ViewerComponent } from './project/viewer/viewer.component';
 import { ProtectedRoutingModule } from './protected-routing.module';
 import { UserMenuComponent } from './user-menu/user-menu.component';
+import { ProfileComponent } from './profile/profile.component';
 @NgModule({
     declarations: [
         AppComponent,
@@ -42,6 +43,7 @@ import { UserMenuComponent } from './user-menu/user-menu.component';
         ProjectControlsComponent,
         UserMenuComponent,
         NewProjectDialogComponent,
+        ProfileComponent,
     ],
     imports: [
         ProtectedRoutingModule,
