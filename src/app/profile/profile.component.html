@@ -1,0 +1,43 @@
+<app-nav-bar></app-nav-bar>
+
+<div class="p-px-5 p-py-5 container">
+    <h1>Your profile</h1>
+    <div class="p-fluid p-formgrid p-grid">
+        <div class="p-field p-col">
+            <div class="p-field">
+                <label for="name">Name</label>
+                <input id="name" type="name" pInputText aria-describedby="Your name" value="Full name">
+            </div>
+            <div class="p-field">
+                <label for="email">Email</label>
+                <input id="email" type="email" pInputText aria-describedby="Your email" value="user@stepflow.co">
+            </div>
+            <div class="p-field p-mt-6">
+                <h3>Change password</h3>
+                <label for="password">Old password</label>
+                <input id="password" type="password" pInputText aria-describedby="Enter your old password">
+                <small id="password-help">Enter your old password to create a new one.</small>
+            </div>
+            <div class="p-field">
+                <label for="npassword">New password</label>
+                <input id="npassword" type="password" pInputText aria-describedby="Enter a new password">
+            </div>
+            <div class="p-field">
+                <label for="vnpassword">Verify new password</label>
+                <input id="vnpassword" type="password" pInputText aria-describedby="Verify your new password">
+            </div>
+            <div class="p-field">
+                <button pButton type="button" label="Update profile" style="width:150px"></button>
+            </div>
+        </div>
+        <div class="p-field p-col">
+            <div class="p-field p-d-flex p-jc-center">
+                <img src="/assets/placeholder/placeholder-profile.png" width="250" height="250" alt="Your profile picture" />
+            </div>
+            <div class="p-field p-d-flex p-jc-center">
+                <p-menu #menu [popup]="true" [model]="items"></p-menu>
+                <button type="button" pButton icon="pi pi-pencil" label="Edit" (click)="menu.toggle($event)" style="width:100px"></button>
+            </div>
+        </div>
+    </div>
+</div>

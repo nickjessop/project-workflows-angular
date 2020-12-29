@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ComponentPlaygroundComponent } from './dashboard/component-playground/component-playground.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { ProfileComponent } from './profile/profile.component';
 import { ProjectComponent } from './project/project.component';
 import { ViewerComponent } from './project/viewer/viewer.component';
 import { ProtectedGuard } from './protected.guard';
@@ -28,6 +29,11 @@ const guardedRoutes: Routes = [
         component: ViewerComponent,
         canActivate: [ProtectedGuard],
         resolve: { data: ProjectResolverService },
+    },
+    {
+        path: 'profile',
+        component: ProfileComponent,
+        canActivate: [ProtectedGuard],
     },
 ];
 
