@@ -21,9 +21,9 @@
     .field__handle {
         display: none;
         position: absolute;
-        left: -12px;
-        top: calc(50% - 11px);
-        opacity: 0.2;
+        top: 0px;
+        left: calc(50% - 8px);
+        opacity: 0.3;
         &:hover,
         button.button:hover {
             cursor: grab !important;
