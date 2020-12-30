@@ -1,6 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { FileUpload } from 'primeng/fileupload';
 import { ProjectService } from 'src/app/services/project/project.service';
+import { FileUploader, Link } from '../../interfaces/core-component';
 import { BaseFieldComponent } from '../base-field/base-field.component';
 
 @Component({
@@ -9,36 +11,48 @@ import { BaseFieldComponent } from '../base-field/base-field.component';
     styleUrls: ['./file-uploader.component.scss'],
 })
 export class FileUploaderComponent extends BaseFieldComponent implements OnInit {
-    // @Input() field: FieldConfig = createFieldConfig();
     @Input() group!: FormGroup;
-    // @Input() componentMode: ComponentMode = 'view';
-    // @Input() index = 0;
+    @ViewChild('fileUploader', { static: true }) fileUploaderButton!: FileUpload;
 
-    files: any[] | undefined;
+    public cols = [
+        { field: 'title', header: 'Name', size: '40' },
+        { field: 'description', header: 'Description', size: '40' },
+        { field: 'type', header: 'File Type', size: '10' },
+        { field: 'href', header: 'Download', size: '10' },
+    ];
 
-    cols: any[] | undefined;
+    public fileData: Link[] = [{ href: '', title: '', description: '', altText: '', thumbnail: '' }];
+    public dialogData: Link & { file?: File } = { href: '', title: '', description: '', altText: '' };
 
-    log(val: any) {
-        console.log(val);
-    }
+    public showFileUploaderDialog = false;
 
     constructor(public projectService: ProjectService) {
         super(projectService);
     }
 
     ngOnInit() {
-        this.cols = [
-            { field: 'filename', header: 'Name', size: '55' },
-            { field: 'filetype', header: 'Type', size: '15' },
-            { field: 'filesize', header: 'Size', size: '15' },
-            { field: 'fileurl', header: 'Download', size: '15' },
-        ];
-        this.files = [
-            { filename: 'Testfile.pdf', filetype: 'PDF', filesize: '1 MB', fileurl: '/path/to/file.pdf' },
-            { filename: 'Testfile.pdf', filetype: 'PDF', filesize: '1 MB', fileurl: '/path/to/file.pdf' },
-            { filename: 'Testfile.pdf', filetype: 'PDF', filesize: '1 MB', fileurl: '/path/to/file.pdf' },
-            { filename: 'Testfile.pdf', filetype: 'PDF', filesize: '1 MB', fileurl: '/path/to/file.pdf' },
-            { filename: 'Testfile.pdf', filetype: 'PDF', filesize: '1 MB', fileurl: '/path/to/file.pdf' },
-        ];
+        this.fileData = (this.field.metadata as FileUploader).data.value;
+    }
+
+    public onFileUploadSelected($event: { originalEvent: Event; files: FileList; currentFiles: File[] }) {
+        this.dialogData.file = $event.currentFiles[0];
+        this.dialogData.title = $event.currentFiles[0].name;
+        this.dialogData.type = $event.currentFiles[0].type;
+    }
+
+    private uploadFile(file: File) {
+        // const successful = this.uploadFile($event.currentFiles[0]);
+
+        // if (successful) {
+        // } else {
+        // }
+
+        return true;
+    }
+
+    public onDialogSubmit($event: Event) {
+        this.dialogData = { href: '', title: '', description: '', altText: '' };
+        this.fileUploaderButton.clear();
+        this.showFileUploaderDialog = false;
     }
 }
