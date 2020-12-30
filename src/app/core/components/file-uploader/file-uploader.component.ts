@@ -14,11 +14,15 @@ export class FileUploaderComponent extends BaseFieldComponent implements OnInit 
 
     public cols = [
         { field: 'title', header: 'Name', size: '40' },
-        { field: 'description', header: 'Description', size: '50' },
+        { field: 'description', header: 'Description', size: '40' },
+        { field: 'type', header: 'File Type', size: '10' },
         { field: 'href', header: 'Download', size: '10' },
     ];
 
     public fileData: Link[] = [{ href: '', title: '', description: '', altText: '', thumbnail: '' }];
+    public dialogData: Link & { file?: File } = { href: '', title: '', description: '', altText: '' };
+
+    public showFileUploaderDialog = false;
 
     constructor(public projectService: ProjectService) {
         super(projectService);
@@ -29,18 +33,22 @@ export class FileUploaderComponent extends BaseFieldComponent implements OnInit 
     }
 
     public onFileUploadSelected($event: { originalEvent: Event; files: FileList; currentFiles: File[] }) {
-        // Some sort of validation here
-
-        const successful = this.uploadFile($event.currentFiles[0]);
-
-        if (successful) {
-        } else {
-        }
+        this.dialogData.file = $event.currentFiles[0];
+        this.dialogData.title = $event.currentFiles[0].name;
+        this.dialogData.type = $event.currentFiles[0].type;
     }
 
     private uploadFile(file: File) {
-        console.log(`Uploading file ${file.name}`);
+        // const successful = this.uploadFile($event.currentFiles[0]);
+
+        // if (successful) {
+        // } else {
+        // }
 
         return true;
+    }
+
+    public onDialogSubmit($event: Event) {
+        console.log($event);
     }
 }
