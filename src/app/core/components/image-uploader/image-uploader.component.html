@@ -13,7 +13,7 @@
                 </div>
             </div>
             <p-galleria
-                [(value)]="imageData"
+                [value]="imageData"
                 [(visible)]="displayLightbox"
                 [(activeIndex)]="activeIndex"
                 [responsiveOptions]="responsiveOptions"
@@ -25,18 +25,16 @@
                 [showThumbnails]="false"
                 [baseZIndex]="100000"
             >
-                <ng-template pTemplate="item">
-                    <img *ngFor="let img of imageData" [src]="img.href" style="width: 100%; display: block;" />
+                <ng-template pTemplate="item" let-item>
+                    <img [src]="item.href" style="width: 100%; display: block;" />
                 </ng-template>
-                <ng-template pTemplate="caption">
-                    <ng-container *ngFor="let img of imageData">
-                        <h4 style="margin-bottom: .5rem; color: #ffffff;">{{ img.title }}</h4>
-                        <p>{{ img.description }}</p>
-                    </ng-container>
+                <ng-template pTemplate="caption" let-item>
+                    <h4 style="margin-bottom: .5rem; color: #ffffff;">{{ item.title }}</h4>
+                    <p>{{ item.description }}</p>
                 </ng-template>
-                <ng-template pTemplate="thumbnail">
-                    <div *ngFor="let img of imageData" class="p-grid p-nogutter p-justify-center">
-                        <img [src]="img.href" style="display: block;" />
+                <ng-template pTemplate="thumbnail" let-item>
+                    <div class="p-grid p-nogutter p-justify-center">
+                        <img [src]="item.href" style="display: block;" />
                     </div>
                 </ng-template>
             </p-galleria>
