@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ProjectService } from 'src/app/services/project/project.service';
+import { ImageUploader, Link } from '../../interfaces/core-component';
 import { BaseFieldComponent } from '../base-field/base-field.component';
 
 @Component({
@@ -9,39 +10,72 @@ import { BaseFieldComponent } from '../base-field/base-field.component';
     styleUrls: ['./image-uploader.component.scss'],
 })
 export class ImageUploaderComponent extends BaseFieldComponent implements OnInit {
-    // @Input() field: FieldConfig = createFieldConfig();
     @Input() group!: FormGroup;
-    // @Input() componentMode: ComponentMode = 'view';
-    // @Input() index = 0;
 
-    images = [
-        {
-            path: 'https://primefaces.org/primeng/showcase/assets/showcase/images/galleria/galleria1.jpg',
-            thumbnail: 'https://primefaces.org/primeng/showcase/assets/showcase/images/galleria/galleria1s.jpg',
-            alt: 'flower',
-            title: 'An odd looking flower',
-        },
-        {
-            path: 'https://primefaces.org/primeng/showcase/assets/showcase/images/galleria/galleria2.jpg',
-            thumbnail: 'https://primefaces.org/primeng/showcase/assets/showcase/images/galleria/galleria2s.jpg',
-            alt: 'fog',
-            title: 'Chill fog',
-        },
-        {
-            path: 'https://primefaces.org/primeng/showcase/assets/showcase/images/galleria/galleria3.jpg',
-            thumbnail: 'https://primefaces.org/primeng/showcase/assets/showcase/images/galleria/galleria3s.jpg',
-            alt: 'dead dandelion',
-            title: 'Is this danelion dead?',
-        },
-        {
-            path: 'https://primefaces.org/primeng/showcase/assets/showcase/images/galleria/galleria4.jpg',
-            thumbnail: 'https://primefaces.org/primeng/showcase/assets/showcase/images/galleria/galleria4s.jpg',
-            alt: 'flower',
-            title: 'Another odd flower',
-        },
-    ];
+    // public images = [
+    //     {
+    //         path: 'https://primefaces.org/primeng/showcase/assets/showcase/images/galleria/galleria1.jpg',
+    //         thumbnail: 'https://primefaces.org/primeng/showcase/assets/showcase/images/galleria/galleria1s.jpg',
+    //         alt: 'flower',
+    //         title: 'An odd looking flower',
+    //     },
+    //     {
+    //         path: 'https://primefaces.org/primeng/showcase/assets/showcase/images/galleria/galleria2.jpg',
+    //         thumbnail: 'https://primefaces.org/primeng/showcase/assets/showcase/images/galleria/galleria2s.jpg',
+    //         alt: 'fog',
+    //         title: 'Chill fog',
+    //     },
+    //     {
+    //         path: 'https://primefaces.org/primeng/showcase/assets/showcase/images/galleria/galleria3.jpg',
+    //         thumbnail: 'https://primefaces.org/primeng/showcase/assets/showcase/images/galleria/galleria3s.jpg',
+    //         alt: 'dead dandelion',
+    //         title: 'Is this danelion dead?',
+    //     },
+    //     {
+    //         path: 'https://primefaces.org/primeng/showcase/assets/showcase/images/galleria/galleria4.jpg',
+    //         thumbnail: 'https://primefaces.org/primeng/showcase/assets/showcase/images/galleria/galleria4s.jpg',
+    //         alt: 'flower',
+    //         title: 'Another odd flower',
+    //     },
+    //     {
+    //         path: 'https://primefaces.org/primeng/showcase/assets/showcase/images/galleria/galleria3.jpg',
+    //         thumbnail: 'https://primefaces.org/primeng/showcase/assets/showcase/images/galleria/galleria3s.jpg',
+    //         alt: 'dead dandelion',
+    //         title: 'Is this danelion dead?',
+    //     },
+    //     {
+    //         path: 'https://primefaces.org/primeng/showcase/assets/showcase/images/galleria/galleria4.jpg',
+    //         thumbnail: 'https://primefaces.org/primeng/showcase/assets/showcase/images/galleria/galleria4s.jpg',
+    //         alt: 'flower',
+    //         title: 'Another odd flower',
+    //     },
+    //     {
+    //         path: 'https://primefaces.org/primeng/showcase/assets/showcase/images/galleria/galleria3.jpg',
+    //         thumbnail: 'https://primefaces.org/primeng/showcase/assets/showcase/images/galleria/galleria3s.jpg',
+    //         alt: 'dead dandelion',
+    //         title: 'Is this danelion dead?',
+    //     },
+    //     {
+    //         path: 'https://primefaces.org/primeng/showcase/assets/showcase/images/galleria/galleria4.jpg',
+    //         thumbnail: 'https://primefaces.org/primeng/showcase/assets/showcase/images/galleria/galleria4s.jpg',
+    //         alt: 'flower',
+    //         title: 'Another odd flower',
+    //     },
+    //     {
+    //         path: 'https://primefaces.org/primeng/showcase/assets/showcase/images/galleria/galleria3.jpg',
+    //         thumbnail: 'https://primefaces.org/primeng/showcase/assets/showcase/images/galleria/galleria3s.jpg',
+    //         alt: 'dead dandelion',
+    //         title: 'Is this danelion dead?',
+    //     },
+    //     {
+    //         path: 'https://primefaces.org/primeng/showcase/assets/showcase/images/galleria/galleria4.jpg',
+    //         thumbnail: 'https://primefaces.org/primeng/showcase/assets/showcase/images/galleria/galleria4s.jpg',
+    //         alt: 'flower',
+    //         title: 'Another odd flower',
+    //     },
+    // ];
 
-    responsiveOptions: any[] = [
+    public responsiveOptions: any[] = [
         {
             breakpoint: '1024px',
             numVisible: 5,
@@ -56,18 +90,26 @@ export class ImageUploaderComponent extends BaseFieldComponent implements OnInit
         },
     ];
 
-    activeIndex: number = 0;
+    public activeIndex = 0;
 
-    displayLightbox: boolean = false;
+    public displayLightbox = false;
+
+    public imageData: Link[] = [{ href: '', title: '', description: '', altText: '', thumbnail: '' }];
 
     constructor(public projectService: ProjectService) {
         super(projectService);
     }
 
-    ngOnInit() {}
+    ngOnInit() {
+        this.imageData = (this.field.metadata as ImageUploader).data.value;
+    }
 
-    imageClick(index: number) {
+    public imageClick(index: number) {
         this.activeIndex = index;
         this.displayLightbox = true;
+    }
+
+    public onFileUploadSelected($event: { originalEvent: Event; files: FileList; currentFiles: File[] }) {
+        console.log($event);
     }
 }

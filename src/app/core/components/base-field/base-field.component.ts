@@ -11,7 +11,7 @@ import { ProjectService } from 'src/app/services/project/project.service';
 export class BaseFieldComponent {
     @Input() field: BlockConfig = createBlockConfig('smallTextInput');
     @Input() index?: number;
-    @Input() componentMode: ComponentMode = 'view';
+    @Input() componentMode: ComponentMode = 'edit';
 
     public items: MenuItem[] = [
         {
