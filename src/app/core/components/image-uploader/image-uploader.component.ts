@@ -47,10 +47,16 @@ export class ImageUploaderComponent extends BaseFieldComponent implements OnInit
     public onFileUploadSelected($event: { originalEvent: Event; files: FileList; currentFiles: File[] }) {
         // Some sort of validation here
 
-        this.uploadFile($event.currentFiles[0]);
+        const successful = this.uploadFile($event.currentFiles[0]);
+
+        if (successful) {
+        } else {
+        }
     }
 
     private uploadFile(file: File) {
-        console.log(`Uploading file ${file.stream}`);
+        console.log(`Uploading file ${file.name}`);
+
+        return true;
     }
 }

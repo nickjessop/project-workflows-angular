@@ -1,9 +1,9 @@
 <app-base-field [field]="field" [index]="index">
-    <ng-container *ngIf="componentMode === 'view'"></ng-container>
+    <ng-container *ngIf="componentMode === 'view'"> </ng-container>
     <ng-container *ngIf="componentMode === 'edit'">
         <p-table
             [columns]="cols"
-            [value]="files"
+            [value]="fileData"
             [scrollable]="true"
             [rows]="20"
             scrollHeight="250px"
@@ -37,19 +37,13 @@
             <div class="p-toolbar-group-left">
                 <p-fileUpload
                     mode="basic"
-                    name="files[]"
-                    url="/"
-                    accept="image/*"
                     maxFileSize="1000000"
-                    multiple="multiple"
-                    [auto]="true"
                     chooseLabel="Upload files"
+                    (onSelect)="onFileUploadSelected($event)"
                 ></p-fileUpload>
             </div>
 
-            <div class="p-toolbar-group-right">
-                6 files
-            </div>
+            <div class="p-toolbar-group-right">{{ fileData.length }} files</div>
         </p-toolbar>
     </ng-container>
 </app-base-field>
