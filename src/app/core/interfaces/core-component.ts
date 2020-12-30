@@ -250,4 +250,5 @@ export type Link = {
     description?: string;
     thumbnail?: string;
     altText?: string;
+    type?: string;
 };
