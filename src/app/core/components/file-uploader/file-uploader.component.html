@@ -1,9 +1,9 @@
 <app-base-field [field]="field" [index]="index">
-    <ng-container *ngIf="componentMode === 'view'"></ng-container>
+    <ng-container *ngIf="componentMode === 'view'"> </ng-container>
     <ng-container *ngIf="componentMode === 'edit'">
         <p-table
             [columns]="cols"
-            [value]="files"
+            [value]="fileData"
             [scrollable]="true"
             [rows]="20"
             scrollHeight="250px"
@@ -27,7 +27,9 @@
                             ></a>
                         </td>
                         <ng-template #elseBlock>
-                            <td [ngStyle]="{ width: col.size + '%' }">{{ rowData[col.field] }}</td>
+                            <td [ngStyle]="{ width: col.size + '%' }">
+                                {{ rowData[col.field] ? rowData[col.field] : 'Unknown' }}
+                            </td>
                         </ng-template>
                     </ng-container>
                 </tr>
@@ -35,21 +37,43 @@
         </p-table>
         <p-toolbar>
             <div class="p-toolbar-group-left">
-                <p-fileUpload
-                    mode="basic"
-                    name="files[]"
-                    url="/"
-                    accept="image/*"
-                    maxFileSize="1000000"
-                    multiple="multiple"
-                    [auto]="true"
-                    chooseLabel="Upload files"
-                ></p-fileUpload>
-            </div>
-
-            <div class="p-toolbar-group-right">
-                6 files
+                <button type="button" label="Upload Files" pButton (click)="showFileUploaderDialog = true"></button>
             </div>
         </p-toolbar>
     </ng-container>
+
+    <!-- <div class="p-toolbar-group-right">{{ fileData.length }} files</div> -->
+    <p-dialog
+        [(visible)]="showFileUploaderDialog"
+        header="File Uploader"
+        styleClass="dialog"
+        focusTrap="true"
+        modal="true"
+    >
+        <div class="p-field p-pt-2">
+            <div class="p-toolbar-group-left">
+                <p-fileUpload
+                    #fileUploader
+                    mode="basic"
+                    maxFileSize="1000000"
+                    [chooseLabel]="dialogData.title ? dialogData.title : 'Select file'"
+                    (onSelect)="onFileUploadSelected($event)"
+                ></p-fileUpload>
+            </div>
+        </div>
+        <div class="p-field">
+            <label for="fileName" aria-describedby="Add a file name" styleClass="labelBlock">File Name</label>
+            <input id="fileName" type="text" pInputText [(ngModel)]="dialogData.title" style="width: 100%" />
+        </div>
+        <div class="p-field p-pt-2">
+            <label for="description" aria-describedby="Add a description" styleClass="labelBlock">Description</label>
+            <input id="description" type="text" pInputText [(ngModel)]="dialogData.description" style="width: 100%" />
+        </div>
+        <div class="p-field p-pt-2">
+            <label for="altText" aria-describedby="Add a alternate text" styleClass="labelBlock">Alt Text</label>
+            <input id="altText" type="text" pInputText [(ngModel)]="dialogData.altText" style="width: 100%" />
+        </div>
+
+        <button type="button" label="Submit" pButton (click)="onDialogSubmit($event)"></button>
+    </p-dialog>
 </app-base-field>
