@@ -51,12 +51,12 @@
         modal="true"
     >
         <div class="p-field p-pt-2">
-            <!-- <label aria-describedby="" styleClass="labelBlock">{{ dialogData.title }}</label> -->
             <div class="p-toolbar-group-left">
                 <p-fileUpload
+                    #fileUploader
                     mode="basic"
                     maxFileSize="1000000"
-                    chooseLabel="Choose a file"
+                    [chooseLabel]="dialogData.title ? dialogData.title : 'Select file'"
                     (onSelect)="onFileUploadSelected($event)"
                 ></p-fileUpload>
             </div>

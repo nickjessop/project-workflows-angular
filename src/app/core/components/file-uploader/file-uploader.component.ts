@@ -1,5 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { FileUpload } from 'primeng/fileupload';
 import { ProjectService } from 'src/app/services/project/project.service';
 import { FileUploader, Link } from '../../interfaces/core-component';
 import { BaseFieldComponent } from '../base-field/base-field.component';
@@ -11,6 +12,7 @@ import { BaseFieldComponent } from '../base-field/base-field.component';
 })
 export class FileUploaderComponent extends BaseFieldComponent implements OnInit {
     @Input() group!: FormGroup;
+    @ViewChild('fileUploader', { static: true }) fileUploaderButton!: FileUpload;
 
     public cols = [
         { field: 'title', header: 'Name', size: '40' },
@@ -49,6 +51,8 @@ export class FileUploaderComponent extends BaseFieldComponent implements OnInit 
     }
 
     public onDialogSubmit($event: Event) {
-        console.log($event);
+        this.dialogData = { href: '', title: '', description: '', altText: '' };
+        this.fileUploaderButton.clear();
+        this.showFileUploaderDialog = false;
     }
 }
