@@ -1,16 +1,14 @@
 import { Injectable } from '@angular/core';
-
+import { Router } from '@angular/router';
 // Firebase App (the core Firebase SDK) is always required and must be listed first
-import * as firebase from 'firebase/app';
-
+import firebase from 'firebase';
 // If you enabled Analytics in your project, add the Firebase SDK for Analytics
 import 'firebase/analytics';
-
 // Add the Firebase products that you want to use
 import 'firebase/auth';
 import { from } from 'rxjs/internal/observable/from';
 import { take } from 'rxjs/operators';
-import { Router } from '@angular/router';
+
 export interface User {
     id: string;
     email: string | null;

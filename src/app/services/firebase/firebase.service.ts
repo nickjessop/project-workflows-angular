@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
+// Firebase App (the core Firebase SDK) is always required and must be listed first
+import firebase from 'firebase';
 // If you enabled Analytics in your project, add the Firebase SDK for Analytics
 import 'firebase/analytics';
-// Firebase App (the core Firebase SDK) is always required and must be listed first
-import * as firebase from 'firebase/app';
 // Add the Firebase products that you want to use
 import 'firebase/auth';
 import 'firebase/firestore';
