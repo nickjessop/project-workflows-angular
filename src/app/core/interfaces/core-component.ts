@@ -55,6 +55,27 @@ export function createComponentMetadataTemplate(componentType: ComponentType, va
                         thumbnail:
                             'https://primefaces.org/primeng/showcase/assets/showcase/images/galleria/galleria1s.jpg',
                     },
+                    {
+                        href: 'https://primefaces.org/primeng/showcase/assets/showcase/images/galleria/galleria2.jpg',
+                        description: '',
+                        title: '',
+                        thumbnail:
+                            'https://primefaces.org/primeng/showcase/assets/showcase/images/galleria/galleria2s.jpg',
+                    },
+                    {
+                        href: 'https://primefaces.org/primeng/showcase/assets/showcase/images/galleria/galleria3.jpg',
+                        description: '',
+                        title: '',
+                        thumbnail:
+                            'https://primefaces.org/primeng/showcase/assets/showcase/images/galleria/galleria3s.jpg',
+                    },
+                    {
+                        href: 'https://primefaces.org/primeng/showcase/assets/showcase/images/galleria/galleria4.jpg',
+                        description: '',
+                        title: '',
+                        thumbnail:
+                            'https://primefaces.org/primeng/showcase/assets/showcase/images/galleria/galleria4s.jpg',
+                    },
                 ],
             },
             component: 'imageUploader',
