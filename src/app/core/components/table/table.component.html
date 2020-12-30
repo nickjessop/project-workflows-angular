@@ -1,3 +1,4 @@
+
 <app-base-field [field]="field" [index]="index">
     <ng-container *ngIf="componentMode === 'view'">
         <div class="table">
@@ -26,8 +27,9 @@
         </div>
     </ng-container>
     <ng-container *ngIf="componentMode === 'edit'">
-        <div class="table">
-            <p-table [resizableColumns]="true" [value]="tableValues.row" styleClass="p-datatable-gridlines">
+        <p-contextMenu #cm [model]="menuItems" appendTo="body"></p-contextMenu>
+        <div class="table" aria-haspopup="true">
+            <p-table #table [value]="tableValues.row" [(contextMenuSelection)]="selectedData" [contextMenu]="cm" [resizableColumns]="true" styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="header">
                     <tr pEditableRow>
                         <ng-container *ngFor="let row of tableValues.row">
@@ -46,10 +48,10 @@
                         </ng-container>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-value>
+                <ng-template pTemplate="body" let-value let-r="rowIndex">
                     <tr>
-                        <ng-container *ngFor="let col of value.item">
-                            <td pEditableColumn *ngIf="!col.isHeader">
+                        <ng-container *ngFor="let col of value.item; let c = index">
+                            <td pEditableColumn *ngIf="!col.isHeader" [pContextMenuRow]="{rowIndex: r, colIndex: c}">
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
                                         <input pInputText type="text" [(ngModel)]="col.text" />
@@ -63,24 +65,6 @@
                     </tr>
                 </ng-template>
             </p-table>
-        </div>
-        <div>
-            <button
-                type="button"
-                class="p-button-rounded"
-                pButton
-                icon="pi pi-plus"
-                (click)="menuAdd.toggle($event)"
-            ></button>
-            <p-menu #menuAdd [popup]="true" [model]="menuAddItems" appendTo="body"></p-menu>
-            <button
-                type="button"
-                class="p-button-rounded"
-                pButton
-                icon="pi pi-minus"
-                (click)="menuRemove.toggle($event)"
-            ></button>
-            <p-menu #menuRemove [popup]="true" [model]="menuRemoveItems" appendTo="body"></p-menu>
         </div>
     </ng-container>
 </app-base-field>
