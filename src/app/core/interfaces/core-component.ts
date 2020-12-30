@@ -46,10 +46,19 @@ export function createComponentMetadataTemplate(componentType: ComponentType, va
         return _component;
     } else if (componentType === 'imageUploader') {
         const _component: ImageUploader = {
-            data: { value: [{ href: '', description: '', title: '' }] },
+            data: {
+                value: [
+                    {
+                        href: 'https://primefaces.org/primeng/showcase/assets/showcase/images/galleria/galleria1.jpg',
+                        description: '',
+                        title: '',
+                        thumbnail:
+                            'https://primefaces.org/primeng/showcase/assets/showcase/images/galleria/galleria1s.jpg',
+                    },
+                ],
+            },
             component: 'imageUploader',
         };
-
         if (validation) {
             _component.validation = validation;
         }
@@ -208,4 +217,6 @@ export type Link = {
     href?: string;
     title?: string;
     description?: string;
+    thumbnail?: string;
+    altText?: string;
 };

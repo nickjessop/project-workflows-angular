@@ -2,18 +2,18 @@
     <ng-container *ngIf="componentMode === 'view'"></ng-container>
     <ng-container *ngIf="componentMode === 'edit'">
         <div class="images view p-p-2">
-            <div *ngIf="images" class="p-grid" style="max-width: 400px;">
-                <div *ngFor="let image of images; let index = index" class="p-col-3" key="index">
+            <div class="p-grid" style="max-width: 400px;">
+                <div *ngFor="let image of imageData; let index = index" class="p-col-3" key="index">
                     <img
                         [src]="image.thumbnail"
-                        [alt]="image.alt"
+                        [alt]="image.altText"
                         style="cursor: pointer"
                         (click)="imageClick(index)"
                     />
                 </div>
             </div>
             <p-galleria
-                [(value)]="images"
+                [(value)]="imageData"
                 [(visible)]="displayLightbox"
                 [(activeIndex)]="activeIndex"
                 [responsiveOptions]="responsiveOptions"
@@ -25,16 +25,18 @@
                 [showThumbnails]="false"
                 [baseZIndex]="100000"
             >
-                <ng-template pTemplate="item" let-item>
-                    <img [src]="item.path" style="width: 100%; display: block;" />
+                <ng-template pTemplate="item">
+                    <img *ngFor="let img of imageData" [src]="img.href" style="width: 100%; display: block;" />
                 </ng-template>
-                <ng-template pTemplate="caption" let-item>
-                    <h4 style="margin-bottom: .5rem; color: #ffffff;">{{ item.title }}</h4>
-                    <p>{{ item.alt }}</p>
+                <ng-template pTemplate="caption">
+                    <ng-container *ngFor="let img of imageData">
+                        <h4 style="margin-bottom: .5rem; color: #ffffff;">{{ img.title }}</h4>
+                        <p>{{ img.description }}</p>
+                    </ng-container>
                 </ng-template>
-                <ng-template pTemplate="thumbnail" let-item>
-                    <div class="p-grid p-nogutter p-justify-center">
-                        <img [src]="item.path" style="display: block;" />
+                <ng-template pTemplate="thumbnail">
+                    <div *ngFor="let img of imageData" class="p-grid p-nogutter p-justify-center">
+                        <img [src]="img.href" style="display: block;" />
                     </div>
                 </ng-template>
             </p-galleria>
@@ -43,19 +45,14 @@
             <div class="p-toolbar-group-left">
                 <p-fileUpload
                     mode="basic"
-                    name="images[]"
-                    url="/"
                     accept="image/*"
                     maxFileSize="1000000"
-                    multiple="multiple"
-                    [auto]="true"
                     chooseLabel="Upload images"
+                    (onSelect)="onFileUploadSelected($event)"
                 ></p-fileUpload>
             </div>
 
-            <div class="p-toolbar-group-right">
-                5 images
-            </div>
+            <div class="p-toolbar-group-right">{{ imageData.length }} images</div>
         </p-toolbar>
     </ng-container>
 </app-base-field>
