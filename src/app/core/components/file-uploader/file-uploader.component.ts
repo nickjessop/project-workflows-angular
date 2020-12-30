@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ProjectService } from 'src/app/services/project/project.service';
+import { FileUploader, Link } from '../../interfaces/core-component';
 import { BaseFieldComponent } from '../base-field/base-field.component';
 
 @Component({
@@ -9,36 +10,37 @@ import { BaseFieldComponent } from '../base-field/base-field.component';
     styleUrls: ['./file-uploader.component.scss'],
 })
 export class FileUploaderComponent extends BaseFieldComponent implements OnInit {
-    // @Input() field: FieldConfig = createFieldConfig();
     @Input() group!: FormGroup;
-    // @Input() componentMode: ComponentMode = 'view';
-    // @Input() index = 0;
 
-    files: any[] | undefined;
+    public cols = [
+        { field: 'title', header: 'Name', size: '40' },
+        { field: 'description', header: 'Description', size: '50' },
+        { field: 'href', header: 'Download', size: '10' },
+    ];
 
-    cols: any[] | undefined;
-
-    log(val: any) {
-        console.log(val);
-    }
+    public fileData: Link[] = [{ href: '', title: '', description: '', altText: '', thumbnail: '' }];
 
     constructor(public projectService: ProjectService) {
         super(projectService);
     }
 
     ngOnInit() {
-        this.cols = [
-            { field: 'filename', header: 'Name', size: '55' },
-            { field: 'filetype', header: 'Type', size: '15' },
-            { field: 'filesize', header: 'Size', size: '15' },
-            { field: 'fileurl', header: 'Download', size: '15' },
-        ];
-        this.files = [
-            { filename: 'Testfile.pdf', filetype: 'PDF', filesize: '1 MB', fileurl: '/path/to/file.pdf' },
-            { filename: 'Testfile.pdf', filetype: 'PDF', filesize: '1 MB', fileurl: '/path/to/file.pdf' },
-            { filename: 'Testfile.pdf', filetype: 'PDF', filesize: '1 MB', fileurl: '/path/to/file.pdf' },
-            { filename: 'Testfile.pdf', filetype: 'PDF', filesize: '1 MB', fileurl: '/path/to/file.pdf' },
-            { filename: 'Testfile.pdf', filetype: 'PDF', filesize: '1 MB', fileurl: '/path/to/file.pdf' },
-        ];
+        this.fileData = (this.field.metadata as FileUploader).data.value;
+    }
+
+    public onFileUploadSelected($event: { originalEvent: Event; files: FileList; currentFiles: File[] }) {
+        // Some sort of validation here
+
+        const successful = this.uploadFile($event.currentFiles[0]);
+
+        if (successful) {
+        } else {
+        }
+    }
+
+    private uploadFile(file: File) {
+        console.log(`Uploading file ${file.name}`);
+
+        return true;
     }
 }
