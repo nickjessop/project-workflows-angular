@@ -15,37 +15,57 @@ export class TableComponent extends BaseFieldComponent implements OnInit {
     @Input() group!: FormGroup;
     // @Input() componentMode: ComponentMode = 'view';
     // @Input() index = 0;
-    public menuAddItems: MenuItem[] = [
-        {
-            label: 'Add Bottom Row',
-            icon: 'pi pi-plus',
-            command: () => {
-                this.addTableRow();
-            },
-        },
-        {
-            label: 'Add Bottom Column',
-            icon: 'pi pi-plus',
-            command: () => {
-                this.addTableColumn();
-            },
-        },
-    ];
 
-    public menuRemoveItems: MenuItem[] = [
+    selectedData: { rowIndex: number; colIndex: number } = { rowIndex: 0, colIndex: 0 };
+
+    public menuItems: MenuItem[] = [
         {
-            label: 'Delete Last Row',
-            icon: 'pi pi-times',
-            command: () => {
-                this.removeTableRow();
-            },
+            label: 'Insert',
+            icon: 'pi pi-fw pi-plus',
+            items: [
+                {
+                    label: 'Insert row above',
+                    command: () => {
+                        this.addTableRow(this.selectedData.rowIndex);
+                    },
+                },
+                {
+                    label: 'Insert row below',
+                    command: () => {
+                        this.addTableRow(this.selectedData.rowIndex + 1);
+                    },
+                },
+                {
+                    label: 'Insert column right',
+                    command: () => {
+                        this.addTableColumn(this.selectedData.colIndex + 1);
+                    },
+                },
+                {
+                    label: 'Insert column left',
+                    command: () => {
+                        this.addTableColumn(this.selectedData.colIndex);
+                    },
+                },
+            ],
         },
         {
-            label: 'Delete Last Column',
-            icon: 'pi pi-times',
-            command: () => {
-                this.removeTableColumn();
-            },
+            label: 'Delete',
+            icon: 'pi pi-fw pi-minus',
+            items: [
+                {
+                    label: 'Delete row',
+                    command: () => {
+                        this.removeTableRow(this.selectedData.rowIndex);
+                    },
+                },
+                {
+                    label: 'Delete column',
+                    command: () => {
+                        this.removeTableColumn(this.selectedData.colIndex);
+                    },
+                },
+            ],
         },
     ];
 
@@ -131,6 +151,7 @@ export class TableComponent extends BaseFieldComponent implements OnInit {
 
         const newRow = this.createRowElements(rows?.[0].item?.length || 1, false);
         rows.splice(addAtIndex || rows.length || 0, 0, { item: newRow });
+        console.log(this.selectedData);
     }
 
     private createRowElements(amount: number, isHeader: boolean) {
