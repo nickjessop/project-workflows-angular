@@ -6,6 +6,10 @@
     td {
         white-space: normal;
         vertical-align: text-top;
+        &:focus,
+        &:focus-within {
+            outline: none !important;
+        }
     }
     textarea {
         max-width: 100%;

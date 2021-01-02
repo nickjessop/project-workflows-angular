@@ -106,8 +106,14 @@ export class TableComponent extends BaseFieldComponent implements OnInit {
         }
 
         rows.forEach(col => {
+            console.log(removeAtIndex);
+
             if (col.item) {
-                col.item.splice(removeAtIndex || col.item.length - 1 || 0, 1);
+                if (removeAtIndex == 0) {
+                    col.item.shift();
+                } else {
+                    col.item.splice(removeAtIndex || col.item.length - 1 || 0, 1);
+                }
             }
         });
 
@@ -132,7 +138,11 @@ export class TableComponent extends BaseFieldComponent implements OnInit {
             if (col.item) {
                 const isHeader = col.item[0].isHeader;
                 const newElement = this.createRowElements(1, !!isHeader);
-                col.item.splice(addAtIndex || col.item.length || 0, 0, newElement[0]);
+                if (addAtIndex == 0) {
+                    col.item.unshift(newElement[0]);
+                } else {
+                    col.item.splice(addAtIndex || col.item.length || 0, 0, newElement[0]);
+                }
             }
         });
     }
