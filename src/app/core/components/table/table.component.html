@@ -1,11 +1,10 @@
-
 <app-base-field [field]="field" [index]="index">
     <ng-container *ngIf="componentMode === 'view'">
         <div class="table">
-            <p-table [resizableColumns]="true" [value]="tableValues.row" styleClass="p-datatable-gridlines">
+            <p-table [resizableColumns]="true" [value]="tableValues?.row" styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="header">
                     <tr>
-                        <ng-container *ngFor="let row of tableValues.row">
+                        <ng-container *ngFor="let row of tableValues?.row">
                             <ng-container *ngFor="let col of row.item">
                                 <th pResizableColumn *ngIf="col.isHeader">
                                     {{ col.text }}
@@ -29,10 +28,17 @@
     <ng-container *ngIf="componentMode === 'edit'">
         <p-contextMenu #cm [model]="menuItems" appendTo="body"></p-contextMenu>
         <div class="table" aria-haspopup="true">
-            <p-table #table [value]="tableValues.row" [(contextMenuSelection)]="selectedData" [contextMenu]="cm" [resizableColumns]="true" styleClass="p-datatable-gridlines">
+            <p-table
+                #table
+                [value]="tableValues?.row"
+                [(contextMenuSelection)]="selectedData"
+                [contextMenu]="cm"
+                [resizableColumns]="true"
+                styleClass="p-datatable-gridlines"
+            >
                 <ng-template pTemplate="header">
                     <tr pEditableRow>
-                        <ng-container *ngFor="let row of tableValues.row">
+                        <ng-container *ngFor="let row of tableValues?.row">
                             <ng-container *ngFor="let col of row.item">
                                 <th pEditableColumn pResizableColumn *ngIf="col.isHeader">
                                     <p-cellEditor>
@@ -51,7 +57,7 @@
                 <ng-template pTemplate="body" let-value let-r="rowIndex">
                     <tr>
                         <ng-container *ngFor="let col of value.item; let c = index">
-                            <td pEditableColumn *ngIf="!col.isHeader" [pContextMenuRow]="{rowIndex: r, colIndex: c}">
+                            <td pEditableColumn *ngIf="!col.isHeader" [pContextMenuRow]="{ rowIndex: r, colIndex: c }">
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
                                         <input pInputText type="text" [(ngModel)]="col.text" />

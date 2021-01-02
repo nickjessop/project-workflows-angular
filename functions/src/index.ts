@@ -7,8 +7,12 @@ admin.initializeApp();
 
 // // Start writing Firebase Functions
 // // https://firebase.google.com/docs/functions/typescript
-//
-export const helloWorld = functions.https.onRequest((request: any, response: any) => {
-    functions.logger.info('Hello logs!', { structuredData: true });
-    response.send('Hello from Firebase!');
+
+// export const helloWorldTest = functions.https.onRequest((request: any, response: any) => {
+//     response.set('Access-Control-Allow-Origin', '*');
+//     response.send('Hello from Firebase!');
+// });
+
+exports.helloWorldTest = functions.https.onCall((data: any, context: any) => {
+    return 'hello world';
 });
