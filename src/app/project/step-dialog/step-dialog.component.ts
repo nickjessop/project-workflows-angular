@@ -39,7 +39,7 @@ export class StepDialogComponent implements OnInit {
         return '';
     }
 
-    public onDialogSubmit() {
+    public onDialogSubmit($event: Event) {
         if (this.mode !== 'delete' && (!this.step.title || !this.step.description)) {
             return;
         }
@@ -47,7 +47,7 @@ export class StepDialogComponent implements OnInit {
         this.dialogSubmitEvent.emit({ step: this.step, mode: this.mode });
     }
 
-    public onHide() {
+    public onHide($event: Event) {
         this.onHideEvent.emit(true);
     }
 }

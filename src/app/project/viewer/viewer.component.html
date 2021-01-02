@@ -1,5 +1,8 @@
 <div class="viewer" #viewer>
-    <app-project-controls projectName="{{ project.name }}" projectDescription="{{ project.description }}"></app-project-controls>
+    <app-project-controls
+        [projectName]="project?.name"
+        [projectDescription]="project?.description"
+    ></app-project-controls>
     <div class="p-grid p-nogutter viewer-container">
         <div class="p-col-3 p-pt-5 p-pl-4">
             <project-steps (dragAndDropStepEvent)="onDragAndDropStepEvent($event)"></project-steps>
@@ -12,22 +15,40 @@
                             <div class="p-d-flex p-flex-column">
                                 <div class="p-d-flex">
                                     <h2 class="ms-3 p-my-0 p-pr-2">{{ currentStep.step.title }}</h2>
-                                    <ng-container *ngIf="currentStep.step.status != undefined" [ngSwitch]="currentStep.step.status.value">
-                                        <span *ngSwitchCase="'in-progress'" class="p-tag p-tag-rounded p-tag-warning ms-03">
-                                            <i class="pi {{ currentStep.step.status.icon }} p-pr-1"></i>{{ currentStep.step.status.label }}
+                                    <ng-container
+                                        *ngIf="currentStep.step.status != undefined"
+                                        [ngSwitch]="currentStep.step.status.value"
+                                    >
+                                        <span
+                                            *ngSwitchCase="'in-progress'"
+                                            class="p-tag p-tag-rounded p-tag-warning ms-03"
+                                        >
+                                            <i class="pi {{ currentStep.step.status.icon }} p-pr-1"></i
+                                            >{{ currentStep.step.status.label }}
                                         </span>
                                         <span *ngSwitchCase="'upcoming'" class="p-tag p-tag-rounded ms-03">
-                                            <i class="pi {{ currentStep.step.status.icon }} p-pr-1"></i>{{ currentStep.step.status.label }}
+                                            <i class="pi {{ currentStep.step.status.icon }} p-pr-1"></i
+                                            >{{ currentStep.step.status.label }}
                                         </span>
-                                        <span *ngSwitchCase="'completed'" class="p-tag p-tag-rounded p-tag-success ms-03">
-                                            <i class="pi {{ currentStep.step.status.icon }} p-pr-1"></i>{{ currentStep.step.status.label }}
+                                        <span
+                                            *ngSwitchCase="'completed'"
+                                            class="p-tag p-tag-rounded p-tag-success ms-03"
+                                        >
+                                            <i class="pi {{ currentStep.step.status.icon }} p-pr-1"></i
+                                            >{{ currentStep.step.status.label }}
                                         </span>
-                                        <span *ngSwitchCase="'needs-input'" class="p-tag p-tag-rounded p-tag-danger ms-03">
-                                            <i class="pi {{ currentStep.step.status.icon }} p-pr-1"></i> {{ currentStep.step.status.label }}
+                                        <span
+                                            *ngSwitchCase="'needs-input'"
+                                            class="p-tag p-tag-rounded p-tag-danger ms-03"
+                                        >
+                                            <i class="pi {{ currentStep.step.status.icon }} p-pr-1"></i>
+                                            {{ currentStep.step.status.label }}
                                         </span>
                                     </ng-container>
                                 </div>
-                                <span *ngIf="currentStep.step.description" class="p-pt-1">{{ currentStep.step.description }}</span>
+                                <span *ngIf="currentStep.step.description" class="p-pt-1">{{
+                                    currentStep.step.description
+                                }}</span>
                             </div>
                         </div>
                         <div class="p-col-6 p-d-flex p-jc-end p-ai-center">
@@ -36,11 +57,14 @@
                     </div>
                 </div>
                 <div class="p-px-2">
-                    <project-dynamic-form [fields]="currentStep.components" (dragAndDropEvent)="onDragAndDropEvent($event)"></project-dynamic-form>
+                    <project-dynamic-form
+                        [fields]="currentStep.components"
+                        (dragAndDropEvent)="onDragAndDropEvent($event)"
+                    ></project-dynamic-form>
                 </div>
             </div>
         </div>
-         <ng-template #showErrorState>
+        <ng-template #showErrorState>
             <div class="p-col-6 p-d-flex p-ai-center">
                 Failed to load current step
             </div>

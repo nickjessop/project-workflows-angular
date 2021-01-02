@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ConfirmationService } from 'primeng/api';
 import { Project } from '../models/interfaces/project';
+import { FirebaseService } from '../services/firebase/firebase.service';
 import { ProjectService } from '../services/project/project.service';
 
 @Component({
@@ -12,7 +13,11 @@ export class ProjectComponent implements OnInit {
     public isLoadingProjects = true;
     public projects: { id: string; description: string; name: string }[] = [];
 
-    constructor(private projectService: ProjectService, private confirmationService: ConfirmationService) {}
+    constructor(
+        private projectService: ProjectService,
+        private confirmationService: ConfirmationService,
+        private firebaseService: FirebaseService
+    ) {}
 
     ngOnInit() {
         this.getProjects();
@@ -20,6 +25,13 @@ export class ProjectComponent implements OnInit {
 
     public getProjects() {
         this.isLoadingProjects = true;
+
+        const helloTest = this.firebaseService.getFunctionsInstance().httpsCallable('helloWorld');
+
+        helloTest().then(res => {
+            const sanitizedMsg = res.data;
+            console.log(sanitizedMsg);
+        });
 
         this.projectService.getAllProjectIds().subscribe(
             projectDocument => {

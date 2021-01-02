@@ -6,6 +6,7 @@
         "start": "ng serve",
         "build": "ng build",
         "build-auth-prod": "ng build authentication --prod",
+        "build-stepflow-prod": "ng build stepflow --prod",
         "auth-app": "ng serve authentication",
         "test": "ng test",
         "lint": "ng lint",
