@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { AuthenticationService, User } from './services/authentication/authentication.service';
 
 @Injectable({
@@ -8,11 +8,18 @@ import { AuthenticationService, User } from './services/authentication/authentic
 })
 export class ProtectedGuard implements CanActivate {
     private user?: User;
+    private subscriptions: Subscription = new Subscription();
 
     constructor(private authenticationService: AuthenticationService, private router: Router) {
-        this.user = this.authenticationService.user;
+        this.subscriptions.add(
+            this.authenticationService.$user?.subscribe(user => {
+                this.user = user;
+            })
+        );
+    }
 
-        console.log(this.user);
+    ngOnDestroy() {
+        this.subscriptions.unsubscribe();
     }
 
     canActivate(
@@ -26,9 +33,6 @@ export class ProtectedGuard implements CanActivate {
 
     checkLogin(url: string): boolean {
         if (this.user && this.user.email && this.user.id) {
-            if (url.includes('auth')) {
-                this.router.navigate(['/dashboard']);
-            }
             return true;
         } else {
             this.router.navigate(['/auth/login']);
