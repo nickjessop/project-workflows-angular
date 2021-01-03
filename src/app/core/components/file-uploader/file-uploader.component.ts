@@ -2,6 +2,7 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { FileUpload } from 'primeng/fileupload';
 import { ProjectService } from 'src/app/services/project/project.service';
+import { StorageService } from 'src/app/services/storage/storage.service';
 import { FileUploader, Link } from '../../interfaces/core-component';
 import { BaseFieldComponent } from '../base-field/base-field.component';
 
@@ -26,7 +27,7 @@ export class FileUploaderComponent extends BaseFieldComponent implements OnInit 
 
     public showFileUploaderDialog = false;
 
-    constructor(public projectService: ProjectService) {
+    constructor(public projectService: ProjectService, private storageService: StorageService) {
         super(projectService);
     }
 
@@ -40,19 +41,22 @@ export class FileUploaderComponent extends BaseFieldComponent implements OnInit 
         this.dialogData.type = $event.currentFiles[0].type;
     }
 
-    private uploadFile(file: File) {
-        // const successful = this.uploadFile($event.currentFiles[0]);
-
-        // if (successful) {
-        // } else {
-        // }
-
-        return true;
-    }
-
     public onDialogSubmit($event: Event) {
-        this.dialogData = { href: '', title: '', description: '', altText: '' };
-        this.fileUploaderButton.clear();
-        this.showFileUploaderDialog = false;
+        const file = this.dialogData.file;
+
+        if (!file) {
+            return;
+        }
+
+        this.storageService.uploadFile(file).subscribe(
+            success => {
+                this.dialogData = { href: '', title: '', description: '', altText: '' };
+                this.fileUploaderButton.clear();
+                this.showFileUploaderDialog = false;
+            },
+            err => {
+                console.log(err);
+            }
+        );
     }
 }
