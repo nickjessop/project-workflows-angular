@@ -77,8 +77,10 @@ export class AuthenticationService {
     }
 
     public logout() {
-        from(this.firebaseService.getAuthInstance()!.signOut()).subscribe();
-        this.user = undefined;
-        localStorage.clear();
+        from(this.firebaseService.getAuthInstance()!.signOut()).subscribe(success => {
+            this.user = undefined;
+            localStorage.clear();
+            this.router.navigate(['/auth/login']);
+        });
     }
 }
