@@ -21,7 +21,10 @@
                     (click)="onStepPress(i)"
                 >
                     <div class="p-d-flex">
-                        <i *ngIf="stepConfig.step.status != undefined; else defaultIcon" class="pi {{ stepConfig.step.status.icon }} p-pr-2"></i>
+                        <i
+                            *ngIf="stepConfig.step.status != undefined; else defaultIcon"
+                            class="pi {{ stepConfig.step.status.icon }} p-pr-2"
+                        ></i>
                         <ng-template #defaultIcon><i class="pi pi-active p-pr-2"></i></ng-template>
                         <div class="ms-0">{{ stepConfig.step.title }}</div>
                     </div>
@@ -39,7 +42,7 @@
     </ng-container>
     <ng-template #showEmptyState>
         <div class="p-col-6 p-d-flex p-ai-center">
-            Looks like you haven't added any steps yet
+            Press the plus button to create your first step
         </div>
     </ng-template>
 </div>
