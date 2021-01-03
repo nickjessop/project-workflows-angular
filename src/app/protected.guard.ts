@@ -27,14 +27,14 @@ export class ProtectedGuard implements CanActivate {
     }
 
     checkLogin(url: string): boolean {
-        if (this.user) {
-            console.log(this.user);
-            return true;
-        } else {
-            // Navigate to the login page with extras
-            this.router.navigate(['/auth/login']);
+        return true;
+        // if (this.user) {
+        //     return true;
+        // } else {
+        //     // Navigate to the login page with extras
+        //     this.router.navigate(['/auth/login']);
 
-            return false;
-        }
+        //     return false;
+        // }
     }
 }

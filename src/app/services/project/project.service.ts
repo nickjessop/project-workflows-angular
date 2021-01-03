@@ -97,7 +97,7 @@ export class ProjectService {
     }
 
     public createBaseProject(
-        creatorId = this.authenticationService.user!.id,
+        creatorId = this.authenticationService.user?.id,
         projectName = '',
         description = '',
         configuration?: StepConfig[]
