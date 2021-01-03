@@ -26,12 +26,12 @@ export class ProjectComponent implements OnInit {
     public getProjects() {
         this.isLoadingProjects = true;
 
-        const helloTest = this.firebaseService.getFunctionsInstance().httpsCallable('helloWorld');
+        // const trick = this.firebaseService.getFunctionsInstance().httpsCallable('trickortreat');
 
-        helloTest().then(res => {
-            const sanitizedMsg = res.data;
-            console.log(sanitizedMsg);
-        });
+        // trick().then(res => {
+        //     const sanitizedMsg = res.data;
+        //     console.log(sanitizedMsg);
+        // });
 
         this.projectService.getAllProjectIds().subscribe(
             projectDocument => {
