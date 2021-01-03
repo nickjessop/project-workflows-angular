@@ -11,7 +11,7 @@ export class StorageService {
 
     public uploadFile(file: File) {
         const userId = this.authenticationService.user?.id;
-        const storageRef = this.firebaseService.getStorageInstance().ref(userId);
+        const storageRef = this.firebaseService.getStorageInstance().ref(`${userId}/${file.name}`);
 
         console.log(this.authenticationService.user);
 
@@ -19,11 +19,9 @@ export class StorageService {
     }
 
     public getDownloadUrl(filePath: string) {
-        return from(
-            this.firebaseService
-                .getStorageInstance()
-                .ref(filePath)
-                .getDownloadURL()
-        );
+        return this.firebaseService
+            .getStorageInstance()
+            .ref(filePath)
+            .getDownloadURL();
     }
 }

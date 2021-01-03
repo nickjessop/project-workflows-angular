@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { MessageService } from 'primeng/api';
 import { FileUpload } from 'primeng/fileupload';
 import { ProjectService } from 'src/app/services/project/project.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
@@ -27,7 +28,11 @@ export class FileUploaderComponent extends BaseFieldComponent implements OnInit 
 
     public showFileUploaderDialog = false;
 
-    constructor(public projectService: ProjectService, private storageService: StorageService) {
+    constructor(
+        public projectService: ProjectService,
+        private storageService: StorageService,
+        private messageService: MessageService
+    ) {
         super(projectService);
     }
 
@@ -50,13 +55,34 @@ export class FileUploaderComponent extends BaseFieldComponent implements OnInit 
 
         this.storageService.uploadFile(file).subscribe(
             success => {
-                this.dialogData = { href: '', title: '', description: '', altText: '' };
-                this.fileUploaderButton.clear();
-                this.showFileUploaderDialog = false;
+                const {size, name, fullPath} = success.metadata;
+
+                const downloadUrl = await this.storageService.getDownloadUrl(fullPath);
+                this.fileData.push({''})
+
+                href?: string | undefined;
+                title?: string | undefined;
+                description?: string | undefined;
+                thumbnail?: string | undefined;
+                altText?: string | undefined;
+                type?: string | undefined;
+                this.resetDialog();
             },
             err => {
-                console.log(err);
+                this.messageService.add({
+                    severity: 'error',
+                    key: 'global-toast',
+                    life: 3000,
+                    closable: true,
+                    detail: 'Failed to upload file',
+                });
             }
         );
+    }
+
+    private resetDialog() {
+        this.dialogData = { href: '', title: '', description: '', altText: '' };
+        this.fileUploaderButton.clear();
+        this.showFileUploaderDialog = false;
     }
 }
