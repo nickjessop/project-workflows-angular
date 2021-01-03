@@ -83,7 +83,9 @@ export class StepsComponent implements OnInit {
     }
 
     private onDeleteCurrentStep() {
-        this.openDialog('delete');
+        const currentStep = this.projectService.getCurrentStep();
+
+        this.openDialog('delete', currentStep);
     }
 
     public openDialog(stepMode: 'edit' | 'new' | 'delete', step?: Step) {
@@ -95,7 +97,8 @@ export class StepsComponent implements OnInit {
             this.focusStep = { description: '', title: '' };
             this.stepMode = 'new';
             this.showDialog = true;
-        } else if (stepMode == 'delete') {
+        } else if (stepMode == 'delete' && step) {
+            this.focusStep = _.cloneDeep(step);
             this.stepMode = 'delete';
             this.showDialog = true;
         }

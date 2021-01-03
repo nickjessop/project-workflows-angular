@@ -1,44 +1,58 @@
 <p-dialog
     [(visible)]="showDialog"
     (onHide)="onHide($event)"
-    [header]="step.title"
+    [header]="mode === 'delete' ? 'Delete step?' : step.title"
     styleClass="dialog"
     focusTrap="true"
     modal="true"
 >
-    <div class="p-field">
-        <label for="title" aria-describedby="Name your step" styleClass="labelBlock">Title</label>
-        <input id="title" type="text" pInputText [(ngModel)]="step.title" style="width: 100%" />
-    </div>
-    <div class="p-field p-pt-2">
-        <label for="description" aria-describedby="Add a description" styleClass="labelBlock">Description</label>
-        <input id="description" type="text" pInputText [(ngModel)]="step.description" style="width: 100%" />
-    </div>
-    <div class="p-field p-pt-2">
-        <label for="description" aria-describedby="Select the status" styleClass="labelBlock">Status</label>
-        <p-dropdown
-            [options]="statusOptions"
-            [(ngModel)]="step.status"
-            placeholder="No status"
-            optionLabel="label"
-            appendTo="body"
-            class="p-my-3"
-            showClear="true"
-        >
-            <ng-template pTemplate="selectedItem">
-                <div class="p-d-flex" *ngIf="step.status">
-                    <i class="pi {{ step.status.icon }} p-mr-2"></i>
-                    <span> {{ step.status.label }}</span>
-                </div>
-            </ng-template>
-            <ng-template let-status pTemplate="item">
-                <div class="p-d-flex">
-                    <i class="pi {{ status.icon }} p-mr-2"></i>
-                    <span> {{ status.label }}</span>
-                </div>
-            </ng-template>
-        </p-dropdown>
-    </div>
+    <ng-container *ngIf="mode === 'delete'; else showDefault">
+        <div class="p-field">
+            <label aria-describedby="Step Name" styleClass="labelBlock">Title: {{ step.title }}</label>
+        </div>
+        <div class="p-field p-pt-2">
+            <label aria-describedby="Add a description" styleClass="labelBlock"
+                >Description: {{ step.description }}</label
+            >
+        </div>
+    </ng-container>
+    <ng-template #showDefault>
+        <div class="p-field">
+            <label for="title" aria-describedby="Name your step" styleClass="labelBlock">Title</label>
+
+            <input id="title" type="text" pInputText [(ngModel)]="step.title" style="width: 100%" />
+        </div>
+        <div class="p-field p-pt-2">
+            <label for="description" aria-describedby="Add a description" styleClass="labelBlock">Description</label>
+            <input id="description" type="text" pInputText [(ngModel)]="step.description" style="width: 100%" />
+        </div>
+        <div class="p-field p-pt-2">
+            <label for="description" aria-describedby="Select the status" styleClass="labelBlock">Status</label>
+            <p-dropdown
+                [options]="statusOptions"
+                [(ngModel)]="step.status"
+                placeholder="No status"
+                optionLabel="label"
+                appendTo="body"
+                class="p-my-3"
+                showClear="true"
+            >
+                <ng-template pTemplate="selectedItem">
+                    <div class="p-d-flex" *ngIf="step.status">
+                        <i class="pi {{ step.status.icon }} p-mr-2"></i>
+                        <span> {{ step.status.label }}</span>
+                    </div>
+                </ng-template>
+                <ng-template let-status pTemplate="item">
+                    <div class="p-d-flex">
+                        <i class="pi {{ status.icon }} p-mr-2"></i>
+                        <span> {{ status.label }}</span>
+                    </div>
+                </ng-template>
+            </p-dropdown>
+        </div>
+    </ng-template>
+
     <p-footer>
         <button type="button" pButton [label]="getButtonLabel()" (click)="onDialogSubmit($event)"></button>
     </p-footer>

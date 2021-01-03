@@ -365,7 +365,7 @@ export class ProjectService {
                     });
 
                     if (!currentStepSet) {
-                        if (project.configuration?.[0].step) {
+                        if (project.configuration?.[0]?.step) {
                             project.configuration[0].step.isCurrentStep = true;
                         }
                     }
