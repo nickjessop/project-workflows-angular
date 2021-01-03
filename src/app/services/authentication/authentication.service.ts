@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
 import { BehaviorSubject, from } from 'rxjs';
 import { FirebaseService } from '../firebase/firebase.service';
 
@@ -18,7 +19,11 @@ export class AuthenticationService {
 
     public redirectUrl = '/dashboard';
 
-    constructor(private firebaseService: FirebaseService, private router: Router) {
+    constructor(
+        private firebaseService: FirebaseService,
+        private router: Router,
+        private messageService: MessageService
+    ) {
         const parsedUser = {
             id: localStorage.getItem('id') || undefined,
             email: localStorage.getItem('email') || undefined,
@@ -45,9 +50,6 @@ export class AuthenticationService {
     public login(email: string, password: string) {
         from(this.firebaseService.getAuthInstance()!.signInWithEmailAndPassword(email, password)).subscribe(
             firebaseUser => {
-                if (!firebaseUser) {
-                    return;
-                }
                 const { user } = firebaseUser;
                 const parsedUser = {
                     id: user!.uid,
@@ -61,6 +63,15 @@ export class AuthenticationService {
                 localStorage.setItem('emailVerified', parsedUser.emailVerified + '');
 
                 this.router.navigate([this.redirectUrl]);
+            },
+            err => {
+                this.messageService.add({
+                    severity: 'error',
+                    key: 'global-toast',
+                    life: 5000,
+                    closable: true,
+                    detail: 'Invalid email or password.',
+                });
             }
         );
     }

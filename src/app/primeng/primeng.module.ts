@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AccordionModule } from 'primeng/accordion';
-import { ConfirmationService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -79,6 +79,6 @@ import { ToolbarModule } from 'primeng/toolbar';
         CheckboxModule,
         ContextMenuModule,
     ],
-    providers: [ConfirmationService],
+    providers: [ConfirmationService, MessageService],
 })
 export class PrimengModule {}

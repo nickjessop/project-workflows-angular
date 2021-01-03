@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FirebaseService } from '../services/firebase/firebase.service';
+import { AuthenticationService } from '../services/authentication/authentication.service';
 
 @Component({
     selector: 'app-authentication',
@@ -7,7 +7,21 @@ import { FirebaseService } from '../services/firebase/firebase.service';
     styleUrls: ['./authentication.component.scss'],
 })
 export class AuthenticationComponent implements OnInit {
-    constructor(private firebaseService: FirebaseService) {}
+    public authMode: 'register' | 'login' = 'login';
+    public authInfo = { email: '', password: '' };
+
+    constructor(private authService: AuthenticationService) {}
 
     ngOnInit(): void {}
+
+    public login() {
+        const email = this.authInfo.email;
+        const password = this.authInfo.password;
+
+        if (!email || !password) {
+            return;
+        }
+
+        this.authService.login(email, password);
+    }
 }

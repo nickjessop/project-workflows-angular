@@ -28,10 +28,9 @@ export class ProtectedGuard implements CanActivate {
 
     checkLogin(url: string): boolean {
         return true;
-        // if (this.user) {
+        // if (this.user && this.user.email && this.user.id) {
         //     return true;
         // } else {
-        //     // Navigate to the login page with extras
         //     this.router.navigate(['/auth/login']);
 
         //     return false;
