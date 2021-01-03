@@ -1,0 +1,36 @@
+<p-card *ngIf="authMode === 'register'"></p-card>
+<p-card *ngIf="authMode === 'login'" [style]="{ maxWidth: '480px', margin: 'auto' }" header="Login" subheader="">
+    <div class="p-d-flex p-flex-column p-card-content">
+        <!-- <div class="p-field p-col-12">
+            <span class="p-float-label">
+                <input id="username" type="text" pInputText style="width: 100%;" />
+                <label for="username">Username</label>
+            </span>
+        </div> -->
+        <div class="p-field p-col-12">
+            <span class="p-float-label">
+                <div class="p-float-label">
+                    <input id="email" type="email" pInputText style="width: 100%;" [(ngModel)]="authInfo.email" />
+                    <label for="email">Email</label>
+                </div>
+            </span>
+        </div>
+        <div class="p-field p-col-12">
+            <span class="p-float-label">
+                <div class="p-float-label">
+                    <input
+                        id="password"
+                        type="password"
+                        pInputText
+                        style="width: 100%;"
+                        [(ngModel)]="authInfo.password"
+                    />
+                    <label for="password">Password</label>
+                </div>
+            </span>
+        </div>
+        <div class="p-field p-col-12">
+            <button pButton type="button" label="Login" (click)="login()"></button>
+        </div>
+    </div>
+</p-card>

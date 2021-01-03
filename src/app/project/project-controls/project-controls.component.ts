@@ -13,7 +13,6 @@ interface Permission {
     selector: 'app-project-controls',
     templateUrl: './project-controls.component.html',
     styleUrls: ['./project-controls.component.scss'],
-    providers: [MessageService],
 })
 export class ProjectControlsComponent implements OnInit {
     @Input() projectName = '';
@@ -79,7 +78,7 @@ export class ProjectControlsComponent implements OnInit {
         document.execCommand('copy');
         linkInput.setSelectionRange(0, 0);
         this.messageService.add({
-            key: 'linkCopied',
+            key: 'global-toast',
             severity: 'success',
             detail: 'Link copied',
         });
