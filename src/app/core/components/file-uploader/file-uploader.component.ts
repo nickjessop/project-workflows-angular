@@ -57,7 +57,7 @@ export class FileUploaderComponent extends BaseFieldComponent implements OnInit 
             success => {
                 const { size, name, fullPath } = success.metadata;
 
-                const downloadUrl = await this.storageService.getDownloadUrl(fullPath);
+                // const downloadUrl = await this.storageService.getDownloadUrl(fullPath);
                 // this.fileData.push({''})
 
                 // href?: string | undefined;
