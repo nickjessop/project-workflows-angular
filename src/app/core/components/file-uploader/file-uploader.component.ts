@@ -55,17 +55,17 @@ export class FileUploaderComponent extends BaseFieldComponent implements OnInit 
 
         this.storageService.uploadFile(file).subscribe(
             success => {
-                const {size, name, fullPath} = success.metadata;
+                const { size, name, fullPath } = success.metadata;
 
                 const downloadUrl = await this.storageService.getDownloadUrl(fullPath);
-                this.fileData.push({''})
+                // this.fileData.push({''})
 
-                href?: string | undefined;
-                title?: string | undefined;
-                description?: string | undefined;
-                thumbnail?: string | undefined;
-                altText?: string | undefined;
-                type?: string | undefined;
+                // href?: string | undefined;
+                // title?: string | undefined;
+                // description?: string | undefined;
+                // thumbnail?: string | undefined;
+                // altText?: string | undefined;
+                // type?: string | undefined;
                 this.resetDialog();
             },
             err => {
