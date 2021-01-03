@@ -7,14 +7,12 @@ import { AuthenticationService, User } from './services/authentication/authentic
     providedIn: 'root',
 })
 export class ProtectedGuard implements CanActivate {
-    private user: User | null = null;
+    private user?: User;
 
     constructor(private authenticationService: AuthenticationService, private router: Router) {
-        this.authenticationService.$user?.subscribe(user => {
-            if (user) {
-                this.user = user;
-            }
-        });
+        this.user = this.authenticationService.user;
+
+        console.log(this.user);
     }
 
     canActivate(
@@ -27,13 +25,15 @@ export class ProtectedGuard implements CanActivate {
     }
 
     checkLogin(url: string): boolean {
-        return true;
-        // if (this.user && this.user.email && this.user.id) {
-        //     return true;
-        // } else {
-        //     this.router.navigate(['/auth/login']);
+        if (this.user && this.user.email && this.user.id) {
+            if (url.includes('auth')) {
+                this.router.navigate(['/dashboard']);
+            }
+            return true;
+        } else {
+            this.router.navigate(['/auth/login']);
 
-        //     return false;
-        // }
+            return false;
+        }
     }
 }
