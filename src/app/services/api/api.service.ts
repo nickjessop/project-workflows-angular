@@ -9,6 +9,4 @@ export class ApiService {
     private url = '';
 
     constructor(private firebaseService: FirebaseService, private http: HttpClient) {}
-
-    public callHelloWorld() {}
 }

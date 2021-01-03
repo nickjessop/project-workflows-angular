@@ -12,12 +12,12 @@ const guardedRoutes: Routes = [
     {
         path: 'dashboard/playground',
         component: ComponentPlaygroundComponent,
-        // canActivate: [ProtectedGuard],
+        canActivate: [ProtectedGuard],
     },
     {
         path: 'dashboard',
         component: DashboardComponent,
-        // canActivate: [ProtectedGuard],
+        canActivate: [ProtectedGuard],
     },
     {
         path: 'project',

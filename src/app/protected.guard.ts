@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AuthenticationService, User } from './services/authentication/authentication.service';
 
@@ -10,8 +10,10 @@ export class ProtectedGuard implements CanActivate {
     private user: User | null = null;
 
     constructor(private authenticationService: AuthenticationService, private router: Router) {
-        this.authenticationService.$user.subscribe(user => {
-            this.user = user;
+        this.authenticationService.$user?.subscribe(user => {
+            if (user) {
+                this.user = user;
+            }
         });
     }
 
@@ -26,6 +28,7 @@ export class ProtectedGuard implements CanActivate {
 
     checkLogin(url: string): boolean {
         if (this.user) {
+            console.log(this.user);
             return true;
         } else {
             // Navigate to the login page with extras

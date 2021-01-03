@@ -97,7 +97,7 @@ export class ProjectService {
     }
 
     public createBaseProject(
-        creatorId: string = this.authenticationService.user!.id,
+        creatorId = this.authenticationService.user!.id,
         projectName = '',
         description = '',
         configuration?: StepConfig[]
@@ -118,7 +118,7 @@ export class ProjectService {
         const baseProject: Project = {
             name: projectName,
             description,
-            ownerIds: [creatorId],
+            ownerIds: [creatorId || ''],
             configuration: config,
         };
 

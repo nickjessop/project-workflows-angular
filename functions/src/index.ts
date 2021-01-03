@@ -13,6 +13,6 @@ admin.initializeApp();
 //     response.send('Hello from Firebase!');
 // });
 
-exports.helloWorldTest = functions.https.onCall((data: any, context: any) => {
-    return 'hello world';
+exports.trickortreat = functions.https.onCall((data: any, context: any) => {
+    return 'hello world trick';
 });
