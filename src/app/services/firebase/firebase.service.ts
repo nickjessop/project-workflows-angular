@@ -7,6 +7,7 @@ import 'firebase/analytics';
 import 'firebase/auth';
 import 'firebase/firestore';
 import 'firebase/functions';
+import 'firebase/storage';
 
 @Injectable({
     providedIn: 'root',
@@ -37,12 +38,15 @@ export class FirebaseService {
     private readonly db: firebase.firestore.Firestore;
     private readonly auth: firebase.auth.Auth;
     private readonly functions: firebase.functions.Functions;
+    private readonly storage: firebase.storage.Storage;
 
     constructor() {
         firebase.initializeApp(this.stepflowAppFirebaseConfig);
+
         this.db = firebase.firestore();
         this.auth = firebase.auth();
         this.functions = firebase.functions();
+        this.storage = firebase.storage();
     }
 
     public getDbInstance() {
@@ -54,5 +58,9 @@ export class FirebaseService {
     }
     public getFunctionsInstance() {
         return this.functions;
+    }
+
+    public getStorageInstance() {
+        return this.storage;
     }
 }
