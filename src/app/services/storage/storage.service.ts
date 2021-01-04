@@ -19,9 +19,11 @@ export class StorageService {
     }
 
     public getDownloadUrl(filePath: string) {
-        return this.firebaseService
-            .getStorageInstance()
-            .ref(filePath)
-            .getDownloadURL();
+        return from(
+            this.firebaseService
+                .getStorageInstance()
+                .ref(filePath)
+                .getDownloadURL()
+        );
     }
 }

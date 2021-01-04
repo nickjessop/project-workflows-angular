@@ -2,6 +2,7 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { FileUpload } from 'primeng/fileupload';
+import { map, switchMap } from 'rxjs/operators';
 import { ProjectService } from 'src/app/services/project/project.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
 import { FileUploader, Link } from '../../interfaces/core-component';
@@ -38,6 +39,7 @@ export class FileUploaderComponent extends BaseFieldComponent implements OnInit 
 
     ngOnInit() {
         this.fileData = (this.field.metadata as FileUploader).data.value;
+        console.log(this.fileData);
     }
 
     public onFileUploadSelected($event: { originalEvent: Event; files: FileList; currentFiles: File[] }) {
@@ -53,33 +55,36 @@ export class FileUploaderComponent extends BaseFieldComponent implements OnInit 
             return;
         }
 
-        this.storageService.uploadFile(file).subscribe(
-            success => {
-                const { size, name, fullPath } = success.metadata;
+        this.storageService
+            .uploadFile(file)
+            .pipe(
+                switchMap(file => {
+                    return this.storageService.getDownloadUrl(file.metadata.fullPath).pipe(
+                        map(downloadUrl => {
+                            return { fileMetadata: file.metadata, downloadUrl: downloadUrl as string };
+                        })
+                    );
+                })
+            )
+            .subscribe(
+                filedata => {
+                    const { name, size } = filedata.fileMetadata;
+                    const downloadUrl = filedata.downloadUrl;
+                    this.fileData.push({ href: downloadUrl, title: name });
 
-                // const downloadUrl = await this.storageService.getDownloadUrl(fullPath);
-                // this.fileData.push({''})
-
-                // href?: string | undefined;
-                // title?: string | undefined;
-                // description?: string | undefined;
-                // thumbnail?: string | undefined;
-                // altText?: string | undefined;
-                // type?: string | undefined;
-                this.resetDialog();
-            },
-            err => {
-                this.messageService.add({
-                    severity: 'error',
-                    key: 'global-toast',
-                    life: 3000,
-                    closable: true,
-                    detail: 'Failed to upload file',
-                });
-            }
-        );
+                    this.resetDialog();
+                },
+                err => {
+                    this.messageService.add({
+                        severity: 'error',
+                        key: 'global-toast',
+                        life: 3000,
+                        closable: true,
+                        detail: 'Failed to upload file',
+                    });
+                }
+            );
     }
-
     private resetDialog() {
         this.dialogData = { href: '', title: '', description: '', altText: '' };
         this.fileUploaderButton.clear();
