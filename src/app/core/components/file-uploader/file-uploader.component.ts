@@ -39,7 +39,6 @@ export class FileUploaderComponent extends BaseFieldComponent implements OnInit 
 
     ngOnInit() {
         this.fileData = (this.field.metadata as FileUploader).data.value;
-        console.log(this.fileData);
     }
 
     public onFileUploadSelected($event: { originalEvent: Event; files: FileList; currentFiles: File[] }) {
