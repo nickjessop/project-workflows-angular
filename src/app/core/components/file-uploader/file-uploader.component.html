@@ -67,10 +67,6 @@
             <label for="description" aria-describedby="Add a description" styleClass="labelBlock">Description</label>
             <input id="description" type="text" pInputText [(ngModel)]="dialogData.description" style="width: 100%" />
         </div>
-        <div class="p-field p-pt-2">
-            <label for="altText" aria-describedby="Add a alternate text" styleClass="labelBlock">Alt Text</label>
-            <input id="altText" type="text" pInputText [(ngModel)]="dialogData.altText" style="width: 100%" />
-        </div>
 
         <button type="button" label="Submit" pButton (click)="onDialogSubmit($event)"></button>
     </p-dialog>

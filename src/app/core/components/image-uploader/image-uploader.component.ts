@@ -1,6 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { MessageService } from 'primeng/api';
+import { map, switchMap } from 'rxjs/operators';
 import { ProjectService } from 'src/app/services/project/project.service';
+import { StorageService } from 'src/app/services/storage/storage.service';
 import { ImageUploader, Link } from '../../interfaces/core-component';
 import { BaseFieldComponent } from '../base-field/base-field.component';
 
@@ -29,9 +32,13 @@ export class ImageUploaderComponent extends BaseFieldComponent implements OnInit
     public activeIndex = 0;
     public displayLightbox = false;
 
-    public imageData: Link[] = [{ href: '', title: '', description: '', altText: '', thumbnail: '' }];
+    public imageData: Link[] = [{ href: '', title: '', description: '', thumbnail: '' }];
 
-    constructor(public projectService: ProjectService) {
+    constructor(
+        public projectService: ProjectService,
+        private storageService: StorageService,
+        private messageService: MessageService
+    ) {
         super(projectService);
     }
 
@@ -47,16 +54,36 @@ export class ImageUploaderComponent extends BaseFieldComponent implements OnInit
     public onFileUploadSelected($event: { originalEvent: Event; files: FileList; currentFiles: File[] }) {
         // Some sort of validation here
 
-        const successful = this.uploadFile($event.currentFiles[0]);
-
-        if (successful) {
-        } else {
-        }
+        this.uploadFile($event.currentFiles[0]);
     }
 
     private uploadFile(file: File) {
-        console.log(`Uploading file ${file.name}`);
-
-        return true;
+        this.storageService
+            .uploadFile(file)
+            .pipe(
+                switchMap(file => {
+                    return this.storageService.getDownloadUrl(file.metadata.fullPath).pipe(
+                        map(downloadUrl => {
+                            return { fileMetadata: file.metadata, downloadUrl: downloadUrl as string };
+                        })
+                    );
+                })
+            )
+            .subscribe(
+                filedata => {
+                    const { name, size } = filedata.fileMetadata;
+                    const downloadUrl = filedata.downloadUrl;
+                    this.imageData.push({ href: downloadUrl, thumbnail: downloadUrl, title: name, size });
+                },
+                err => {
+                    this.messageService.add({
+                        severity: 'error',
+                        key: 'global-toast',
+                        life: 3000,
+                        closable: true,
+                        detail: 'Failed to upload image',
+                    });
+                }
+            );
     }
 }
