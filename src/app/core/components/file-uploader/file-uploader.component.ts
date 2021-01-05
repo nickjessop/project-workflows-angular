@@ -24,8 +24,8 @@ export class FileUploaderComponent extends BaseFieldComponent implements OnInit 
         { field: 'href', header: 'Download', size: '10' },
     ];
 
-    public fileData: Link[] = [{ href: '', title: '', description: '', altText: '', thumbnail: '' }];
-    public dialogData: Link & { file?: File } = { href: '', title: '', description: '', altText: '' };
+    public fileData: Link[] = [{ href: '', title: '', description: '', thumbnail: '' }];
+    public dialogData: Link & { file?: File } = { href: '', title: '', description: '' };
 
     public showFileUploaderDialog = false;
 
@@ -69,7 +69,7 @@ export class FileUploaderComponent extends BaseFieldComponent implements OnInit 
                 filedata => {
                     const { name, size } = filedata.fileMetadata;
                     const downloadUrl = filedata.downloadUrl;
-                    this.fileData.push({ href: downloadUrl, title: name });
+                    this.fileData.push({ href: downloadUrl, title: name, size });
 
                     this.resetDialog();
                 },
@@ -85,7 +85,7 @@ export class FileUploaderComponent extends BaseFieldComponent implements OnInit 
             );
     }
     private resetDialog() {
-        this.dialogData = { href: '', title: '', description: '', altText: '' };
+        this.dialogData = { href: '', title: '', description: '' };
         this.fileUploaderButton.clear();
         this.showFileUploaderDialog = false;
     }
