@@ -29,25 +29,25 @@
                 <h2 class="p-mb-1">Create your account</h2>
                 <div class="p-field">
                     <label for="name">Name</label>
-                    <input id="name" type="name" style="width: 100%;" aria-describedby="Enter your name" pInputText />
+                    <input id="name" type="name" style="width: 100%;" aria-describedby="Enter your name" pInputText [(ngModel)]="authInfo.name"/>
                 </div>
                 <div class="p-field">
                     <label for="email">Email</label>
                     <input id="email" type="email" style="width: 100%;" aria-describedby="Enter your email" pInputText
-                        value="{{email}}" />
+                        value="{{email}}" [(ngModel)]="authInfo.email" />
                 </div>
                 <div class="p-field">
                     <label for="password">Password</label>
                     <input id="password" type="password" style="width: 100%;" aria-describedby="Enter a secure password"
-                        pInputText />
+                        pInputText [(ngModel)]="authInfo.password" />
                 </div>
                 <div class="p-field">
                     <label for="cpassword">Confirm password</label>
-                    <input id="cpassword" type="cpassword" style="width: 100%;"
-                        aria-describedby="Confirm password previously entered" pInputText />
+                    <input id="cpassword" type="password" style="width: 100%;"
+                        aria-describedby="Confirm password previously entered" [(ngModel)]="authInfo.password2" pInputText />
                 </div>
                 <div class="p-field">
-                    <input type="hidden" name="plan" value="{{plan}}" />
+                    <input type="hidden" name="plan" value="{{plan}}" [(ngModel)]="authInfo.plan" />
                     <button pButton type="button" label="Sign up" (click)="register()"></button>
                     <p>By clicking "Sign up" you agree to Stepflow's <a
                             href="https://stepflow.co/terms-of-service">Terms of Service</a> and <a

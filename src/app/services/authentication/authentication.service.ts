@@ -47,7 +47,7 @@ export class AuthenticationService {
 
     // TODO: subscribe to user modification event, and set this as the user here as well as local storage
 
-    public register(email: string, password: string, password2: string) {
+    public register(email: string, password: string, password2: string, name: string, plan: string) {
         if (password !== password2) {
             this.messageService.add({
                 severity: 'error',
@@ -69,12 +69,33 @@ export class AuthenticationService {
                     emailVerified: user!.emailVerified,
                 };
                 this.user = parsedUser;
-
                 localStorage.setItem('id', parsedUser.id);
                 localStorage.setItem('email', parsedUser.email || '');
                 localStorage.setItem('emailVerified', parsedUser.emailVerified + '');
 
-                this.router.navigate([this.redirectUrl]);
+                const currentUser = this.firebaseService.getAuthInstance().currentUser;
+
+                if (currentUser) {
+                    currentUser
+                        .updateProfile({
+                            displayName: name,
+                        })
+                        .then(
+                            () => {
+                                this.firebaseService
+                                    .getDbInstance()
+                                    .collection('users')
+                                    .add({
+                                        uid: currentUser.uid,
+                                        plan: plan,
+                                    });
+                                this.router.navigate([this.redirectUrl]);
+                            },
+                            function(error: any) {
+                                console.log(error);
+                            }
+                        );
+                }
             },
             err => {
                 this.messageService.add({

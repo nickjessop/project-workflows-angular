@@ -9,7 +9,7 @@ import { AuthenticationService } from '../services/authentication/authentication
 export class AuthenticationComponent implements OnInit {
     // public authMode: 'register' | 'login' = 'login';
     public authMode: 'register' | 'login' = 'register';
-    public authInfo = { email: '', password: '' };
+    public authInfo = { email: '', password: '', password2: '', name: '', plan: '' };
 
     public email: string | null = '';
     public plan: string | null = 'Essential';
@@ -22,14 +22,26 @@ export class AuthenticationComponent implements OnInit {
         if (queryString) {
             const urlParams = new URLSearchParams(queryString);
             this.email = urlParams.get('email');
+            if (this.email) {
+                this.authInfo.email = this.email;
+            }
             this.plan = urlParams.get('plan');
+            if (this.plan) {
+                this.authInfo.plan = this.plan;
+            } else {
+                this.authInfo.plan = 'Essential';
+            }
             this.planPrice = urlParams.get('planPrice');
         }
     }
 
     public register() {
-        // this.authService.register()
-        console.log('sign up');
+        const email = this.authInfo.email;
+        const password = this.authInfo.password;
+        const password2 = this.authInfo.password2;
+        const name = this.authInfo.name;
+        const plan = this.authInfo.plan;
+        this.authService.register(email, password, password2, name, plan);
     }
 
     public login() {
