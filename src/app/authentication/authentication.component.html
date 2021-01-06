@@ -1,4 +1,75 @@
-<p-card *ngIf="authMode === 'register'"></p-card>
+<div class=" p-col-12 p-mt-2">
+    <div class="container p-d-flex p-ai-center p-jc-between">
+        <a href="https://stepflow.co" alt="Stepflow logo">
+            <img src="/assets/stepflow-logo.svg" alt="Stepflow logo" height="26px" />
+        </a>
+        <a href="/auth/login" alt="Stepflow logo">
+            <button pButton type="button" class="p-button-secondary" label="Login" routerLink="login"></button>
+        </a>
+    </div>
+</div>
+<div class="p-col-12 p-mt-2 info">
+    <div class="container p-p-4">
+        <h4><i class="pi pi-info-circle"></i> Early access</h4>
+        <p>We’re currently in the process of testing the first version of our application with select users.
+            When you sign up you will be added to a waitlist and notified when you can access Stepflow as we
+            gradually allow more users in.
+        </p>
+        <p>By creating your account you will be one of the first to access all Stepflow has to offer. After the
+            early access period
+            you will be automatically switched to a 14 day trial for your selected plan. We are
+            excited to have you around and we hope you enjoy this first glimpse at our app!
+        </p>
+    </div>
+</div>
+<div class="container p-pb-4" *ngIf="authMode === 'register'">
+    <div class="p-d-flex p-px-4 p-mt-4">
+        <div class="p-col-7">
+            <div class="p-pr-4">
+                <h2 class="p-mb-1">Create your account</h2>
+                <div class="p-field">
+                    <label for="name">Name</label>
+                    <input id="name" type="name" style="width: 100%;" aria-describedby="Enter your name" pInputText />
+                </div>
+                <div class="p-field">
+                    <label for="email">Email</label>
+                    <input id="email" type="email" style="width: 100%;" aria-describedby="Enter your email" pInputText
+                        value="{{email}}" />
+                </div>
+                <div class="p-field">
+                    <label for="password">Password</label>
+                    <input id="password" type="password" style="width: 100%;" aria-describedby="Enter a secure password"
+                        pInputText />
+                </div>
+                <div class="p-field">
+                    <label for="cpassword">Confirm password</label>
+                    <input id="cpassword" type="cpassword" style="width: 100%;"
+                        aria-describedby="Confirm password previously entered" pInputText />
+                </div>
+                <div class="p-field">
+                    <input type="hidden" name="plan" value="{{plan}}" />
+                    <button pButton type="button" label="Sign up" (click)="register()"></button>
+                    <p>By clicking "Sign up" you agree to Stepflow's <a
+                            href="https://stepflow.co/terms-of-service">Terms of Service</a> and <a
+                            href="https://stepflow.co/privacy-policy">Privacy Policy</a>.</p>
+                </div>
+            </div>
+
+        </div>
+        <div class="p-col-5">
+            <p-card header="{{plan}} plan" subheader="{{planPrice}}/mo" class="price">
+                + Early access<br />
+                + 14 day trial<br />
+                <hr />
+                Total after early access & trial: {{planPrice}}/mo<br />
+                <strong>Due today: $0/mo</strong>
+            </p-card>
+            <div class="p-mt-2">
+                <a href="https://stepflow.co/plans-and-pricing">Switch plans</a>
+            </div>
+        </div>
+    </div>
+</div>
 <p-card *ngIf="authMode === 'login'" [style]="{ maxWidth: '480px', margin: 'auto' }" header="Login" subheader="">
     <div class="p-d-flex p-flex-column p-card-content">
         <!-- <div class="p-field p-col-12">
@@ -18,13 +89,8 @@
         <div class="p-field p-col-12">
             <span class="p-float-label">
                 <div class="p-float-label">
-                    <input
-                        id="password"
-                        type="password"
-                        pInputText
-                        style="width: 100%;"
-                        [(ngModel)]="authInfo.password"
-                    />
+                    <input id="password" type="password" pInputText style="width: 100%;"
+                        [(ngModel)]="authInfo.password" />
                     <label for="password">Password</label>
                 </div>
             </span>
