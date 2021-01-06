@@ -37,7 +37,7 @@
         "prettier": "^1.19.1",
         "primeflex": "~2.0.0",
         "primeicons": "git://github.com:stepflowapp/primeicons.git#0a0b7a2",
-        "primeng": "^10.0.3",
+        "primeng": "^11.0.0",
         "rxjs": "~6.6.2",
         "tslib": "^1.9.0",
         "zone.js": "~0.10.3"
