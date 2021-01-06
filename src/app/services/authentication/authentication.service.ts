@@ -47,6 +47,47 @@ export class AuthenticationService {
 
     // TODO: subscribe to user modification event, and set this as the user here as well as local storage
 
+    public register(email: string, password: string, password2: string) {
+        if (password !== password2) {
+            this.messageService.add({
+                severity: 'error',
+                key: 'global-toast',
+                life: 2000,
+                closable: true,
+                detail: 'Passwords do not match',
+            });
+
+            return;
+        }
+
+        from(this.firebaseService.getAuthInstance().createUserWithEmailAndPassword(email, password)).subscribe(
+            firebaseUser => {
+                const { user } = firebaseUser;
+                const parsedUser = {
+                    id: user!.uid,
+                    email: user!.email || undefined,
+                    emailVerified: user!.emailVerified,
+                };
+                this.user = parsedUser;
+
+                localStorage.setItem('id', parsedUser.id);
+                localStorage.setItem('email', parsedUser.email || '');
+                localStorage.setItem('emailVerified', parsedUser.emailVerified + '');
+
+                this.router.navigate([this.redirectUrl]);
+            },
+            err => {
+                this.messageService.add({
+                    severity: 'error',
+                    key: 'global-toast',
+                    life: 5000,
+                    closable: true,
+                    detail: `${err}`,
+                });
+            }
+        );
+    }
+
     public login(email: string, password: string) {
         from(this.firebaseService.getAuthInstance()!.signInWithEmailAndPassword(email, password)).subscribe(
             firebaseUser => {
