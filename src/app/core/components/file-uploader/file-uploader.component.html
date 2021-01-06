@@ -2,37 +2,35 @@
     <ng-container *ngIf="componentMode === 'view'"> </ng-container>
     <ng-container *ngIf="componentMode === 'edit'">
         <p-table
-            [columns]="cols"
-            [value]="fileData"
             [scrollable]="true"
             [rows]="20"
+            [value]="fileData"
             scrollHeight="250px"
             [virtualScroll]="true"
             [virtualRowHeight]="34"
             styleClass="p-datatable-striped"
         >
-            <ng-template pTemplate="header" let-columns>
+            <ng-template pTemplate="header">
                 <tr>
-                    <ng-container *ngFor="let col of columns">
+                    <ng-container *ngFor="let col of cols">
                         <th [ngStyle]="{ width: col.size + '%' }">{{ col.header }}</th>
                     </ng-container>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-rowData let-columns="columns">
-                <tr style="height:34px">
-                    <ng-container *ngFor="let col of columns; last as isLast">
-                        <td [ngStyle]="{ width: col.size + '%' }" *ngIf="isLast; else elseBlock">
-                            <a href="{{ rowData[col.field] }}"
+            <ng-template pTemplate="body" let-rowData>
+                <ng-container>
+                    <tr style="height:34px">
+                        <td style="width: 40%;">{{ rowData.title }}</td>
+                        <td style="width: 40%;">{{ rowData.description }}</td>
+                        <td style="width: 10%;">{{ rowData.type }}</td>
+
+                        <td style="width: 10%;">
+                            <a [href]="rowData.href"
                                 ><button pButton type="button" icon="pi pi-download" iconPos="left"></button
                             ></a>
                         </td>
-                        <ng-template #elseBlock>
-                            <td [ngStyle]="{ width: col.size + '%' }">
-                                {{ rowData[col.field] ? rowData[col.field] : 'Unknown' }}
-                            </td>
-                        </ng-template>
-                    </ng-container>
-                </tr>
+                    </tr>
+                </ng-container>
             </ng-template>
         </p-table>
         <p-toolbar>
@@ -68,10 +66,6 @@
         <div class="p-field p-pt-2">
             <label for="description" aria-describedby="Add a description" styleClass="labelBlock">Description</label>
             <input id="description" type="text" pInputText [(ngModel)]="dialogData.description" style="width: 100%" />
-        </div>
-        <div class="p-field p-pt-2">
-            <label for="altText" aria-describedby="Add a alternate text" styleClass="labelBlock">Alt Text</label>
-            <input id="altText" type="text" pInputText [(ngModel)]="dialogData.altText" style="width: 100%" />
         </div>
 
         <button type="button" label="Submit" pButton (click)="onDialogSubmit($event)"></button>
