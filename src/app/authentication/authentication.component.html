@@ -1,4 +1,4 @@
-<ng-container *ngIf="authMode === 'register'">
+<ng-container *ngIf="href.includes('/auth/register')">
     <div class=" p-col-12 p-mt-2">
         <div class="container p-d-flex p-ai-center p-jc-between">
             <a href="https://stepflow.co" alt="Stepflow logo">
@@ -100,7 +100,7 @@
         </div>
     </div>
 </ng-container>
-<ng-container *ngIf="authMode === 'login'">
+<ng-container *ngIf="href.includes('/auth/login')">
     <div class="p-d-flex p-flex-column p-ai-center p-jc-center login">
         <p-card
             [style]="{ maxWidth: '480px', margin: 'auto auto 6rem auto', minWidth: '320px' }"
