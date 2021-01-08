@@ -57,6 +57,26 @@ export class ImageUploaderComponent extends BaseFieldComponent implements OnInit
         this.uploadFile($event.currentFiles[0]);
     }
 
+    public onDeleteImagePress(index: number) {
+        const filePath = this.imageData?.[index]?.filePath;
+
+        if (filePath) {
+            this.storageService.deleteFile(filePath).subscribe(
+                () => {
+                    // Successfully removed file
+                    this.imageData.splice(index, 1);
+                    this.projectService.syncProject();
+                },
+                error => {
+                    console.log(error);
+                }
+            );
+        } else {
+            this.imageData.splice(index, 1);
+            this.projectService.syncProject();
+        }
+    }
+
     private uploadFile(file: File) {
         this.storageService
             .uploadFile(file)

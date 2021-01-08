@@ -6,10 +6,19 @@
                 <div *ngFor="let image of imageData; let index = index" class="p-col-3" key="index">
                     <img
                         [src]="image.thumbnail"
-                        [alt]="image.altText"
+                        [alt]="image.description"
                         style="cursor: pointer"
                         (click)="imageClick(index)"
                     />
+                    <!-- Use this remove button until we get chips from primeng v11.1 -->
+                    <button
+                        pButton
+                        styleClass="p-button-sm"
+                        class="p-button-rounded"
+                        type="button"
+                        icon="pi pi-times"
+                        (click)="onDeleteImagePress(index)"
+                    ></button>
                 </div>
             </div>
             <p-galleria
