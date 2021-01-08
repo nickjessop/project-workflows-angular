@@ -27,10 +27,10 @@ export class AuthenticationComponent implements OnInit {
         this.activatedRoute.queryParams.subscribe(params => {
             if (!isEmpty(params)) {
                 this.email = params['email'];
-                this.authInfo.email = this.email;
                 this.plan = params['plan'];
-                this.authInfo.plan = this.plan;
                 this.planPrice = params['planPrice'];
+                this.authInfo.email = this.email;
+                this.authInfo.plan = this.plan;
             }
         });
     }

@@ -1,14 +1,23 @@
-<ng-container *ngIf="href.includes('/auth/register')">
-    <div class=" p-col-12 p-mt-2">
-        <div class="container p-d-flex p-ai-center p-jc-between">
-            <a href="https://stepflow.co" alt="Stepflow logo">
-                <img src="/assets/stepflow-logo.svg" alt="Stepflow logo" height="26px" />
-            </a>
-            <a href="/auth/login" alt="Stepflow logo">
-                <button pButton type="button" class="p-button-secondary" label="Login" routerLink="login"></button>
-            </a>
-        </div>
+<div class="p-col-12 nav p-d-flex p-ai-center">
+    <div class="container p-d-flex p-ai-center p-jc-between">
+        <a href="https://stepflow.co" alt="Stepflow logo">
+            <img src="/assets/stepflow-logo.svg" alt="Stepflow logo" height="26px" />
+        </a>
+        <ng-container *ngIf="href.includes('/auth/register'); else registerPage">
+            <button pButton type="button" class="p-button-secondary" label="Login" routerLink="/auth/login"></button>
+        </ng-container>
+        <ng-template #registerPage>
+            <button
+                pButton
+                type="button"
+                class="p-button-secondary"
+                label="Start my free trial"
+                routerLink="/auth/register"
+            ></button>
+        </ng-template>
     </div>
+</div>
+<ng-container *ngIf="href.includes('/auth/register')">
     <div class="p-col-12 p-mt-2 info">
         <div class="container p-p-4">
             <h4><i class="pi pi-info-circle"></i> Early access</h4>
@@ -103,7 +112,7 @@
 <ng-container *ngIf="href.includes('/auth/login')">
     <div class="p-d-flex p-flex-column p-ai-center p-jc-center login">
         <p-card
-            [style]="{ maxWidth: '480px', margin: 'auto auto 6rem auto', minWidth: '320px' }"
+            [style]="{ maxWidth: '480px', margin: 'auto auto 8rem auto', minWidth: '320px' }"
             header="Login"
             subheader=""
         >
