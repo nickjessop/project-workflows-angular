@@ -13,8 +13,6 @@ export class StorageService {
         const userId = this.authenticationService.user?.id;
         const storageRef = this.firebaseService.getStorageInstance().ref(`${userId}/${file.name}`);
 
-        console.log(this.authenticationService.user);
-
         return from(storageRef.put(file));
     }
 
@@ -24,6 +22,15 @@ export class StorageService {
                 .getStorageInstance()
                 .ref(filePath)
                 .getDownloadURL()
+        );
+    }
+
+    public deleteFile(filePath: string) {
+        return from(
+            this.firebaseService
+                .getStorageInstance()
+                .ref(filePath)
+                .delete()
         );
     }
 }

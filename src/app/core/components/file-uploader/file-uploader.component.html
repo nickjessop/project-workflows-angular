@@ -4,6 +4,7 @@
         <p-table
             [scrollable]="true"
             [rows]="20"
+            [columns]="cols"
             [value]="fileData"
             scrollHeight="250px"
             [virtualScroll]="true"
@@ -17,17 +18,26 @@
                     </ng-container>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-rowData>
+            <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
                 <ng-container>
                     <tr style="height:34px">
-                        <td style="width: 40%;">{{ rowData.title }}</td>
-                        <td style="width: 40%;">{{ rowData.description }}</td>
+                        <td style="width: 25%;">{{ rowData.title }}</td>
+                        <td style="width: 50%;">{{ rowData.description }}</td>
                         <td style="width: 10%;">{{ rowData.type }}</td>
 
-                        <td style="width: 10%;">
+                        <td style="width: 15%;">
                             <a [href]="rowData.href"
                                 ><button pButton type="button" icon="pi pi-download" iconPos="left"></button
                             ></a>
+                        </td>
+                        <td style="width: 10%;">
+                            <button
+                                pButton
+                                type="button"
+                                icon="pi pi-times"
+                                class="p-button-text"
+                                (click)="onFileDeletePress(rowIndex)"
+                            ></button>
                         </td>
                     </tr>
                 </ng-container>
@@ -53,7 +63,7 @@
                 <p-fileUpload
                     #fileUploader
                     mode="basic"
-                    maxFileSize="1000000"
+                    maxFileSize="10000000"
                     [chooseLabel]="dialogData.title ? dialogData.title : 'Select file'"
                     (onSelect)="onFileUploadSelected($event)"
                 ></p-fileUpload>

@@ -18,10 +18,11 @@ export class FileUploaderComponent extends BaseFieldComponent implements OnInit 
     @ViewChild('fileUploader', { static: true }) fileUploaderButton!: FileUpload;
 
     public cols = [
-        { field: 'title', header: 'Name', size: '40' },
-        { field: 'description', header: 'Description', size: '40' },
+        { field: 'title', header: 'Name', size: '25' },
+        { field: 'description', header: 'Description', size: '50' },
         { field: 'type', header: 'File Type', size: '10' },
-        { field: 'href', header: 'Download', size: '10' },
+        { field: 'href', header: 'Download', size: '15' },
+        { field: 'delete', header: 'Delete', size: '10' },
     ];
 
     public fileData: Link[] = [{ href: '', title: '', description: '', thumbnail: '' }];
@@ -47,6 +48,26 @@ export class FileUploaderComponent extends BaseFieldComponent implements OnInit 
         this.dialogData.type = $event.currentFiles[0].type;
     }
 
+    public onFileDeletePress(index: number) {
+        const filePath = this.fileData?.[index]?.filePath;
+
+        if (filePath) {
+            this.storageService.deleteFile(filePath).subscribe(
+                () => {
+                    // Successfully removed file
+                    this.fileData.splice(index, 1);
+                    this.projectService.syncProject();
+                },
+                error => {
+                    console.log(error);
+                }
+            );
+        } else {
+            this.fileData.splice(index, 1);
+            this.projectService.syncProject();
+        }
+    }
+
     public onDialogSubmit($event: Event) {
         const file = this.dialogData.file;
 
@@ -67,10 +88,11 @@ export class FileUploaderComponent extends BaseFieldComponent implements OnInit 
             )
             .subscribe(
                 filedata => {
-                    const { name, size } = filedata.fileMetadata;
+                    const { name, size, fullPath } = filedata.fileMetadata;
                     const downloadUrl = filedata.downloadUrl;
-                    this.fileData.push({ href: downloadUrl, title: name, size });
+                    this.fileData.push({ href: downloadUrl, title: name, size, filePath: fullPath });
 
+                    this.projectService.syncProject();
                     this.resetDialog();
                 },
                 err => {
