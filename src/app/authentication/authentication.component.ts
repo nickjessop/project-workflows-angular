@@ -8,7 +8,7 @@ import { AuthenticationService } from '../services/authentication/authentication
 })
 export class AuthenticationComponent implements OnInit {
     // public authMode: 'register' | 'login' = 'login';
-    public authMode: 'register' | 'login' = 'register';
+    public authMode: 'register' | 'login' = 'login';
     public authInfo = { email: '', password: '', password2: '', name: '', plan: '' };
 
     public email: string | null = '';
