@@ -22,10 +22,10 @@ export class BlockPanelOverlayComponent implements OnInit {
     private getBlockOptions() {
         const options = [
             { enabled: true, icon: 'pi-check-square', label: 'Checkbox', component: 'checkboxes' },
-            { enabled: true, icon: 'pi-folder', label: 'File Uploader', component: 'fileUploader' },
-            { enabled: true, icon: 'pi-images', label: 'Image Uploader', component: 'imageUploader' },
-            { enabled: true, icon: 'pi-small-text', label: 'Small Text Box', component: 'smallTextInput' },
-            { enabled: true, icon: 'pi-large-text', label: 'Large Text Box', component: 'largeTextInput' },
+            { enabled: true, icon: 'pi-folder', label: 'Files', component: 'fileUploader' },
+            { enabled: true, icon: 'pi-images', label: 'Images', component: 'imageUploader' },
+            { enabled: true, icon: 'pi-small-text', label: 'Text Input', component: 'smallTextInput' },
+            { enabled: true, icon: 'pi-large-text', label: 'Text Area', component: 'largeTextInput' },
             { enabled: true, icon: 'pi-table', label: 'Table', component: 'table' },
             { enabled: true, icon: 'pi-globe', label: 'Url', component: 'url' },
         ];
