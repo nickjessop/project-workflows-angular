@@ -227,6 +227,7 @@ export type Link = {
     href?: string;
     title?: string;
     description?: string;
+    filePath?: string;
     thumbnail?: string;
     size?: number;
     type?: string;

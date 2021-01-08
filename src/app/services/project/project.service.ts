@@ -96,6 +96,11 @@ export class ProjectService {
         }
     }
 
+    public syncProject() {
+        this.projectConfig = _.cloneDeep(this.projectConfig);
+        this.updateProject(this.projectConfig);
+    }
+
     public createBaseProject(
         creatorId = this.authenticationService.user?.id,
         projectName = '',
