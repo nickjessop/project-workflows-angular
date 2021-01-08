@@ -15,3 +15,15 @@
 .login {
     height: calc(100% - 60px);
 }
+
+@media (max-width: 768px) {
+    .register {
+        .p-d-flex {
+            flex-direction: column;
+        }
+        .p-col-7,
+        .p-col-5 {
+            width: 100%;
+        }
+    }
+}
