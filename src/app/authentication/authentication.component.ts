@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { isEmpty } from 'lodash';
 import { AuthenticationService } from '../services/authentication/authentication.service';
 
 @Component({
@@ -7,32 +9,30 @@ import { AuthenticationService } from '../services/authentication/authentication
     styleUrls: ['./authentication.component.scss'],
 })
 export class AuthenticationComponent implements OnInit {
-    // public authMode: 'register' | 'login' = 'login';
-    public authMode: 'register' | 'login' = 'register';
     public authInfo = { email: '', password: '', password2: '', name: '', plan: '' };
 
-    public email: string | null = '';
-    public plan: string | null = 'Essential';
-    public planPrice: string | null = '$9';
+    public href: string = '';
+    public email: string = '';
+    public plan: string = 'Essential';
+    public planPrice: string = '$9';
 
-    constructor(private authService: AuthenticationService) {}
+    constructor(
+        private authService: AuthenticationService,
+        private router: Router,
+        private activatedRoute: ActivatedRoute
+    ) {}
 
     ngOnInit(): void {
-        const queryString = window.location.search;
-        if (queryString) {
-            const urlParams = new URLSearchParams(queryString);
-            this.email = urlParams.get('email');
-            if (this.email) {
+        this.href = this.router.url;
+        this.activatedRoute.queryParams.subscribe(params => {
+            if (!isEmpty(params)) {
+                this.email = params['email'];
+                this.plan = params['plan'];
+                this.planPrice = params['planPrice'];
                 this.authInfo.email = this.email;
-            }
-            this.plan = urlParams.get('plan');
-            if (this.plan) {
                 this.authInfo.plan = this.plan;
-            } else {
-                this.authInfo.plan = 'Essential';
             }
-            this.planPrice = urlParams.get('planPrice');
-        }
+        });
     }
 
     public register() {

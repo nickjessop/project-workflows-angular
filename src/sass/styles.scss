@@ -8,6 +8,18 @@
 // VARIABLES AND MIXINS
 @import 'core';
 
+:root {
+    --clr-text: #1c1c39;
+    --clr-greytext: #747498;
+    --primary-color: #552aff;
+    --clr-b: #161687;
+    --clr-t: #47d1ed;
+    --clr-r: #e9006a;
+    --clr-g: #fbf8f7;
+    --hvr-primary: #4421d2;
+    --hvr-r: #d40061;
+}
+
 // RESET
 *,
 ::after,
@@ -60,12 +72,13 @@ body.noscroll {
     @include hidden;
 }
 
-a {
-    text-decoration: none;
-}
-
+a,
 a:visited {
-    color: $action;
+    text-decoration: none;
+    color: var(--primary-color);
+    &:hover {
+        text-decoration: underline;
+    }
 }
 
 // TYPOGRAPHY
@@ -84,6 +97,19 @@ a:visited {
 
 .p-field > label {
     display: block;
+}
+
+.p-button {
+    background: var(--primary-color);
+    border: 1px solid var(--primary-color);
+}
+.p-button:enabled:hover {
+    background: var(--hvr-primary);
+    border: 1px solid var(--hvr-primary);
+}
+.p-inputtext:enabled:focus,
+.p-inputtext:enabled:hover {
+    border-color: var(--primary-color);
 }
 
 //DRAG & DROP

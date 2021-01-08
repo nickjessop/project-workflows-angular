@@ -1,3 +1,8 @@
+.nav {
+    height: 60px;
+    padding-top: 0;
+    padding-bottom: 0;
+}
 .price {
     hr {
         border: none;
@@ -5,5 +10,20 @@
     }
 }
 .info {
-    background: linear-gradient(94.76deg, #FBF8F7 46.16%, #E4D9D5 288.04%);
+    background: linear-gradient(94.76deg, #fbf8f7 46.16%, #e4d9d5 288.04%);
+}
+.login {
+    height: calc(100% - 60px);
+}
+
+@media (max-width: 768px) {
+    .register {
+        .p-d-flex {
+            flex-direction: column;
+        }
+        .p-col-7,
+        .p-col-5 {
+            width: 100%;
+        }
+    }
 }
