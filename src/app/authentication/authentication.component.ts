@@ -36,11 +36,8 @@ export class AuthenticationComponent implements OnInit {
     }
 
     public register() {
-        const email = this.authInfo.email;
-        const password = this.authInfo.password;
-        const password2 = this.authInfo.password2;
-        const name = this.authInfo.name;
-        const plan = this.authInfo.plan;
+        const { email, password, password2, name, plan } = this.authInfo;
+
         this.authService.register(email, password, password2, name, plan);
     }
 
