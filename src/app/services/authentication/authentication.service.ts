@@ -89,7 +89,7 @@ export class AuthenticationService {
                                         uid: currentUser.uid,
                                         plan: plan,
                                     });
-                                this.router.navigate([this.redirectUrl]);
+                                this.router.navigate(['/auth/confirmation']);
                             },
                             function(error: any) {
                                 console.log(error);

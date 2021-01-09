@@ -11,7 +11,7 @@
                 pButton
                 type="button"
                 class="p-button-secondary"
-                label="Start my free trial"
+                label="Join the waitlist"
                 routerLink="/auth/register"
             ></button>
         </ng-template>
@@ -84,7 +84,7 @@
                         />
                     </div>
                     <div class="p-field">
-                        <input type="hidden" name="plan" value="{{ plan }}" [(ngModel)]="authInfo.plan" />
+                        <input type="hidden" name="plan" value="{{ authInfo.plan }}" [(ngModel)]="authInfo.plan" />
                         <button pButton type="button" label="Sign up" (click)="register()"></button>
                         <p>
                             By clicking "Sign up" you agree to Stepflow's
@@ -117,12 +117,6 @@
             subheader=""
         >
             <div class="p-d-flex p-flex-column p-card-content">
-                <!-- <div class="p-field p-col-12">
-            <span class="p-float-label">
-                <input id="username" type="text" pInputText style="width: 100%;" />
-                <label for="username">Username</label>
-            </span>
-        </div> -->
                 <div class="p-field p-col-12">
                     <span class="p-float-label">
                         <div class="p-float-label">
