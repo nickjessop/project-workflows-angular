@@ -6,8 +6,8 @@ import { ConfirmationComponent } from './authentication/confirmation/confirmatio
 
 const appRoutes: Routes = [
     // { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
-    { path: 'auth/login', component: AuthenticationComponent },
-    { path: 'auth/register', component: AuthenticationComponent },
+    { path: 'auth/login', component: AuthenticationComponent, data: { authMode: 'login' } },
+    { path: 'auth/register', component: AuthenticationComponent, data: { authMode: 'register' } },
     { path: 'auth/confirmation', component: ConfirmationComponent },
     // { path: '404', component: PageNotFoundComponent },
     { path: '**', redirectTo: 'auth/login' },

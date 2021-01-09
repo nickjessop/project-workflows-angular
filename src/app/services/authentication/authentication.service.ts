@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { BehaviorSubject, from } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { FirebaseService } from '../firebase/firebase.service';
 
 export interface User {
@@ -9,6 +10,8 @@ export interface User {
     email?: string;
     emailVerified?: boolean;
 }
+
+export type UserPlan = 'Plus' | 'Growth' | 'Essential';
 
 @Injectable({
     providedIn: 'root',
@@ -47,22 +50,29 @@ export class AuthenticationService {
 
     // TODO: subscribe to user modification event, and set this as the user here as well as local storage
 
-    public register(email: string, password: string, password2: string, name: string, plan: string) {
-        if (password !== password2) {
-            this.messageService.add({
-                severity: 'error',
-                key: 'global-toast',
-                life: 2000,
-                closable: true,
-                detail: 'Passwords do not match',
-            });
+    public register(email: string, password: string, name: string, plan: UserPlan) {
+        this.createUserAndAttachMetadata(email, password, name, plan).subscribe(
+            success => {},
+            error => {
+                const msg = {
+                    severity: 'error',
+                    key: 'global-toast',
+                    life: 5000,
+                    closable: true,
+                    detail: '',
+                };
 
-            return;
-        }
+                msg.detail = error?.message ? error.message : error;
 
-        from(this.firebaseService.getAuthInstance().createUserWithEmailAndPassword(email, password)).subscribe(
-            firebaseUser => {
-                const { user } = firebaseUser;
+                this.messageService.add(msg);
+            }
+        );
+    }
+
+    private createUserAndAttachMetadata(email: string, password: string, name: string, plan: UserPlan) {
+        return from(this.firebaseService.getAuthInstance().createUserWithEmailAndPassword(email, password)).pipe(
+            map(userCredential => {
+                const { user } = userCredential;
                 const parsedUser = {
                     id: user!.uid,
                     email: user!.email || undefined,
@@ -75,67 +85,63 @@ export class AuthenticationService {
 
                 const currentUser = this.firebaseService.getAuthInstance().currentUser;
 
-                if (currentUser) {
-                    currentUser
-                        .updateProfile({
-                            displayName: name,
-                        })
-                        .then(
-                            () => {
-                                this.firebaseService
-                                    .getDbInstance()
-                                    .collection('users')
-                                    .add({
-                                        uid: currentUser.uid,
-                                        plan: plan,
-                                    });
+                return from(currentUser!.updateProfile({ displayName: name })).pipe(
+                    map(() => {
+                        return from(
+                            this.firebaseService
+                                .getDbInstance()
+                                .collection('users')
+                                .add({
+                                    uid: currentUser!.uid,
+                                    plan: plan,
+                                })
+                        ).pipe(
+                            map(() => {
                                 this.router.navigate(['/auth/confirmation']);
-                            },
-                            function(error: any) {
-                                console.log(error);
-                            }
+                            })
                         );
-                }
-            },
-            err => {
-                this.messageService.add({
-                    severity: 'error',
-                    key: 'global-toast',
-                    life: 5000,
-                    closable: true,
-                    detail: `${err}`,
-                });
-            }
+                    })
+                );
+            })
         );
     }
 
     public login(email: string, password: string) {
-        from(this.firebaseService.getAuthInstance()!.signInWithEmailAndPassword(email, password)).subscribe(
-            firebaseUser => {
-                const { user } = firebaseUser;
-                const parsedUser = {
-                    id: user!.uid,
-                    email: user!.email || undefined,
-                    emailVerified: user!.emailVerified,
-                };
-                this.user = parsedUser;
+        this.messageService.add({
+            severity: 'error',
+            key: 'global-toast',
+            life: 5000,
+            closable: true,
+            detail: 'You may not login at this time.',
+        });
 
-                localStorage.setItem('id', parsedUser.id);
-                localStorage.setItem('email', parsedUser.email || '');
-                localStorage.setItem('emailVerified', parsedUser.emailVerified + '');
+        return;
+        // from(this.firebaseService.getAuthInstance()!.signInWithEmailAndPassword(email, password)).subscribe(
+        //     firebaseUser => {
+        //         const { user } = firebaseUser;
+        //         const parsedUser = {
+        //             id: user!.uid,
+        //             email: user!.email || undefined,
+        //             emailVerified: user!.emailVerified,
+        //         };
+        //         this.user = parsedUser;
 
-                this.router.navigate([this.redirectUrl]);
-            },
-            err => {
-                this.messageService.add({
-                    severity: 'error',
-                    key: 'global-toast',
-                    life: 5000,
-                    closable: true,
-                    detail: 'Invalid email or password.',
-                });
-            }
-        );
+        //         localStorage.setItem('id', parsedUser.id);
+        //         localStorage.setItem('email', parsedUser.email || '');
+        //         localStorage.setItem('emailVerified', parsedUser.emailVerified + '');
+
+        //         this.router.navigate([this.redirectUrl]);
+        //     },
+        //     err => {
+        //         this.messageService.add({
+        //             severity: 'error',
+        //             key: 'global-toast',
+        //             life: 5000,
+        //             closable: true,
+        //             detail: 'Invalid email or password.',
+        //         });
+        //     }
+        // );
     }
 
     public logout() {

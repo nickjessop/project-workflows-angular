@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { isEmpty } from 'lodash';
-import { AuthenticationService } from '../services/authentication/authentication.service';
+import { ActivatedRoute } from '@angular/router';
+import { MessageService } from 'primeng/api';
+import { Subscription } from 'rxjs';
+import { AuthenticationService, UserPlan } from '../services/authentication/authentication.service';
 
 @Component({
     selector: 'app-authentication',
@@ -9,36 +10,79 @@ import { AuthenticationService } from '../services/authentication/authentication
     styleUrls: ['./authentication.component.scss'],
 })
 export class AuthenticationComponent implements OnInit {
-    public authInfo = { email: '', password: '', password2: '', name: '', plan: '' };
+    public authInfo: {
+        name?: string;
+        plan?: UserPlan;
+        password: string;
+        password2?: string;
+        planPrice?: string;
+        email: string;
+    } = {
+        email: '',
+        password: '',
+        password2: '',
+        name: '',
+        plan: 'Essential',
+        planPrice: '9',
+    };
 
-    public href: string = '';
-    public email: string = '';
-    public plan: string = 'Essential';
-    public planPrice: string = '$9';
+    public authMode: 'register' | 'login' = 'login';
+
+    private subscriptions = new Subscription();
 
     constructor(
         private authService: AuthenticationService,
-        private router: Router,
-        private activatedRoute: ActivatedRoute
+        private activatedRoute: ActivatedRoute,
+        private messageService: MessageService
     ) {}
 
     ngOnInit(): void {
-        this.href = this.router.url;
-        this.activatedRoute.queryParams.subscribe(params => {
-            if (!isEmpty(params)) {
-                this.email = params['email'];
-                this.plan = params['plan'];
-                this.planPrice = params['planPrice'];
-                this.authInfo.email = this.email;
-            }
-        });
-        this.authInfo.plan = this.plan;
+        this.subscriptions.add(
+            this.activatedRoute.data.subscribe(data => {
+                const { authMode } = data;
+                this.authMode = authMode;
+            })
+        );
+
+        this.subscriptions.add(
+            this.activatedRoute.queryParams.subscribe(params => {
+                this.authInfo.email = params['email'] || '';
+                this.authInfo.plan = params['plan'] || 'Essential';
+                this.authInfo.planPrice = params['planPrice'] || '9';
+            })
+        );
+    }
+
+    ngOnDestroy() {
+        this.subscriptions.unsubscribe();
     }
 
     public register() {
         const { email, password, password2, name, plan } = this.authInfo;
 
-        this.authService.register(email, password, password2, name, plan);
+        const message = {
+            severity: 'error',
+            key: 'global-toast',
+            life: 2000,
+            closable: true,
+            detail: '',
+        };
+
+        if (password !== password2) {
+            message.detail = 'Passwords do not match';
+            this.messageService.add(message);
+
+            return;
+        }
+
+        if (!password || !password2 || !name || !plan) {
+            message.detail = 'Please fill in password, name and plan fields';
+            this.messageService.add(message);
+
+            return;
+        }
+
+        this.authService.register(email, password, name, plan);
     }
 
     public login() {
