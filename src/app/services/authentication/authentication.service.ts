@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { BehaviorSubject, from } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import { FirebaseService } from '../firebase/firebase.service';
 
 export interface User {
@@ -73,7 +73,7 @@ export class AuthenticationService {
 
     private createUserAndAttachMetadata(email: string, password: string, name: string, plan: UserPlan) {
         return from(this.firebaseService.getAuthInstance().createUserWithEmailAndPassword(email, password)).pipe(
-            map(userCredential => {
+            switchMap(userCredential => {
                 const { user } = userCredential;
                 const parsedUser = {
                     id: user!.uid,
