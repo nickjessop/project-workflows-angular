@@ -30,9 +30,9 @@ export class AuthenticationComponent implements OnInit {
                 this.plan = params['plan'];
                 this.planPrice = params['planPrice'];
                 this.authInfo.email = this.email;
-                this.authInfo.plan = this.plan;
             }
         });
+        this.authInfo.plan = this.plan;
     }
 
     public register() {

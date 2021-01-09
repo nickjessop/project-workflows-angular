@@ -1,0 +1,9 @@
+.confirmation {
+    min-height: 100%;
+    &__msg {
+        margin-bottom: 8rem;
+    }
+    a:hover {
+        text-decoration: none;
+    }
+}
