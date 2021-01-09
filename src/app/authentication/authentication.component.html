@@ -3,10 +3,10 @@
         <a href="https://stepflow.co" alt="Stepflow logo" style="height: 26px;">
             <img src="/assets/stepflow-logo.svg" alt="Stepflow logo" height="26px" />
         </a>
-        <ng-container *ngIf="href.includes('/auth/register'); else registerPage">
+        <ng-container *ngIf="authMode === 'register'">
             <button pButton type="button" class="p-button-secondary" label="Login" routerLink="/auth/login"></button>
         </ng-container>
-        <ng-template #registerPage>
+        <ng-container *ngIf="authMode === 'login'">
             <button
                 pButton
                 type="button"
@@ -14,10 +14,10 @@
                 label="Join the waitlist"
                 routerLink="/auth/register"
             ></button>
-        </ng-template>
+        </ng-container>
     </div>
 </div>
-<ng-container *ngIf="href.includes('/auth/register')">
+<ng-container *ngIf="authMode === 'register'">
     <div class="p-col-12 info">
         <div class="container p-p-4">
             <h4><i class="pi pi-info-circle"></i> Early access</h4>
@@ -57,7 +57,6 @@
                             style="width: 100%;"
                             aria-describedby="Enter your email"
                             pInputText
-                            value="{{ email }}"
                             [(ngModel)]="authInfo.email"
                         />
                     </div>
@@ -95,11 +94,11 @@
                 </div>
             </div>
             <div class="p-col-5">
-                <p-card header="{{ plan }} plan" subheader="{{ planPrice }}/mo" class="price">
+                <p-card header="{{ authInfo.plan }} plan" subheader="{{ authInfo.planPrice }}/mo" class="price">
                     + Early access<br />
                     + 14 day trial<br />
                     <hr />
-                    Total after early access & trial: {{ planPrice }}/mo<br />
+                    Total after early access & trial: ${{ authInfo.planPrice }}/mo<br />
                     <strong>Due today: $0/mo</strong>
                 </p-card>
                 <div class="p-mt-2">
@@ -109,7 +108,7 @@
         </div>
     </div>
 </ng-container>
-<ng-container *ngIf="href.includes('/auth/login')">
+<ng-container *ngIf="authMode === 'login'">
     <div class="p-d-flex p-flex-column p-ai-center p-jc-center login">
         <p-card
             [style]="{ maxWidth: '480px', margin: 'auto auto 8rem auto', minWidth: '320px' }"
