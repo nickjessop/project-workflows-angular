@@ -52,7 +52,9 @@ export class AuthenticationService {
 
     public register(email: string, password: string, name: string, plan: UserPlan) {
         this.createUserAndAttachMetadata(email, password, name, plan).subscribe(
-            success => {},
+            success => {
+                this.router.navigate(['/auth/confirmation']);
+            },
             error => {
                 const msg = {
                     severity: 'error',
@@ -95,10 +97,6 @@ export class AuthenticationService {
                                     uid: currentUser!.uid,
                                     plan: plan,
                                 })
-                        ).pipe(
-                            map(() => {
-                                this.router.navigate(['/auth/confirmation']);
-                            })
                         );
                     })
                 );
