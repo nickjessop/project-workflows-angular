@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { BehaviorSubject, from } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { switchMap } from 'rxjs/operators';
 import { FirebaseService } from '../firebase/firebase.service';
 
 export interface User {
@@ -11,12 +11,13 @@ export interface User {
     emailVerified?: boolean;
 }
 
-export type UserPlan = 'Plus' | 'Growth' | 'Essential';
+export type UserPlan = 'Plus' | 'Growth' | 'Essential' | 'Free';
 
 @Injectable({
     providedIn: 'root',
 })
 export class AuthenticationService {
+    private readonly USER_COLLECTION_NAME = 'users';
     private _user?: BehaviorSubject<User | undefined> = new BehaviorSubject<User | undefined>(undefined);
     public readonly $user = this._user?.asObservable();
 
@@ -85,21 +86,11 @@ export class AuthenticationService {
                 localStorage.setItem('email', parsedUser.email || '');
                 localStorage.setItem('emailVerified', parsedUser.emailVerified + '');
 
-                const currentUser = this.firebaseService.getAuthInstance().currentUser;
+                const updateUserMetadata = this.firebaseService
+                    .getFunctionsInstance()
+                    .httpsCallable('updateUserMetadata', {});
 
-                return from(currentUser!.updateProfile({ displayName: name })).pipe(
-                    map(() => {
-                        return from(
-                            this.firebaseService
-                                .getDbInstance()
-                                .collection('users')
-                                .add({
-                                    uid: currentUser!.uid,
-                                    plan: plan,
-                                })
-                        );
-                    })
-                );
+                return from(updateUserMetadata({ name, plan }));
             })
         );
     }

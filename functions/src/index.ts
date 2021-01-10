@@ -1,23 +1,30 @@
-// The Cloud Functions for Firebase SDK to create Cloud Functions and setup triggers.
-// const functions = require('firebase-functions');
-
-import * as functions from 'firebase-functions';
 // The Firebase Admin SDK to access Cloud Firestore.
-const admin = require('firebase-admin');
+import * as admin from 'firebase-admin';
+import * as functions from 'firebase-functions';
 admin.initializeApp();
 
-// // Start writing Firebase Functions
-// // https://firebase.google.com/docs/functions/typescript
+const USER_DOCUMENT_PATH = 'user' as const;
 
-// export const helloWorldTest = functions.https.onRequest((request: any, response: any) => {
-//     response.set('Access-Control-Allow-Origin', '*');
-//     response.send('Hello from Firebase!');
-// });
+exports.updateUserMetadata = functions.https.onCall(
+    (data: { name?: string; plan?: 'Plus' | 'Growth' | 'Essential' | 'Free' }, context) => {
+        const uid = context.auth?.uid;
 
-exports.trickortreat = functions.https.onCall((data: any, context: any) => {
-    return 'hello world trick';
-});
+        if (!uid) {
+            throw new functions.https.HttpsError('unauthenticated', 'User not authenticated.');
+        }
 
-// exports.assignUserPlan = functions.auth.user().onCreate(user => {
-//     user.
-// });
+        admin
+            .firestore()
+            .collection(USER_DOCUMENT_PATH)
+            .doc(uid)
+            .set({ name: data.name, plan: data.plan }, { merge: true })
+            .then(
+                success => {
+                    return {};
+                },
+                err => {
+                    throw new functions.https.HttpsError('internal', 'An error occurred while updating user');
+                }
+            );
+    }
+);
