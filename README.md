@@ -27,3 +27,10 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+## Deployment to Firebase from Local machine
+
+To build the full Stepflow app, with the new authenication page do the following:
+
+1. Using terminal from the root of the project, use `npm run build-stepflow-prod`
+2. Once built, use `firebase deploy --only hosting:stepflow-app` to deploy the locally compiled stepflow app to firebase
