@@ -1,5 +1,5 @@
 <app-base-field [field]="field" [index]="index">
-    <ng-container *ngIf="componentMode === 'edit'">
+    <ng-container *ngIf="componentMode === 'view'">
         <div class="view" *ngIf="urlData.data.value.href; else placeholder">
             <div class="embed p-mb-2" [style.height.px]="urlData.data.value.height">
                 <div class="embed__inner">
@@ -16,7 +16,7 @@
             </div>
         </ng-template>
     </ng-container>
-    <ng-container *ngIf="componentMode === 'view'">
+    <ng-container *ngIf="componentMode === 'edit'">
         <div class="p-d-flex p-flex-column p-mb-2">
             <div class="edit" *ngIf="urlData.data.value.href; else add">
                 <div
