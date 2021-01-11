@@ -2,7 +2,9 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
+import { AngularResizedEventModule } from 'angular-resize-event';
 import { PrimengModule } from '../primeng/primeng.module';
 import { BaseFieldComponent } from './components/base-field/base-field.component';
 import { CheckboxesComponent } from './components/checkboxes/checkboxes.component';
@@ -29,7 +31,16 @@ import { CoreComponentResolverDirective } from './core-component-resolver.direct
 
         UrlComponent,
     ],
-    imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, PrimengModule, DragDropModule],
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        RouterModule,
+        PrimengModule,
+        DragDropModule,
+        AngularResizedEventModule,
+        BrowserModule,
+    ],
     exports: [
         LargeTextInputComponent,
         SmallTextInputComponent,

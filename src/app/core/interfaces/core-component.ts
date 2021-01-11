@@ -135,7 +135,7 @@ export function createComponentMetadataTemplate(componentType: ComponentType, va
         return _component;
     } else if (componentType === 'url') {
         const _component: Url = {
-            data: { value: [{ href: '', description: '', title: '' }] },
+            data: { value: { href: '', height: 400 } },
             component: 'url',
         };
 
@@ -219,7 +219,7 @@ export interface Table extends BaseComponent {
 
 export interface Url extends BaseComponent {
     component: 'url';
-    data: { value: Link[] };
+    data: { value: { href: string; height: number } };
     validation?: Validator[];
 }
 
