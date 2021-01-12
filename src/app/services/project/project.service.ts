@@ -2,6 +2,7 @@ import { moveItemInArray } from '@angular/cdk/drag-drop';
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { BehaviorSubject, from } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { BlockConfig, createBlockConfig } from '../../core/interfaces/core-component';
 import { Project, Status, Step, StepConfig } from '../../models/interfaces/project';
 import { AuthenticationService } from '../authentication/authentication.service';
@@ -118,8 +119,8 @@ export class ProjectService {
         const baseProject: Project = {
             name: projectName,
             description,
-            ownerIds: [userId || ''],
-            members: [{ userId, role: 'owner' }],
+            memberRoles: [{ userId, role: 'owner' }],
+            members: [{ userId }],
             configuration: config,
         };
 
@@ -319,44 +320,21 @@ export class ProjectService {
         this.setProject(_projectConfig);
     }
 
-    //TODO: Add firebase rule to only return authorized projects
-    // public getProjects(userId: string) {
-    //     const creatorsProjects$ = new Subject();
-    //     const membersProjects$ = new Subject();
-
-    //     const creatorProjectsRef = this.firebaseService
-    //         .getDbInstance()!
-    //         .collection(this.PROJECT_COLLECTION_NAME)
-    //         .where('creatorId', '==', userId);
-
-    //     const memberProjectsRef = this.firebaseService
-    //         .getDbInstance()!
-    //         .collection(this.PROJECT_COLLECTION_NAME)
-    //         .where('memberIds', 'array-contains', userId);
-
-    //     creatorProjectsRef.onSnapshot(creatorsProjectsSnapshot => {
-    //         const data = creatorsProjectsSnapshot.docs.map(d => d.data());
-    //         return creatorsProjects$.next(data);
-    //     });
-
-    //     memberProjectsRef.onSnapshot(membersProjectsSnapshot => {
-    //         const data = membersProjectsSnapshot.docs.map(d => d.data());
-    //         return membersProjects$.next(data);
-    //     });
-
-    //     const allProjectsForUser$ = combineLatest(creatorsProjects$, membersProjects$).pipe(values => {
-    //         return values;
-    //     });
-
-    //     return allProjectsForUser$;
-    // }
-
     public getProjects() {
         const userId = this.authenticationService.user?.id;
 
         const ref = this.firebaseService.getDbInstance().collection(this.PROJECT_COLLECTION_NAME);
 
-        return ref.where('members', 'array-contains', { userId: userId, role: 'owner' }).get();
+        return from(ref.where('members', 'array-contains', userId).get()).pipe(
+            // return from(ref.where('members', 'array-contains', { userId: userId, role: 'owner' }).get()).pipe(
+            map(data => {
+                const projects = data.docs.map(items => {
+                    return items.data();
+                });
+
+                return projects;
+            })
+        );
     }
 
     public subscribeAndSetProject(projectId: string) {

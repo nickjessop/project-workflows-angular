@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ConfirmationService } from 'primeng/api';
-import { FirebaseService } from '../services/firebase/firebase.service';
 import { ProjectService } from '../services/project/project.service';
 
 @Component({
@@ -12,11 +11,7 @@ export class ProjectComponent implements OnInit {
     public isLoadingProjects = true;
     public projects: { id: string; description: string; name: string }[] = [];
 
-    constructor(
-        private projectService: ProjectService,
-        private confirmationService: ConfirmationService,
-        private firebaseService: FirebaseService
-    ) {}
+    constructor(private projectService: ProjectService, private confirmationService: ConfirmationService) {}
 
     ngOnInit() {
         this.getProjects();
@@ -25,56 +20,19 @@ export class ProjectComponent implements OnInit {
     public getProjects() {
         this.isLoadingProjects = true;
 
-        this.projectService.getProjects().then(projects => {
-            console.log(projects);
-
-            // const projectSubdata = _projects.map(project => {
-            //     return { id: project.id!, description: project.description, name: project.name };
-            // });
-
-            // this.projects = projectSubdata;
-
-            this.isLoadingProjects = false;
-        });
-
-        // this.projectService.getProjects().subscribe(
-        //     projects => {
-        //         const _projects = projects.data as Project[];
-
-        //         const projectSubdata = _projects.map(project => {
-        //             return { id: project.id!, description: project.description, name: project.name };
-        //         });
-
-        //         this.projects = projectSubdata;
-
-        //         this.isLoadingProjects = false;
-        //     },
-        //     error => {
-        //         this.isLoadingProjects = false;
-        //     }
-        // );
-
-        // this.projectService.getAllProjectIds().subscribe(
-        //     projectDocument => {
-        //         let _projects: { id: string; description: string; name: string }[] = [];
-
-        //         projectDocument.forEach(projectDoc => {
-        //             const projectData = projectDoc.data() as Project;
-        //             _projects.push({
-        //                 id: projectDoc.id,
-        //                 description: projectData.description,
-        //                 name: projectData.name,
-        //             });
-        //         });
-
-        //         this.projects = _projects;
-        //         this.isLoadingProjects = false;
-        //     },
-        //     err => {
-        //         console.log(err);
-        //         this.isLoadingProjects = false;
-        //     }
-        // );
+        this.projectService.getProjects().subscribe(
+            projects => {
+                this.projects = projects.map(project => {
+                    return { id: project.id!, description: project.description, name: project.name };
+                });
+            },
+            err => {
+                console.log(err);
+            },
+            () => {
+                this.isLoadingProjects = false;
+            }
+        );
     }
 
     public onDeleteProject($event: { id: string }) {

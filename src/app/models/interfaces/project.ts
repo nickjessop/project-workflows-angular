@@ -2,10 +2,10 @@ import { BlockConfig } from '../../core/interfaces/core-component';
 
 export interface Project {
     name: string;
-    ownerIds: string[];
     description: string;
     configuration?: StepConfig[];
-    members?: Array<{ userId: string; role: Role }>;
+    members: Array<{ userId: string }>;
+    memberRoles: Array<{ userId: string; role: Role }>;
     id?: string;
 }
 
