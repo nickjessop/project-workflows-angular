@@ -1,7 +1,7 @@
 import { moveItemInArray } from '@angular/cdk/drag-drop';
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
-import { BehaviorSubject, combineLatest, from, Subject } from 'rxjs';
+import { BehaviorSubject, from } from 'rxjs';
 import { BlockConfig, createBlockConfig } from '../../core/interfaces/core-component';
 import { Project, Status, Step, StepConfig } from '../../models/interfaces/project';
 import { AuthenticationService } from '../authentication/authentication.service';
@@ -12,7 +12,7 @@ import { FirebaseService } from '../firebase/firebase.service';
 })
 export class ProjectService {
     private readonly PROJECT_COLLECTION_NAME = 'projects';
-    private _projectConfig: BehaviorSubject<Project> = new BehaviorSubject<Project>(this.createBaseProject());
+    private _projectConfig: BehaviorSubject<Project> = new BehaviorSubject<Project>(this.createBaseProject('', '', ''));
     public readonly projectConfig$ = this._projectConfig.asObservable();
 
     // private _currentStepConfig: BehaviorSubject<StepConfig | undefined> = new BehaviorSubject<StepConfig | undefined>(
@@ -101,12 +101,7 @@ export class ProjectService {
         this.updateProject(this.projectConfig);
     }
 
-    public createBaseProject(
-        creatorId = this.authenticationService.user?.id,
-        projectName = '',
-        description = '',
-        configuration?: StepConfig[]
-    ) {
+    public createBaseProject(userId: string, projectName: string, description: string, configuration?: StepConfig[]) {
         const config: StepConfig[] = configuration
             ? configuration
             : [
@@ -123,7 +118,8 @@ export class ProjectService {
         const baseProject: Project = {
             name: projectName,
             description,
-            ownerIds: [creatorId || ''],
+            ownerIds: [userId || ''],
+            members: [{ userId, role: 'owner' }],
             configuration: config,
         };
 
@@ -179,12 +175,10 @@ export class ProjectService {
         this.setProject(_projectConfig);
     }
 
-    public createNewProject(projectName?: string, projectDescription?: string) {
-        const baseProject = this.createBaseProject(
-            this.authenticationService.user!.id,
-            projectName,
-            projectDescription
-        );
+    public createNewProject(projectName: string, projectDescription: string) {
+        const userId = this.authenticationService.user?.id;
+
+        const baseProject = this.createBaseProject(userId || '', projectName, projectDescription);
 
         return this.firebaseService
             .getDbInstance()!
@@ -326,35 +320,43 @@ export class ProjectService {
     }
 
     //TODO: Add firebase rule to only return authorized projects
-    public getProjects(userId: string) {
-        const creatorsProjects$ = new Subject();
-        const membersProjects$ = new Subject();
+    // public getProjects(userId: string) {
+    //     const creatorsProjects$ = new Subject();
+    //     const membersProjects$ = new Subject();
 
-        const creatorProjectsRef = this.firebaseService
-            .getDbInstance()!
-            .collection(this.PROJECT_COLLECTION_NAME)
-            .where('creatorId', '==', userId);
+    //     const creatorProjectsRef = this.firebaseService
+    //         .getDbInstance()!
+    //         .collection(this.PROJECT_COLLECTION_NAME)
+    //         .where('creatorId', '==', userId);
 
-        const memberProjectsRef = this.firebaseService
-            .getDbInstance()!
-            .collection(this.PROJECT_COLLECTION_NAME)
-            .where('memberIds', 'array-contains', userId);
+    //     const memberProjectsRef = this.firebaseService
+    //         .getDbInstance()!
+    //         .collection(this.PROJECT_COLLECTION_NAME)
+    //         .where('memberIds', 'array-contains', userId);
 
-        creatorProjectsRef.onSnapshot(creatorsProjectsSnapshot => {
-            const data = creatorsProjectsSnapshot.docs.map(d => d.data());
-            return creatorsProjects$.next(data);
-        });
+    //     creatorProjectsRef.onSnapshot(creatorsProjectsSnapshot => {
+    //         const data = creatorsProjectsSnapshot.docs.map(d => d.data());
+    //         return creatorsProjects$.next(data);
+    //     });
 
-        memberProjectsRef.onSnapshot(membersProjectsSnapshot => {
-            const data = membersProjectsSnapshot.docs.map(d => d.data());
-            return membersProjects$.next(data);
-        });
+    //     memberProjectsRef.onSnapshot(membersProjectsSnapshot => {
+    //         const data = membersProjectsSnapshot.docs.map(d => d.data());
+    //         return membersProjects$.next(data);
+    //     });
 
-        const allProjectsForUser$ = combineLatest(creatorsProjects$, membersProjects$).pipe(values => {
-            return values;
-        });
+    //     const allProjectsForUser$ = combineLatest(creatorsProjects$, membersProjects$).pipe(values => {
+    //         return values;
+    //     });
 
-        return allProjectsForUser$;
+    //     return allProjectsForUser$;
+    // }
+
+    public getProjects() {
+        const userId = this.authenticationService.user?.id;
+
+        const ref = this.firebaseService.getDbInstance().collection(this.PROJECT_COLLECTION_NAME);
+
+        return ref.where('members', 'array-contains', { userId: userId, role: 'owner' }).get();
     }
 
     public subscribeAndSetProject(projectId: string) {
