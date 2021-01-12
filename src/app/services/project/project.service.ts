@@ -120,7 +120,7 @@ export class ProjectService {
             name: projectName,
             description,
             memberRoles: [{ userId, role: 'owner' }],
-            members: [{ userId }],
+            members: [userId],
             configuration: config,
         };
 

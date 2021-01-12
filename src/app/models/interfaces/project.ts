@@ -4,7 +4,7 @@ export interface Project {
     name: string;
     description: string;
     configuration?: StepConfig[];
-    members: Array<{ userId: string }>;
+    members: string[];
     memberRoles: Array<{ userId: string; role: Role }>;
     id?: string;
 }
