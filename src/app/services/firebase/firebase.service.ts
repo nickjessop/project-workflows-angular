@@ -45,7 +45,10 @@ export class FirebaseService {
 
         this.db = firebase.firestore();
         this.auth = firebase.auth();
+        this.auth.setPersistence('local');
+
         this.functions = firebase.functions();
+
         this.storage = firebase.storage();
     }
 

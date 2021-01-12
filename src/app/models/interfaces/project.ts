@@ -23,7 +23,7 @@ export interface Step {
     isCurrentStep?: boolean;
     status?: Status;
 }
-export type Role = 'admin' | 'editor' | 'viewer' | 'guest';
+export type Role = 'owner' | 'admin' | 'editor' | 'viewer' | 'guest';
 
 export type Status = typeof InProgress | typeof Important | typeof Upcoming | typeof Complete;
 
