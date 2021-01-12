@@ -37,7 +37,7 @@ export class AuthenticationService {
                         this.user = { id: user.uid, email: user.email || '', emailVerified: user.emailVerified };
 
                         if (this.router.url.includes('/auth/login')) {
-                            this.router.navigate(['/dashboard']);
+                            this.router.navigate(['/project']);
                         }
                     } else {
                         this.user = undefined;
