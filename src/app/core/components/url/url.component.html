@@ -1,41 +1,70 @@
 <app-base-field [field]="field" [index]="index">
     <ng-container *ngIf="componentMode === 'view'">
-        <div class="url view">
-            <p-card>
-                <p-header>
-                    <!-- <img class="p-px-2 p-pt-2" src="" alt="dynamic screenshot" /> -->
-                    <iframe [src]="cleanUrl"></iframe>
-                </p-header>
-                <strong>Dynamic title</strong>
-                <p>Dynamic description</p>
-                <a [href]="urlData.data.value[0].href" target="_blank">{{ urlData.data.value[0].href }} </a>
-                <i class="pi pi-external-link"></i>
-            </p-card>
+        <div class="view" *ngIf="urlData.data.value.href; else placeholder">
+            <div class="embed p-mb-2" [style.height.px]="urlData.data.value.height">
+                <div class="embed__inner">
+                    <iframe [src]="cleanUrl" allowfullscreen class="p-mb-2" frameBorder="0"></iframe>
+                </div>
+            </div>
+            <i class="pi pi-external-link p-mr-2"></i>
+            <a [href]="urlData.data.value.href" target="_blank">{{ domain.hostname }}</a>
         </div>
+        <ng-template #placeholder>
+            <div class="placeholder">
+                <img src="/assets/placeholder/embed-placeholder.jpg" alt="Embed placeholder" />
+                <div class="p-text-italic">Awaiting embedded content.</div>
+            </div>
+        </ng-template>
     </ng-container>
     <ng-container *ngIf="componentMode === 'edit'">
         <div class="p-d-flex p-flex-column p-mb-2">
-            <div *ngFor="let url of urlData.data.value; index as index">
+            <div class="edit" *ngIf="urlData.data.value.href; else add">
+                <div
+                    class="embed"
+                    (resized)="onResized($event)"
+                    (mouseup)="onMouseUp()"
+                    [style.height.px]="urlData.data.value.height"
+                >
+                    <div class="handle"><i class="pi pi-arrow-circle-down"></i></div>
+                    <div class="embed__inner">
+                        <iframe [src]="cleanUrl" allowfullscreen class="p-mb-2" frameBorder="0"></iframe>
+                    </div>
+                </div>
                 <span class="p-mt-5 p-float-label">
-                    <input id="float-input-{{ index }}" type="text" pInputText [(ngModel)]="url.href" />
-                    <label for="float-input-{{ index }}">Url</label>
+                    <i class="pi pi-link p-mx-2"></i>
+                    <input id="float-input" type="text" pInputText [(ngModel)]="urlData.data.value.href" />
+                    <label for="float-input">Url</label>
                     <button
                         pButton
                         class="p-button-rounded p-button-text"
                         type="button"
                         icon="pi pi-times"
-                        (click)="onRemoveUrlPress(index)"
+                        (click)="onRemoveUrlPress()"
                     ></button>
                 </span>
             </div>
+            <ng-template #add>
+                <div class="placeholder">
+                    <img src="/assets/placeholder/embed-placeholder.jpg" alt="Embed placeholder" />
+                    <div class="p-text-italic">Enter a URL below to embed content here.</div>
+                </div>
+                <div class="p-d-flex p-ai-center p-jc-center add p-mt-5">
+                    <span class="p-float-label">
+                        <label for="float-input-add">Url</label>
+                        <input id="float-input-add" type="text" pInputText [(ngModel)]="href" />
+                    </span>
+                    <div>
+                        <button
+                            pButton
+                            class="p-button-icon p-ml-2"
+                            type="button"
+                            icon="pi pi-plus"
+                            label="Embed URL"
+                            (click)="onAddNewUrlPress()"
+                        ></button>
+                    </div>
+                </div>
+            </ng-template>
         </div>
-        <button
-            pButton
-            class="p-button-icon"
-            type="button"
-            icon="pi pi-plus"
-            label="Add URL"
-            (click)="onAddNewUrlPress()"
-        ></button>
     </ng-container>
 </app-base-field>

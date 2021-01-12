@@ -7,6 +7,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthenticationComponent } from './authentication/authentication.component';
+import { ConfirmationComponent } from './authentication/confirmation/confirmation.component';
 import { CoreComponentsModule } from './core/core-components.module';
 import { ComponentPlaygroundComponent } from './dashboard/component-playground/component-playground.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -26,7 +27,6 @@ import { StepsComponent } from './project/steps/steps.component';
 import { ViewerComponent } from './project/viewer/viewer.component';
 import { ProtectedRoutingModule } from './protected-routing.module';
 import { UserMenuComponent } from './user-menu/user-menu.component';
-import { ConfirmationComponent } from './authentication/confirmation/confirmation.component';
 @NgModule({
     declarations: [
         AppComponent,
@@ -63,6 +63,6 @@ import { ConfirmationComponent } from './authentication/confirmation/confirmatio
     ],
     providers: [],
     bootstrap: [AppComponent],
-    exports: [],
+    exports: [SliceEllipsisPipe],
 })
 export class AppModule {}
