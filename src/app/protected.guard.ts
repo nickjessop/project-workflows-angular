@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
-import { Observable } from 'rxjs';
+import { CanActivate, Router } from '@angular/router';
 import { AuthenticationService } from './services/authentication/authentication.service';
 import { FirebaseService } from './services/firebase/firebase.service';
 
@@ -10,29 +9,24 @@ import { FirebaseService } from './services/firebase/firebase.service';
 export class ProtectedGuard implements CanActivate {
     constructor(
         private authenticationService: AuthenticationService,
-        private router: Router,
-        private firebaseService: FirebaseService
+        private firebaseService: FirebaseService,
+        private router: Router
     ) {}
 
     ngOnDestroy() {}
 
-    canActivate(
-        next: ActivatedRouteSnapshot,
-        state: RouterStateSnapshot
-    ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-        if (this.firebaseService.getAuthInstance().currentUser) {
-            return true;
-        } else {
-            this.router.navigate(['/auth/login']);
-
-            return false;
-        }
-        // if (this.authenticationService.user) {
-        //     return true;
-        // } else {
-        //     this.router.navigate(['/auth/login']);
-
-        //     return false;
-        // }
+    canActivate() {
+        // return this.authenticationService.$user!.pipe(
+        //     take(1),
+        //     switchMap(user => {
+        //         if (user) {
+        //             return of(true);
+        //         } else {
+        //             this.router.navigate(['/auth/login']);
+        //             return of(false);
+        //         }
+        //     })
+        // );
+        return true;
     }
 }

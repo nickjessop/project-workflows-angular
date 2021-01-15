@@ -28,18 +28,15 @@ export class AuthenticationService {
         private router: Router,
         private messageService: MessageService
     ) {
-        const user = this.firebaseService.getAuthInstance().currentUser;
-
         this.subscriptions.add(
             this.firebaseService.getAuthInstance().onAuthStateChanged(
                 user => {
                     if (user) {
+                        console.log(this.router.url);
+                        console.log('logged in user');
                         this.user = { id: user.uid, email: user.email || '', emailVerified: user.emailVerified };
-
-                        if (this.router.url.includes('/auth/login')) {
-                            this.router.navigate(['/project']);
-                        }
                     } else {
+                        console.log('logged out');
                         this.user = undefined;
                     }
                 },
