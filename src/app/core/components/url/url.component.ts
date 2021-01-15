@@ -3,7 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ResizedEvent } from 'angular-resize-event';
 import { ProjectService } from 'src/app/services/project/project.service';
-import { createComponentMetadataTemplate, Url } from '../../interfaces/core-component';
+import { ComponentSettings, createComponentMetadataTemplate, Url } from '../../interfaces/core-component';
 import { BaseFieldComponent } from '../base-field/base-field.component';
 
 @Component({
@@ -15,6 +15,7 @@ export class UrlComponent extends BaseFieldComponent implements OnInit {
     @Input() group!: FormGroup;
 
     public urlData = createComponentMetadataTemplate('url') as Url;
+    public settings?: ComponentSettings;
     public cleanUrl: SafeResourceUrl = '';
     public href: string = '';
     public domain: { hostname: string } = { hostname: '' };
@@ -25,11 +26,15 @@ export class UrlComponent extends BaseFieldComponent implements OnInit {
 
     ngOnInit(): void {
         this.urlData = this.field.metadata as Url;
+
         this.cleanUrl = this.domSantizer.bypassSecurityTrustResourceUrl(this.urlData.data.value.href || '');
-        if (this.urlData.data.value) {
-            this.domain = new URL(this.urlData.data.value.href);
-        }
+        // if (this.urlData.data.value) {
+        //     this.domain = new URL(this.urlData.data.value.href);
+        // }
         console.log(this.urlData.data.value.height);
+        console.log(this.urlData.settings?.urlComponent?.iframeHeight);
+
+        this.settings = this.urlData.settings;
     }
 
     public onAddNewUrlPress() {
@@ -45,7 +50,12 @@ export class UrlComponent extends BaseFieldComponent implements OnInit {
     public onResized(event: ResizedEvent) {
         this.height = event.newHeight;
     }
-    public onMouseUp() {
+    public onMouseUp(event: ResizedEvent) {
         this.urlData.data.value.height = this.height;
+        console.log(event);
+
+        const someHeightValue = 2;
+
+        this.settings = { urlComponent: { iframeHeight: someHeightValue } };
     }
 }
