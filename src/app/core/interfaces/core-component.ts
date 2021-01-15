@@ -135,7 +135,7 @@ export function createComponentMetadataTemplate(componentType: ComponentType, va
         return _component;
     } else if (componentType === 'url') {
         const _component: Url = {
-            data: { value: { href: '', height: 400 } },
+            data: { value: [{ href: '' }] },
             component: 'url',
         };
 
@@ -175,6 +175,10 @@ export type ComponentMetadata =
     | SmallTextInput
     | Table
     | Url;
+
+export type ComponentSettings = {
+    height?: number;
+};
 
 export type BaseComponent = {
     component: ComponentType;
@@ -219,7 +223,7 @@ export interface Table extends BaseComponent {
 
 export interface Url extends BaseComponent {
     component: 'url';
-    data: { value: { href: string; height: number } };
+    data: { value: Link[] };
     validation?: Validator[];
 }
 

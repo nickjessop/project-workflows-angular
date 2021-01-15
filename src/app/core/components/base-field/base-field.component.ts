@@ -12,6 +12,7 @@ export class BaseFieldComponent {
     @Input() field: BlockConfig = createBlockConfig('smallTextInput');
     @Input() index?: number;
     @Input() componentMode: ComponentMode = 'edit';
+    @Input() height?: number;
 
     public items: MenuItem[] = [
         {
