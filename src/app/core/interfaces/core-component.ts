@@ -137,6 +137,7 @@ export function createComponentMetadataTemplate(componentType: ComponentType, va
         const _component: Url = {
             data: { value: [{ href: '' }] },
             component: 'url',
+            settings: { urlComponent: { iframeHeight: 400 } },
         };
 
         if (validation) {
@@ -176,55 +177,58 @@ export type ComponentMetadata =
     | Table
     | Url;
 
-export type ComponentSettings = {
-    height?: number;
-};
-
 export type BaseComponent = {
     component: ComponentType;
     validation?: Validator[];
+    settings?: ComponentSettings;
+};
+
+export type ComponentSettings = {
+    height?: number;
+    urlComponent?: {
+        iframeHeight?: number;
+    };
+    imageUploaderComponent?: {
+        maxThumbnails?: number;
+    };
+    tableComponent?: {
+        disableTableHeaderStyle?: boolean;
+    };
 };
 
 export interface Checkboxes extends BaseComponent {
     component: 'checkboxes';
     data: { value: { item: string; checked?: boolean }[] };
-    validation?: Validator[];
 }
 
 export interface FileUploader extends BaseComponent {
     component: 'fileUploader';
     data: { value: Link[] };
-    validation?: Validator[];
 }
 
 export interface ImageUploader extends BaseComponent {
     component: 'imageUploader';
     data: { value: Link[] };
-    validation?: Validator[];
 }
 
 export interface LargeTextInput extends BaseComponent {
     component: 'largeTextInput';
     data: { value: string };
-    validation?: Validator[];
 }
 
 export interface SmallTextInput extends BaseComponent {
     component: 'smallTextInput';
     data: { value: string };
-    validation?: Validator[];
 }
 
 export interface Table extends BaseComponent {
     component: 'table';
     data: { value: { row?: { item: { text: string; isHeader?: boolean }[] }[] } };
-    validation?: Validator[];
 }
 
 export interface Url extends BaseComponent {
     component: 'url';
     data: { value: Link[] };
-    validation?: Validator[];
 }
 
 export type Link = {
