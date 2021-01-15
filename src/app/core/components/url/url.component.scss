@@ -1,37 +1,26 @@
 .embed {
-    overflow: auto;
-    resize: vertical;
-    padding: 2px 2px 24px 2px;
+    border: 2px solid var(--surface-c);
     background: var(--surface-c);
-    &__inner {
-        height: 100%;
-        width: 100%;
-        position: relative;
+    border-radius: 2px;
+    &--resizable {
+        overflow: auto;
+        resize: vertical;
     }
     iframe {
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 100%;
+        height: calc(100% - 16px);
         width: 100%;
     }
-    .handle {
-        width: 16px;
-        height: 16px;
-        color: var(--text-color);
-        position: absolute;
-        bottom: 2px;
-        right: 2px;
-        text-align: center;
+}
+
+.url {
+    button {
+        visibility: hidden;
     }
-}
-
-.view .embed {
-    padding: 2px;
-}
-
-input[type='text'] {
-    width: 80%;
+    &:hover {
+        button {
+            visibility: visible;
+        }
+    }
 }
 
 .placeholder {
@@ -41,6 +30,7 @@ input[type='text'] {
         height: 150px;
     }
 }
+
 .add {
     width: 80%;
     margin: 0 auto;

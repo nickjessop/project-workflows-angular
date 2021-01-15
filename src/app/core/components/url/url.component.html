@@ -1,52 +1,54 @@
-<app-base-field [field]="field" [index]="index" [height]="400">
+<app-base-field [field]="field" [index]="index">
     <ng-container *ngIf="componentMode === 'view'">
         <div class="view" *ngIf="urlData.data.value[0].href; else placeholder">
-            <div class="embed p-mb-2" [style.height.px]="height">
-                <div class="embed__inner">
-                    <iframe [src]="cleanUrl" allowfullscreen class="p-mb-2" frameBorder="0"></iframe>
-                </div>
+            <div
+                class="embed p-mb-0"
+                [style.height.px]="settings?.urlComponent?.iframeHeight ? settings.urlComponent.iframeHeight : 400"
+            >
+                <iframe [src]="cleanUrl" allowfullscreen class="p-mb-2" frameBorder="0" style="height: 100%;"></iframe>
             </div>
-            <i class="pi pi-external-link p-mr-2"></i>
-            <a [href]="urlData.data.value[0].href" target="_blank">{{ domain.hostname }}</a>
+            <div class="p-mt-2 p-d-flex p-ai-center">
+                <i class="pi pi-external-link p-mr-2"></i>
+                <a [href]="urlData.data.value[0].href" target="_blank">{{ domain.hostname }}</a>
+            </div>
         </div>
         <ng-template #placeholder>
             <div class="placeholder">
                 <img src="/assets/placeholder/embed-placeholder.jpg" alt="Embed placeholder" />
-                <div class="p-text-italic">Awaiting embedded content.</div>
             </div>
         </ng-template>
     </ng-container>
     <ng-container *ngIf="componentMode === 'edit'">
         <div class="p-d-flex p-flex-column p-mb-2">
-            <div class="edit" *ngIf="urlData.data.value[0].href; else add">
-                <div class="embed" (resized)="onResized($event)" (mouseup)="onMouseUp()" [style.height.px]="height">
-                    <div class="handle"><i class="pi pi-arrow-circle-down"></i></div>
-                    <div class="embed__inner">
-                        <iframe [src]="cleanUrl" allowfullscreen class="p-mb-2" frameBorder="0"></iframe>
-                    </div>
+            <div class="edit" *ngIf="urlData.data.value[0].href && domain.hostname != ''; else add">
+                <div
+                    class="embed embed--resizable"
+                    (mouseup)="onMouseUp($event)"
+                    [style.height.px]="settings?.urlComponent?.iframeHeight ? settings.urlComponent.iframeHeight : 400"
+                >
+                    <iframe [src]="cleanUrl" allowfullscreen frameBorder="0"></iframe>
                 </div>
-                <span class="p-mt-5 p-float-label">
-                    <i class="pi pi-link p-mx-2"></i>
-                    <input id="float-input" type="text" pInputText [(ngModel)]="urlData.data.value[0].href" />
-                    <label for="float-input">Url</label>
+                <div class="url p-mt-2 p-d-flex p-ai-center">
+                    <i class="pi pi-external-link p-mr-2"></i>
+                    <a [href]="urlData.data.value[0].href" target="_blank" class="p-mr-2">{{ domain.hostname }}</a>
                     <button
                         pButton
                         class="p-button-rounded p-button-text"
                         type="button"
-                        icon="pi pi-times"
+                        icon="pi pi-trash"
                         (click)="onRemoveUrlPress()"
                     ></button>
-                </span>
+                </div>
             </div>
             <ng-template #add>
                 <div class="placeholder">
                     <img src="/assets/placeholder/embed-placeholder.jpg" alt="Embed placeholder" />
-                    <div class="p-text-italic">Enter a URL below to embed content here.</div>
+                    <div class="p-text-italic">Enter a URL below to embed content.</div>
                 </div>
                 <div class="p-d-flex p-ai-center p-jc-center add p-mt-5">
                     <span class="p-float-label">
                         <label for="float-input-add">Url</label>
-                        <input id="float-input-add" type="text" pInputText [(ngModel)]="href" />
+                        <input id="float-input-add" type="url" pInputText [(ngModel)]="href" />
                     </span>
                     <div>
                         <button
@@ -63,13 +65,3 @@
         </div>
     </ng-container>
 </app-base-field>
-
-<div>
-    <label>URL SETTINGS:</label>
-    <ng-container *ngIf="settings?.urlComponent?.iframeHeight; else showNoSetting">
-        <input type="text" [(ngModel)]="settings.urlComponent.iframeHeight" />
-    </ng-container>
-    <ng-template #showNoSetting>
-        no iframeheight set
-    </ng-template>
-</div>
