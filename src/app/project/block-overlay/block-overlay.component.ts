@@ -27,7 +27,7 @@ export class BlockPanelOverlayComponent implements OnInit {
             { enabled: true, icon: 'pi-small-text', label: 'Text Input', component: 'smallTextInput' },
             { enabled: true, icon: 'pi-large-text', label: 'Text Area', component: 'largeTextInput' },
             { enabled: true, icon: 'pi-table', label: 'Table', component: 'table' },
-            { enabled: true, icon: 'pi-globe', label: 'Url', component: 'url' },
+            { enabled: true, icon: 'pi-embed', label: 'Embed', component: 'embed' },
         ];
 
         return options;
