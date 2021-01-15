@@ -28,7 +28,6 @@ import { CoreComponentResolverDirective } from './core-component-resolver.direct
         DynamicFormComponent,
         CheckboxesComponent,
         BaseFieldComponent,
-
         UrlComponent,
     ],
     imports: [

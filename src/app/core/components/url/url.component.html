@@ -1,13 +1,13 @@
-<app-base-field [field]="field" [index]="index">
+<app-base-field [field]="field" [index]="index" [height]="400">
     <ng-container *ngIf="componentMode === 'view'">
-        <div class="view" *ngIf="urlData.data.value.href; else placeholder">
-            <div class="embed p-mb-2" [style.height.px]="urlData.data.value.height">
+        <div class="view" *ngIf="urlData.data.value[0].href; else placeholder">
+            <div class="embed p-mb-2" [style.height.px]="height">
                 <div class="embed__inner">
                     <iframe [src]="cleanUrl" allowfullscreen class="p-mb-2" frameBorder="0"></iframe>
                 </div>
             </div>
             <i class="pi pi-external-link p-mr-2"></i>
-            <a [href]="urlData.data.value.href" target="_blank">{{ domain.hostname }}</a>
+            <a [href]="urlData.data.value[0].href" target="_blank">{{ domain.hostname }}</a>
         </div>
         <ng-template #placeholder>
             <div class="placeholder">
@@ -18,13 +18,8 @@
     </ng-container>
     <ng-container *ngIf="componentMode === 'edit'">
         <div class="p-d-flex p-flex-column p-mb-2">
-            <div class="edit" *ngIf="urlData.data.value.href; else add">
-                <div
-                    class="embed"
-                    (resized)="onResized($event)"
-                    (mouseup)="onMouseUp()"
-                    [style.height.px]="urlData.data.value.height"
-                >
+            <div class="edit" *ngIf="urlData.data.value[0].href; else add">
+                <div class="embed" (resized)="onResized($event)" (mouseup)="onMouseUp()" [style.height.px]="height">
                     <div class="handle"><i class="pi pi-arrow-circle-down"></i></div>
                     <div class="embed__inner">
                         <iframe [src]="cleanUrl" allowfullscreen class="p-mb-2" frameBorder="0"></iframe>
@@ -32,7 +27,7 @@
                 </div>
                 <span class="p-mt-5 p-float-label">
                     <i class="pi pi-link p-mx-2"></i>
-                    <input id="float-input" type="text" pInputText [(ngModel)]="urlData.data.value.href" />
+                    <input id="float-input" type="text" pInputText [(ngModel)]="urlData.data.value[0].href" />
                     <label for="float-input">Url</label>
                     <button
                         pButton
