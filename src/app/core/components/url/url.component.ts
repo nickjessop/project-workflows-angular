@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { ResizedEvent } from 'angular-resize-event';
+import { MessageService } from 'primeng/api';
 import { ProjectService } from 'src/app/services/project/project.service';
 import { ComponentSettings, createComponentMetadataTemplate, Url } from '../../interfaces/core-component';
 import { BaseFieldComponent } from '../base-field/base-field.component';
@@ -19,43 +19,66 @@ export class UrlComponent extends BaseFieldComponent implements OnInit {
     public cleanUrl: SafeResourceUrl = '';
     public href: string = '';
     public domain: { hostname: string } = { hostname: '' };
-    // public height: number = this.urlData.data.value.height;
-    public height: number = 400;
 
-    constructor(public projectService: ProjectService, private domSantizer: DomSanitizer) {
+    constructor(
+        public projectService: ProjectService,
+        private domSantizer: DomSanitizer,
+        private messageService: MessageService
+    ) {
         super(projectService);
     }
 
     ngOnInit(): void {
         this.urlData = this.field.metadata as Url;
 
-        this.cleanUrl = this.domSantizer.bypassSecurityTrustResourceUrl(this.urlData.data.value.href || '');
-        // if (this.urlData.data.value) {
-        //     this.domain = new URL(this.urlData.data.value.href);
-        // }
-        console.log(this.urlData.data.value.height);
-        console.log(this.urlData.settings?.urlComponent?.iframeHeight);
+        this.cleanUrl = this.domSantizer.bypassSecurityTrustResourceUrl(this.urlData.data.value[0].href || '');
+
+        try {
+            if (this.urlData.data.value[0].href) {
+                this.domain = new URL(this.urlData.data.value[0].href);
+            }
+        } catch (e) {
+            this.domain.hostname = '';
+        }
 
         this.settings = this.urlData.settings;
     }
 
     public onAddNewUrlPress() {
-        this.urlData.data.value[0].href = this.href;
-        this.href = '';
+        const message = {
+            severity: 'error',
+            key: 'global-toast',
+            life: 2000,
+            closable: true,
+            detail: '',
+        };
+        if (this.isValidUrl(this.href)) {
+            this.urlData.data.value[0].href = this.href;
+            this.href = '';
+        } else {
+            message.detail = 'Please enter a valid URL.';
+            this.messageService.add(message);
+            return;
+        }
     }
+
     public onRemoveUrlPress() {
         this.urlData.data.value[0].href = '';
     }
 
-    public onResized(event: ResizedEvent) {
-        this.height = event.newHeight;
+    public onMouseUp(event: any) {
+        const height = event.layerY;
+        this.settings = { urlComponent: { iframeHeight: height } };
+        this.urlData.settings = this.settings;
     }
-    public onMouseUp(event: ResizedEvent) {
-        this.urlData.data.value.height = this.height;
-        console.log(event);
 
-        const someHeightValue = 2;
+    public isValidUrl(url: string) {
+        const regexp = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
 
-        this.settings = { urlComponent: { iframeHeight: someHeightValue } };
+        if (regexp.test(url)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
