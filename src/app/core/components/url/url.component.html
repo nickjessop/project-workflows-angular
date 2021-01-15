@@ -63,3 +63,13 @@
         </div>
     </ng-container>
 </app-base-field>
+
+<div>
+    <label>URL SETTINGS:</label>
+    <ng-container *ngIf="settings?.urlComponent?.iframeHeight; else showNoSetting">
+        <input type="text" [(ngModel)]="settings.urlComponent.iframeHeight" />
+    </ng-container>
+    <ng-template #showNoSetting>
+        no iframeheight set
+    </ng-template>
+</div>
