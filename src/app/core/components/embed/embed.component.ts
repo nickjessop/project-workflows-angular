@@ -3,18 +3,18 @@ import { FormGroup } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { MessageService } from 'primeng/api';
 import { ProjectService } from 'src/app/services/project/project.service';
-import { ComponentSettings, createComponentMetadataTemplate, Url } from '../../interfaces/core-component';
+import { ComponentSettings, createComponentMetadataTemplate, Embed } from '../../interfaces/core-component';
 import { BaseFieldComponent } from '../base-field/base-field.component';
 
 @Component({
-    selector: 'app-url',
-    templateUrl: './url.component.html',
-    styleUrls: ['./url.component.scss'],
+    selector: 'app-embed',
+    templateUrl: './embed.component.html',
+    styleUrls: ['./embed.component.scss'],
 })
-export class UrlComponent extends BaseFieldComponent implements OnInit {
+export class EmbedComponent extends BaseFieldComponent implements OnInit {
     @Input() group!: FormGroup;
 
-    public urlData = createComponentMetadataTemplate('url') as Url;
+    public embedData = createComponentMetadataTemplate('embed') as Embed;
     public settings?: ComponentSettings;
     public cleanUrl: SafeResourceUrl = '';
     public href: string = '';
@@ -29,19 +29,19 @@ export class UrlComponent extends BaseFieldComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.urlData = this.field.metadata as Url;
+        this.embedData = this.field.metadata as Embed;
 
-        this.cleanUrl = this.domSantizer.bypassSecurityTrustResourceUrl(this.urlData.data.value[0].href || '');
+        this.cleanUrl = this.domSantizer.bypassSecurityTrustResourceUrl(this.embedData.data.value[0].href || '');
 
         try {
-            if (this.urlData.data.value[0].href) {
-                this.domain = new URL(this.urlData.data.value[0].href);
+            if (this.embedData.data.value[0].href) {
+                this.domain = new URL(this.embedData.data.value[0].href);
             }
         } catch (e) {
             this.domain.hostname = '';
         }
 
-        this.settings = this.urlData.settings;
+        this.settings = this.embedData.settings;
     }
 
     public onAddNewUrlPress() {
@@ -53,7 +53,7 @@ export class UrlComponent extends BaseFieldComponent implements OnInit {
             detail: '',
         };
         if (this.isValidUrl(this.href)) {
-            this.urlData.data.value[0].href = this.href;
+            this.embedData.data.value[0].href = this.href;
             this.href = '';
         } else {
             message.detail = 'Please enter a valid URL.';
@@ -63,13 +63,13 @@ export class UrlComponent extends BaseFieldComponent implements OnInit {
     }
 
     public onRemoveUrlPress() {
-        this.urlData.data.value[0].href = '';
+        this.embedData.data.value[0].href = '';
     }
 
     public onMouseUp(event: any) {
         const height = event.layerY;
-        this.settings = { urlComponent: { iframeHeight: height } };
-        this.urlData.settings = this.settings;
+        this.settings = { embedComponent: { iframeHeight: height } };
+        this.embedData.settings = this.settings;
     }
 
     public isValidUrl(url: string) {
