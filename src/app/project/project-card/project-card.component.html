@@ -1,5 +1,5 @@
-<div class="project__row p-d-flex">
-    <div class="p-col-6 p-d-flex" (click)="navigate()">
+<div class="p-d-flex p-p-3">
+    <div class="project__row" (click)="navigate()">
         <td>
             <strong>{{ projectName | sliceEllipsis: 0:80 }}</strong
             ><br />
@@ -9,7 +9,7 @@
             <span title="{{ openedDate }}">{{ openedDate | sliceEllipsis: 0:40 }}</span>
         </td>
     </div>
-    <div *ngIf="projectId?.length > 0" class="p-col-6 p-d-flex p-jc-end">
+    <div *ngIf="projectId?.length > 0" class="p-ml-auto">
         <button
             pButton
             type="button"
