@@ -321,7 +321,7 @@ export class ProjectService {
     }
 
     public getProjects() {
-        const userId = this.authenticationService.user?.id;
+        const userId = this.authenticationService.user?.id || '';
 
         const ref = this.firebaseService.getDbInstance().collection(this.PROJECT_COLLECTION_NAME);
 
@@ -361,5 +361,9 @@ export class ProjectService {
                     console.log(error);
                 }
             );
+    }
+
+    public resetProject() {
+        this.projectConfig = this.createBaseProject('', '', '');
     }
 }

@@ -11,14 +11,20 @@ export interface User {
 }
 
 export type UserPlan = 'Plus' | 'Growth' | 'Essential' | 'Free';
+export enum AuthStatus {
+    AUTHENTICATED,
+    UNAUTHENTICATED,
+    UNKNOWN,
+}
 
 @Injectable({
     providedIn: 'root',
 })
 export class AuthenticationService {
     private readonly USER_COLLECTION_NAME = 'users';
-    private _user?: BehaviorSubject<User | undefined> = new BehaviorSubject<User | undefined>(undefined);
+    private _user: BehaviorSubject<User | undefined | null> = new BehaviorSubject<User | undefined | null>(undefined);
     public readonly $user = this._user?.asObservable();
+    public readonly $loginStatus = new BehaviorSubject<{ authStatus: AuthStatus }>({ authStatus: AuthStatus.UNKNOWN });
 
     private subscriptions = new Subscription();
     public redirectUrl = '/dashboard';
@@ -28,20 +34,46 @@ export class AuthenticationService {
         private router: Router,
         private messageService: MessageService
     ) {
+        this.setAuthStatus(this.user);
+        this.initFirebaseUserListener();
+    }
+
+    private setAuthStatus(user?: User | null) {
+        if (user === undefined) {
+            this.$loginStatus.next({ authStatus: AuthStatus.UNKNOWN });
+        } else if (user === null) {
+            this.$loginStatus.next({ authStatus: AuthStatus.UNAUTHENTICATED });
+        } else {
+            this.$loginStatus.next({ authStatus: AuthStatus.AUTHENTICATED });
+        }
+    }
+
+    initFirebaseUserListener() {
+        // this.firebaseService.getAuthInstance().currentUser gets a snapshot of who the current user is.
+        // Because Firebase has async calls to pull user info from Web SQL and then has to make an API call to fetch user info on initialization,
+        // It doesn't make sense to use this synchronous user fetch method
+
+        // this.firebaseService.getAuthInstance().onAuthStateChanged() gives us the opportunity to receive events on when
+        // the user status changes (authenticated vs unauthenticated).  The problem is that onAuthStateChanged() sends us
+        // a `null` user is not authenticated OR if firebase hasn't finished initializing (pulling from WEB sql & making API call).
+        // This makes it extremely difficult to rely on it for checking for unauthenticated state for app initialization.
+
         this.subscriptions.add(
             this.firebaseService.getAuthInstance().onAuthStateChanged(
                 user => {
                     if (user) {
-                        console.log(this.router.url);
-                        console.log('logged in user');
-                        this.user = { id: user.uid, email: user.email || '', emailVerified: user.emailVerified };
+                        this.user = {
+                            id: user.uid,
+                            email: user.email || '',
+                            emailVerified: user.emailVerified,
+                        };
+                        this.setAuthStatus(this.user);
                     } else {
-                        console.log('logged out');
-                        this.user = undefined;
+                        this.setAuthStatus(null);
                     }
                 },
                 error => {
-                    console.log(error);
+                    this.setAuthStatus(null);
                 }
             )
         );
@@ -58,8 +90,6 @@ export class AuthenticationService {
     public set user(user) {
         this._user?.next(user);
     }
-
-    // TODO: subscribe to user modification event, and set this as the user here as well as local storage
 
     public register(email: string, password: string, name: string, plan: UserPlan) {
         from(this.createUserAndAttachMetadata(email, password, name, plan)).subscribe(
