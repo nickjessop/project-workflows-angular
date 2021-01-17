@@ -133,11 +133,11 @@ export function createComponentMetadataTemplate(componentType: ComponentType, va
             _component.validation = validation;
         }
         return _component;
-    } else if (componentType === 'url') {
-        const _component: Url = {
+    } else if (componentType === 'embed') {
+        const _component: Embed = {
             data: { value: [{ href: '' }] },
-            component: 'url',
-            settings: { urlComponent: { iframeHeight: 400 } },
+            component: 'embed',
+            settings: { embedComponent: { iframeHeight: 400 } },
         };
 
         if (validation) {
@@ -164,7 +164,7 @@ export type ComponentType =
     | 'largeTextInput'
     | 'smallTextInput'
     | 'table'
-    | 'url';
+    | 'embed';
 
 export type ComponentMode = 'edit' | 'view' | 'interact';
 
@@ -175,7 +175,7 @@ export type ComponentMetadata =
     | LargeTextInput
     | SmallTextInput
     | Table
-    | Url;
+    | Embed;
 
 export type BaseComponent = {
     component: ComponentType;
@@ -185,7 +185,7 @@ export type BaseComponent = {
 
 export type ComponentSettings = {
     height?: number;
-    urlComponent?: {
+    embedComponent?: {
         iframeHeight?: number;
     };
     imageUploaderComponent?: {
@@ -226,8 +226,8 @@ export interface Table extends BaseComponent {
     data: { value: { row?: { item: { text: string; isHeader?: boolean }[] }[] } };
 }
 
-export interface Url extends BaseComponent {
-    component: 'url';
+export interface Embed extends BaseComponent {
+    component: 'embed';
     data: { value: Link[] };
 }
 
