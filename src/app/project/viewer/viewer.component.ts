@@ -40,8 +40,10 @@ export class ViewerComponent implements OnInit {
             })
         );
     }
+
     ngOnDestroy() {
         this.subscriptions.unsubscribe();
+        this.projectService.resetProject();
     }
 
     public onDragAndDropEvent(event: any) {
