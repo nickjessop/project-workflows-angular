@@ -4,17 +4,16 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
-import { AngularResizedEventModule } from 'angular-resize-event';
 import { PrimengModule } from '../primeng/primeng.module';
 import { BaseFieldComponent } from './components/base-field/base-field.component';
 import { CheckboxesComponent } from './components/checkboxes/checkboxes.component';
 import { DynamicFormComponent } from './components/dynamic-form/dynamic-form.component';
+import { EmbedComponent } from './components/embed/embed.component';
 import { FileUploaderComponent } from './components/file-uploader/file-uploader.component';
 import { ImageUploaderComponent } from './components/image-uploader/image-uploader.component';
 import { LargeTextInputComponent } from './components/large-text-input/large-text-input.component';
 import { SmallTextInputComponent } from './components/small-text-input/small-text-input.component';
 import { TableComponent } from './components/table/table.component';
-import { UrlComponent } from './components/url/url.component';
 import { CoreComponentResolverDirective } from './core-component-resolver.directive';
 
 @NgModule({
@@ -28,7 +27,7 @@ import { CoreComponentResolverDirective } from './core-component-resolver.direct
         DynamicFormComponent,
         CheckboxesComponent,
         BaseFieldComponent,
-        UrlComponent,
+        EmbedComponent,
     ],
     imports: [
         CommonModule,
@@ -37,7 +36,6 @@ import { CoreComponentResolverDirective } from './core-component-resolver.direct
         RouterModule,
         PrimengModule,
         DragDropModule,
-        AngularResizedEventModule,
         BrowserModule,
     ],
     exports: [
@@ -48,7 +46,7 @@ import { CoreComponentResolverDirective } from './core-component-resolver.direct
         TableComponent,
         DynamicFormComponent,
         CheckboxesComponent,
-        UrlComponent,
+        EmbedComponent,
     ],
     entryComponents: [
         LargeTextInputComponent,
@@ -58,7 +56,7 @@ import { CoreComponentResolverDirective } from './core-component-resolver.direct
         TableComponent,
         DynamicFormComponent,
         CheckboxesComponent,
-        UrlComponent,
+        EmbedComponent,
     ],
 })
 export class CoreComponentsModule {}

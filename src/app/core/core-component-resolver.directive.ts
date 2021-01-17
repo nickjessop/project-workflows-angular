@@ -1,12 +1,12 @@
 import { ComponentFactoryResolver, ComponentRef, Directive, Input, OnInit, ViewContainerRef } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { CheckboxesComponent } from './components/checkboxes/checkboxes.component';
+import { EmbedComponent } from './components/embed/embed.component';
 import { FileUploaderComponent } from './components/file-uploader/file-uploader.component';
 import { ImageUploaderComponent } from './components/image-uploader/image-uploader.component';
 import { LargeTextInputComponent } from './components/large-text-input/large-text-input.component';
 import { SmallTextInputComponent } from './components/small-text-input/small-text-input.component';
 import { TableComponent } from './components/table/table.component';
-import { UrlComponent } from './components/url/url.component';
 import { BlockConfig, ComponentType } from './interfaces/core-component';
 
 @Directive({
@@ -24,7 +24,7 @@ export class CoreComponentResolverDirective implements OnInit {
         | CheckboxesComponent
         | SmallTextInputComponent
         | TableComponent
-        | UrlComponent
+        | EmbedComponent
     >;
 
     constructor(
@@ -82,9 +82,9 @@ export class CoreComponentResolverDirective implements OnInit {
             _componentRef.instance.index = this.index;
 
             this.componentRef = _componentRef;
-        } else if (componentType === 'url') {
-            const factory = this.componentFactoryResolver.resolveComponentFactory(UrlComponent);
-            const _componentRef = this.viewContainerRef.createComponent<UrlComponent>(factory);
+        } else if (componentType === 'embed') {
+            const factory = this.componentFactoryResolver.resolveComponentFactory(EmbedComponent);
+            const _componentRef = this.viewContainerRef.createComponent<EmbedComponent>(factory);
             _componentRef.instance.field = this.field;
             _componentRef.instance.group = this.group;
             _componentRef.instance.index = this.index;
