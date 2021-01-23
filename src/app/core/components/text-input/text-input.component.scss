@@ -4,14 +4,14 @@
     width: 100%;
 }
 
-.text.edit {
-    input {
-        width: 80%;
-    }
+.text textarea {
+    width: 100%;
+    max-width: 100%;
 }
 
 .text.view {
-    p {
-        margin: 0;
+    .text__input {
+        border: none;
+        background: transparent;
     }
 }

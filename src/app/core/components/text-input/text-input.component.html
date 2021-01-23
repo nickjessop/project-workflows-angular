@@ -1,12 +1,28 @@
 <app-base-field [field]="field" [index]="index">
     <ng-container *ngIf="componentMode === 'view'">
         <div class="text view">
-            <p class="p-p-2">{{ field.metadata.data.value ? field.metadata.data.value : 'No content' }}</p>
+            <textarea
+                pInputTextarea
+                [ngModel]="field.metadata.data.value"
+                placeholder="No content"
+                readonly
+                class="text__input"
+            ></textarea>
         </div>
     </ng-container>
     <ng-container *ngIf="componentMode === 'edit'">
         <div class="text edit">
-            <input type="text" pInputText [(ngModel)]="field.metadata.data.value" placeholder="Add content" />
+            <textarea
+                pInputTextarea
+                placeholder="Add content"
+                [(ngModel)]="field.metadata.data.value"
+                [rows]="2"
+                [cols]="30"
+                autoResize="autoResize"
+                (focusout)="onFocusOut($event)"
+                [style.height.px]="settings?.TextInputComponent?.textareaHeight"
+            >
+            </textarea>
         </div>
     </ng-container>
 </app-base-field>
