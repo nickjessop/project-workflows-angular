@@ -11,14 +11,14 @@ import { DynamicFormComponent } from './components/dynamic-form/dynamic-form.com
 import { EmbedComponent } from './components/embed/embed.component';
 import { FileUploaderComponent } from './components/file-uploader/file-uploader.component';
 import { ImageUploaderComponent } from './components/image-uploader/image-uploader.component';
-import { LargeTextInputComponent } from './components/large-text-input/large-text-input.component';
+import { RichTextInputComponent } from './components/rich-text-input/rich-text-input.component';
 import { TableComponent } from './components/table/table.component';
 import { TextInputComponent } from './components/text-input/text-input.component';
 import { CoreComponentResolverDirective } from './core-component-resolver.directive';
 
 @NgModule({
     declarations: [
-        LargeTextInputComponent,
+        RichTextInputComponent,
         TextInputComponent,
         ImageUploaderComponent,
         FileUploaderComponent,
@@ -39,7 +39,7 @@ import { CoreComponentResolverDirective } from './core-component-resolver.direct
         BrowserModule,
     ],
     exports: [
-        LargeTextInputComponent,
+        RichTextInputComponent,
         TextInputComponent,
         ImageUploaderComponent,
         FileUploaderComponent,
@@ -49,7 +49,7 @@ import { CoreComponentResolverDirective } from './core-component-resolver.direct
         EmbedComponent,
     ],
     entryComponents: [
-        LargeTextInputComponent,
+        RichTextInputComponent,
         TextInputComponent,
         ImageUploaderComponent,
         FileUploaderComponent,

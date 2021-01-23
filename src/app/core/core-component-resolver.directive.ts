@@ -4,7 +4,7 @@ import { CheckboxesComponent } from './components/checkboxes/checkboxes.componen
 import { EmbedComponent } from './components/embed/embed.component';
 import { FileUploaderComponent } from './components/file-uploader/file-uploader.component';
 import { ImageUploaderComponent } from './components/image-uploader/image-uploader.component';
-import { LargeTextInputComponent } from './components/large-text-input/large-text-input.component';
+import { RichTextInputComponent } from './components/rich-text-input/rich-text-input.component';
 import { TableComponent } from './components/table/table.component';
 import { TextInputComponent } from './components/text-input/text-input.component';
 import { BlockConfig, ComponentType } from './interfaces/core-component';
@@ -20,7 +20,7 @@ export class CoreComponentResolverDirective implements OnInit {
     componentRef?: ComponentRef<
         | FileUploaderComponent
         | ImageUploaderComponent
-        | LargeTextInputComponent
+        | RichTextInputComponent
         | CheckboxesComponent
         | TextInputComponent
         | TableComponent
@@ -58,9 +58,9 @@ export class CoreComponentResolverDirective implements OnInit {
             _componentRef.instance.index = this.index;
 
             this.componentRef = _componentRef;
-        } else if (componentType === 'largeTextInput') {
-            const factory = this.componentFactoryResolver.resolveComponentFactory(LargeTextInputComponent);
-            const _componentRef = this.viewContainerRef.createComponent<LargeTextInputComponent>(factory);
+        } else if (componentType === 'richTextInput') {
+            const factory = this.componentFactoryResolver.resolveComponentFactory(RichTextInputComponent);
+            const _componentRef = this.viewContainerRef.createComponent<RichTextInputComponent>(factory);
             _componentRef.instance.field = this.field;
             _componentRef.instance.group = this.group;
             _componentRef.instance.index = this.index;

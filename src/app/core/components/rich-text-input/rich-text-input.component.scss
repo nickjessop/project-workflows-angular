@@ -1,16 +1,16 @@
 @import 'core';
 
-.large-text {
+.rich-text {
     width: 100%;
 }
 
-.large-text textarea {
+.rich-text textarea {
     width: 80%;
     // resize: none;
 }
 
-.large-text.view {
-    .large-text__input {
+.rich-text.view {
+    .rich-text__input {
         border: none;
         background: transparent;
     }
