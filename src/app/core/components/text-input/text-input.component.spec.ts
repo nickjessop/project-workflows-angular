@@ -1,19 +1,18 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { SmallTextInputComponent } from './small-text-input.component';
+import { TextInputComponent } from './text-input.component';
 
 describe('SmallTextInputComponent', () => {
-    let component: SmallTextInputComponent;
-    let fixture: ComponentFixture<SmallTextInputComponent>;
+    let component: TextInputComponent;
+    let fixture: ComponentFixture<TextInputComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [SmallTextInputComponent],
+            declarations: [TextInputComponent],
         }).compileComponents();
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(SmallTextInputComponent);
+        fixture = TestBed.createComponent(TextInputComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

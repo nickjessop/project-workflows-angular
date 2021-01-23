@@ -83,10 +83,10 @@ export function createComponentMetadataTemplate(componentType: ComponentType, va
             _component.validation = validation;
         }
         return _component;
-    } else if (componentType === 'smallTextInput') {
-        const _component: SmallTextInput = {
+    } else if (componentType === 'textInput') {
+        const _component: textInput = {
             data: { value: '' },
-            component: 'smallTextInput',
+            component: 'textInput',
         };
 
         if (validation) {
@@ -145,9 +145,9 @@ export function createComponentMetadataTemplate(componentType: ComponentType, va
         }
         return _component;
     } else {
-        const _component: SmallTextInput = {
+        const _component: textInput = {
             data: { value: '' },
-            component: 'smallTextInput',
+            component: 'textInput',
         };
 
         if (validation) {
@@ -162,20 +162,13 @@ export type ComponentType =
     | 'fileUploader'
     | 'imageUploader'
     | 'largeTextInput'
-    | 'smallTextInput'
+    | 'textInput'
     | 'table'
     | 'embed';
 
 export type ComponentMode = 'edit' | 'view' | 'interact';
 
-export type ComponentMetadata =
-    | Checkboxes
-    | FileUploader
-    | ImageUploader
-    | LargeTextInput
-    | SmallTextInput
-    | Table
-    | Embed;
+export type ComponentMetadata = Checkboxes | FileUploader | ImageUploader | LargeTextInput | textInput | Table | Embed;
 
 export type BaseComponent = {
     component: ComponentType;
@@ -216,8 +209,8 @@ export interface LargeTextInput extends BaseComponent {
     data: { value: string };
 }
 
-export interface SmallTextInput extends BaseComponent {
-    component: 'smallTextInput';
+export interface textInput extends BaseComponent {
+    component: 'textInput';
     data: { value: string };
 }
 
