@@ -84,9 +84,10 @@ export function createComponentMetadataTemplate(componentType: ComponentType, va
         }
         return _component;
     } else if (componentType === 'textInput') {
-        const _component: textInput = {
+        const _component: TextInput = {
             data: { value: '' },
             component: 'textInput',
+            settings: { TextInputComponent: { textareaHeight: '50' } },
         };
 
         if (validation) {
@@ -145,7 +146,7 @@ export function createComponentMetadataTemplate(componentType: ComponentType, va
         }
         return _component;
     } else {
-        const _component: textInput = {
+        const _component: TextInput = {
             data: { value: '' },
             component: 'textInput',
         };
@@ -168,7 +169,7 @@ export type ComponentType =
 
 export type ComponentMode = 'edit' | 'view' | 'interact';
 
-export type ComponentMetadata = Checkboxes | FileUploader | ImageUploader | RichTextInput | textInput | Table | Embed;
+export type ComponentMetadata = Checkboxes | FileUploader | ImageUploader | RichTextInput | TextInput | Table | Embed;
 
 export type BaseComponent = {
     component: ComponentType;
@@ -178,6 +179,9 @@ export type BaseComponent = {
 
 export type ComponentSettings = {
     height?: number;
+    TextInputComponent?: {
+        textareaHeight?: string;
+    };
     embedComponent?: {
         iframeHeight?: number;
     };
@@ -209,7 +213,7 @@ export interface RichTextInput extends BaseComponent {
     data: { value: string };
 }
 
-export interface textInput extends BaseComponent {
+export interface TextInput extends BaseComponent {
     component: 'textInput';
     data: { value: string };
 }

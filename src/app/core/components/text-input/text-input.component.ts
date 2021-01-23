@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ProjectService } from 'src/app/services/project/project.service';
+import { ComponentSettings, createComponentMetadataTemplate, TextInput } from '../../interfaces/core-component';
 import { BaseFieldComponent } from '../base-field/base-field.component';
 
 @Component({
@@ -14,9 +15,21 @@ export class TextInputComponent extends BaseFieldComponent implements OnInit {
     // @Input() componentMode: ComponentMode = 'view';
     // @Input() index = 0;
 
+    public textInputData = createComponentMetadataTemplate('textInput') as TextInput;
+    public settings?: ComponentSettings;
+
     constructor(public projectService: ProjectService) {
         super(projectService);
     }
 
-    ngOnInit() {}
+    ngOnInit() {
+        this.textInputData = this.field.metadata as TextInput;
+        this.settings = this.textInputData.settings;
+    }
+
+    onFocusOut(event: { srcElement: { clientHeight: string } }) {
+        const height = event.srcElement.clientHeight;
+        this.settings = { TextInputComponent: { textareaHeight: height } };
+        this.textInputData.settings = this.settings;
+    }
 }
