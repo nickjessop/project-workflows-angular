@@ -5,8 +5,8 @@ import { EmbedComponent } from './components/embed/embed.component';
 import { FileUploaderComponent } from './components/file-uploader/file-uploader.component';
 import { ImageUploaderComponent } from './components/image-uploader/image-uploader.component';
 import { LargeTextInputComponent } from './components/large-text-input/large-text-input.component';
-import { SmallTextInputComponent } from './components/small-text-input/small-text-input.component';
 import { TableComponent } from './components/table/table.component';
+import { TextInputComponent } from './components/text-input/text-input.component';
 import { BlockConfig, ComponentType } from './interfaces/core-component';
 
 @Directive({
@@ -22,7 +22,7 @@ export class CoreComponentResolverDirective implements OnInit {
         | ImageUploaderComponent
         | LargeTextInputComponent
         | CheckboxesComponent
-        | SmallTextInputComponent
+        | TextInputComponent
         | TableComponent
         | EmbedComponent
     >;
@@ -66,9 +66,9 @@ export class CoreComponentResolverDirective implements OnInit {
             _componentRef.instance.index = this.index;
 
             this.componentRef = _componentRef;
-        } else if (componentType === 'smallTextInput') {
-            const factory = this.componentFactoryResolver.resolveComponentFactory(SmallTextInputComponent);
-            const _componentRef = this.viewContainerRef.createComponent<SmallTextInputComponent>(factory);
+        } else if (componentType === 'textInput') {
+            const factory = this.componentFactoryResolver.resolveComponentFactory(TextInputComponent);
+            const _componentRef = this.viewContainerRef.createComponent<TextInputComponent>(factory);
             _componentRef.instance.field = this.field;
             _componentRef.instance.group = this.group;
             _componentRef.instance.index = this.index;

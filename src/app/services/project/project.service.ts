@@ -107,7 +107,7 @@ export class ProjectService {
             ? configuration
             : [
                   {
-                      components: [createBlockConfig('smallTextInput')],
+                      components: [createBlockConfig('textInput')],
                       step: {
                           title: 'Untitled Step',
                           description: 'Untitled Step Description',
@@ -154,7 +154,7 @@ export class ProjectService {
         label?: string,
         name?: string
     ) {
-        const fieldConfig = createBlockConfig('smallTextInput', label, name);
+        const fieldConfig = createBlockConfig('textInput', label, name);
 
         const stepConfig: StepConfig = {
             step: {

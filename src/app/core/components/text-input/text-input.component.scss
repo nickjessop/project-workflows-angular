@@ -1,16 +1,16 @@
 @import 'core';
 
-.small-text {
+.text {
     width: 100%;
 }
 
-.small-text.edit {
+.text.edit {
     input {
         width: 80%;
     }
 }
 
-.small-text.view {
+.text.view {
     p {
         margin: 0;
     }
