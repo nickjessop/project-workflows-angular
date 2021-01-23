@@ -87,7 +87,7 @@ export function createComponentMetadataTemplate(componentType: ComponentType, va
         const _component: TextInput = {
             data: { value: '' },
             component: 'textInput',
-            settings: { TextInputComponent: { textareaHeight: '50' } },
+            settings: { TextInputComponent: { textareaHeight: 50 } },
         };
 
         if (validation) {
@@ -180,7 +180,7 @@ export type BaseComponent = {
 export type ComponentSettings = {
     height?: number;
     TextInputComponent?: {
-        textareaHeight?: string;
+        textareaHeight?: number;
     };
     embedComponent?: {
         iframeHeight?: number;

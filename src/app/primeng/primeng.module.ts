@@ -10,6 +10,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ContextMenuModule } from 'primeng/contextmenu';
 import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
+import { EditorModule } from 'primeng/editor';
 import { FileUploadModule } from 'primeng/fileupload';
 import { GalleriaModule } from 'primeng/galleria';
 import { InplaceModule } from 'primeng/inplace';
@@ -25,6 +26,7 @@ import { TableModule } from 'primeng/table';
 import { TabViewModule } from 'primeng/tabview';
 import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
+
 @NgModule({
     declarations: [],
     imports: [
@@ -53,6 +55,7 @@ import { ToolbarModule } from 'primeng/toolbar';
         ConfirmDialogModule,
         CheckboxModule,
         ContextMenuModule,
+        EditorModule,
     ],
     exports: [
         AccordionModule,
@@ -78,6 +81,7 @@ import { ToolbarModule } from 'primeng/toolbar';
         ConfirmDialogModule,
         CheckboxModule,
         ContextMenuModule,
+        EditorModule,
     ],
     providers: [ConfirmationService, MessageService],
 })

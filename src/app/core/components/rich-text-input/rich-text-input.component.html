@@ -1,18 +1,30 @@
 <app-base-field [field]="field" [index]="index">
     <ng-container *ngIf="componentMode === 'view'">
         <div class="rich-text view">
-            <textarea
-                pInputTextarea
-                [ngModel]="field.metadata.data.value"
-                placeholder="No content"
-                readonly
-                class="rich-text__input"
-            ></textarea>
+            <div
+                class="p-p-2"
+                [innerHTML]="field.metadata.data.value ? field.metadata.data.value : 'No content added yet.'"
+            ></div>
         </div>
     </ng-container>
     <ng-container *ngIf="componentMode === 'edit'">
         <div class="rich-text edit">
-            <textarea pInputTextarea placeholder="Add content" [(ngModel)]="field.metadata.data.value"></textarea>
+            <p-editor
+                placeholder="Add content"
+                [(ngModel)]="field.metadata.data.value"
+                [style]="{ height: '100%', fontSize: '1rem' }"
+                formats="['Bold', 'Underline', 'Italic', 'Link']"
+                styleClass="editor"
+            >
+                <p-header>
+                    <span class="ql-formats">
+                        <button class="ql-bold" aria-label="Bold"></button>
+                        <button class="ql-italic" aria-label="Italic"></button>
+                        <button class="ql-underline" aria-label="Underline"></button>
+                        <button class="ql-link" aria-label="Link"></button>
+                    </span>
+                </p-header>
+            </p-editor>
         </div>
     </ng-container>
 </app-base-field>
