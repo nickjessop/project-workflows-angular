@@ -28,7 +28,7 @@ export class TextInputComponent extends BaseFieldComponent implements OnInit {
     }
 
     onFocusOut(event: { srcElement: { clientHeight: string } }) {
-        const height = event.srcElement.clientHeight;
+        const height = +event.srcElement.clientHeight + 10; //adds small buffer for view mode to avoid scrollbar
         this.settings = { TextInputComponent: { textareaHeight: height } };
         this.textInputData.settings = this.settings;
     }

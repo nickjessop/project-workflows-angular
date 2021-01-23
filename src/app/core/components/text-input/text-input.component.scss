@@ -10,8 +10,18 @@
 }
 
 .text.view {
-    .text__input {
+    textarea {
         border: none;
         background: transparent;
+        resize: none;
+        &:focus {
+            outline: none;
+            -webkit-box-shadow: none;
+            -moz-box-shadow: none;
+            box-shadow: none;
+        }
+        &:hover {
+            cursor: inherit;
+        }
     }
 }

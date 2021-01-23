@@ -7,6 +7,7 @@
                 placeholder="No content"
                 readonly
                 class="text__input"
+                [style.height.px]="settings?.TextInputComponent?.textareaHeight"
             ></textarea>
         </div>
     </ng-container>
@@ -20,7 +21,6 @@
                 [cols]="30"
                 autoResize="autoResize"
                 (focusout)="onFocusOut($event)"
-                [style.height.px]="settings?.TextInputComponent?.textareaHeight"
             >
             </textarea>
         </div>
