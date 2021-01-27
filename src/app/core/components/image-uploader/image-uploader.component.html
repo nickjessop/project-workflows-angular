@@ -1,52 +1,35 @@
 <app-base-field [field]="field" [index]="index">
-    <ng-container *ngIf="componentMode === 'view'"></ng-container>
+    <ng-container *ngIf="componentMode === 'view'">
+        <div class="images">
+            <div *ngFor="let image of imageData; let index = index" class="images__item" key="index">
+                <img
+                    [src]="image.thumbnail"
+                    [alt]="image.description"
+                    style="cursor: pointer"
+                    (click)="imageClick(index)"
+                />
+            </div>
+        </div>
+    </ng-container>
     <ng-container *ngIf="componentMode === 'edit'">
         <div class="images view p-p-2">
-            <div class="p-grid" style="max-width: 400px;">
-                <div *ngFor="let image of imageData; let index = index" class="p-col-3" key="index">
-                    <img
-                        [src]="image.thumbnail"
-                        [alt]="image.description"
-                        style="cursor: pointer"
-                        (click)="imageClick(index)"
-                    />
-                    <!-- Use this remove button until we get chips from primeng v11.1 -->
-                    <button
-                        pButton
-                        styleClass="p-button-sm"
-                        class="p-button-rounded"
-                        type="button"
-                        icon="pi pi-times"
-                        (click)="onDeleteImagePress(index)"
-                    ></button>
-                </div>
+            <div *ngFor="let image of imageData; let index = index" class="images__item" key="index">
+                <img
+                    [src]="image.thumbnail"
+                    [alt]="image.description"
+                    style="cursor: pointer"
+                    (click)="imageClick(index)"
+                />
+                <!-- Use this remove button until we get chips from primeng v11.1 -->
+                <button
+                    pButton
+                    styleClass="p-button-sm"
+                    class="p-button-secondary p-button-rounded"
+                    type="button"
+                    icon="pi pi-trash"
+                    (click)="onDeleteImagePress(index)"
+                ></button>
             </div>
-            <p-galleria
-                [value]="imageData"
-                [(visible)]="displayLightbox"
-                [(activeIndex)]="activeIndex"
-                [responsiveOptions]="responsiveOptions"
-                [containerStyle]="{ 'max-width': '850px' }"
-                [numVisible]="7"
-                [circular]="true"
-                [fullScreen]="true"
-                [showItemNavigators]="true"
-                [showThumbnails]="false"
-                [baseZIndex]="100000"
-            >
-                <ng-template pTemplate="item" let-item>
-                    <img [src]="item.href" style="width: 100%; display: block;" />
-                </ng-template>
-                <ng-template pTemplate="caption" let-item>
-                    <h4 style="margin-bottom: .5rem; color: #ffffff;">{{ item.title }}</h4>
-                    <p>{{ item.description }}</p>
-                </ng-template>
-                <ng-template pTemplate="thumbnail" let-item>
-                    <div class="p-grid p-nogutter p-justify-center">
-                        <img [src]="item.href" style="display: block;" />
-                    </div>
-                </ng-template>
-            </p-galleria>
         </div>
         <p-toolbar>
             <div class="p-toolbar-group-left">
@@ -62,4 +45,30 @@
             <div class="p-toolbar-group-right">{{ imageData.length }} images</div>
         </p-toolbar>
     </ng-container>
+    <p-galleria
+        [value]="imageData"
+        [(visible)]="displayLightbox"
+        [(activeIndex)]="activeIndex"
+        [responsiveOptions]="responsiveOptions"
+        [containerStyle]="{ 'max-width': '850px' }"
+        [numVisible]="7"
+        [circular]="true"
+        [fullScreen]="true"
+        [showItemNavigators]="true"
+        [showThumbnails]="false"
+        [baseZIndex]="100000"
+    >
+        <ng-template pTemplate="item" let-item>
+            <img [src]="item.href" style="width: 100%; display: block;" />
+        </ng-template>
+        <ng-template pTemplate="caption" let-item>
+            <h4 style="margin-bottom: .5rem; color: #ffffff;">{{ item.title }}</h4>
+            <p>{{ item.description }}</p>
+        </ng-template>
+        <ng-template pTemplate="thumbnail" let-item>
+            <div class="p-grid p-nogutter p-justify-center">
+                <img [src]="item.href" style="display: block;" />
+            </div>
+        </ng-template>
+    </p-galleria>
 </app-base-field>
