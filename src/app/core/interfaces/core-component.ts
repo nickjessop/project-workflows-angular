@@ -87,7 +87,7 @@ export function createComponentMetadataTemplate(componentType: ComponentType, va
         const _component: TextInput = {
             data: { value: '' },
             component: 'textInput',
-            settings: { TextInputComponent: { textareaHeight: 50 } },
+            settings: { textInputComponent: { textareaHeight: 50 } },
         };
 
         if (validation) {
@@ -138,7 +138,7 @@ export function createComponentMetadataTemplate(componentType: ComponentType, va
         const _component: Embed = {
             data: { value: [{ href: '' }] },
             component: 'embed',
-            settings: { EmbedComponent: { iframeHeight: 400 } },
+            settings: { embedComponent: { iframeHeight: 400 } },
         };
 
         if (validation) {
