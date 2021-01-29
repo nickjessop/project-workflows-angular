@@ -182,7 +182,7 @@ export type ComponentSettings = {
     TextInputComponent?: {
         textareaHeight?: number;
     };
-    EmbedComponent?: {
+    embedComponent?: {
         iframeHeight?: number;
     };
     imageUploaderComponent?: {
