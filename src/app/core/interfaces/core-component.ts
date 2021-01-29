@@ -188,7 +188,7 @@ export type ComponentSettings = {
     ImageUploaderComponent?: {
         maxThumbnails?: number;
     };
-    TableComponent?: {
+    tableComponent?: {
         disableTableHeaderStyle?: boolean;
     };
 };
