@@ -185,7 +185,7 @@ export type ComponentSettings = {
     EmbedComponent?: {
         iframeHeight?: number;
     };
-    ImageUploaderComponent?: {
+    imageUploaderComponent?: {
         maxThumbnails?: number;
     };
     tableComponent?: {
