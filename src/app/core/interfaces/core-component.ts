@@ -179,7 +179,7 @@ export type BaseComponent = {
 
 export type ComponentSettings = {
     height?: number;
-    TextInputComponent?: {
+    textInputComponent?: {
         textareaHeight?: number;
     };
     embedComponent?: {
