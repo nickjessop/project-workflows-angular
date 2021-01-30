@@ -1,4 +1,7 @@
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, Input, OnInit } from '@angular/core';
+import * as _ from 'lodash';
+import { MenuItem } from 'primeng/api';
 import { ProjectService } from 'src/app/services/project/project.service';
 import { Checkboxes } from '../../interfaces/core-component';
 import { BaseFieldComponent } from '../base-field/base-field.component';
@@ -13,6 +16,18 @@ export class CheckboxesComponent extends BaseFieldComponent implements OnInit {
 
     constructor(public projectService: ProjectService) {
         super(projectService);
+    }
+
+    public getCheckboxMenuItems(index: number): MenuItem[] {
+        return [
+            {
+                label: 'Delete item',
+                icon: 'pi pi-trash',
+                command: () => {
+                    this.onCheckboxDeletePress(index);
+                },
+            },
+        ];
     }
 
     ngOnInit() {}
@@ -40,6 +55,18 @@ export class CheckboxesComponent extends BaseFieldComponent implements OnInit {
     }
 
     public onCheckboxDeletePress(index: number) {
+        console.log(index);
         (this.field.metadata as Checkboxes).data.value.splice(index, 1);
+    }
+
+    drop(event: CdkDragDrop<any>) {
+        this.swapCheckboxOrder(event.previousIndex, event.currentIndex);
+    }
+
+    public swapCheckboxOrder(previousIndex: number, currentIndex: number) {
+        const checkboxes = (this.field.metadata as Checkboxes).data.value;
+        const _checkboxes = _.cloneDeep(checkboxes);
+        moveItemInArray(_checkboxes!, previousIndex, currentIndex);
+        this.field.metadata.data.value = _checkboxes;
     }
 }

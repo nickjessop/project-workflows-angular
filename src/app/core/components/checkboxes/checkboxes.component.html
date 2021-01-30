@@ -7,37 +7,50 @@
         </div>
     </ng-container>
     <ng-container *ngIf="componentMode === 'edit'">
-        <div class="p-d-flex" *ngFor="let val of field.metadata.data.value; index as index">
-            <p-checkbox
-                [inputId]="index"
-                [binary]="true"
-                [(ngModel)]="val.checked"
-                (onChange)="onCheckboxPress()"
-            ></p-checkbox>
-            <p-inplace closable="true">
-                <ng-template pTemplate="display">
-                    <label [for]="index">{{ val.item ? val.item : '(Untitled Checkbox)' }}</label>
-                </ng-template>
-                <ng-template pTemplate="content">
-                    <input type="text" class="p-inputtext" [(ngModel)]="val.item" pInputText />
-                </ng-template>
-            </p-inplace>
-            <button
-                pButton
-                type="button"
-                icon="pi pi-times"
-                class="p-button-text"
-                (click)="onCheckboxDeletePress(index)"
-            ></button>
+        <div class="checkboxes p-pt-2" cdkDropList (cdkDropListDropped)="drop($event)">
+            <div
+                class="p-d-flex p-ai-center p-pl-2 p-py-2 checkbox"
+                *ngFor="let val of field.metadata.data.value; index as index"
+                [cdkDragDisabled]="val.checked"
+                cdkDrag
+            >
+                <p-checkbox
+                    [inputId]="index"
+                    [binary]="true"
+                    [(ngModel)]="val.checked"
+                    (onChange)="onCheckboxPress()"
+                ></p-checkbox>
+                <p-inplace closable="true" styleClass="p-pl-2 checkbox__editable" closeIcon="pi pi-check">
+                    <ng-template pTemplate="display">
+                        <label [for]="index" [ngClass]="{ checkbox__completed: val.checked }">{{
+                            val.item ? val.item : 'New item'
+                        }}</label>
+                    </ng-template>
+                    <ng-template pTemplate="content">
+                        <input type="text" class="p-inputtext" [(ngModel)]="val.item" pInputText />
+                    </ng-template>
+                </p-inplace>
+                <button
+                    pButton
+                    type="button"
+                    icon="pi pi-ellipsis-h"
+                    class="p-button-text checkbox__delete p-js-right"
+                    (click)="menu.toggle($event)"
+                ></button>
+                <p-menu #menu [popup]="true" [model]="getCheckboxMenuItems(index)" appendTo="body"></p-menu>
+            </div>
         </div>
-        <div>
-            <button
-                class="p-button-rounded p-button-text"
-                type="button"
-                pButton
-                icon="pi pi-plus"
-                (click)="onAddCheckboxPress()"
-            ></button>
-        </div>
+        <p-toolbar styleClass="p-p-2 p-mt-2">
+            <div class="p-toolbar-group-left">
+                <button
+                    pButton
+                    type="button"
+                    icon="pi pi-plus"
+                    label="Add an item"
+                    (click)="onAddCheckboxPress()"
+                    class="p-button-text"
+                ></button>
+            </div>
+        </p-toolbar>
     </ng-container>
 </app-base-field>
