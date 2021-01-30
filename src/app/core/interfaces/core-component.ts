@@ -73,20 +73,21 @@ export function createComponentMetadataTemplate(componentType: ComponentType, va
             _component.validation = validation;
         }
         return _component;
-    } else if (componentType === 'largeTextInput') {
-        const _component: LargeTextInput = {
+    } else if (componentType === 'richTextInput') {
+        const _component: RichTextInput = {
             data: { value: '' },
-            component: 'largeTextInput',
+            component: 'richTextInput',
         };
 
         if (validation) {
             _component.validation = validation;
         }
         return _component;
-    } else if (componentType === 'smallTextInput') {
-        const _component: SmallTextInput = {
+    } else if (componentType === 'textInput') {
+        const _component: TextInput = {
             data: { value: '' },
-            component: 'smallTextInput',
+            component: 'textInput',
+            settings: { textInputComponent: { textareaHeight: 50 } },
         };
 
         if (validation) {
@@ -145,9 +146,9 @@ export function createComponentMetadataTemplate(componentType: ComponentType, va
         }
         return _component;
     } else {
-        const _component: SmallTextInput = {
+        const _component: TextInput = {
             data: { value: '' },
-            component: 'smallTextInput',
+            component: 'textInput',
         };
 
         if (validation) {
@@ -161,21 +162,14 @@ export type ComponentType =
     | 'checkboxes'
     | 'fileUploader'
     | 'imageUploader'
-    | 'largeTextInput'
-    | 'smallTextInput'
+    | 'richTextInput'
+    | 'textInput'
     | 'table'
     | 'embed';
 
 export type ComponentMode = 'edit' | 'view' | 'interact';
 
-export type ComponentMetadata =
-    | Checkboxes
-    | FileUploader
-    | ImageUploader
-    | LargeTextInput
-    | SmallTextInput
-    | Table
-    | Embed;
+export type ComponentMetadata = Checkboxes | FileUploader | ImageUploader | RichTextInput | TextInput | Table | Embed;
 
 export type BaseComponent = {
     component: ComponentType;
@@ -185,6 +179,9 @@ export type BaseComponent = {
 
 export type ComponentSettings = {
     height?: number;
+    textInputComponent?: {
+        textareaHeight?: number;
+    };
     embedComponent?: {
         iframeHeight?: number;
     };
@@ -211,13 +208,13 @@ export interface ImageUploader extends BaseComponent {
     data: { value: Link[] };
 }
 
-export interface LargeTextInput extends BaseComponent {
-    component: 'largeTextInput';
+export interface RichTextInput extends BaseComponent {
+    component: 'richTextInput';
     data: { value: string };
 }
 
-export interface SmallTextInput extends BaseComponent {
-    component: 'smallTextInput';
+export interface TextInput extends BaseComponent {
+    component: 'textInput';
     data: { value: string };
 }
 
