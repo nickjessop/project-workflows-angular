@@ -1,19 +1,18 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { RichTextInputComponent } from './rich-text-input.component';
 
-import { LargeTextInputComponent } from './large-text-input.component';
-
-describe('LargeTextInputComponent', () => {
-    let component: LargeTextInputComponent;
-    let fixture: ComponentFixture<LargeTextInputComponent>;
+describe('RichTextInputComponent', () => {
+    let component: RichTextInputComponent;
+    let fixture: ComponentFixture<RichTextInputComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [LargeTextInputComponent],
+            declarations: [RichTextInputComponent],
         }).compileComponents();
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(LargeTextInputComponent);
+        fixture = TestBed.createComponent(RichTextInputComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
