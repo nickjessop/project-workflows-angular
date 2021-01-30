@@ -26,10 +26,12 @@ export class ViewerComponent implements OnInit {
     private initProject() {
         this.subscriptions.add(
             this.projectService.projectConfig$.subscribe(_project => {
-                this.project = _project;
-                this.currentStep = _project.configuration?.find(stepConfig => {
-                    return stepConfig.step.isCurrentStep;
-                });
+                if (_project) {
+                    this.project = _project;
+                    this.currentStep = _project.configuration?.find(stepConfig => {
+                        return stepConfig.step.isCurrentStep;
+                    });
+                }
             })
         );
     }
