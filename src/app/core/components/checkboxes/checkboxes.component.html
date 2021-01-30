@@ -1,13 +1,14 @@
 <app-base-field [field]="field" [index]="index">
     <ng-container *ngIf="componentMode === 'view'">
-        <div class="checkboxes mb-2">
-            <div *ngFor="let val of field.metadata.data.value">
-                <p-checkbox [(value)]="val.item" label="test" [(ngModel)]="val.checked"></p-checkbox>
+        <div class="checkboxes checkboxes--view mb-2">
+            <div class="p-d-flex p-ai-center p-pl-2 p-py-3 checkbox" *ngFor="let val of field.metadata.data.value">
+                <p-checkbox [inputId]="index" [binary]="true" [(ngModel)]="val.checked" readonly="true"> </p-checkbox>
+                <label for="index" class="p-pl-2" [class.checkbox__completed]="val.checked">{{ val.item }}</label>
             </div>
         </div>
     </ng-container>
     <ng-container *ngIf="componentMode === 'edit'">
-        <div class="checkboxes p-pt-2" cdkDropList (cdkDropListDropped)="drop($event)">
+        <div class="checkboxes checkboxes--edit p-pt-2" cdkDropList (cdkDropListDropped)="drop($event)">
             <div
                 class="p-d-flex p-ai-center p-pl-2 p-py-2 checkbox"
                 *ngFor="let val of field.metadata.data.value; index as index"
