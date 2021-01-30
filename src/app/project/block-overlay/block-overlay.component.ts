@@ -21,7 +21,7 @@ export class BlockPanelOverlayComponent implements OnInit {
 
     private getBlockOptions() {
         const options = [
-            { enabled: true, icon: 'pi-check-square', label: 'Checkbox', component: 'checkboxes' },
+            { enabled: true, icon: 'pi-check-square', label: 'Checklist', component: 'checkboxes' },
             { enabled: true, icon: 'pi-folder', label: 'Files', component: 'fileUploader' },
             { enabled: true, icon: 'pi-images', label: 'Images', component: 'imageUploader' },
             { enabled: true, icon: 'pi-small-text', label: 'Text', component: 'textInput' },

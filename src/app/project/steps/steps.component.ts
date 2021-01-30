@@ -58,7 +58,7 @@ export class StepsComponent implements OnInit {
         },
         {
             label: 'Delete Step',
-            icon: 'pi pi-times',
+            icon: 'pi pi-trash',
             command: () => {
                 this.onDeleteCurrentStep();
             },

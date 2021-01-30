@@ -1,14 +1,34 @@
 @import 'core';
 
-.checkboxes__add {
-    display: block;
-    text-decoration: none;
-    color: inherit;
-    opacity: 0.6;
-    width: max-content;
-}
-
-.checkboxes__add:hover {
-    opacity: 1;
-    color: $action;
+.checkboxes {
+    min-height: 100px;
+    .checkbox {
+        width: 100%;
+        border-bottom: 1px solid var(--surface-c);
+        &:last-child {
+            border: none;
+        }
+        &__delete {
+            visibility: hidden;
+            margin-left: auto;
+        }
+        &__completed {
+            opacity: 0.6;
+            text-decoration: line-through;
+        }
+        &__editable,
+        p-inplace {
+            width: 100%;
+        }
+        input {
+            width: calc(100% - 60px);
+            margin-right: 10px;
+        }
+        &:hover,
+        &:focus-within {
+            .checkbox__delete {
+                visibility: visible;
+            }
+        }
+    }
 }
