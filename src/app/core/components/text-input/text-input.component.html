@@ -1,5 +1,5 @@
 <app-base-field [field]="field" [index]="index">
-    <ng-container *ngIf="componentMode === 'edit'">
+    <ng-container *ngIf="componentMode === 'view'">
         <div class="text view">
             <textarea
                 pInputTextarea
@@ -11,7 +11,7 @@
             ></textarea>
         </div>
     </ng-container>
-    <ng-container *ngIf="componentMode === 'view'">
+    <ng-container *ngIf="componentMode === 'edit'">
         <div class="text edit">
             <textarea
                 pInputTextarea
