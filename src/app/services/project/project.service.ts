@@ -1,5 +1,6 @@
 import { moveItemInArray } from '@angular/cdk/drag-drop';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import * as _ from 'lodash';
 import { BehaviorSubject, from } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -23,7 +24,11 @@ export class ProjectService {
 
     public unsubscribeToProjectListener?: () => void;
 
-    constructor(private firebaseService: FirebaseService, private authenticationService: AuthenticationService) {}
+    constructor(
+        private firebaseService: FirebaseService,
+        private authenticationService: AuthenticationService,
+        private router: Router
+    ) {}
 
     public get projectConfig() {
         return this._projectConfig.getValue();
@@ -263,7 +268,6 @@ export class ProjectService {
     }
 
     public deleteProjectBlock(blockIndex: number) {
-        console.log(`Deleting block at index: ${blockIndex}`);
         const currentStepIndex = this.getCurrentStepIndex() || 0;
 
         const _projectConfig = _.cloneDeep(this.projectConfig);
@@ -345,6 +349,11 @@ export class ProjectService {
             .onSnapshot(
                 document => {
                     const project = document.data() as Project;
+
+                    if (!project) {
+                        this.router.navigate(['404']);
+                    }
+
                     const currentStepSet = project.configuration?.some(stepConfig => {
                         return stepConfig.step.isCurrentStep;
                     });
@@ -359,6 +368,7 @@ export class ProjectService {
                 },
                 error => {
                     console.log(error);
+                    this.router.navigate(['404']);
                 }
             );
     }

@@ -26,7 +26,7 @@ export class ControlsComponent implements OnInit {
     private initCurrentStep() {
         this.subscriptions.add(
             this.projectService.projectConfig$.subscribe(project => {
-                project.configuration?.forEach(stepConfig => {
+                project?.configuration?.forEach(stepConfig => {
                     if (stepConfig.step.isCurrentStep) {
                         this.currentStep = stepConfig;
                         return;

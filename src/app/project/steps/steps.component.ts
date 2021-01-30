@@ -39,10 +39,13 @@ export class StepsComponent implements OnInit {
     private initializeProject() {
         this.subscriptions.add(
             this.projectService.projectConfig$.subscribe(_project => {
-                this.project = _project;
-                if (_project.configuration) {
-                    this.steps = _project.configuration;
-                    this.currentStep = _project.configuration[0];
+                if (_project) {
+                    this.project = _project;
+
+                    if (_project.configuration) {
+                        this.steps = _project.configuration;
+                        this.currentStep = _project.configuration[0];
+                    }
                 }
             })
         );
