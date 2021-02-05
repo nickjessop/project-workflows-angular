@@ -1,7 +1,7 @@
 <p-dialog
     [(visible)]="showDialog"
     (onHide)="onHide($event)"
-    [header]="mode === 'delete' ? 'Delete step?' : step.title"
+    [header]="mode === 'delete' ? 'Delete step?' : mode === 'new' ? 'New step' : step.title"
     styleClass="dialog"
     focusTrap="true"
     modal="true"
@@ -30,17 +30,15 @@
             <label for="description" aria-describedby="Select the status" styleClass="labelBlock">Status</label>
             <p-dropdown
                 [options]="statusOptions"
-                [(ngModel)]="step.status"
-                placeholder="No status"
+                [(ngModel)]="selectedStatus"
                 optionLabel="label"
                 appendTo="body"
                 class="p-my-3"
-                showClear="true"
             >
-                <ng-template pTemplate="selectedItem">
-                    <div class="p-d-flex" *ngIf="step.status">
-                        <i class="pi {{ step.status.icon }} p-mr-2"></i>
-                        <span> {{ step.status.label }}</span>
+                <ng-template let-item pTemplate="selectedItem">
+                    <div class="p-d-flex" *ngIf="selectedStatus">
+                        <i class="pi {{ item.icon }} p-mr-2"></i>
+                        <span> {{ item.label }}</span>
                     </div>
                 </ng-template>
                 <ng-template let-status pTemplate="item">
