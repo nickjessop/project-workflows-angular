@@ -16,7 +16,7 @@
                                 <div class="p-d-flex">
                                     <h2 class="ms-3 p-my-0 p-pr-2">{{ currentStep.step.title }}</h2>
                                     <ng-container
-                                        *ngIf="currentStep.step.status != undefined"
+                                        *ngIf="currentStep.step.status"
                                         [ngSwitch]="currentStep.step.status.value"
                                     >
                                         <span
@@ -38,7 +38,7 @@
                                             >{{ currentStep.step.status.label }}
                                         </span>
                                         <span
-                                            *ngSwitchCase="'needs-input'"
+                                            *ngSwitchCase="'important'"
                                             class="p-tag p-tag-rounded p-tag-danger ms-03"
                                         >
                                             <i class="pi {{ currentStep.step.status.icon }} p-pr-1"></i>

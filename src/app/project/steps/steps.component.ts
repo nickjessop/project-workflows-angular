@@ -3,7 +3,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import * as _ from 'lodash';
 import { MenuItem } from 'primeng/api';
 import { Subscription } from 'rxjs';
-import { Project, Step, StepConfig } from 'src/app/models/interfaces/project';
+import { Project, Status, Step, StepConfig } from 'src/app/models/interfaces/project';
 import { ProjectService } from 'src/app/services/project/project.service';
 @Component({
     selector: 'project-steps',
@@ -24,9 +24,23 @@ export class StepsComponent implements OnInit {
 
     public showDialog = false;
     public stepMode: 'edit' | 'new' | 'delete' = 'edit';
-    public focusStep: Step = { title: '', description: '' };
+    public focusStep: Step = {
+        title: '',
+        description: '',
+        status: { label: 'No status', value: 'no-status', icon: 'pi-circle-off' },
+    };
 
-    constructor(private projectService: ProjectService) {}
+    statusOptions: Status[];
+
+    constructor(private projectService: ProjectService) {
+        this.statusOptions = [
+            { label: 'No status', value: 'no-status', icon: 'pi-circle-off' },
+            { label: 'In progress', value: 'in-progress', icon: 'pi-progress' },
+            { label: 'Important', value: 'important', icon: 'pi-exclamation-circle' },
+            { label: 'Upcoming', value: 'upcoming', icon: 'pi-clock' },
+            { label: 'Completed', value: 'completed', icon: 'pi-check-circle' },
+        ];
+    }
 
     ngOnInit() {
         this.initializeProject();
@@ -94,7 +108,11 @@ export class StepsComponent implements OnInit {
             this.stepMode = 'edit';
             this.showDialog = true;
         } else if (stepMode === 'new') {
-            this.focusStep = { description: '', title: '' };
+            this.focusStep = {
+                description: '',
+                title: '',
+                status: { label: 'No status', value: 'no-status', icon: 'pi-circle-off' },
+            };
             this.stepMode = 'new';
             this.showDialog = true;
         } else if (stepMode == 'delete' && step) {

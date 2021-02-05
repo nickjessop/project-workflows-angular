@@ -15,7 +15,8 @@
     .step-selected {
         background: rgba(33, 150, 243, 0.1);
         border-radius: 6px;
-        &:hover {
+        &:hover,
+        &:focus-within {
             background: rgba(33, 150, 243, 0.1);
             .step__edit-step {
                 opacity: 0.6;

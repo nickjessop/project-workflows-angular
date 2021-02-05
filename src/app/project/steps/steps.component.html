@@ -22,7 +22,7 @@
                 >
                     <div class="p-d-flex">
                         <i
-                            *ngIf="stepConfig.step.status != undefined; else defaultIcon"
+                            *ngIf="stepConfig.step.status; else defaultIcon"
                             class="pi {{ stepConfig.step.status.icon }} p-pr-2"
                         ></i>
                         <ng-template #defaultIcon><i class="pi pi-circle-off p-pr-2"></i></ng-template>
