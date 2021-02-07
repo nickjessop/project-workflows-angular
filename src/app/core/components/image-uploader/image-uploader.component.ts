@@ -110,7 +110,11 @@ export class ImageUploaderComponent extends BaseFieldComponent implements OnInit
                 switchMap(file => {
                     return this.storageService.getDownloadUrl(file.metadata.fullPath).pipe(
                         map(downloadUrl => {
-                            return { fileMetadata: file.metadata, downloadUrl: downloadUrl as string };
+                            return {
+                                fileMetadata: file.metadata,
+                                downloadUrl: downloadUrl as string,
+                                filePath: file.metadata.fullPath,
+                            };
                         })
                     );
                 })
