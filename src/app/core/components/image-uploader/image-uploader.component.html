@@ -20,15 +20,13 @@
                     style="cursor: pointer"
                     (click)="imageClick(index)"
                 />
-                <!-- Use this remove button until we get chips from primeng v11.1 -->
-                <button
-                    pButton
-                    styleClass="p-button-sm"
-                    class="p-button-secondary p-button-rounded"
-                    type="button"
-                    icon="pi pi-trash"
-                    (click)="onDeleteImagePress(index)"
-                ></button>
+                <p-checkbox
+                    name="deleteImage"
+                    value="{{ index }}"
+                    [(ngModel)]="selectedImages"
+                    (onChange)="onCheckboxPress($event, index)"
+                    class="image-checkbox"
+                ></p-checkbox>
             </div>
         </div>
         <p-toolbar>
@@ -39,7 +37,18 @@
                     maxFileSize="1000000"
                     chooseLabel="Upload images"
                     (onSelect)="onFileUploadSelected($event)"
+                    class="p-mr-2"
                 ></p-fileUpload>
+                <button
+                    pButton
+                    styleClass="p-button-sm"
+                    class="p-button-secondary"
+                    type="button"
+                    label="Delete images"
+                    icon="pi pi-trash"
+                    (click)="onDeleteImagePress(index)"
+                    *ngIf="selectedImages.length > 0"
+                ></button>
             </div>
 
             <div class="p-toolbar-group-right">{{ imageData.length }} images</div>
@@ -50,24 +59,47 @@
         [(visible)]="displayLightbox"
         [(activeIndex)]="activeIndex"
         [responsiveOptions]="responsiveOptions"
-        [containerStyle]="{ 'max-width': '850px' }"
         [numVisible]="7"
         [circular]="true"
         [fullScreen]="true"
         [showItemNavigators]="true"
-        [showThumbnails]="false"
+        [showThumbnails]="showThumbnails"
+        [containerStyle]="{ width: '100%', height: '100%' }"
         [baseZIndex]="100000"
+        class="gallery"
     >
-        <ng-template pTemplate="item" let-item>
-            <img [src]="item.href" style="width: 100%; display: block;" />
+        <ng-template pTemplate="header">
+            <div class="p-py-4">
+                <strong>
+                    {{ field.label }}
+                </strong>
+            </div>
         </ng-template>
-        <ng-template pTemplate="caption" let-item>
-            <h4 style="margin-bottom: .5rem; color: #ffffff;">{{ item.title }}</h4>
-            <p>{{ item.description }}</p>
+        <ng-template pTemplate="item" let-item>
+            <img [src]="item.href" style="width: 100%; display: block;" class="gallery-image" />
         </ng-template>
         <ng-template pTemplate="thumbnail" let-item>
-            <div class="p-grid p-nogutter p-justify-center">
+            <div class="p-grid p-nogutter p-justify-center gallery-thumbnail p-mr-1">
                 <img [src]="item.href" style="display: block;" />
+            </div>
+        </ng-template>
+        <ng-template pTemplate="footer" let-item>
+            <div class="custom-galleria-footer">
+                <button type="button" pButton icon="pi pi-list" (click)="onThumbnailButtonClick()"></button>
+                <span *ngIf="imageData" class="meta-data">
+                    <span class="title">{{ imageData[activeIndex].title }}</span>
+                    <span>{{ imageData[activeIndex].description }}</span>
+                </span>
+                <span class="meta-data p-mr-2">
+                    <span>{{ activeIndex + 1 }}/{{ imageData.length }}</span>
+                </span>
+                <!-- <button
+                    type="button"
+                    pButton
+                    [icon]="fullScreenIcon()"
+                    (click)="toggleFullScreen()"
+                    class="fullscreen-button"
+                ></button> -->
             </div>
         </ng-template>
     </p-galleria>

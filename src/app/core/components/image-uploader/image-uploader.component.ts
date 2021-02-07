@@ -31,8 +31,11 @@ export class ImageUploaderComponent extends BaseFieldComponent implements OnInit
     ];
     public activeIndex = 0;
     public displayLightbox = false;
+    public showThumbnails: boolean = false;
 
     public imageData: Link[] = [{ href: '', title: '', description: '', thumbnail: '' }];
+    public selectedImages: number[] = [];
+    // public _selectImages: number[] = [];
 
     constructor(
         public projectService: ProjectService,
@@ -44,11 +47,33 @@ export class ImageUploaderComponent extends BaseFieldComponent implements OnInit
 
     ngOnInit() {
         this.imageData = (this.field.metadata as ImageUploader).data.value;
+        console.log(this.selectedImages);
     }
 
     public imageClick(index: number) {
         this.activeIndex = index;
         this.displayLightbox = true;
+    }
+
+    public onThumbnailButtonClick() {
+        this.showThumbnails = !this.showThumbnails;
+    }
+
+    public onCheckboxPress($event: { checked: boolean }, imageIndex: number) {
+        // console.log(imageIndex);
+        // console.log($event);
+        // let _selectedImages = [...this.selectedImages];
+        if ($event.checked) {
+            this.selectedImages.push(imageIndex);
+            // this.selectedImages = _selectedImages;
+            console.log(this.selectedImages);
+        } else {
+            const index = this.selectedImages.indexOf(imageIndex);
+            if (index > -1) {
+                this.selectedImages.splice(index, 1);
+            }
+            console.log(this.selectedImages);
+        }
     }
 
     public onFileUploadSelected($event: { originalEvent: Event; files: FileList; currentFiles: File[] }) {
