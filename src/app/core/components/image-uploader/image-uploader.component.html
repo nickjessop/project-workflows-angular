@@ -22,8 +22,7 @@
                 />
                 <p-checkbox
                     name="deleteImage"
-                    value="{{ index }}"
-                    [(ngModel)]="selectedImages"
+                    [value]="index"
                     (onChange)="onCheckboxPress($event, index)"
                     class="image-checkbox"
                 ></p-checkbox>
