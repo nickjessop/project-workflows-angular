@@ -60,12 +60,8 @@ export class ImageUploaderComponent extends BaseFieldComponent implements OnInit
     }
 
     public onCheckboxPress($event: { checked: boolean }, imageIndex: number) {
-        // console.log(imageIndex);
-        // console.log($event);
-        // let _selectedImages = [...this.selectedImages];
         if ($event.checked) {
             this.selectedImages.push(imageIndex);
-            // this.selectedImages = _selectedImages;
             console.log(this.selectedImages);
         } else {
             const index = this.selectedImages.indexOf(imageIndex);
@@ -82,24 +78,29 @@ export class ImageUploaderComponent extends BaseFieldComponent implements OnInit
         this.uploadFile($event.currentFiles[0]);
     }
 
-    public onDeleteImagePress(index: number) {
-        const filePath = this.imageData?.[index]?.filePath;
-
-        if (filePath) {
-            this.storageService.deleteFile(filePath).subscribe(
-                () => {
-                    // Successfully removed file
-                    this.imageData.splice(index, 1);
-                    this.projectService.syncProject();
-                },
-                error => {
-                    console.log(error);
-                }
-            );
-        } else {
-            this.imageData.splice(index, 1);
-            this.projectService.syncProject();
-        }
+    public onDeleteImagePress() {
+        this.selectedImages.forEach(index => {
+            const filePath = this.imageData?.[index]?.filePath;
+            console.log(this.imageData);
+            console.log(index);
+            if (filePath) {
+                console.log(this.selectedImages);
+                // this.storageService.deleteFile(filePath).subscribe(
+                //     () => {
+                //         // Successfully removed file
+                //         this.imageData.splice(index, 1);
+                //         this.projectService.syncProject();
+                //     },
+                //     error => {
+                //         console.log(error);
+                //     }
+                // );
+            } else {
+                console.log('no file path');
+                // this.imageData.splice(index, 1);
+                // this.projectService.syncProject();
+            }
+        });
     }
 
     private uploadFile(file: File) {
