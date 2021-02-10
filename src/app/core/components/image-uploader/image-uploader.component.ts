@@ -79,28 +79,28 @@ export class ImageUploaderComponent extends BaseFieldComponent implements OnInit
     }
 
     public onDeleteImagePress() {
-        this.selectedImages.forEach(index => {
-            const filePath = this.imageData?.[index]?.filePath;
-            console.log(this.imageData);
-            console.log(index);
+        let index = this.selectedImages.length;
+        while (index--) {
+            const imageIndex = this.selectedImages[index];
+            const filePath = this.imageData?.[imageIndex]?.filePath;
             if (filePath) {
-                console.log(this.selectedImages);
-                // this.storageService.deleteFile(filePath).subscribe(
-                //     () => {
-                //         // Successfully removed file
-                //         this.imageData.splice(index, 1);
-                //         this.projectService.syncProject();
-                //     },
-                //     error => {
-                //         console.log(error);
-                //     }
-                // );
+                this.storageService.deleteFile(filePath).subscribe(
+                    () => {
+                        //Successfully removed file
+                        this.imageData.splice(imageIndex, 1);
+                        this.selectedImages.splice(index, 1);
+                    },
+                    error => {
+                        console.log(error);
+                    }
+                );
             } else {
                 console.log('no file path');
-                // this.imageData.splice(index, 1);
-                // this.projectService.syncProject();
+                this.imageData.splice(imageIndex, 1);
+                this.selectedImages.splice(index, 1);
             }
-        });
+        }
+        this.projectService.syncProject();
     }
 
     private uploadFile(file: File) {
@@ -110,11 +110,7 @@ export class ImageUploaderComponent extends BaseFieldComponent implements OnInit
                 switchMap(file => {
                     return this.storageService.getDownloadUrl(file.metadata.fullPath).pipe(
                         map(downloadUrl => {
-                            return {
-                                fileMetadata: file.metadata,
-                                downloadUrl: downloadUrl as string,
-                                filePath: file.metadata.fullPath,
-                            };
+                            return { fileMetadata: file.metadata, downloadUrl: downloadUrl as string };
                         })
                     );
                 })
