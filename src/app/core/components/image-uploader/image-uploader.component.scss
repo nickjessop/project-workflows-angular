@@ -52,7 +52,7 @@
             width: 100%;
             position: relative;
             .p-galleria-item-container {
-                margin-top: -4.5rem;
+                // margin-top: -4.5rem;
                 > button {
                     visibility: hidden;
                 }
@@ -68,9 +68,9 @@
             }
         }
         .p-galleria-thumbnail-wrapper {
-            position: absolute;
-            bottom: 0;
-            left: 0;
+            // position: absolute;
+            // bottom: 0;
+            // left: 0;
             width: 100%;
         }
         .p-galleria-thumbnail-items-container {
