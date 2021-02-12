@@ -33,7 +33,7 @@ export class ImageUploaderComponent extends BaseFieldComponent implements OnInit
     public displayLightbox = false;
     public showThumbnails: boolean = false;
 
-    public imageData: Link[] = [{ href: '', title: '', description: '', thumbnail: '' }];
+    public imageData: Link[] = [{ href: '', title: '', description: '', thumbnail: '', filePath: '' }];
     public selectedImages: number[] = [];
     // public _selectImages: number[] = [];
 
@@ -47,7 +47,7 @@ export class ImageUploaderComponent extends BaseFieldComponent implements OnInit
 
     ngOnInit() {
         this.imageData = (this.field.metadata as ImageUploader).data.value;
-        console.log(this.selectedImages);
+        console.log(this.imageData);
     }
 
     public imageClick(index: number) {
@@ -68,7 +68,6 @@ export class ImageUploaderComponent extends BaseFieldComponent implements OnInit
             if (index > -1) {
                 this.selectedImages.splice(index, 1);
             }
-            console.log(this.selectedImages);
         }
     }
 
@@ -123,7 +122,14 @@ export class ImageUploaderComponent extends BaseFieldComponent implements OnInit
                 filedata => {
                     const { name, size } = filedata.fileMetadata;
                     const downloadUrl = filedata.downloadUrl;
-                    this.imageData.push({ href: downloadUrl, thumbnail: downloadUrl, title: name, size });
+                    const filePath = filedata.filePath;
+                    this.imageData.push({
+                        href: downloadUrl,
+                        thumbnail: downloadUrl,
+                        title: name,
+                        filePath: filePath,
+                        size,
+                    });
                 },
                 err => {
                     this.messageService.add({
