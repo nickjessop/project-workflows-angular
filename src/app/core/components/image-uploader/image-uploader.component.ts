@@ -83,11 +83,12 @@ export class ImageUploaderComponent extends BaseFieldComponent implements OnInit
             const imageIndex = this.selectedImages[index];
             const filePath = this.imageData?.[imageIndex]?.filePath;
             if (filePath) {
+                this.imageData.splice(imageIndex, 1);
+                this.selectedImages.splice(index, 1);
                 this.storageService.deleteFile(filePath).subscribe(
                     () => {
                         //Successfully removed file
-                        this.imageData.splice(imageIndex, 1);
-                        this.selectedImages.splice(index, 1);
+                        this.projectService.syncProject();
                     },
                     error => {
                         console.log(error);
@@ -97,9 +98,9 @@ export class ImageUploaderComponent extends BaseFieldComponent implements OnInit
                 console.log('no file path');
                 this.imageData.splice(imageIndex, 1);
                 this.selectedImages.splice(index, 1);
+                this.projectService.syncProject();
             }
         }
-        this.projectService.syncProject();
     }
 
     private uploadFile(file: File) {
