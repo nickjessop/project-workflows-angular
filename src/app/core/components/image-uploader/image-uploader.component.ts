@@ -36,7 +36,6 @@ export class ImageUploaderComponent extends BaseFieldComponent implements OnInit
 
     public imageData: Link[] = [{ href: '', title: '', description: '', thumbnail: '', filePath: '' }];
     public selectedImages: number[] = [];
-    public uploadedFiles: any[] = [];
 
     constructor(
         public projectService: ProjectService,

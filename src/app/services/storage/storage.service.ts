@@ -11,9 +11,9 @@ export class StorageService {
     constructor(private firebaseService: FirebaseService, private authenticationService: AuthenticationService) {}
 
     public uploadFile(file: File) {
-        const fileID: string = uuid();
+        const fileId: string = uuid();
         const userId = this.authenticationService.user?.id;
-        const storageRef = this.firebaseService.getStorageInstance().ref(`${userId}/${fileID}`);
+        const storageRef = this.firebaseService.getStorageInstance().ref(`${userId}/${fileId}`);
 
         return from(storageRef.put(file));
     }
