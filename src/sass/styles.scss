@@ -134,6 +134,17 @@ button {
     background: var(--primary-color-light);
     color: var(--primary-color);
 }
+.p-checkbox .p-checkbox-box.p-highlight {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+}
+.p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box:hover {
+    border-color: var(--primary-color);
+}
+.p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box.p-highlight:hover {
+    background: var(--hvr-primary);
+    border-color: var(--hvr-primary);
+}
 
 //DRAG & DROP
 
