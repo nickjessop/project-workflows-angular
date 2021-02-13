@@ -18,17 +18,39 @@
             height: auto;
             margin-bottom: 1rem;
         }
+        .image-edit,
         .image-checkbox {
             position: absolute;
-            top: 10px;
-            right: 10px;
             visibility: hidden;
+            top: 10px;
+        }
+        .image-checkbox {
+            right: 10px;
+        }
+        .image-edit {
+            left: 10px;
+            background: white;
         }
         &:hover {
+            cursor: zoom-in;
+            .image-edit,
             .image-checkbox {
+                cursor: pointer;
                 visibility: visible;
             }
         }
+        .image-dialog:hover .image-edit {
+            visibility: visible;
+        }
+    }
+}
+
+:host ::ng-deep .p-button.p-fileupload-choose {
+    background: transparent;
+    color: var(--primary-color);
+    border: none;
+    &:hover {
+        background: var(--primary-color-light);
     }
 }
 

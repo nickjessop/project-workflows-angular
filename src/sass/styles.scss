@@ -12,6 +12,8 @@
     --clr-text: #1c1c39;
     --clr-greytext: #747498;
     --primary-color: #552aff;
+    --primary-color-light: #552aff0a;
+    --primary-color-medium: #552aff0d;
     --clr-b: #161687;
     --clr-t: #47d1ed;
     --clr-r: #e9006a;
@@ -124,6 +126,13 @@ button {
 .p-inputtext:enabled:focus,
 .p-inputtext:enabled:hover {
     border-color: var(--primary-color);
+}
+.p-button.p-button-text {
+    color: var(--primary-color);
+}
+.p-button.p-button-text:enabled:hover {
+    background: var(--primary-color-light);
+    color: var(--primary-color);
 }
 
 //DRAG & DROP
