@@ -3,7 +3,7 @@
         margin-left: -0.5rem;
         &:hover {
             cursor: pointer;
-            background: rgba(33, 150, 243, 0.04);
+            background: var(--primary-color-light);
             border-radius: 6px;
         }
         &__edit-step {
@@ -13,11 +13,11 @@
         }
     }
     .step-selected {
-        background: rgba(33, 150, 243, 0.1);
+        background: var(--primary-color-medium);
         border-radius: 6px;
         &:hover,
         &:focus-within {
-            background: rgba(33, 150, 243, 0.1);
+            background: var(--primary-color-medium);
             .step__edit-step {
                 opacity: 0.6;
                 pointer-events: initial;

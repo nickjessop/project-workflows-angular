@@ -32,9 +32,11 @@ export class ImageUploaderComponent extends BaseFieldComponent implements OnInit
     public activeIndex = 0;
     public displayLightbox = false;
     public showThumbnails: boolean = false;
+    public showImageUploaderDialog = false;
 
     public imageData: Link[] = [{ href: '', title: '', description: '', thumbnail: '', filePath: '' }];
     public selectedImages: number[] = [];
+    public uploadedFiles: any[] = [];
 
     constructor(
         public projectService: ProjectService,
@@ -46,7 +48,6 @@ export class ImageUploaderComponent extends BaseFieldComponent implements OnInit
 
     ngOnInit() {
         this.imageData = (this.field.metadata as ImageUploader).data.value;
-        console.log(this.imageData);
     }
 
     public imageClick(index: number) {
@@ -72,7 +73,6 @@ export class ImageUploaderComponent extends BaseFieldComponent implements OnInit
 
     public onFileUploadSelected($event: { originalEvent: Event; files: FileList; currentFiles: File[] }) {
         // Some sort of validation here
-
         this.uploadFile($event.currentFiles[0]);
     }
 
@@ -120,7 +120,8 @@ export class ImageUploaderComponent extends BaseFieldComponent implements OnInit
             )
             .subscribe(
                 filedata => {
-                    const { name, size } = filedata.fileMetadata;
+                    const size = filedata.fileMetadata.size;
+                    const name = file.name;
                     const downloadUrl = filedata.downloadUrl;
                     const filePath = filedata.filePath;
                     this.imageData.push({
@@ -130,6 +131,7 @@ export class ImageUploaderComponent extends BaseFieldComponent implements OnInit
                         filePath: filePath,
                         size,
                     });
+                    this.projectService.syncProject();
                 },
                 err => {
                     this.messageService.add({
@@ -141,5 +143,11 @@ export class ImageUploaderComponent extends BaseFieldComponent implements OnInit
                     });
                 }
             );
+    }
+
+    updateImageMetadata(image: Link) {
+        let index = this.imageData.indexOf(image);
+        this.imageData[index] = image;
+        this.projectService.syncProject();
     }
 }
