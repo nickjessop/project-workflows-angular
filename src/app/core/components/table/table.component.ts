@@ -168,7 +168,7 @@ export class TableComponent extends BaseFieldComponent implements OnInit {
         let row: { text: string; isHeader?: boolean }[] = [];
 
         for (let i = 0; i < amount; i++) {
-            row.push({ text: isHeader ? '(Empty header)' : '(Empty cell)', isHeader });
+            row.push({ text: isHeader ? '' : '', isHeader });
         }
         return row;
     }
