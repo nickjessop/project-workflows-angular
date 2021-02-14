@@ -2,25 +2,26 @@
 
 // CSS RESET
 @import '~normalize.css';
-@import url('https://fonts.googleapis.com/css?family=Roboto:400,400i,500,700&display=swap');
-@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+// @import url('https://fonts.googleapis.com/css?family=Roboto:400,400i,500,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 // VARIABLES AND MIXINS
 @import 'core';
 
 :root {
-    --clr-text: #1c1c39;
-    --clr-greytext: #747498;
-    --primary-color: #552aff;
-    --primary-color-light: #552aff0a;
-    --primary-color-medium: #552aff0d;
-    --clr-b: #161687;
-    --clr-t: #47d1ed;
-    --clr-r: #e9006a;
-    --clr-g: #fbf8f7;
-    --hvr-primary: #4421d2;
-    --hvr-r: #d40061;
-    --overlay: #07070ff6;
+    --clr-text: rgb(28, 28, 57);
+    --clr-greytext: rgb(116, 116, 152);
+    --primary-color: rgb(85, 42, 255);
+    --primary-color-light: rgba(85, 42, 255, 0.06);
+    --primary-color-medium: rgba(85, 42, 255, 0.5);
+    --clr-b: rgb(22, 22, 135);
+    --clr-t: rgb(71, 209, 237);
+    --clr-r: rgb(233, 0, 106);
+    --clr-g: rgb(251, 248, 247);
+    --hvr-primary: rgb(68, 33, 210);
+    --hvr-r: rgb(212, 0, 97);
+    --overlay: rgba(7, 7, 15, 0.965);
+    --font-family: 'Inter', sans-serif;
 }
 
 // RESET
@@ -40,8 +41,9 @@ html {
 
 // GENERAL
 body {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Inter', sans-serif;
     min-height: 100%;
+    color: var(--clr-text);
 }
 
 body.noscroll {
@@ -102,6 +104,11 @@ button {
 @import 'group/typography';
 
 // PRIME OVERRIDES
+.p-component,
+.ql-editor {
+    font-family: 'Inter', sans-serif;
+}
+
 .dialog {
     width: 40vw;
 }
@@ -123,10 +130,6 @@ button {
 .p-button:enabled:hover {
     background: var(--hvr-primary);
     border: 1px solid var(--hvr-primary);
-}
-.p-inputtext:enabled:focus,
-.p-inputtext:enabled:hover {
-    border-color: var(--primary-color);
 }
 .p-button.p-button-text {
     color: var(--primary-color);
@@ -151,6 +154,43 @@ button {
 }
 .p-overlaypanel .p-overlaypanel-close:enabled:hover {
     background: var(--hvr-primary);
+}
+.p-dropdown-panel .p-dropdown-items .p-dropdown-item.p-highlight {
+    background: var(--primary-color-light);
+}
+.p-dropdown:not(.p-disabled):hover,
+.p-dropdown:hover {
+    border-color: var(--primary-color);
+}
+.p-button.p-button-secondary.p-button-outlined,
+.p-buttonset.p-button-secondary > .p-button.p-button-outlined,
+.p-splitbutton.p-button-secondary > .p-button.p-button-outlined {
+    border-color: var(--clr-text);
+    color: var(--clr-text);
+}
+.p-button.p-button-secondary,
+.p-buttonset.p-button-secondary > .p-button,
+.p-splitbutton.p-button-secondary > .p-button {
+    border-color: var(--clr-text);
+    color: var(--clr-text);
+}
+.p-inputtext:enabled:focus,
+.p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box.p-focus,
+.p-button:focus,
+.p-column-filter-menu-button:focus,
+.p-breadcrumb ul li .p-menuitem-link:focus,
+.p-contextmenu .p-menuitem-link:focus,
+.p-menu .p-menuitem-link:focus {
+    box-shadow: 0 0 0 0.2rem var(--primary-color-light);
+    border-color: transparent;
+}
+.p-dropdown:not(.p-disabled).p-focus {
+    box-shadow: 0 0 0 0.2rem var(--primary-color-light);
+    border-color: var(--primary-color);
+}
+.p-inputtext:enabled:focus,
+.p-inputtext:enabled:hover {
+    border-color: var(--primary-color);
 }
 
 //DRAG & DROP

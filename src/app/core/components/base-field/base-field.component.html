@@ -1,8 +1,8 @@
 <div class="field p-mb-3 p-py-4 p-px-2" cdkDrag #fieldContainer>
     <div class="field__handle"><i class="pi pi-drag" cdkDragHandle></i></div>
-    <div class="p-d-flex p-jc-md-between">
-        <div class="p-mb-3">
-            <p-inplace closable="true">
+    <div class="p-d-flex p-jc-between p-ai-center p-mb-2">
+        <div class="field__label">
+            <p-inplace closable="true" closeIcon="pi pi-check">
                 <ng-template pTemplate="display">
                     {{ field?.label ? field.label : '(Untitled block)' }}
                 </ng-template>
@@ -11,7 +11,7 @@
                 </ng-template>
             </p-inplace>
         </div>
-        <div>
+        <div class="field__settings">
             <button
                 type="button"
                 class="p-button-text p-button-plain"
