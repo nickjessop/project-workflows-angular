@@ -89,6 +89,7 @@
                     visibility: hidden;
                     width: auto;
                     height: auto;
+                    padding: 0.5rem;
                     span {
                         text-shadow: 0px 2px 3px rgb(0 0 0 / 20%);
                     }
@@ -107,7 +108,7 @@
         }
         .p-galleria-item {
             height: auto;
-            padding: 3rem;
+            padding: 4rem;
         }
         .p-galleria-thumbnail-wrapper {
             position: absolute;

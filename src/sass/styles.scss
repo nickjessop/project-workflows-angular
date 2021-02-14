@@ -146,6 +146,12 @@ button {
     background: var(--hvr-primary);
     border-color: var(--hvr-primary);
 }
+.p-overlaypanel .p-overlaypanel-close {
+    background: var(--primary-color);
+}
+.p-overlaypanel .p-overlaypanel-close:enabled:hover {
+    background: var(--hvr-primary);
+}
 
 //DRAG & DROP
 

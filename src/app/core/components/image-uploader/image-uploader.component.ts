@@ -61,7 +61,6 @@ export class ImageUploaderComponent extends BaseFieldComponent implements OnInit
     public onCheckboxPress($event: { checked: boolean }, imageIndex: number) {
         if ($event.checked) {
             this.selectedImages.push(imageIndex);
-            console.log(this.selectedImages);
         } else {
             const index = this.selectedImages.indexOf(imageIndex);
             if (index > -1) {
