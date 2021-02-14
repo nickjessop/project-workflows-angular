@@ -8,7 +8,7 @@
         </div>
     </ng-container>
     <ng-container *ngIf="componentMode === 'edit'">
-        <div class="checkboxes checkboxes--edit p-pt-2" cdkDropList (cdkDropListDropped)="drop($event)">
+        <div class="checkboxes checkboxes--edit" cdkDropList (cdkDropListDropped)="drop($event)">
             <div
                 class="p-d-flex p-ai-center p-pl-2 p-py-2 checkbox"
                 *ngFor="let val of field.metadata.data.value; index as index"
