@@ -59,25 +59,39 @@
 }
 
 :host ::ng-deep .gallery {
+    .p-galleria-mask.p-component-overlay {
+        background-color: var(--overlay, rgba(247, 249, 250, 0.97));
+        max-height: 100%;
+    }
     .p-galleria {
         display: flex;
         flex-direction: column;
         height: 100%;
         max-height: 100%;
         width: 100%;
+        .close-button {
+            color: white;
+        }
+        .p-galleria-close {
+            display: none;
+        }
         .p-galleria-header {
             color: white;
         }
         .p-galleria-content {
             flex-grow: 1;
             justify-content: center;
-            height: 100%;
             width: 100%;
             position: relative;
+            overflow: hidden;
             .p-galleria-item-container {
-                // margin-top: -4.5rem;
                 > button {
                     visibility: hidden;
+                    width: auto;
+                    height: auto;
+                    span {
+                        text-shadow: 0px 2px 3px rgb(0 0 0 / 20%);
+                    }
                 }
                 &:hover {
                     > button {
@@ -86,14 +100,18 @@
                 }
             }
             .gallery-image {
-                max-width: 840px;
-                height: auto;
+                display: block;
+                max-width: 100%;
+                max-height: calc(100vh - 42px - 54px - 2rem);
             }
         }
+        .p-galleria-item {
+            height: auto;
+            padding: 3rem;
+        }
         .p-galleria-thumbnail-wrapper {
-            // position: absolute;
-            // bottom: 0;
-            // left: 0;
+            position: absolute;
+            bottom: 0;
             width: 100%;
         }
         .p-galleria-thumbnail-items-container {
@@ -111,7 +129,7 @@
             .custom-galleria-footer {
                 display: flex;
                 align-items: center;
-                background-color: rgba(0, 0, 0, 0.9);
+                background-color: rgba(0, 0, 0, 0.6);
                 color: #ffffff;
                 justify-content: space-between;
                 > button {
