@@ -70,7 +70,7 @@
                     mode="basic"
                     accept="image/*"
                     maxFileSize="1000000"
-                    chooseLabel="Add images"
+                    chooseLabel="Add an image"
                     (onSelect)="onFileUploadSelected($event)"
                     class="p-button-text p-mr-2"
                     [auto]="true"
@@ -82,11 +82,11 @@
                     type="button"
                     label="Delete images"
                     icon="pi pi-trash"
-                    (click)="onDeleteImagePress(index)"
+                    (click)="onDeleteImagePress()"
                     *ngIf="selectedImages.length > 0"
                 ></button>
             </div>
-            <div class="p-toolbar-group-right">
+            <div class="p-toolbar-group-right p-pr-2">
                 <div>{{ imageData.length }} images</div>
             </div>
         </p-toolbar>

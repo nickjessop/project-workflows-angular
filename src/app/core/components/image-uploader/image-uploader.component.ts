@@ -101,6 +101,10 @@ export class ImageUploaderComponent extends BaseFieldComponent implements OnInit
     }
 
     private uploadFile(file: File) {
+        if (!file) {
+            return;
+        }
+
         this.storageService
             .uploadFile(file)
             .pipe(
@@ -143,7 +147,7 @@ export class ImageUploaderComponent extends BaseFieldComponent implements OnInit
             );
     }
 
-    updateImageMetadata(image: Link) {
+    public updateImageMetadata(image: Link) {
         let index = this.imageData.indexOf(image);
         this.imageData[index] = image;
         this.projectService.syncProject();

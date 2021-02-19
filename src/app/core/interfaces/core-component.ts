@@ -236,4 +236,5 @@ export type Link = {
     thumbnail?: string;
     size?: number;
     type?: string;
+    extension?: string;
 };
