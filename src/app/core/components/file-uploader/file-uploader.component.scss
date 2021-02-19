@@ -1,0 +1,22 @@
+.file {
+    &__menu {
+        visibility: hidden;
+        &:focus,
+        &:focus-within {
+            visibility: visible;
+        }
+    }
+    &:hover {
+        .file__menu {
+            visibility: visible;
+        }
+    }
+}
+
+:host ::ng-deep .p-datatable .p-datatable-tbody > {
+    tr:hover,
+    tr:focus,
+    tr:focus-within {
+        background: var(--primary-color-light);
+    }
+}

@@ -9,7 +9,7 @@
             scrollHeight="250px"
             [virtualScroll]="true"
             [virtualRowHeight]="34"
-            styleClass="p-datatable-striped"
+            styleClass="p-datatable-striped files"
         >
             <ng-template pTemplate="header">
                 <tr>
@@ -20,64 +20,96 @@
             </ng-template>
             <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
                 <ng-container>
-                    <tr style="height:34px">
-                        <td style="width: 25%;">{{ rowData.title }}</td>
-                        <td style="width: 50%;">{{ rowData.description }}</td>
-                        <td style="width: 10%;">{{ rowData.type }}</td>
-
-                        <td style="width: 15%;">
-                            <a [href]="rowData.href"
-                                ><button pButton type="button" icon="pi pi-download" iconPos="left"></button
-                            ></a>
+                    <tr style="height:34px" class="file">
+                        <td style="width: 30%;">
+                            <ng-container [ngSwitch]="rowData.type">
+                                <ng-container *ngSwitchCase="'image'"><i class="pi pi-image"></i></ng-container>
+                                <ng-container *ngSwitchCase="'video'"><i class="pi pi-video"></i></ng-container>
+                                <ng-container *ngSwitchCase="'audio'"><i class="pi pi-volume-off"></i></ng-container>
+                                <ng-container *ngSwitchDefault><i class="pi pi-file"></i></ng-container>
+                            </ng-container>
+                            {{ rowData.title }}
                         </td>
-                        <td style="width: 10%;">
+                        <td style="width: 50%;">{{ rowData.description }}</td>
+                        <td style="width: 10%;">{{ rowData.extension }}</td>
+                        <td style="width: 10%;text-align: right;">
                             <button
                                 pButton
                                 type="button"
-                                icon="pi pi-times"
-                                class="p-button-text"
-                                (click)="onFileDeletePress(rowIndex)"
+                                icon="pi pi-ellipsis-h"
+                                class="p-button-text file__menu"
+                                (click)="menu.toggle($event)"
                             ></button>
+                            <a href="#" id="fileBlockDownload-{{ rowIndex }}" style="display: none;">Download</a>
+                            <p-menu
+                                #menu
+                                [popup]="true"
+                                [model]="getFileMenuItems(rowIndex, rowData)"
+                                appendTo="body"
+                            ></p-menu>
                         </td>
                     </tr>
                 </ng-container>
             </ng-template>
         </p-table>
-        <p-toolbar>
+        <p-toolbar styleClass="p-p-2">
             <div class="p-toolbar-group-left">
-                <button type="button" label="Upload Files" pButton (click)="showFileUploaderDialog = true"></button>
+                <button
+                    pButton
+                    type="button"
+                    icon="pi pi-plus"
+                    label="Add a file"
+                    pButton
+                    (click)="showFileUploaderDialog = true; fileDialogMode = 'upload'"
+                    class="p-button-text"
+                ></button>
             </div>
+            <div class="p-toolbar-group-right p-pr-2">{{ fileData.length }} files</div>
         </p-toolbar>
     </ng-container>
 
-    <!-- <div class="p-toolbar-group-right">{{ fileData.length }} files</div> -->
     <p-dialog
         [(visible)]="showFileUploaderDialog"
-        header="File Uploader"
         styleClass="dialog"
         focusTrap="true"
         modal="true"
+        (onHide)="resetDialog()"
     >
-        <div class="p-field p-pt-2">
-            <div class="p-toolbar-group-left">
-                <p-fileUpload
-                    #fileUploader
-                    mode="basic"
-                    maxFileSize="10000000"
-                    [chooseLabel]="dialogData.title ? dialogData.title : 'Select file'"
-                    (onSelect)="onFileUploadSelected($event)"
-                ></p-fileUpload>
+        <ng-template pTemplate="header">
+            <ng-container *ngIf="fileDialogMode === 'upload'">
+                <span class="p-dialog-title">Add new file</span>
+            </ng-container>
+            <ng-container *ngIf="fileDialogMode === 'edit'">
+                <span class="p-dialog-title">Edit: {{ dialogData.title }}</span>
+            </ng-container>
+        </ng-template>
+        <ng-container *ngIf="fileDialogMode === 'upload'">
+            <div class="p-field p-pt-2">
+                <div class="p-toolbar-group-left">
+                    <p-fileUpload
+                        #fileUploader
+                        mode="basic"
+                        chooseLabel="Select a file"
+                        maxFileSize="10000000"
+                        (onSelect)="onFileUploadSelected($event)"
+                    ></p-fileUpload>
+                </div>
             </div>
-        </div>
+        </ng-container>
         <div class="p-field">
-            <label for="fileName" aria-describedby="Add a file name" styleClass="labelBlock">File Name</label>
+            <label for="fileName" aria-describedby="Add a file name" styleClass="labelBlock">Name</label>
             <input id="fileName" type="text" pInputText [(ngModel)]="dialogData.title" style="width: 100%" />
         </div>
-        <div class="p-field p-pt-2">
+        <div class="p-field p-py-2">
             <label for="description" aria-describedby="Add a description" styleClass="labelBlock">Description</label>
             <input id="description" type="text" pInputText [(ngModel)]="dialogData.description" style="width: 100%" />
         </div>
-
-        <button type="button" label="Submit" pButton (click)="onDialogSubmit($event)"></button>
+        <ng-container *ngIf="fileDialogMode === 'upload'; else saveData">
+            <button type="button" label="Submit" pButton (click)="onDialogSubmit($event)"></button>
+            <button type="button" label="Cancel" class="p-button-text p-ml-2" pButton (click)="resetDialog()"></button>
+        </ng-container>
+        <ng-template #saveData>
+            <button type="button" label="Save" pButton (click)="updateFileMetadata(this.dialogData)"></button>
+        </ng-template>
     </p-dialog>
 </app-base-field>
