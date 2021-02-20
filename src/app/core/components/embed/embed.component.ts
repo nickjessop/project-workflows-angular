@@ -66,8 +66,8 @@ export class EmbedComponent extends BaseFieldComponent implements OnInit {
         this.embedData.data.value[0].href = '';
     }
 
-    public onMouseUp(event: any) {
-        const height = event.layerY;
+    public onMouseUp(embed: any) {
+        const height = embed.getBoundingClientRect().height;
         this.settings = { embedComponent: { iframeHeight: height } };
         this.embedData.settings = this.settings;
     }

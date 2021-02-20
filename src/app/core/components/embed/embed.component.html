@@ -3,7 +3,9 @@
         <div class="view" *ngIf="embedData.data.value[0].href; else placeholder">
             <div
                 class="embed p-mb-0"
-                [style.height.px]="settings?.embedComponent?.iframeHeight ? settings.embedComponent.iframeHeight : 400"
+                [style.height.px]="
+                    settings?.embedComponent?.iframeHeight ? settings?.embedComponent?.iframeHeight : 400
+                "
             >
                 <iframe [src]="cleanUrl" allowfullscreen class="p-mb-2" frameBorder="0" style="height: 100%;"></iframe>
             </div>
@@ -23,9 +25,10 @@
             <div class="edit" *ngIf="embedData.data.value[0].href && domain.hostname != ''; else add">
                 <div
                     class="embed embed--resizable"
-                    (mouseup)="onMouseUp($event)"
+                    (mouseup)="onMouseUp(embed)"
+                    #embed
                     [style.height.px]="
-                        settings?.embedComponent?.iframeHeight ? settings.embedComponent.iframeHeight : 400
+                        settings?.embedComponent?.iframeHeight ? settings?.embedComponent?.iframeHeight : 400
                     "
                 >
                     <iframe [src]="cleanUrl" allowfullscreen frameBorder="0"></iframe>
