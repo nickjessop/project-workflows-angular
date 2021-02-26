@@ -10,7 +10,7 @@ export class StepDialogComponent implements OnInit {
     @Input() step: Step = {
         title: '',
         description: '',
-        status: { label: 'No status', value: 'no-status', icon: 'pi-circle-off' },
+        status: { label: 'No status', value: 'no-status', icon: '' },
     };
     @Input() mode: 'edit' | 'new' | 'delete' = 'new';
     @Input() showDialog = false;
@@ -18,11 +18,11 @@ export class StepDialogComponent implements OnInit {
     @Output() onHideEvent = new EventEmitter<true>();
 
     statusOptions: Status[];
-    selectedStatus: Status = { label: 'No status', value: 'no-status', icon: 'pi-circle-off' };
+    selectedStatus: Status = { label: 'No status', value: 'no-status', icon: '' };
 
     constructor() {
         this.statusOptions = [
-            { label: 'No status', value: 'no-status', icon: 'pi-circle-off' },
+            { label: 'No status', value: 'no-status', icon: '' },
             { label: 'In progress', value: 'in-progress', icon: 'pi-progress' },
             { label: 'Important', value: 'important', icon: 'pi-exclamation-circle' },
             { label: 'Upcoming', value: 'upcoming', icon: 'pi-clock' },
