@@ -13,6 +13,7 @@ export class BaseFieldComponent {
     @Input() index?: number;
     @Input() componentMode: ComponentMode = 'edit';
     @Input() height?: number;
+    // @Output() isDragging = new EventEmitter<boolean>();
 
     public items: MenuItem[] = [
         {
@@ -31,5 +32,17 @@ export class BaseFieldComponent {
     public onDeleteBlock() {
         const index = this.index ? this.index : 0;
         this.projectService.deleteProjectBlock(index);
+    }
+
+    dragStarted() {
+        // this.isDragging.emit(true);
+        console.log('dragging');
+        this.projectService.setBlockDrag(true);
+    }
+
+    dragFinished() {
+        // this.isDragging.emit(false);
+        console.log('drag finished');
+        this.projectService.setBlockDrag(false);
     }
 }
