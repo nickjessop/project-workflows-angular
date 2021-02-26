@@ -1,5 +1,5 @@
 import { moveItemInArray } from '@angular/cdk/drag-drop';
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import * as _ from 'lodash';
 import { BehaviorSubject, from } from 'rxjs';
@@ -16,6 +16,7 @@ export class ProjectService {
     private readonly PROJECT_COLLECTION_NAME = 'projects';
     private _projectConfig: BehaviorSubject<Project> = new BehaviorSubject<Project>(this.createBaseProject('', '', ''));
     public readonly projectConfig$ = this._projectConfig.asObservable();
+    public isDragging: EventEmitter<boolean> = new EventEmitter();
 
     // private _currentStepConfig: BehaviorSubject<StepConfig | undefined> = new BehaviorSubject<StepConfig | undefined>(
     //     this._projectConfig.value.configuration?.[0]
@@ -145,6 +146,10 @@ export class ProjectService {
         moveItemInArray(_projectConfig.configuration![currentStepIndex].components!, previousIndex, currentIndex);
         // this.projectConfig = _projectConfig;
         this.setProject(_projectConfig);
+    }
+
+    public setBlockDrag(dragging: boolean) {
+        this.isDragging.emit(dragging);
     }
 
     public swapStepOrder(previousIndex: number, currentIndex: number) {
