@@ -117,7 +117,7 @@ export class ProjectService {
                       step: {
                           title: 'Untitled Step',
                           description: 'Untitled Step Description',
-                          status: { label: 'No status', value: 'no-status', icon: 'pi-circle-off' },
+                          status: { label: 'No status', value: 'no-status', icon: '' },
                           isCurrentStep: true,
                       },
                   },
@@ -171,7 +171,7 @@ export class ProjectService {
             step: {
                 title: stepTitle || 'Untitled Step',
                 description: stepDescription || '',
-                status: status || { label: 'No status', value: 'no-status', icon: 'pi-circle-off' },
+                status: status || { label: 'No status', value: 'no-status', icon: '' },
             },
             components: [fieldConfig],
         };

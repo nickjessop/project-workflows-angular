@@ -4,6 +4,7 @@
     position: relative;
     border: 0.065rem solid var(--surface-d);
     border-radius: 6px;
+    background: white;
     &:hover,
     &:focus-within {
         border: 0.065rem solid var(--primary-color-medium);

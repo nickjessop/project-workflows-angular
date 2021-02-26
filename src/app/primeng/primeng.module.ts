@@ -26,6 +26,7 @@ import { TableModule } from 'primeng/table';
 import { TabViewModule } from 'primeng/tabview';
 import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
+import { TooltipModule } from 'primeng/tooltip';
 
 @NgModule({
     declarations: [],
@@ -56,6 +57,7 @@ import { ToolbarModule } from 'primeng/toolbar';
         CheckboxModule,
         ContextMenuModule,
         EditorModule,
+        TooltipModule,
     ],
     exports: [
         AccordionModule,
@@ -82,6 +84,7 @@ import { ToolbarModule } from 'primeng/toolbar';
         CheckboxModule,
         ContextMenuModule,
         EditorModule,
+        TooltipModule,
     ],
     providers: [ConfirmationService, MessageService],
 })
