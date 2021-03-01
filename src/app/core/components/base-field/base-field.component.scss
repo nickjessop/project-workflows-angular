@@ -30,7 +30,6 @@
     .field__description {
         color: $sub-text;
         font-style: italic;
-        font-size: ms(-1);
         display: none;
     }
 }
@@ -42,7 +41,6 @@
     .p-inplace-display,
     .p-inputtext {
         font-weight: 500;
-        font-size: ms(1);
         color: var(--clr-text);
     }
 }
