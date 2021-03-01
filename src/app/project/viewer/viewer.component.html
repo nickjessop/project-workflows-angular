@@ -7,65 +7,56 @@
         <div class="p-col-3">
             <project-steps (dragAndDropStepEvent)="onDragAndDropStepEvent($event)"></project-steps>
         </div>
-        <div class="p-col-9 p-pl-3 p-pr-2 p-pt-5 viewer-container__step" *ngIf="currentStep; else showErrorState">
-            <div class="step-container p-pb-3">
-                <div class="p-mb-2 p-px-2">
-                    <div class="p-grid p-nogutter p-pb-3">
-                        <div class="p-col-6 p-d-flex p-ai-center">
-                            <div class="p-d-flex p-flex-column">
-                                <div class="p-d-flex">
-                                    <h2 class="ms-3 p-my-0 p-pr-2">{{ currentStep.step.title }}</h2>
-                                    <ng-container
-                                        *ngIf="currentStep.step.status"
-                                        [ngSwitch]="currentStep.step.status.value"
-                                    >
-                                        <span
-                                            *ngSwitchCase="'in-progress'"
-                                            class="p-tag p-tag-rounded p-tag-warning ms-03"
-                                        >
-                                            <i class="pi {{ currentStep.step.status.icon }} p-pr-1"></i
-                                            >{{ currentStep.step.status.label }}
-                                        </span>
-                                        <span *ngSwitchCase="'upcoming'" class="p-tag p-tag-rounded ms-03">
-                                            <i class="pi {{ currentStep.step.status.icon }} p-pr-1"></i
-                                            >{{ currentStep.step.status.label }}
-                                        </span>
-                                        <span
-                                            *ngSwitchCase="'completed'"
-                                            class="p-tag p-tag-rounded p-tag-success ms-03"
-                                        >
-                                            <i class="pi {{ currentStep.step.status.icon }} p-pr-1"></i
-                                            >{{ currentStep.step.status.label }}
-                                        </span>
-                                        <span
-                                            *ngSwitchCase="'important'"
-                                            class="p-tag p-tag-rounded p-tag-danger ms-03"
-                                        >
-                                            <i class="pi {{ currentStep.step.status.icon }} p-pr-1"></i>
-                                            {{ currentStep.step.status.label }}
-                                        </span>
-                                    </ng-container>
+        <div class="p-col-9 p-px-2 p-pt-5 viewer-container__step" *ngIf="currentStep; else showErrorState">
+            <div class="p-grid p-nogutter" style="min-height: 100%">
+                <div class="p-col-11">
+                    <div class="step-container p-pb-3">
+                        <div class="p-mb-4 p-px-2">
+                            <div class="p-d-flex p-ai-center p-jc-between">
+                                <div class="p-d-flex p-flex-column">
+                                    <h2 class="ms-4 p-my-0 p-pr-2">{{ currentStep.step.title }}</h2>
+                                    <span *ngIf="currentStep.step.description" class="p-pt-1">{{
+                                        currentStep.step.description
+                                    }}</span>
                                 </div>
-                                <span *ngIf="currentStep.step.description" class="p-pt-1">{{
-                                    currentStep.step.description
-                                }}</span>
+                                <ng-container
+                                    *ngIf="currentStep.step.status"
+                                    [ngSwitch]="currentStep.step.status.value"
+                                >
+                                    <span *ngSwitchCase="'in-progress'" class="p-tag p-tag-rounded p-tag-warning ms-02">
+                                        <i class="pi {{ currentStep.step.status.icon }} p-pr-1"></i
+                                        >{{ currentStep.step.status.label }}
+                                    </span>
+                                    <span *ngSwitchCase="'upcoming'" class="p-tag p-tag-rounded ms-02">
+                                        <i class="pi {{ currentStep.step.status.icon }} p-pr-1"></i
+                                        >{{ currentStep.step.status.label }}
+                                    </span>
+                                    <span *ngSwitchCase="'completed'" class="p-tag p-tag-rounded p-tag-success ms-02">
+                                        <i class="pi {{ currentStep.step.status.icon }} p-pr-1"></i
+                                        >{{ currentStep.step.status.label }}
+                                    </span>
+                                    <span *ngSwitchCase="'important'" class="p-tag p-tag-rounded p-tag-danger ms-02">
+                                        <i class="pi {{ currentStep.step.status.icon }} p-pr-1"></i>
+                                        {{ currentStep.step.status.label }}
+                                    </span>
+                                </ng-container>
                             </div>
                         </div>
-                        <div class="p-col-6 p-d-flex p-jc-end p-ai-center">
-                            <step-controls></step-controls>
+                        <div class="p-px-2">
+                            <project-dynamic-form
+                                [fields]="currentStep.components"
+                                (dragAndDropEvent)="onDragAndDropEvent($event)"
+                            ></project-dynamic-form>
                         </div>
                     </div>
                 </div>
-                <div class="p-px-2">
-                    <project-dynamic-form
-                        [fields]="currentStep.components"
-                        (dragAndDropEvent)="onDragAndDropEvent($event)"
-                    ></project-dynamic-form>
+                <div class="p-col-1" style="position: relative">
+                    <step-controls></step-controls>
                 </div>
             </div>
         </div>
         <ng-template #showErrorState>
-            <div class="p-col-6 p-d-flex p-ai-center"></div>
+            <div class="p-col-9 p-d-flex p-ai-center"></div>
         </ng-template>
     </div>
 </div>

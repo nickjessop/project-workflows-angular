@@ -1,9 +1,12 @@
-<p-sidebar [(visible)]="displayBlockSidebar" position="right">
+<p-sidebar [(visible)]="displayBlockSidebar" position="right" appendTo="body">
     <div class="ms-1 p-pt-2">Add block</div>
     <div class="p-grid p-nogutter block-overlay p-mt-3">
         <ng-container *ngIf="blockOptions?.length">
             <div class="p-col-4" *ngFor="let blockOption of blockOptions">
-                <div class="p-d-flex p-flex-column p-jc-center p-my-2 p-mx-2 block-overlay__item" (click)="onAddNewBlockPress(blockOption.component)">
+                <div
+                    class="p-d-flex p-flex-column p-jc-center p-my-2 p-mx-2 block-overlay__item"
+                    (click)="onAddNewBlockPress(blockOption.component)"
+                >
                     <i class="pi {{ blockOption.icon }} ms-4 block-icon"></i>
                     <div class="block-label ms-01">{{ blockOption.label }}</div>
                 </div>
@@ -15,8 +18,7 @@
 <button
     pButton
     type="button"
-    label="Add block"
-    class="p-button-outlined p-button-secondary"
+    class="p-button-raised p-button-text p-button-rounded p-button-white"
     icon="pi pi-plus"
     (click)="showAddNewBlockDialog($event)"
 ></button>
