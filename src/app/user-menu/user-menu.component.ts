@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { AuthenticationService } from '../services/authentication/authentication.service';
+import { UserService } from '../services/user/user.service';
 
 @Component({
     selector: 'app-user-menu',
@@ -11,7 +12,14 @@ export class UserMenuComponent implements OnInit {
     items!: MenuItem[];
     @Input() showUsername = true;
 
-    constructor(private authService: AuthenticationService) {}
+    public user: string = '';
+
+    constructor(private authService: AuthenticationService, private userService: UserService) {
+        this.userService.getUserDetails().then(() => {
+            this.user = this.userService.userDetails.name!;
+            console.log(this.user);
+        });
+    }
 
     ngOnInit(): void {
         this.items = [

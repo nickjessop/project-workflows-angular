@@ -12,7 +12,6 @@ export class StorageService {
 
     public uploadFile(file: File) {
         const fileId: string = uuid();
-        console.log(file);
         const userId = this.authenticationService.user?.id;
         const storageRef = this.firebaseService.getStorageInstance().ref(`${userId}/${fileId}`);
 
