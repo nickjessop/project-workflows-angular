@@ -91,6 +91,10 @@ export class AuthenticationService {
         this._user?.next(user);
     }
 
+    public getCurrentUser() {
+        return this.firebaseService.getAuthInstance().currentUser;
+    }
+
     public register(email: string, password: string, name: string, plan: UserPlan) {
         from(this.createUserAndAttachMetadata(email, password, name, plan)).subscribe(
             success => {
