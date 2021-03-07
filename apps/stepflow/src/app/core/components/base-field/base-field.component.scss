@@ -1,0 +1,46 @@
+@import 'variables.scss';
+
+.field {
+    position: relative;
+    border: 0.065rem solid var(--surface-d);
+    border-radius: 6px;
+    background: white;
+    &:hover,
+    &:focus-within {
+        border: 0.065rem solid var(--primary-color-medium);
+        .field__settings,
+        .field__handle {
+            visibility: visible;
+        }
+    }
+    .field__settings {
+        visibility: hidden;
+    }
+    .field__handle {
+        visibility: hidden;
+        position: absolute;
+        top: 0px;
+        left: calc(50% - 8px);
+        opacity: 0.3;
+        &:hover,
+        button.button:hover {
+            cursor: grab !important;
+        }
+    }
+    .field__description {
+        color: $sub-text;
+        font-style: italic;
+        display: none;
+    }
+}
+
+:host ::ng-deep .field__label {
+    .p-button {
+        margin-left: 0.5rem;
+    }
+    .p-inplace-display,
+    .p-inputtext {
+        font-weight: 500;
+        color: var(--clr-text);
+    }
+}
