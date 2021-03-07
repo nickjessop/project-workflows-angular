@@ -139,6 +139,9 @@ button {
     background: var(--primary-color-light);
     color: var(--primary-color);
 }
+.p-button.p-button-white {
+    background: var(--surface-a);
+}
 .p-checkbox .p-checkbox-box.p-highlight {
     background: var(--primary-color);
     border-color: var(--primary-color);

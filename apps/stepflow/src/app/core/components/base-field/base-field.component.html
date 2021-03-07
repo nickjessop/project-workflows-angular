@@ -1,4 +1,10 @@
-<div class="field p-mb-3 p-py-4 p-px-2" cdkDrag #fieldContainer>
+<div
+    class="field p-mb-3 p-py-4 p-px-2"
+    cdkDrag
+    #fieldContainer
+    (cdkDragStarted)="dragStarted()"
+    (cdkDragReleased)="dragFinished()"
+>
     <div class="field__handle"><i class="pi pi-drag" cdkDragHandle></i></div>
     <div class="p-d-flex p-jc-between p-ai-center p-mb-2">
         <div class="field__label">
@@ -22,6 +28,6 @@
             <p-menu #menu [popup]="true" [model]="items" appendTo="body"></p-menu>
         </div>
     </div>
-    <div class="field__description mb-2">Description</div>
+    <div class="field__description mb-2 ms-01">Description</div>
     <ng-content></ng-content>
 </div>

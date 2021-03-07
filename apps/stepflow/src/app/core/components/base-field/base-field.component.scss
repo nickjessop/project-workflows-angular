@@ -4,6 +4,7 @@
     position: relative;
     border: 0.065rem solid var(--surface-d);
     border-radius: 6px;
+    background: white;
     &:hover,
     &:focus-within {
         border: 0.065rem solid var(--primary-color-medium);
@@ -29,7 +30,6 @@
     .field__description {
         color: $sub-text;
         font-style: italic;
-        font-size: ms(-1);
         display: none;
     }
 }
@@ -41,7 +41,6 @@
     .p-inplace-display,
     .p-inputtext {
         font-weight: 500;
-        font-size: ms(1);
         color: var(--clr-text);
     }
 }

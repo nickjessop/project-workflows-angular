@@ -1,1 +1,16 @@
-<project-block-overlay (onSelectNewBlock)="onSelectNewBlock($event)"> </project-block-overlay>
+<div class="control p-pl-3 p-pt-4 p-d-flex p-dir-col">
+    <div class="control__button p-mb-2 p-d-flex p-dir-col p-ai-center">
+        <project-block-overlay (onSelectNewBlock)="onSelectNewBlock($event)"> </project-block-overlay>
+        <div class="control-label ms-02 p-mt-2 p-text-center">Blocks</div>
+    </div>
+    <div class="control__button control__button--bottom p-mb-2 p-d-flex p-dir-col p-ai-center">
+        <!-- TODO: rig this up with a menu and some items -->
+        <button
+            pButton
+            type="button"
+            class="p-button-raised p-button-text p-button-rounded"
+            icon="pi pi-question"
+        ></button>
+        <div class="control-label ms-02 p-mt-2 p-text-center">Help</div>
+    </div>
+</div>

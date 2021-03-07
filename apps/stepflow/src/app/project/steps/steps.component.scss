@@ -1,4 +1,7 @@
 .steps-container {
+    border-right: 1px solid var(--surface-d);
+    background: white;
+    min-height: 100%;
     .step {
         margin-left: -0.5rem;
         &:hover {
@@ -13,11 +16,13 @@
         }
     }
     .step-selected {
-        background: var(--surface-c);
+        background: var(--primary-color-light);
         border-radius: 6px;
+        color: var(--primary-color);
+        font-weight: bold;
         &:hover,
         &:focus-within {
-            background: var(--surface-c);
+            background: var(--primary-color-light);
             .step__edit-step {
                 opacity: 0.6;
                 pointer-events: initial;

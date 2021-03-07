@@ -1,5 +1,5 @@
 import { moveItemInArray } from '@angular/cdk/drag-drop';
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import * as _ from 'lodash';
 import { BehaviorSubject, from } from 'rxjs';
@@ -16,6 +16,7 @@ export class ProjectService {
     private readonly PROJECT_COLLECTION_NAME = 'projects';
     private _projectConfig: BehaviorSubject<Project> = new BehaviorSubject<Project>(this.createBaseProject('', '', ''));
     public readonly projectConfig$ = this._projectConfig.asObservable();
+    public isDragging: EventEmitter<boolean> = new EventEmitter();
 
     // private _currentStepConfig: BehaviorSubject<StepConfig | undefined> = new BehaviorSubject<StepConfig | undefined>(
     //     this._projectConfig.value.configuration?.[0]
@@ -116,7 +117,7 @@ export class ProjectService {
                       step: {
                           title: 'Untitled Step',
                           description: 'Untitled Step Description',
-                          status: { label: 'No status', value: 'no-status', icon: 'pi-circle-off' },
+                          status: { label: 'No status', value: 'no-status', icon: '' },
                           isCurrentStep: true,
                       },
                   },
@@ -147,6 +148,10 @@ export class ProjectService {
         this.setProject(_projectConfig);
     }
 
+    public setBlockDrag(dragging: boolean) {
+        this.isDragging.emit(dragging);
+    }
+
     public swapStepOrder(previousIndex: number, currentIndex: number) {
         const _projectConfig = _.cloneDeep(this.projectConfig);
         moveItemInArray(_projectConfig.configuration!, previousIndex, currentIndex);
@@ -166,7 +171,7 @@ export class ProjectService {
             step: {
                 title: stepTitle || 'Untitled Step',
                 description: stepDescription || '',
-                status: status || { label: 'No status', value: 'no-status', icon: 'pi-circle-off' },
+                status: status || { label: 'No status', value: 'no-status', icon: '' },
             },
             components: [fieldConfig],
         };

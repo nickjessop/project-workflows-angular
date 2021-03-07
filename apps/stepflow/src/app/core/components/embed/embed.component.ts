@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { MessageService } from 'primeng/api';
@@ -13,6 +13,10 @@ import { BaseFieldComponent } from '../base-field/base-field.component';
 })
 export class EmbedComponent extends BaseFieldComponent implements OnInit {
     @Input() group!: FormGroup;
+    // @Input() isDragging!: EventEmitter<boolean>;
+
+    @ViewChild('iframe')
+    public iframe!: ElementRef;
 
     public embedData = createComponentMetadataTemplate('embed') as Embed;
     public settings?: ComponentSettings;
@@ -26,6 +30,19 @@ export class EmbedComponent extends BaseFieldComponent implements OnInit {
         private messageService: MessageService
     ) {
         super(projectService);
+    }
+
+    private getBlockDrag() {
+        this.projectService.isDragging.subscribe((dragging: boolean) => {
+            console.log('dragging!' + dragging);
+            if (this.iframe.nativeElement) {
+                if (dragging === true) {
+                    this.iframe.nativeElement.src = '';
+                } else {
+                    this.iframe.nativeElement.src = this.cleanUrl;
+                }
+            }
+        });
     }
 
     ngOnInit(): void {
@@ -42,6 +59,12 @@ export class EmbedComponent extends BaseFieldComponent implements OnInit {
         }
 
         this.settings = this.embedData.settings;
+    }
+
+    ngAfterViewInit() {
+        console.log('after view init');
+        console.log(this.getBlockDrag());
+        this.getBlockDrag();
     }
 
     public onAddNewUrlPress() {
@@ -81,4 +104,19 @@ export class EmbedComponent extends BaseFieldComponent implements OnInit {
             return false;
         }
     }
+
+    // public onDraggingEvent($event: boolean) {
+    //     console.log($event);
+
+    //     const _cleanUrl = this.cleanUrl;
+    //     if (this.iframe.nativeElement) {
+    //         if ($event === true) {
+    //             // this.cleanUrl = '';
+    //             this.iframe.nativeElement.src = '';
+    //         } else {
+    //             // this.cleanUrl = _cleanUrl;
+    //             this.iframe.nativeElement.src = this.cleanUrl;
+    //         }
+    //     }
+    // }
 }

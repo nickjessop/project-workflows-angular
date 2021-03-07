@@ -27,14 +27,14 @@ export class StepsComponent implements OnInit {
     public focusStep: Step = {
         title: '',
         description: '',
-        status: { label: 'No status', value: 'no-status', icon: 'pi-circle-off' },
+        status: { label: 'No status', value: 'no-status', icon: '' },
     };
 
     statusOptions: Status[];
 
     constructor(private projectService: ProjectService) {
         this.statusOptions = [
-            { label: 'No status', value: 'no-status', icon: 'pi-circle-off' },
+            { label: 'No status', value: 'no-status', icon: '' },
             { label: 'In progress', value: 'in-progress', icon: 'pi-progress' },
             { label: 'Important', value: 'important', icon: 'pi-exclamation-circle' },
             { label: 'Upcoming', value: 'upcoming', icon: 'pi-clock' },
@@ -111,7 +111,7 @@ export class StepsComponent implements OnInit {
             this.focusStep = {
                 description: '',
                 title: '',
-                status: { label: 'No status', value: 'no-status', icon: 'pi-circle-off' },
+                status: { label: 'No status', value: 'no-status', icon: '' },
             };
             this.stepMode = 'new';
             this.showDialog = true;
