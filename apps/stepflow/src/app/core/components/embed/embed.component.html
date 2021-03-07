@@ -31,7 +31,7 @@
                         settings?.embedComponent?.iframeHeight ? settings?.embedComponent?.iframeHeight : 400
                     "
                 >
-                    <iframe [src]="cleanUrl" allowfullscreen frameBorder="0"></iframe>
+                    <iframe [src]="cleanUrl" allowfullscreen frameBorder="0" #iframe></iframe>
                 </div>
                 <div class="url p-mt-2 p-d-flex p-ai-center">
                     <i class="pi pi-external-link p-mr-2"></i>
