@@ -1,0 +1,156 @@
+.images {
+    line-height: 0;
+    -webkit-column-count: 3;
+    -webkit-column-gap: 1rem;
+    -moz-column-count: 3;
+    -moz-column-gap: 1rem;
+    column-count: 3;
+    column-gap: 1rem;
+    display: inline-block;
+    margin-right: auto;
+    margin-left: auto;
+    &__item {
+        position: relative;
+        img {
+            width: 100%;
+            height: auto;
+            margin-bottom: 1rem;
+        }
+        .image-edit,
+        .image-checkbox {
+            position: absolute;
+            visibility: hidden;
+            top: 10px;
+        }
+        .image-checkbox {
+            right: 10px;
+        }
+        .image-edit {
+            left: 10px;
+            background: white;
+        }
+        &:hover {
+            cursor: zoom-in;
+            .image-edit,
+            .image-checkbox {
+                cursor: pointer;
+                visibility: visible;
+            }
+        }
+        .image-dialog:hover .image-edit {
+            visibility: visible;
+        }
+    }
+}
+
+:host ::ng-deep .p-button.p-fileupload-choose {
+    background: transparent;
+    color: var(--primary-color);
+    border: none;
+    &:hover {
+        background: var(--primary-color-light);
+    }
+}
+
+:host ::ng-deep .p-checkbox-checked {
+    visibility: visible;
+}
+
+:host ::ng-deep .gallery {
+    .p-galleria-mask.p-component-overlay {
+        background-color: var(--overlay, rgba(247, 249, 250, 0.97));
+        max-height: 100%;
+    }
+    .p-galleria {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        max-height: 100%;
+        width: 100%;
+        .close-button {
+            color: white;
+        }
+        .p-galleria-close {
+            display: none;
+        }
+        .p-galleria-header {
+            color: white;
+        }
+        .p-galleria-content {
+            flex-grow: 1;
+            justify-content: center;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            .p-galleria-item-container {
+                > button {
+                    visibility: hidden;
+                    width: auto;
+                    height: auto;
+                    padding: 0.5rem;
+                    span {
+                        text-shadow: 0px 2px 3px rgb(0 0 0 / 20%);
+                    }
+                }
+                &:hover {
+                    > button {
+                        visibility: visible;
+                    }
+                }
+            }
+            .gallery-image {
+                display: block;
+                max-width: 100%;
+                max-height: calc(100vh - 42px - 54px - 2rem);
+            }
+        }
+        .p-galleria-item {
+            height: auto;
+            padding: 4rem;
+        }
+        .p-galleria-thumbnail-wrapper {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+        }
+        .p-galleria-thumbnail-items-container {
+            width: 100%;
+            .gallery-thumbnail {
+                width: 50px;
+                height: 50px;
+                img {
+                    width: 50px;
+                    height: 50px;
+                }
+            }
+        }
+        .p-galleria-footer {
+            .custom-galleria-footer {
+                display: flex;
+                align-items: center;
+                background-color: rgba(0, 0, 0, 0.6);
+                color: #ffffff;
+                justify-content: space-between;
+                > button {
+                    background-color: transparent;
+                    color: #ffffff;
+                    border: 0 none;
+                    border-radius: 0;
+                    margin: 0.2rem 0;
+                    &:hover {
+                        background-color: rgba(255, 255, 255, 0.1);
+                    }
+                }
+            }
+        }
+        .meta-data {
+            > span {
+                font-size: 0.9rem;
+                padding-left: 0.829rem;
+                &.title {
+                    font-weight: bold;
+                }
+            }
+        }
+    }
+}

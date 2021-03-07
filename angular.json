@@ -1,7 +1,7 @@
 {
     "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
     "version": 1,
-    "newProjectRoot": "projects",
+    "newProjectRoot": "",
     "projects": {
         "stepflow": {
             "projectType": "application",
@@ -10,22 +10,22 @@
                     "style": "scss"
                 }
             },
-            "root": "",
-            "sourceRoot": "src",
+            "root": "apps/stepflow",
+            "sourceRoot": "apps/stepflow/src",
             "prefix": "app",
             "architect": {
                 "build": {
                     "builder": "@angular-devkit/build-angular:browser",
                     "options": {
-                        "outputPath": "dist/stepflow",
-                        "index": "src/index.html",
-                        "main": "src/main.ts",
-                        "polyfills": "src/polyfills.ts",
-                        "tsConfig": "tsconfig.app.json",
+                        "outputPath": "dist/apps/stepflow",
+                        "index": "apps/stepflow/src/index.html",
+                        "main": "apps/stepflow/src/main.ts",
+                        "polyfills": "apps/stepflow/src/polyfills.ts",
+                        "tsConfig": "apps/stepflow/tsconfig.app.json",
                         "aot": false,
                         "assets": [
-                            "src/favicon.ico",
-                            "src/assets"
+                            "apps/stepflow/src/favicon.ico",
+                            "apps/stepflow/src/assets"
                         ],
                         "styles": [
                             "node_modules/primeng/resources/themes/saga-blue/theme.css",
@@ -34,11 +34,11 @@
                             "node_modules/primeflex/primeflex.css",
                             "node_modules/quill/dist/quill.core.css",
                             "node_modules/quill/dist/quill.snow.css",
-                            "src/sass/styles.scss"
+                            "apps/stepflow/src/sass/styles.scss"
                         ],
                         "stylePreprocessorOptions": {
                             "includePaths": [
-                                "src/sass"
+                                "apps/stepflow/src/sass"
                             ]
                         },
                         "scripts": [
@@ -49,8 +49,8 @@
                         "production": {
                             "fileReplacements": [
                                 {
-                                    "replace": "src/environments/environment.ts",
-                                    "with": "src/environments/environment.prod.ts"
+                                    "replace": "apps/stepflow/src/environments/environment.ts",
+                                    "with": "apps/stepflow/src/environments/environment.prod.ts"
                                 }
                             ],
                             "optimization": true,
@@ -76,8 +76,7 @@
                     "builder": "@angular-devkit/build-angular:dev-server",
                     "options": {
                         "browserTarget": "stepflow:build",
-                        "port": 4200,
-                        "proxyConfig": "src/proxy.conf.json"
+                        "port": 4200
                     },
                     "configurations": {
                         "production": {
@@ -94,16 +93,16 @@
                 "test": {
                     "builder": "@angular-devkit/build-angular:karma",
                     "options": {
-                        "main": "src/test.ts",
-                        "polyfills": "src/polyfills.ts",
-                        "tsConfig": "tsconfig.spec.json",
-                        "karmaConfig": "karma.conf.js",
+                        "main": "apps/stepflow/src/test.ts",
+                        "polyfills": "apps/stepflow/src/polyfills.ts",
+                        "tsConfig": "apps/stepflow/tsconfig.spec.json",
+                        "karmaConfig": "apps/stepflow/karma.conf.js",
                         "assets": [
-                            "src/favicon.ico",
-                            "src/assets"
+                            "apps/stepflow/src/favicon.ico",
+                            "apps/stepflow/src/assets"
                         ],
                         "styles": [
-                            "src/sass/styles.scss"
+                            "apps/stepflow/src/sass/styles.scss"
                         ],
                         "stylePreprocessorOptions": {
                             "includePaths": [
@@ -117,19 +116,24 @@
                     "builder": "@angular-devkit/build-angular:tslint",
                     "options": {
                         "tsConfig": [
-                            "tsconfig.app.json",
-                            "tsconfig.spec.json",
-                            "e2e/tsconfig.json"
+                            "apps/stepflow/tsconfig.app.json",
+                            "apps/stepflow/tsconfig.spec.json"
                         ],
                         "exclude": [
                             "**/node_modules/**"
                         ]
                     }
-                },
+                }
+            }
+        },
+        "stepflow-e2e": {
+            "projectType": "application",
+            "root": "apps/stepflow-e2e",
+            "architect": {
                 "e2e": {
                     "builder": "@angular-devkit/build-angular:protractor",
                     "options": {
-                        "protractorConfig": "e2e/protractor.conf.js",
+                        "protractorConfig": "apps/stepflow-e2e/protractor.conf.js",
                         "devServerTarget": "stepflow:serve"
                     },
                     "configurations": {
@@ -137,125 +141,14 @@
                             "devServerTarget": "stepflow:serve:production"
                         }
                     }
-                }
-            }
-        },
-        "authentication": {
-            "projectType": "application",
-            "schematics": {
-                "@schematics/angular:component": {
-                    "style": "scss"
-                }
-            },
-            "root": "projects/authentication",
-            "sourceRoot": "projects/authentication/src",
-            "prefix": "app",
-            "architect": {
-                "build": {
-                    "builder": "@angular-devkit/build-angular:browser",
-                    "options": {
-                        "outputPath": "dist/authentication",
-                        "index": "projects/authentication/src/index.html",
-                        "main": "projects/authentication/src/main.ts",
-                        "polyfills": "projects/authentication/src/polyfills.ts",
-                        "tsConfig": "projects/authentication/tsconfig.app.json",
-                        "aot": false,
-                        "assets": [
-                            "projects/authentication/src/favicon.ico",
-                            "projects/authentication/src/assets"
-                        ],
-                        "styles": [
-                            "projects/authentication/src/styles.scss",
-                            "src/sass/styles.scss"
-                        ],
-                        "scripts": []
-                    },
-                    "configurations": {
-                        "production": {
-                            "fileReplacements": [
-                                {
-                                    "replace": "projects/authentication/src/environments/environment.ts",
-                                    "with": "projects/authentication/src/environments/environment.prod.ts"
-                                }
-                            ],
-                            "optimization": true,
-                            "outputHashing": "all",
-                            "sourceMap": false,
-                            "extractCss": true,
-                            "namedChunks": false,
-                            "aot": true,
-                            "extractLicenses": true,
-                            "vendorChunk": false,
-                            "buildOptimizer": true,
-                            "budgets": [
-                                {
-                                    "type": "initial",
-                                    "maximumWarning": "2mb",
-                                    "maximumError": "5mb"
-                                }
-                            ]
-                        }
-                    }
-                },
-                "serve": {
-                    "builder": "@angular-devkit/build-angular:dev-server",
-                    "options": {
-                        "browserTarget": "authentication:build",
-                        "port": 4005
-                    },
-                    "configurations": {
-                        "production": {
-                            "browserTarget": "authentication:build:production"
-                        }
-                    }
-                },
-                "extract-i18n": {
-                    "builder": "@angular-devkit/build-angular:extract-i18n",
-                    "options": {
-                        "browserTarget": "authentication:build"
-                    }
-                },
-                "test": {
-                    "builder": "@angular-devkit/build-angular:karma",
-                    "options": {
-                        "main": "projects/authentication/src/test.ts",
-                        "polyfills": "projects/authentication/src/polyfills.ts",
-                        "tsConfig": "projects/authentication/tsconfig.spec.json",
-                        "karmaConfig": "projects/authentication/karma.conf.js",
-                        "assets": [
-                            "projects/authentication/src/favicon.ico",
-                            "projects/authentication/src/assets"
-                        ],
-                        "styles": [
-                            "projects/authentication/src/styles.scss",
-                            "src/sass/styles.scss"
-                        ],
-                        "scripts": []
-                    }
                 },
                 "lint": {
                     "builder": "@angular-devkit/build-angular:tslint",
                     "options": {
-                        "tsConfig": [
-                            "projects/authentication/tsconfig.app.json",
-                            "projects/authentication/tsconfig.spec.json",
-                            "projects/authentication/e2e/tsconfig.json"
-                        ],
+                        "tsConfig": "apps/stepflow-e2e/tsconfig.json",
                         "exclude": [
                             "**/node_modules/**"
                         ]
-                    }
-                },
-                "e2e": {
-                    "builder": "@angular-devkit/build-angular:protractor",
-                    "options": {
-                        "protractorConfig": "projects/authentication/e2e/protractor.conf.js",
-                        "devServerTarget": "authentication:serve"
-                    },
-                    "configurations": {
-                        "production": {
-                            "devServerTarget": "authentication:serve:production"
-                        }
                     }
                 }
             }
