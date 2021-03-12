@@ -8,6 +8,10 @@ export interface User {
     id?: string;
     email?: string;
     emailVerified?: boolean;
+    displayName?: string;
+    photoURL?: string;
+    photoFilePath?: string;
+    plan?: string;
 }
 
 export type UserPlan = 'Plus' | 'Growth' | 'Essential' | 'Free';
@@ -66,7 +70,10 @@ export class AuthenticationService {
                             id: user.uid,
                             email: user.email || '',
                             emailVerified: user.emailVerified,
+                            displayName: user.displayName || '',
+                            photoURL: user.photoURL || '',
                         };
+                        this.getUserMetaData();
                         this.setAuthStatus(this.user);
                     } else {
                         this.setAuthStatus(null);
@@ -135,6 +142,52 @@ export class AuthenticationService {
                 return from(updateUserMetadata({ name, plan }));
             });
         });
+    }
+
+    async getUserMetaData() {
+        if (this.user) {
+            const userRef = this.firebaseService
+                .getDbInstance()
+                .collection('users')
+                .doc(this.user.id);
+            try {
+                const doc = await userRef.get();
+                if (doc.exists) {
+                    this.user.plan = doc.data()?.plan || '';
+                    this.user.photoFilePath = doc.data()?.photoFilePath || '';
+                } else {
+                    console.log('No such user!');
+                }
+            } catch (err) {
+                console.log('Error getting user info:', err);
+            }
+        }
+    }
+
+    public setUserMetaData(photoFilePath: string, plan: string) {
+        if (this.user) {
+            const userRef = this.firebaseService
+                .getDbInstance()
+                .collection('users')
+                .doc(this.user.id);
+            userRef
+                .set({
+                    photoFilePath: photoFilePath,
+                    plan: plan,
+                })
+                .then(() => {
+                    return true;
+                })
+                .catch((err: any) => {
+                    this.messageService.add({
+                        severity: 'error',
+                        key: 'global-toast',
+                        life: 5000,
+                        closable: true,
+                        detail: 'Error updating user info.',
+                    });
+                });
+        }
     }
 
     public login(email: string, password: string) {

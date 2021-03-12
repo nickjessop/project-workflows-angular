@@ -1,7 +1,4 @@
-<app-nav-bar></app-nav-bar>
-
 <div class="p-px-5 p-py-5 container">
-
     <div class="p-grid p-nogutter p-pt-2 p-pb-4">
         <div class="p-col-6">
             <h1 class="p-m-0">Projects</h1>
@@ -23,8 +20,14 @@
                 <p-tabPanel header="All projects">
                     <p-table [value]="projects" styleClass="p-datatable-gridlines p-datatable-lg p-py-3">
                         <ng-template pTemplate="body" let-project>
-                            <project-card class="project__card" projectName="{{ project.name }}"
-                                projectDescription="{{ project.description }}" link="/project/{{ project.id }}" projectId="{{project.id}}" (onDeleteProjectByIdEvent)="onDeleteProject($event)">
+                            <project-card
+                                class="project__card"
+                                projectName="{{ project.name }}"
+                                projectDescription="{{ project.description }}"
+                                link="/project/{{ project.id }}"
+                                projectId="{{ project.id }}"
+                                (onDeleteProjectByIdEvent)="onDeleteProject($event)"
+                            >
                             </project-card>
                         </ng-template>
                     </p-table>

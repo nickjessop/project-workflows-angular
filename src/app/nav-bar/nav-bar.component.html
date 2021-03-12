@@ -1,10 +1,17 @@
-<div class="navigation">
+<div class="navigation" *ngIf="authenticated">
     <div class="navigation__content p-grid p-nogutter p-p-3">
         <div class="navigation-logo p-col-6 p-d-flex p-ai-center" [routerLink]="['/project']">
             <img src="/assets/stepflow-logo.svg" alt="Stepflow logo" height="26px" />
         </div>
         <div class="navigation-profile p-col-6 p-d-flex p-ai-center p-jc-end">
-            <app-user-menu></app-user-menu>
+            <div (click)="menu.toggle($event)" class="user-menu p-d-flex p-ai-center">
+                <ng-container *ngIf="showUsername">
+                    <span class="user-menu__label p-pr-2">{{ displayName }}</span>
+                </ng-container>
+                <img src="{{ photoURL }}" width="34px" height="34px" alt="Your profile picture" class="rounded-image" />
+            </div>
+
+            <p-menu #menu [popup]="true" [model]="items" appendTo="body"></p-menu>
         </div>
     </div>
 </div>

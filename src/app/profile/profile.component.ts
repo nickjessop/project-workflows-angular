@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { MenuItem } from 'primeng/api';
+import { MessageService } from 'primeng/api';
+import { map, switchMap } from 'rxjs/operators';
+import { AuthenticationService, User } from '../services/authentication/authentication.service';
+import { StorageService } from '../services/storage/storage.service';
 
 @Component({
     selector: 'app-profile',
@@ -7,14 +10,107 @@ import { MenuItem } from 'primeng/api';
     styleUrls: ['./profile.component.scss'],
 })
 export class ProfileComponent implements OnInit {
-    constructor() {}
+    public userDetails: User = {};
+    public displayProfileModal: boolean = false;
+    public displayEmailModal: boolean = false;
+    public displayPasswordModal: boolean = false;
 
-    items: MenuItem[] = [];
+    constructor(
+        private authService: AuthenticationService,
+        private storageService: StorageService,
+        private messageService: MessageService
+    ) {}
 
     ngOnInit() {
-        this.items = [
-            { label: 'Upload a photo...', icon: 'pi pi-fw pi-upload' },
-            { label: 'Remove photo', icon: 'pi pi-fw pi-times' },
-        ];
+        this.userDetails = this.authService.user!;
+        console.log(this.userDetails);
     }
+
+    showDialog(modal: string) {
+        if (modal === 'profile') {
+            this.displayProfileModal = true;
+        } else if (modal === 'email') {
+            this.displayEmailModal = true;
+        } else if (modal === 'password') {
+            this.displayPasswordModal = true;
+        }
+    }
+
+    updateProfileDetails() {
+        const currentUser = this.authService.getCurrentUser();
+        const displayName = this.userDetails.displayName || '';
+        const photoURL = this.userDetails.photoURL || '';
+        const plan = this.userDetails.plan || '';
+        const photoFilePath = this.userDetails.photoFilePath || '';
+        if (currentUser) {
+            currentUser
+                .updateProfile({
+                    displayName: displayName,
+                    photoURL: photoURL,
+                })
+                .then(
+                    () => {
+                        this.userDetails.displayName = currentUser.displayName || '';
+                        this.userDetails.photoURL =
+                            currentUser.photoURL || '/assets/placeholder/placeholder-profile.png';
+                        // this.authService.getCurrentUser()?.reload();
+                        this.authService.setUserMetaData(photoFilePath, plan);
+                        this.displayProfileModal = false;
+                    },
+                    err => {
+                        this.messageService.add({
+                            severity: 'error',
+                            key: 'global-toast',
+                            life: 3000,
+                            closable: true,
+                            detail: 'Failed to update profile',
+                        });
+                    }
+                );
+        }
+    }
+
+    onProfileImageUploadSelected($event: { originalEvent: Event; files: FileList; currentFiles: File[] }) {
+        this.changeFile($event.currentFiles[0]);
+    }
+
+    private changeFile(file: File) {
+        if (!file) {
+            return;
+        }
+        if (this.userDetails.photoFilePath) {
+            this.storageService.deleteFile(this.userDetails.photoFilePath);
+        }
+        this.storageService
+            .uploadFile(file)
+            .pipe(
+                switchMap(file => {
+                    return this.storageService.getDownloadUrl(file.metadata.fullPath).pipe(
+                        map(downloadUrl => {
+                            return {
+                                downloadUrl: downloadUrl as string,
+                                filePath: file.metadata.fullPath,
+                            };
+                        })
+                    );
+                })
+            )
+            .subscribe(
+                filedata => {
+                    this.userDetails.photoURL = filedata.downloadUrl;
+                    this.userDetails.photoFilePath = filedata.filePath;
+                },
+                err => {
+                    this.messageService.add({
+                        severity: 'error',
+                        key: 'global-toast',
+                        life: 3000,
+                        closable: true,
+                        detail: 'Failed to upload profile image',
+                    });
+                }
+            );
+    }
+
+    updateEmailAddress() {}
 }
