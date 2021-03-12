@@ -104,19 +104,4 @@ export class EmbedComponent extends BaseFieldComponent implements OnInit {
             return false;
         }
     }
-
-    // public onDraggingEvent($event: boolean) {
-    //     console.log($event);
-
-    //     const _cleanUrl = this.cleanUrl;
-    //     if (this.iframe.nativeElement) {
-    //         if ($event === true) {
-    //             // this.cleanUrl = '';
-    //             this.iframe.nativeElement.src = '';
-    //         } else {
-    //             // this.cleanUrl = _cleanUrl;
-    //             this.iframe.nativeElement.src = this.cleanUrl;
-    //         }
-    //     }
-    // }
 }

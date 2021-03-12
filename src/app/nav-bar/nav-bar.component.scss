@@ -6,4 +6,9 @@
     &__content {
         width: 100%;
     }
+    .user-menu {
+        &:hover {
+            cursor: pointer;
+        }
+    }
 }
