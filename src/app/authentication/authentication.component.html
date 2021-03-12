@@ -39,14 +39,25 @@
                 <div class="p-pr-4">
                     <h2 class="p-mb-1">Create your account</h2>
                     <div class="p-field">
-                        <label for="name">Name</label>
+                        <label for="name">First Name</label>
                         <input
                             id="name"
                             type="name"
                             style="width: 100%;"
-                            aria-describedby="Enter your name"
+                            aria-describedby="Enter your first name"
                             pInputText
-                            [(ngModel)]="authInfo.name"
+                            [(ngModel)]="authInfo.firstName"
+                        />
+                    </div>
+                    <div class="p-field">
+                        <label for="name">Last Name</label>
+                        <input
+                            id="name"
+                            type="name"
+                            style="width: 100%;"
+                            aria-describedby="Enter your last name"
+                            pInputText
+                            [(ngModel)]="authInfo.lastName"
                         />
                     </div>
                     <div class="p-field">
