@@ -4,17 +4,17 @@ import * as functions from 'firebase-functions';
 admin.initializeApp();
 
 const USER_DOCUMENT_PATH = 'users' as const;
-const PROJECT_DOCUMENT_PATH = 'projects' as const;
+// const PROJECT_DOCUMENT_PATH = 'projects' as const;
 
 exports.updateUserMetadata = functions.https.onCall(
-    (data: { name?: string; plan?: 'Plus' | 'Growth' | 'Essential' | 'Free' }, context) => {
+    (data: { firstName?: string; lastName?: string; plan?: 'Plus' | 'Growth' | 'Essential' | 'Free' }, context) => {
         isAuthenticated(context);
 
         admin
             .firestore()
             .collection(USER_DOCUMENT_PATH)
             .doc(context.auth!.uid)
-            .set({ name: data.name, plan: data.plan }, { merge: true })
+            .set({ firstName: data.firstName, lastName: data.lastName, plan: data.plan }, { merge: true })
             .then(
                 success => {
                     return {};

@@ -38,14 +38,15 @@ export class ProfileComponent implements OnInit {
 
     updateProfileDetails() {
         const currentUser = this.authService.getCurrentUser();
-        const displayName = this.userDetails.displayName || '';
         const photoURL = this.userDetails.photoURL || '';
         const plan = this.userDetails.plan || '';
         const photoFilePath = this.userDetails.photoFilePath || '';
+        const firstName = this.userDetails.firstName || '';
+        const lastName = this.userDetails.lastName || '';
         if (currentUser) {
             currentUser
                 .updateProfile({
-                    displayName: displayName,
+                    displayName: firstName + ' ' + lastName,
                     photoURL: photoURL,
                 })
                 .then(
@@ -53,8 +54,7 @@ export class ProfileComponent implements OnInit {
                         this.userDetails.displayName = currentUser.displayName || '';
                         this.userDetails.photoURL =
                             currentUser.photoURL || '/assets/placeholder/placeholder-profile.png';
-                        // this.authService.getCurrentUser()?.reload();
-                        this.authService.setUserMetaData(photoFilePath, plan);
+                        this.authService.setUserMetaData(photoFilePath, plan, firstName, lastName);
                         this.displayProfileModal = false;
                     },
                     err => {

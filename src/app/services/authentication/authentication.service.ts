@@ -9,6 +9,8 @@ export interface User {
     email?: string;
     emailVerified?: boolean;
     displayName?: string;
+    firstName?: string;
+    lastName?: string;
     photoURL?: string;
     photoFilePath?: string;
     plan?: string;
@@ -102,8 +104,8 @@ export class AuthenticationService {
         return this.firebaseService.getAuthInstance().currentUser;
     }
 
-    public register(email: string, password: string, name: string, plan: UserPlan) {
-        from(this.createUserAndAttachMetadata(email, password, name, plan)).subscribe(
+    public register(email: string, password: string, firstName: string, lastName: string, plan: UserPlan) {
+        from(this.createUserAndAttachMetadata(email, password, firstName, lastName, plan)).subscribe(
             success => {
                 this.router.navigate(['/auth/confirmation']);
             },
@@ -123,24 +125,36 @@ export class AuthenticationService {
         );
     }
 
-    private createUserAndAttachMetadata(email: string, password: string, name: string, plan: UserPlan) {
+    private createUserAndAttachMetadata(
+        email: string,
+        password: string,
+        firstName: string,
+        lastName: string,
+        plan: UserPlan
+    ) {
         const firebaseAuth = this.firebaseService.getAuthInstance();
         return firebaseAuth.setPersistence('local').then(() => {
-            firebaseAuth.createUserWithEmailAndPassword(email, password).then(userCredential => {
-                const { user } = userCredential;
-                const parsedUser = {
-                    id: user!.uid,
-                    email: user!.email || undefined,
-                    emailVerified: user!.emailVerified,
-                };
-                this.user = parsedUser;
+            firebaseAuth
+                .createUserWithEmailAndPassword(email, password)
+                .then(userCredential => {
+                    const { user } = userCredential;
+                    const parsedUser = {
+                        id: user!.uid,
+                        email: user!.email || undefined,
+                        emailVerified: user!.emailVerified,
+                    };
+                    this.user = parsedUser;
+                    const updateUserMetadata = this.firebaseService
+                        .getFunctionsInstance()
+                        .httpsCallable('updateUserMetadata', {});
 
-                const updateUserMetadata = this.firebaseService
-                    .getFunctionsInstance()
-                    .httpsCallable('updateUserMetadata', {});
-
-                return from(updateUserMetadata({ name, plan }));
-            });
+                    return from(updateUserMetadata({ firstName, lastName, plan }));
+                })
+                .then(() => {
+                    this.getCurrentUser()!.updateProfile({
+                        displayName: firstName + ' ' + lastName,
+                    });
+                });
         });
     }
 
@@ -155,16 +169,24 @@ export class AuthenticationService {
                 if (doc.exists) {
                     this.user.plan = doc.data()?.plan || '';
                     this.user.photoFilePath = doc.data()?.photoFilePath || '';
+                    this.user.firstName = doc.data()?.firstName || '';
+                    this.user.lastName = doc.data()?.lastName || '';
                 } else {
-                    console.log('No such user!');
+                    console.log('User does not exist.');
                 }
             } catch (err) {
-                console.log('Error getting user info:', err);
+                this.messageService.add({
+                    severity: 'error',
+                    key: 'global-toast',
+                    life: 5000,
+                    closable: true,
+                    detail: 'Error fetching user info.',
+                });
             }
         }
     }
 
-    public setUserMetaData(photoFilePath: string, plan: string) {
+    public setUserMetaData(photoFilePath: string, plan: string, firstName: string, lastName: string) {
         if (this.user) {
             const userRef = this.firebaseService
                 .getDbInstance()
@@ -174,6 +196,8 @@ export class AuthenticationService {
                 .set({
                     photoFilePath: photoFilePath,
                     plan: plan,
+                    firstName: firstName,
+                    lastName: lastName,
                 })
                 .then(() => {
                     return true;

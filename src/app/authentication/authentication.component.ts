@@ -11,7 +11,8 @@ import { AuthenticationService, UserPlan } from '../services/authentication/auth
 })
 export class AuthenticationComponent implements OnInit {
     public authInfo: {
-        name?: string;
+        firstName?: string;
+        lastName?: string;
         plan?: UserPlan;
         password: string;
         password2?: string;
@@ -21,7 +22,8 @@ export class AuthenticationComponent implements OnInit {
         email: '',
         password: '',
         password2: '',
-        name: '',
+        firstName: '',
+        lastName: '',
         plan: 'Essential',
         planPrice: '9',
     };
@@ -58,7 +60,7 @@ export class AuthenticationComponent implements OnInit {
     }
 
     public register() {
-        const { email, password, password2, name, plan } = this.authInfo;
+        const { firstName, lastName, plan, password, password2, email } = this.authInfo;
 
         const message = {
             severity: 'error',
@@ -75,14 +77,14 @@ export class AuthenticationComponent implements OnInit {
             return;
         }
 
-        if (!password || !password2 || !name || !plan) {
+        if (!password || !password2 || !firstName || !lastName || !plan) {
             message.detail = 'Please fill in password, name and plan fields';
             this.messageService.add(message);
 
             return;
         }
 
-        this.authService.register(email, password, name, plan);
+        this.authService.register(email, password, firstName, lastName, plan);
     }
 
     public login() {
