@@ -1,0 +1,25 @@
+.text {
+    width: 100%;
+}
+
+.text textarea {
+    width: 100%;
+    max-width: 100%;
+}
+
+.text.view {
+    textarea {
+        border: none;
+        background: transparent;
+        resize: none;
+        &:focus {
+            outline: none;
+            -webkit-box-shadow: none;
+            -moz-box-shadow: none;
+            box-shadow: none;
+        }
+        &:hover {
+            cursor: inherit;
+        }
+    }
+}

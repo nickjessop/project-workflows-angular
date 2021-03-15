@@ -1,0 +1,20 @@
+.project-controls {
+    &__nav {
+        width: 100%;
+        background: white;
+        border-bottom: 1px solid var(--surface-d);
+        box-shadow: 0 1px 1px rgb(25 25 25 / 10%);
+        position: relative;
+    }
+    &__divider {
+        width: 1px;
+        height: 26px;
+        background: var(--surface-d);
+    }
+    &__back:hover {
+        cursor: pointer;
+    }
+    &__settings:hover {
+        cursor: pointer;
+    }
+}
