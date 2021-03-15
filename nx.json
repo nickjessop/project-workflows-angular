@@ -1,18 +1,21 @@
 {
-  "npmScope": "stepflow",
-  "implicitDependencies": {
-    "angular.json": "*",
-    "package.json": "*",
-    "tsconfig.json": "*",
-    "tslint.json": "*",
-    "nx.json": "*"
-  },
-  "projects": {
-    "stepflow": {
-      "tags": []
+    "npmScope": "stepflow",
+    "implicitDependencies": {
+        "angular.json": "*",
+        "package.json": "*",
+        "tsconfig.json": "*",
+        "tslint.json": "*",
+        "nx.json": "*"
     },
-    "stepflow-e2e": {
-      "tags": []
+    "projects": {
+        "stepflow": {
+            "tags": []
+        },
+        "stepflow-e2e": {
+            "tags": []
+        },
+        "stepflow-backend": {
+            "tags": []
+        }
     }
-  }
 }

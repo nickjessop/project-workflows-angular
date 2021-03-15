@@ -1,12 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { FirebaseService } from '../firebase/firebase.service';
+import { environment } from 'apps/stepflow/src/environments/environment';
 
 @Injectable({
     providedIn: 'root',
 })
 export class ApiService {
-    private url = '';
+    private API_URL = environment.apiUrl;
 
-    constructor(private firebaseService: FirebaseService, private http: HttpClient) {}
+    constructor(private http: HttpClient) {}
+
+    public testApi() {
+        return this.http.get(this.API_URL);
+    }
 }

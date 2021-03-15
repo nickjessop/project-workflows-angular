@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ConfirmationService } from 'primeng/api';
+import { ApiService } from '../services/api/api.service';
 import { ProjectService } from '../services/project/project.service';
 
 @Component({
@@ -11,10 +12,15 @@ export class ProjectComponent implements OnInit {
     public isLoadingProjects = true;
     public projects: { id: string; description: string; name: string }[] = [];
 
-    constructor(private projectService: ProjectService, private confirmationService: ConfirmationService) {}
+    constructor(
+        private projectService: ProjectService,
+        private confirmationService: ConfirmationService,
+        private apiService: ApiService
+    ) {}
 
     ngOnInit() {
         this.getProjects();
+        // this.apiService.testApi().subscribe();
     }
 
     public getProjects() {
