@@ -98,10 +98,6 @@
         "tslint": "~5.15.0",
         "tslint-eslint-rules": "^5.4.0",
         "typescript": "~3.9.7",
-        "@nrwl/jest": "9.2.4",
-        "jest": "25.2.3",
-        "@types/jest": "25.1.4",
-        "ts-jest": "25.2.1",
         "@nrwl/node": "9.2.4",
         "@nestjs/schematics": "^6.7.0",
         "@nestjs/testing": "^6.8.3"
