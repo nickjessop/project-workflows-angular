@@ -1,8 +1,4 @@
 <div class="viewer" #viewer>
-    <app-project-controls
-        [projectName]="project?.name"
-        [projectDescription]="project?.description"
-    ></app-project-controls>
     <div class="p-grid p-nogutter viewer-container">
         <div class="p-col-3">
             <project-steps (dragAndDropStepEvent)="onDragAndDropStepEvent($event)"></project-steps>

@@ -20,7 +20,6 @@ import { BlockPanelOverlayComponent } from './project/block-overlay/block-overla
 import { ControlsComponent } from './project/controls/controls.component';
 import { NewProjectDialogComponent } from './project/new-project-dialog/new-project-dialog.component';
 import { ProjectCardComponent } from './project/project-card/project-card.component';
-import { ProjectControlsComponent } from './project/project-controls/project-controls.component';
 import { ProjectComponent } from './project/project.component';
 import { StepDialogComponent } from './project/step-dialog/step-dialog.component';
 import { StepsComponent } from './project/steps/steps.component';
@@ -42,7 +41,6 @@ import { ProtectedRoutingModule } from './protected-routing.module';
         ControlsComponent,
         BlockPanelOverlayComponent,
         StepDialogComponent,
-        ProjectControlsComponent,
         NewProjectDialogComponent,
         ProfileComponent,
         AuthenticationComponent,

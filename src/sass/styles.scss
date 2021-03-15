@@ -9,8 +9,6 @@
 @import 'core';
 
 :root {
-    --clr-text: rgb(28, 28, 57);
-    --clr-greytext: rgb(116, 116, 152);
     --primary-color: rgb(85, 42, 255);
     --primary-color-light: rgba(85, 42, 255, 0.06);
     --primary-color-medium: rgba(85, 42, 255, 0.5);
@@ -22,6 +20,14 @@
     --hvr-r: rgb(212, 0, 97);
     --overlay: rgba(7, 7, 15, 0.965);
     --font-family: 'Inter', sans-serif;
+    --surface-a: #ffffff;
+    --surface-b: #fafafa;
+    --surface-c: #f0f0f0;
+    --surface-d: #e7e7e7;
+    --surface-e: #ffffff;
+    --surface-f: #ffffff;
+    --text-color: rgb(28, 28, 57);
+    --text-color-secondary: rgb(116, 116, 152);
 }
 
 // RESET
@@ -43,7 +49,7 @@ html {
 body {
     font-family: 'Inter', sans-serif;
     min-height: 100%;
-    color: var(--clr-text);
+    color: var(--text-color);
 }
 
 body.noscroll {
@@ -139,9 +145,11 @@ button {
 .p-button.p-button-text {
     color: var(--primary-color);
 }
-.p-button.p-button-text:enabled:hover {
-    background: var(--primary-color-light);
-    color: var(--primary-color);
+.p-button.p-button-text:enabled:hover,
+.p-button-text-hover:hover {
+    background: var(--primary-color-light) !important;
+    color: var(--primary-color) !important;
+    border-color: transparent !important;
 }
 .p-button.p-button-white {
     background: var(--surface-a);
@@ -173,14 +181,14 @@ button {
 .p-button.p-button-secondary.p-button-outlined,
 .p-buttonset.p-button-secondary > .p-button.p-button-outlined,
 .p-splitbutton.p-button-secondary > .p-button.p-button-outlined {
-    border-color: var(--clr-text);
-    color: var(--clr-text);
+    border-color: var(--text-color);
+    color: var(--text-color);
 }
 .p-button.p-button-secondary,
 .p-buttonset.p-button-secondary > .p-button,
 .p-splitbutton.p-button-secondary > .p-button {
-    border-color: var(--clr-text);
-    color: var(--clr-text);
+    border-color: var(--text-color);
+    color: var(--text-color);
 }
 .p-inputtext:enabled:focus,
 .p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box.p-focus,
