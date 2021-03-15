@@ -3,12 +3,25 @@
     height: 70px !important;
     background: white;
     border-bottom: 1px solid var(--surface-d);
+    box-shadow: 0 1px 1px rgb(25 25 25 / 10%);
     &__content {
         width: 100%;
+        height: 100%;
     }
     .user-menu {
         &:hover {
             cursor: pointer;
         }
+    }
+    &__divider {
+        width: 1px;
+        height: 26px;
+        background: var(--surface-d);
+    }
+    &__back:hover {
+        cursor: pointer;
+    }
+    &__settings:hover {
+        cursor: pointer;
     }
 }

@@ -56,6 +56,13 @@ export class ProfileComponent implements OnInit {
                             currentUser.photoURL || '/assets/placeholder/placeholder-profile.png';
                         this.authService.setUserMetaData(photoFilePath, plan, firstName, lastName);
                         this.displayProfileModal = false;
+                        this.messageService.add({
+                            severity: 'success',
+                            key: 'global-toast',
+                            life: 3000,
+                            closable: true,
+                            detail: 'Profile updated',
+                        });
                     },
                     err => {
                         this.messageService.add({
