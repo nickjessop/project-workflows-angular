@@ -4,8 +4,8 @@ import { Router } from '@angular/router';
 import * as _ from 'lodash';
 import { BehaviorSubject, from } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { BlockConfig, createBlockConfig } from '../../core/interfaces/core-component';
-import { Project, Status, Step, StepConfig } from '../../models/interfaces/project';
+import { BlockConfig, ComponentMode, createBlockConfig } from '../../core/interfaces/core-component';
+import { Project, Role, Status, Step, StepConfig } from '../../models/interfaces/project';
 import { AuthenticationService } from '../authentication/authentication.service';
 import { FirebaseService } from '../firebase/firebase.service';
 
@@ -17,6 +17,11 @@ export class ProjectService {
     private _projectConfig: BehaviorSubject<Project> = new BehaviorSubject<Project>(this.createBaseProject('', '', ''));
     public readonly projectConfig$ = this._projectConfig.asObservable();
     public isDragging: EventEmitter<boolean> = new EventEmitter();
+
+    private _projectMode: BehaviorSubject<ComponentMode | undefined> = new BehaviorSubject<ComponentMode | undefined>(
+        undefined
+    );
+    public readonly projectMode$ = this._projectMode.asObservable();
 
     // private _currentStepConfig: BehaviorSubject<StepConfig | undefined> = new BehaviorSubject<StepConfig | undefined>(
     //     this._projectConfig.value.configuration?.[0]
@@ -360,6 +365,19 @@ export class ProjectService {
                         this.router.navigate(['404']);
                     }
 
+                    if (
+                        project.memberRoles.some(member => {
+                            return (
+                                member.userId === this.authenticationService.user?.id &&
+                                ['guest', 'viewer'].includes(member.role)
+                            );
+                        })
+                    ) {
+                        this._projectMode.next('view');
+                    } else {
+                        this._projectMode.next('edit');
+                    }
+
                     const currentStepSet = project.configuration?.some(stepConfig => {
                         return stepConfig.step.isCurrentStep;
                     });
@@ -378,6 +396,8 @@ export class ProjectService {
                 }
             );
     }
+
+    private isReadOnlyRole(projectMemberRoles: { userId: string; role: Role }[]) {}
 
     public resetProject() {
         this.projectConfig = this.createBaseProject('', '', '');

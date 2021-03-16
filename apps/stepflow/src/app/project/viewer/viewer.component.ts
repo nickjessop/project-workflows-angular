@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { ComponentMode } from '../../core/interfaces/core-component';
 import { Project, StepConfig } from '../../models/interfaces/project';
 import { ProjectService } from '../../services/project/project.service';
 
@@ -14,6 +15,7 @@ export class ViewerComponent implements OnInit {
 
     public project?: Project;
     public currentStep?: StepConfig;
+    public componentMode: ComponentMode = 'edit';
     public isNewProject = false;
 
     constructor(private projectService: ProjectService, private route: ActivatedRoute) {}
@@ -31,6 +33,15 @@ export class ViewerComponent implements OnInit {
                     this.currentStep = _project.configuration?.find(stepConfig => {
                         return stepConfig.step.isCurrentStep;
                     });
+                }
+            })
+        );
+
+        this.subscriptions.add(
+            this.projectService.projectMode$.subscribe(componentMode => {
+                if (componentMode) {
+                    console.log(componentMode);
+                    this.componentMode = componentMode;
                 }
             })
         );
