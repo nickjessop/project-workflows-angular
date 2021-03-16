@@ -7,7 +7,7 @@ import { ImageUploaderComponent } from './components/image-uploader/image-upload
 import { RichTextInputComponent } from './components/rich-text-input/rich-text-input.component';
 import { TableComponent } from './components/table/table.component';
 import { TextInputComponent } from './components/text-input/text-input.component';
-import { BlockConfig, ComponentType } from './interfaces/core-component';
+import { BlockConfig, ComponentMode, ComponentType } from './interfaces/core-component';
 
 @Directive({
     selector: '[appCoreComponentResolver]',
@@ -15,6 +15,7 @@ import { BlockConfig, ComponentType } from './interfaces/core-component';
 export class CoreComponentResolverDirective implements OnInit {
     @Input() field!: BlockConfig;
     @Input() group!: FormGroup;
+    @Input() componentMode: ComponentMode = 'edit';
     @Input() index = 0;
 
     componentRef?: ComponentRef<
@@ -41,6 +42,7 @@ export class CoreComponentResolverDirective implements OnInit {
             _componentRef.instance.field = this.field;
             _componentRef.instance.group = this.group;
             _componentRef.instance.index = this.index;
+            _componentRef.instance.componentMode = this.componentMode;
 
             this.componentRef = _componentRef;
         } else if (componentType === 'checkboxes') {
@@ -48,6 +50,7 @@ export class CoreComponentResolverDirective implements OnInit {
             const _componentRef = this.viewContainerRef.createComponent<CheckboxesComponent>(factory);
             _componentRef.instance.index = this.index;
             _componentRef.instance.field = this.field;
+            _componentRef.instance.componentMode = this.componentMode;
 
             this.componentRef = _componentRef;
         } else if (componentType === 'imageUploader') {
@@ -56,6 +59,7 @@ export class CoreComponentResolverDirective implements OnInit {
             _componentRef.instance.field = this.field;
             _componentRef.instance.group = this.group;
             _componentRef.instance.index = this.index;
+            _componentRef.instance.componentMode = this.componentMode;
 
             this.componentRef = _componentRef;
         } else if (componentType === 'richTextInput') {
@@ -64,6 +68,7 @@ export class CoreComponentResolverDirective implements OnInit {
             _componentRef.instance.field = this.field;
             _componentRef.instance.group = this.group;
             _componentRef.instance.index = this.index;
+            _componentRef.instance.componentMode = this.componentMode;
 
             this.componentRef = _componentRef;
         } else if (componentType === 'textInput') {
@@ -72,6 +77,7 @@ export class CoreComponentResolverDirective implements OnInit {
             _componentRef.instance.field = this.field;
             _componentRef.instance.group = this.group;
             _componentRef.instance.index = this.index;
+            _componentRef.instance.componentMode = this.componentMode;
 
             this.componentRef = _componentRef;
         } else if (componentType === 'table') {
@@ -80,6 +86,7 @@ export class CoreComponentResolverDirective implements OnInit {
             _componentRef.instance.field = this.field;
             _componentRef.instance.group = this.group;
             _componentRef.instance.index = this.index;
+            _componentRef.instance.componentMode = this.componentMode;
 
             this.componentRef = _componentRef;
         } else if (componentType === 'embed') {
@@ -88,6 +95,7 @@ export class CoreComponentResolverDirective implements OnInit {
             _componentRef.instance.field = this.field;
             _componentRef.instance.group = this.group;
             _componentRef.instance.index = this.index;
+            _componentRef.instance.componentMode = this.componentMode;
 
             this.componentRef = _componentRef;
         }
