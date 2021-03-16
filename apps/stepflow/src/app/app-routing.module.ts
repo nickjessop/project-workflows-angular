@@ -3,11 +3,22 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthenticationComponent } from './authentication/authentication.component';
 import { ConfirmationComponent } from './authentication/confirmation/confirmation.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { RedirectGuard } from './redirect.guard';
 
 const appRoutes: Routes = [
     { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
-    { path: 'auth/login', component: AuthenticationComponent, data: { authMode: 'login' } },
-    { path: 'auth/register', component: AuthenticationComponent, data: { authMode: 'register' } },
+    {
+        path: 'auth/login',
+        component: AuthenticationComponent,
+        data: { authMode: 'login' },
+        canActivate: [RedirectGuard],
+    },
+    {
+        path: 'auth/register',
+        component: AuthenticationComponent,
+        data: { authMode: 'register' },
+        canActivate: [RedirectGuard],
+    },
     { path: 'auth/confirmation', component: ConfirmationComponent },
     { path: '404', component: PageNotFoundComponent },
     { path: '**', redirectTo: 'auth/login' },

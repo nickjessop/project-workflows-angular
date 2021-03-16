@@ -1,7 +1,7 @@
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
-import { BlockConfig, Validator } from '../../interfaces/core-component';
+import { BlockConfig, ComponentMode, Validator } from '../../interfaces/core-component';
 
 @Component({
     selector: 'project-dynamic-form',
@@ -11,6 +11,7 @@ import { BlockConfig, Validator } from '../../interfaces/core-component';
 export class DynamicFormComponent implements OnInit {
     @Input() fields: BlockConfig[] = [];
     // @Output() submitEvent: EventEmitter<any> = new EventEmitter<any>();
+    @Input() componentMode: ComponentMode = 'edit';
 
     @Output() dragAndDropEvent: EventEmitter<{
         previousIndex: number;
