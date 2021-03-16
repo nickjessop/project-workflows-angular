@@ -36,7 +36,7 @@ export class StepsComponent implements OnInit {
         this.statusOptions = [
             { label: 'No status', value: 'no-status', icon: '' },
             { label: 'In progress', value: 'in-progress', icon: 'pi-progress' },
-            { label: 'Important', value: 'important', icon: 'pi-exclamation-circle' },
+            { label: 'Needs review', value: 'needs-review', icon: 'pi-exclamation-circle' },
             { label: 'Upcoming', value: 'upcoming', icon: 'pi-clock' },
             { label: 'Completed', value: 'completed', icon: 'pi-check-circle' },
         ];

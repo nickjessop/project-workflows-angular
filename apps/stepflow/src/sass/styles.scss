@@ -82,6 +82,12 @@ body.noscroll {
 .hidden {
     @include hidden;
 }
+.text-secondary {
+    color: var(--text-color-secondary);
+}
+.rounded-image {
+    border-radius: 50%;
+}
 
 a,
 a:visited {
@@ -104,10 +110,6 @@ button {
     i {
         margin-right: 0.5rem;
     }
-}
-
-.rounded-image {
-    border-radius: 50%;
 }
 
 // TYPOGRAPHY
@@ -207,6 +209,10 @@ button {
 .p-inputtext:enabled:focus,
 .p-inputtext:enabled:hover {
     border-color: var(--primary-color);
+}
+
+.p-text-medium {
+    font-weight: 500;
 }
 
 //DRAG & DROP
