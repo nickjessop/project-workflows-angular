@@ -1,7 +1,19 @@
-.project__row {
-    width: 100%;
-    &:hover {
-        cursor: pointer;
-        background: rgba(33, 150, 243, 0.04);
+.project {
+    &__row {
+        width: 100%;
+    }
+    &__menu {
+        visibility: hidden;
+    }
+    &:hover,
+    &:focus,
+    &:focus-within {
+        .project__menu {
+            visibility: visible;
+        }
+        .project__row {
+            cursor: pointer;
+            background: var(--surface-b);
+        }
     }
 }

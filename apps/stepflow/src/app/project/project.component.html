@@ -1,5 +1,5 @@
 <div class="p-px-5 p-py-5 container">
-    <div class="p-grid p-nogutter p-pt-2 p-pb-4">
+    <div class="p-grid p-nogutter">
         <div class="p-col-6">
             <h1 class="p-m-0">Projects</h1>
         </div>
@@ -7,7 +7,9 @@
             <new-project-dialog (onCreateNewProject)="onCreateNewProjectEvent($event)"></new-project-dialog>
         </div>
     </div>
+</div>
 
+<div class="projects p-py-3">
     <ng-container *ngIf="isLoadingProjects; else showProjects">
         <div class="p-d-flex p-jc-center p-py-6">
             <p-progressSpinner></p-progressSpinner>
@@ -15,7 +17,7 @@
     </ng-container>
 
     <ng-template #showProjects>
-        <div class="project" *ngIf="projects?.length; else showNoProjects">
+        <div class="container p-px-5" *ngIf="projects?.length; else showNoProjects">
             <p-tabView>
                 <p-tabPanel header="All projects">
                     <p-table [value]="projects" styleClass="p-datatable-gridlines p-datatable-lg p-py-3">
