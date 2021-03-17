@@ -9,7 +9,7 @@ export type EnvConfig = {
 
 export const environment: EnvConfig = {
     production: false,
-    apiUrl: 'localhost:3333/api/',
+    apiUrl: 'http://localhost:3333/api/',
 };
 
 /*
