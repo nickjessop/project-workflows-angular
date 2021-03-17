@@ -25,10 +25,10 @@ export interface Step {
 }
 export type Role = 'owner' | 'admin' | 'editor' | 'viewer' | 'guest';
 
-export type Status = typeof NoStatus | typeof InProgress | typeof Important | typeof Upcoming | typeof Complete;
+export type Status = typeof NoStatus | typeof InProgress | typeof NeedsReview | typeof Upcoming | typeof Complete;
 
 export const NoStatus = { label: 'No status', value: 'no-status', icon: '' } as const;
 export const InProgress = { label: 'In progress', value: 'in-progress', icon: 'pi-progress' } as const;
-export const Important = { label: 'Important', value: 'important', icon: 'pi-exclamation-circle' } as const;
+export const NeedsReview = { label: 'Needs review', value: 'needs-review', icon: 'pi-exclamation-circle' } as const;
 export const Upcoming = { label: 'Upcoming', value: 'upcoming', icon: 'pi-clock' } as const;
 export const Complete = { label: 'Completed', value: 'completed', icon: 'pi-check-circle' } as const;

@@ -18,13 +18,15 @@
                     [class.step-selected]="stepConfig.step.isCurrentStep"
                     (click)="onStepPress(i)"
                 >
-                    <div class="p-d-flex p-ai-center">
+                    <div class="p-d-flex p-flex-column">
                         <div class="ms-1">{{ stepConfig.step.title }}</div>
-                        <i
-                            *ngIf="stepConfig.step.status"
-                            class="pi {{ stepConfig.step.status.icon }} p-pl-1 ms-01"
-                            pTooltip="{{ stepConfig.step.status.label }}"
-                        ></i>
+                        <div
+                            *ngIf="stepConfig.step.status && stepConfig.step.status.value != 'no-status'"
+                            class="ms-01 p-mt-1 text-secondary p-text-medium"
+                        >
+                            <i class="pi {{ stepConfig.step.status.icon }} ms-02"></i>
+                            {{ stepConfig.step.status.label }}
+                        </div>
                     </div>
                     <button
                         type="button"

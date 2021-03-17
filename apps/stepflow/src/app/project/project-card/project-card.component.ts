@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
+import { MenuItem } from 'primeng/api';
 
 @Component({
     selector: 'project-card',
@@ -22,6 +23,16 @@ export class ProjectCardComponent implements OnInit {
     navigate() {
         this.router.navigateByUrl(this.link);
     }
+
+    public projectMenuOptions: MenuItem[] = [
+        {
+            label: 'Delete Project',
+            icon: 'pi pi-trash',
+            command: () => {
+                this.onDeleteProjectPress();
+            },
+        },
+    ];
 
     onDeleteProjectPress() {
         this.onDeleteProjectByIdEvent.emit({ id: this.projectId });
