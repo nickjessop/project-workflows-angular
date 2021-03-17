@@ -13,7 +13,6 @@ export class BaseFieldComponent {
     @Input() index?: number;
     @Input() componentMode: ComponentMode = 'edit';
     @Input() height?: number;
-    // @Output() isDragging = new EventEmitter<boolean>();
 
     public items: MenuItem[] = [
         {
@@ -34,15 +33,11 @@ export class BaseFieldComponent {
         this.projectService.deleteProjectBlock(index);
     }
 
-    dragStarted() {
-        // this.isDragging.emit(true);
-        console.log('dragging');
+    public dragStarted() {
         this.projectService.setBlockDrag(true);
     }
 
-    dragFinished() {
-        // this.isDragging.emit(false);
-        console.log('drag finished');
+    public dragFinished() {
         this.projectService.setBlockDrag(false);
     }
 }
