@@ -13,7 +13,6 @@ import { BaseFieldComponent } from '../base-field/base-field.component';
 })
 export class EmbedComponent extends BaseFieldComponent implements OnInit {
     @Input() group!: FormGroup;
-    // @Input() isDragging!: EventEmitter<boolean>;
 
     @ViewChild('iframe')
     public iframe!: ElementRef;
@@ -34,7 +33,6 @@ export class EmbedComponent extends BaseFieldComponent implements OnInit {
 
     private getBlockDrag() {
         this.projectService.isDragging.subscribe((dragging: boolean) => {
-            console.log('dragging!' + dragging);
             if (this.iframe.nativeElement) {
                 if (dragging === true) {
                     this.iframe.nativeElement.src = '';
@@ -62,8 +60,6 @@ export class EmbedComponent extends BaseFieldComponent implements OnInit {
     }
 
     ngAfterViewInit() {
-        console.log('after view init');
-        console.log(this.getBlockDrag());
         this.getBlockDrag();
     }
 

@@ -21,6 +21,7 @@
         color: var(--primary-color);
         font-weight: bold;
         &:hover,
+        &:focus,
         &:focus-within {
             background: var(--primary-color-light);
             .step__edit-step {
