@@ -1,7 +1,7 @@
 <div class="navigation" *ngIf="authenticated">
     <div class="navigation__content p-grid p-nogutter p-px-3">
         <ng-container *ngIf="navMode === 'project' && project">
-            <div class="navigation-logo p-col-6 p-d-flex p-ai-center" [routerLink]="['/project']">
+            <div class="navigation-logo p-col-6 p-d-flex p-ai-center">
                 <i class="pi pi-chevron-left p-pr-2 navigation__back" [routerLink]="['/project']"></i>
                 <img
                     src="/assets/stepflow-logo.svg"
@@ -128,8 +128,8 @@
             </p-dialog>
         </ng-container>
         <ng-container *ngIf="navMode === 'default'">
-            <div class="navigation-logo p-col-6 p-d-flex p-ai-center" [routerLink]="['/project']">
-                <img src="/assets/stepflow-logo.svg" alt="Stepflow logo" height="26px" />
+            <div class="navigation-logo p-col-6 p-d-flex p-ai-center">
+                <img src="/assets/stepflow-logo.svg" alt="Stepflow logo" height="26px" [routerLink]="['/project']" />
             </div>
             <div class="navigation-profile p-col-6 p-d-flex p-ai-center p-jc-end">
                 <div (click)="menu.toggle($event)" class="user-menu p-d-flex p-ai-center">

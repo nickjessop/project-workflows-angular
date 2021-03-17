@@ -215,6 +215,14 @@ button {
     font-weight: 500;
 }
 
+.p-tabview .p-tabview-nav li.p-highlight .p-tabview-nav-link {
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+.p-tabview-nav-link:hover {
+    text-decoration: none;
+}
+
 //DRAG & DROP
 
 .cdk-drag-preview {
