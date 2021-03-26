@@ -1,7 +1,8 @@
 import { Component, Input } from '@angular/core';
+import { AngularResizeElementDirection, AngularResizeElementEvent } from 'angular-resize-element';
 import { MenuItem } from 'primeng/api';
 import { ProjectService } from '../../../services/project/project.service';
-import { BlockConfig, ComponentMode, createBlockConfig } from '../../interfaces/core-component';
+import { BlockConfig, ComponentMode, ComponentSettings, createBlockConfig } from '../../interfaces/core-component';
 
 @Component({
     selector: 'app-base-field',
@@ -12,7 +13,11 @@ export class BaseFieldComponent {
     @Input() field: BlockConfig = createBlockConfig('textInput');
     @Input() index?: number;
     @Input() componentMode: ComponentMode = 'edit';
-    @Input() height?: number;
+    @Input() resizable?: boolean;
+
+    public height?: number;
+    public settings?: ComponentSettings;
+    public readonly AngularResizeElementDirection = AngularResizeElementDirection;
 
     public items: MenuItem[] = [
         {
@@ -26,7 +31,9 @@ export class BaseFieldComponent {
 
     constructor(public projectService: ProjectService) {}
 
-    ngOnInit() {}
+    ngOnInit() {
+        this.updateHeight(this.field.metadata.settings?.height);
+    }
 
     public onDeleteBlock() {
         const index = this.index ? this.index : 0;
@@ -39,5 +46,23 @@ export class BaseFieldComponent {
 
     public dragFinished() {
         this.projectService.setBlockDrag(false);
+    }
+
+    private updateHeight(height: number = 400) {
+        if (!this.resizable) {
+            return;
+        }
+        this.height = height;
+        this.field.metadata.settings = { ...this.field.metadata.settings, height: height };
+    }
+
+    public onResize(evt: AngularResizeElementEvent): void {
+        this.height = evt.currentHeightValue;
+    }
+
+    public onResizeEnd(evt: AngularResizeElementEvent): void {
+        const height = evt.currentHeightValue;
+        this.updateHeight(height);
+        this.projectService.syncProject();
     }
 }

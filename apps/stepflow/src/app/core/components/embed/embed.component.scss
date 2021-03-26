@@ -1,14 +1,10 @@
-.embed {
-    border: 2px solid var(--surface-c);
-    background: var(--surface-c);
-    border-radius: 2px;
-    &--resizable {
-        overflow: auto;
-        resize: vertical;
-    }
+.edit {
+    height: calc(100% - 40px);
     iframe {
-        height: calc(100% - 16px);
+        flex-grow: 1;
         width: 100%;
+        border: 2px solid var(--surface-c);
+        background: var(--surface-c);
     }
 }
 

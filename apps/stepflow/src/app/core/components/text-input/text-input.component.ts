@@ -25,6 +25,7 @@ export class TextInputComponent extends BaseFieldComponent implements OnInit {
     ngOnInit() {
         this.textInputData = this.field.metadata as TextInput;
         this.settings = this.textInputData.settings;
+        // console.log('aaaa', this.settings,)
     }
 
     onFocusOut(event: { srcElement: { clientHeight: string } }) {

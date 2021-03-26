@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
+import { AngularResizeElementModule } from 'angular-resize-element';
 import { PrimengModule } from '../primeng/primeng.module';
 import { BaseFieldComponent } from './components/base-field/base-field.component';
 import { CheckboxesComponent } from './components/checkboxes/checkboxes.component';
@@ -37,6 +38,7 @@ import { CoreComponentResolverDirective } from './core-component-resolver.direct
         PrimengModule,
         DragDropModule,
         BrowserModule,
+        AngularResizeElementModule,
     ],
     exports: [
         RichTextInputComponent,

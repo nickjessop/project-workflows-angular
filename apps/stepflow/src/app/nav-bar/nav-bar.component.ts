@@ -82,7 +82,6 @@ export class NavBarComponent implements OnInit {
 
         this.subscriptions.add(
             this.projectService.projectConfig$.subscribe(projectData => {
-                console.log(projectData);
                 this.project = projectData;
                 if (projectData.id) {
                     this.navMode = 'project';
