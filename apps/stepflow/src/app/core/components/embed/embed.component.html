@@ -1,14 +1,7 @@
-<app-base-field [field]="field" [index]="index">
+<app-base-field [field]="field" [index]="index" [resizable]="true">
     <ng-container *ngIf="componentMode === 'view'">
         <div class="view" *ngIf="embedData.data.value[0].href; else placeholder">
-            <div
-                class="embed p-mb-0"
-                [style.height.px]="
-                    settings?.embedComponent?.iframeHeight ? settings?.embedComponent?.iframeHeight : 400
-                "
-            >
-                <iframe [src]="cleanUrl" allowfullscreen class="p-mb-2" frameBorder="0" style="height: 100%;"></iframe>
-            </div>
+            <iframe [src]="cleanUrl" allowfullscreen class="p-mb-2" frameBorder="0" style="height: 100%;"></iframe>
             <div class="p-mt-2 p-d-flex p-ai-center">
                 <i class="pi pi-external-link p-mr-2"></i>
                 <a [href]="embedData.data.value[0].href" target="_blank">{{ domain.hostname }}</a>
@@ -21,18 +14,9 @@
         </ng-template>
     </ng-container>
     <ng-container *ngIf="componentMode === 'edit'">
-        <div class="p-d-flex p-flex-column p-mb-2">
-            <div class="edit" *ngIf="embedData.data.value[0].href && domain.hostname != ''; else add">
-                <div
-                    class="embed embed--resizable"
-                    (mouseup)="onMouseUp(embed)"
-                    #embed
-                    [style.height.px]="
-                        settings?.embedComponent?.iframeHeight ? settings?.embedComponent?.iframeHeight : 400
-                    "
-                >
-                    <iframe [src]="cleanUrl" allowfullscreen frameBorder="0" #iframe></iframe>
-                </div>
+        <div class="edit p-d-flex p-flex-column p-mb-2">
+            <ng-container *ngIf="embedData.data.value[0].href && domain.hostname != ''; else add">
+                <iframe [src]="cleanUrl" allowfullscreen frameBorder="0" #iframe></iframe>
                 <div class="url p-mt-2 p-d-flex p-ai-center">
                     <i class="pi pi-external-link p-mr-2"></i>
                     <a [href]="embedData.data.value[0].href" target="_blank" class="p-mr-2">{{ domain.hostname }}</a>
@@ -44,16 +28,16 @@
                         (click)="onRemoveUrlPress()"
                     ></button>
                 </div>
-            </div>
+            </ng-container>
             <ng-template #add>
                 <div class="placeholder">
                     <img src="/assets/placeholder/embed-placeholder.jpg" alt="Embed placeholder" />
-                    <div class="p-text-italic">Enter a URL below to embed content.</div>
+                    <div class="text-secondary">Enter a URL below to embed content.</div>
                 </div>
-                <div class="p-d-flex p-ai-center p-jc-center add p-mt-5">
+                <div class="p-field p-d-flex p-ai-center p-jc-center add p-mt-5">
                     <span class="p-float-label">
-                        <label for="float-input-add">Url</label>
                         <input id="float-input-add" type="url" pInputText [(ngModel)]="href" />
+                        <label for="float-input-add">Url</label>
                     </span>
                     <div>
                         <button

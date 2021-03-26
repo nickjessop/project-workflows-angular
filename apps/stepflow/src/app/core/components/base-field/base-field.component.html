@@ -4,13 +4,22 @@
     #fieldContainer
     (cdkDragStarted)="dragStarted()"
     (cdkDragReleased)="dragFinished()"
+    [style.height.px]="height"
 >
     <div class="field__handle"><i class="pi pi-drag" cdkDragHandle></i></div>
+    <div
+        class="resize resize__bottom--right"
+        (resize)="onResize($event)"
+        (resizeEnd)="onResizeEnd($event)"
+        [targetElement]="fieldContainer"
+        [direction]="AngularResizeElementDirection.BOTTOM_RIGHT"
+        *ngIf="resizable"
+    ></div>
     <div class="p-d-flex p-jc-between p-ai-center p-mb-2">
         <div class="field__label">
             <p-inplace closable="true" closeIcon="pi pi-check">
                 <ng-template pTemplate="display">
-                    {{ field?.label ? field.label : '(Untitled block)' }}
+                    {{ field?.label ? field.label : 'Untitled block' }}
                 </ng-template>
                 <ng-template pTemplate="content">
                     <input type="text" class="p-inputtext" [(ngModel)]="field.label" pInputText />

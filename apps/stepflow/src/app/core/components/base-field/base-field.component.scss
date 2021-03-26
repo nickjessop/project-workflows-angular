@@ -5,6 +5,22 @@
     border: 0.065rem solid var(--surface-d);
     border-radius: 6px;
     background: white;
+    .resize {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 20px;
+        height: 20px;
+        border-right: 3px solid var(--surface-d);
+        border-bottom: 3px solid var(--surface-d);
+        border-radius: 1px;
+        &:hover,
+        &:focus,
+        &:focus-within {
+            cursor: s-resize;
+            border-color: var(--surface-f);
+        }
+    }
     &:hover,
     &:focus-within {
         border: 0.065rem solid var(--primary-color-medium);

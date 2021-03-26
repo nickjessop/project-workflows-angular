@@ -138,7 +138,6 @@ export function createComponentMetadataTemplate(componentType: ComponentType, va
         const _component: Embed = {
             data: { value: [{ href: '' }] },
             component: 'embed',
-            settings: { embedComponent: { iframeHeight: 400 } },
         };
 
         if (validation) {
@@ -181,9 +180,6 @@ export type ComponentSettings = {
     height?: number;
     textInputComponent?: {
         textareaHeight?: number;
-    };
-    embedComponent?: {
-        iframeHeight?: number;
     };
     imageUploaderComponent?: {
         maxThumbnails?: number;

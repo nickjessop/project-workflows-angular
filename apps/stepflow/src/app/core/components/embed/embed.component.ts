@@ -3,7 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { MessageService } from 'primeng/api';
 import { ProjectService } from '../../../services/project/project.service';
-import { ComponentSettings, createComponentMetadataTemplate, Embed } from '../../interfaces/core-component';
+import { createComponentMetadataTemplate, Embed } from '../../interfaces/core-component';
 import { BaseFieldComponent } from '../base-field/base-field.component';
 
 @Component({
@@ -18,7 +18,6 @@ export class EmbedComponent extends BaseFieldComponent implements OnInit {
     public iframe!: ElementRef;
 
     public embedData = createComponentMetadataTemplate('embed') as Embed;
-    public settings?: ComponentSettings;
     public cleanUrl: SafeResourceUrl = '';
     public href: string = '';
     public domain: { hostname: string } = { hostname: '' };
@@ -55,8 +54,6 @@ export class EmbedComponent extends BaseFieldComponent implements OnInit {
         } catch (e) {
             this.domain.hostname = '';
         }
-
-        this.settings = this.embedData.settings;
     }
 
     ngAfterViewInit() {
@@ -74,6 +71,7 @@ export class EmbedComponent extends BaseFieldComponent implements OnInit {
         if (this.isValidUrl(this.href)) {
             this.embedData.data.value[0].href = this.href;
             this.href = '';
+            this.projectService.syncProject();
         } else {
             message.detail = 'Please enter a valid URL.';
             this.messageService.add(message);
@@ -83,12 +81,7 @@ export class EmbedComponent extends BaseFieldComponent implements OnInit {
 
     public onRemoveUrlPress() {
         this.embedData.data.value[0].href = '';
-    }
-
-    public onMouseUp(embed: any) {
-        const height = embed.getBoundingClientRect().height;
-        this.settings = { embedComponent: { iframeHeight: height } };
-        this.embedData.settings = this.settings;
+        this.projectService.syncProject();
     }
 
     public isValidUrl(url: string) {
