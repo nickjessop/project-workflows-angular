@@ -14,27 +14,41 @@
             <div *ngFor="let stepConfig of steps; index as i">
                 <div
                     cdkDrag
-                    class="step p-d-flex p-ai-center p-jc-between p-mb-3 p-p-2"
+                    class="step p-d-flex p-jc-between p-mb-3 p-p-2"
                     [class.step-selected]="stepConfig.step.isCurrentStep"
                     (click)="onStepPress(i)"
                 >
-                    <div class="p-d-flex p-flex-column">
-                        <div class="ms-1">{{ stepConfig.step.title }}</div>
-                        <div
-                            *ngIf="stepConfig.step.status && stepConfig.step.status.value != 'no-status'"
-                            class="ms-01 p-mt-1 text-secondary p-text-medium"
+                    <div class="step-status p-d-flex p-jc-center">
+                        <ng-container
+                            *ngIf="stepConfig.step.status && stepConfig.step.status.value != 'no-status'; else nostatus"
                         >
-                            <i class="pi {{ stepConfig.step.status.icon }} ms-02"></i>
-                            {{ stepConfig.step.status.label }}
-                        </div>
+                            <div class="step-status__icon p-d-flex p-jc-center p-ai-center">
+                                <i class="pi {{ stepConfig.step.status.icon }} ms-01"></i>
+                            </div>
+                        </ng-container>
+                        <ng-template #nostatus>
+                            <div class="step-status__icon step-status__icon--default"></div>
+                        </ng-template>
                     </div>
-                    <button
-                        type="button"
-                        class="p-button-text p-button-plain step__edit-step p-p-0"
-                        pButton
-                        icon="pi pi-ellipsis-h"
-                        (click)="menu.toggle($event)"
-                    ></button>
+
+                    <div class="p-d-flex p-jc-between p-pl-3" style="flex-grow: 1;">
+                        <div class="p-d-flex p-flex-column">
+                            <div class="ms-1">{{ stepConfig.step.title }}</div>
+                            <div
+                                *ngIf="stepConfig.step.status && stepConfig.step.status.value != 'no-status'"
+                                class="ms-01 p-mt-1 text-secondary p-text-medium"
+                            >
+                                {{ stepConfig.step.status.label }}
+                            </div>
+                        </div>
+                        <button
+                            type="button"
+                            class="p-button-text p-button-plain step__edit-step p-p-0"
+                            pButton
+                            icon="pi pi-ellipsis-h"
+                            (click)="menu.toggle($event)"
+                        ></button>
+                    </div>
                 </div>
             </div>
         </div>
