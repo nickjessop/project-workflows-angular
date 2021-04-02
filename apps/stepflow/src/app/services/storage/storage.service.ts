@@ -3,28 +3,19 @@ import { from } from 'rxjs';
 import { v4 as uuid } from 'uuid';
 import { AuthenticationService } from '../authentication/authentication.service';
 import { FirebaseService } from '../firebase/firebase.service';
-import { ProjectService } from '../project/project.service';
 
 @Injectable({
     providedIn: 'root',
 })
 export class StorageService {
-    constructor(
-        private firebaseService: FirebaseService,
-        private authenticationService: AuthenticationService,
-        private projectService: ProjectService
-    ) {}
+    constructor(private firebaseService: FirebaseService, private authenticationService: AuthenticationService) {}
 
-    public uploadProjectFile(file: File) {
-        if (this.projectService.projectConfig.id) {
-            const fileId: string = uuid();
-            const pathId = this.projectService.projectConfig.id;
-            const folder = 'projects';
-            const storageRef = this.firebaseService.getStorageInstance().ref(`${folder}/${pathId}/${fileId}`);
-            return from(storageRef.put(file));
-        } else {
-            return;
-        }
+    public uploadProjectFile(file: File, projectId: string) {
+        const fileId: string = uuid();
+        const pathId = projectId;
+        const folder = 'projects';
+        const storageRef = this.firebaseService.getStorageInstance().ref(`${folder}/${pathId}/${fileId}`);
+        return from(storageRef.put(file));
     }
 
     public uploadProfileImage(file: File) {

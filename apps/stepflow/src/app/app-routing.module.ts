@@ -6,7 +6,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { RedirectGuard } from './redirect.guard';
 
 const appRoutes: Routes = [
-    { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+    { path: '', redirectTo: '/project', pathMatch: 'full' },
     {
         path: 'auth/login',
         component: AuthenticationComponent,
