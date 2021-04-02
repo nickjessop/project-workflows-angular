@@ -1,6 +1,4 @@
-import { EnvConfig } from './environment';
-
-export const environment: EnvConfig = {
+export const environment = {
     production: true,
     apiUrl: 'https://api.stepflow.co/api/',
 };

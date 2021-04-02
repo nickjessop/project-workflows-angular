@@ -16,6 +16,9 @@
         },
         "stepflow-backend": {
             "tags": []
+        },
+        "shared-interfaces": {
+            "tags": []
         }
     }
 }

@@ -175,13 +175,7 @@ export class AuthenticationService {
                     console.log('User does not exist.');
                 }
             } catch (err) {
-                this.messageService.add({
-                    severity: 'error',
-                    key: 'global-toast',
-                    life: 5000,
-                    closable: true,
-                    detail: 'Error fetching user info.',
-                });
+                console.log(`Error while fetching user info`);
             }
         }
     }
@@ -224,9 +218,30 @@ export class AuthenticationService {
         // });
 
         // return;
+        const allowedUserIds = [
+            '06T4lgj7x1emjUEMCmPnJYPFjum2',
+            'iIeZlcLjmebZSoEMuquh4F2htN92',
+            'LkkX7f9yheRFHNwZkoCHhMb6AmC2',
+        ];
+
         from(this.firebaseService.getAuthInstance()!.signInWithEmailAndPassword(email, password)).subscribe(
             firebaseUser => {
                 const { user } = firebaseUser;
+
+                if (user && !allowedUserIds.includes(user?.uid)) {
+                    this.firebaseService.getAuthInstance()!.signOut();
+
+                    this.messageService.add({
+                        severity: 'error',
+                        key: 'global-toast',
+                        life: 5000,
+                        closable: true,
+                        detail: 'You may not login at this time.',
+                    });
+
+                    return;
+                }
+
                 const parsedUser = {
                     id: user!.uid,
                     email: user!.email || undefined,

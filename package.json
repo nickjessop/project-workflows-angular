@@ -76,21 +76,12 @@
         "@angular/language-service": "~10.0.9",
         "@nrwl/nest": "^9.2.4",
         "@nrwl/workspace": "9.2.4",
-        "@types/jasmine": "~3.3.8",
-        "@types/jasminewd2": "~2.0.3",
         "@types/lodash": "^4.14.165",
         "@types/mime": "^2.0.3",
         "@types/node": "^10.0.3",
         "@types/uuid": "^8.3.0",
         "codelyzer": "^5.0.0",
         "gts": "^1.1.2",
-        "jasmine-core": "~3.4.0",
-        "jasmine-spec-reporter": "~4.2.1",
-        "karma": "~4.1.0",
-        "karma-chrome-launcher": "~2.2.0",
-        "karma-coverage-istanbul-reporter": "~2.0.1",
-        "karma-jasmine": "~2.0.1",
-        "karma-jasmine-html-reporter": "^1.4.0",
         "prettier": "1.19.1",
         "protractor": "~7.0.0",
         "stylelint": "^12.0.1",
@@ -101,6 +92,10 @@
         "typescript": "~3.9.7",
         "@nrwl/node": "9.2.4",
         "@nestjs/schematics": "^6.7.0",
-        "@nestjs/testing": "^6.8.3"
+        "@nestjs/testing": "^6.8.3",
+        "@nrwl/jest": "9.2.4",
+        "jest": "25.2.3",
+        "@types/jest": "25.1.4",
+        "ts-jest": "25.2.1"
     }
 }
