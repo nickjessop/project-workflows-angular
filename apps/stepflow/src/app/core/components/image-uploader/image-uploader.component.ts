@@ -106,7 +106,7 @@ export class ImageUploaderComponent extends BaseFieldComponent implements OnInit
         }
 
         this.storageService
-            .uploadFile(file)
+            .uploadProjectFile(file)
             .pipe(
                 switchMap(file => {
                     return this.storageService.getDownloadUrl(file.metadata.fullPath).pipe(

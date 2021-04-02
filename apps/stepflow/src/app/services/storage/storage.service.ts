@@ -15,16 +15,23 @@ export class StorageService {
         private projectService: ProjectService
     ) {}
 
-    public uploadFile(file: File) {
-        const fileId: string = uuid();
-        let pathId = this.authenticationService.user?.id;
-        let folder = 'users';
-        if (this.projectService.projectConfig.id != undefined) {
-            pathId = this.projectService.projectConfig.id;
-            folder = 'projects';
+    public uploadProjectFile(file: File) {
+        if (this.projectService.projectConfig.id) {
+            const fileId: string = uuid();
+            const pathId = this.projectService.projectConfig.id;
+            const folder = 'projects';
+            const storageRef = this.firebaseService.getStorageInstance().ref(`${folder}/${pathId}/${fileId}`);
+            return from(storageRef.put(file));
+        } else {
+            return;
         }
-        const storageRef = this.firebaseService.getStorageInstance().ref(`${folder}/${pathId}/${fileId}`);
+    }
 
+    public uploadProfileImage(file: File) {
+        const fileId: string = uuid();
+        const pathId = this.authenticationService.user?.id;
+        const folder = 'users';
+        const storageRef = this.firebaseService.getStorageInstance().ref(`${folder}/${pathId}/${fileId}`);
         return from(storageRef.put(file));
     }
 
