@@ -19,7 +19,7 @@ export class RedirectGuard implements CanActivate {
             switchMap(status => {
                 const user = this.authenticationService.user;
                 if (user !== undefined && user !== null) {
-                    this.router.navigate(['/dashboard']);
+                    this.router.navigate(['/project']);
                     return of(false);
                 } else {
                     return of(true);

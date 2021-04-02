@@ -9,8 +9,6 @@ import { AppComponent } from './app.component';
 import { AuthenticationComponent } from './authentication/authentication.component';
 import { ConfirmationComponent } from './authentication/confirmation/confirmation.component';
 import { CoreComponentsModule } from './core/core-components.module';
-import { ComponentPlaygroundComponent } from './dashboard/component-playground/component-playground.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { SliceEllipsisPipe } from './pipes/slice-ellipsis.pipe';
@@ -29,12 +27,10 @@ import { ProtectedRoutingModule } from './protected-routing.module';
 @NgModule({
     declarations: [
         AppComponent,
-        DashboardComponent,
         PageNotFoundComponent,
         ProjectComponent,
         ProjectCardComponent,
         SliceEllipsisPipe,
-        ComponentPlaygroundComponent,
         ViewerComponent,
         NavBarComponent,
         StepsComponent,

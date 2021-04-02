@@ -101,12 +101,14 @@ export class ImageUploaderComponent extends BaseFieldComponent implements OnInit
     }
 
     private uploadFile(file: File) {
-        if (!file) {
+        const projectId = this.projectService.projectConfig.id;
+
+        if (!file || !projectId) {
             return;
         }
 
         this.storageService
-            .uploadFile(file)
+            .uploadProjectFile(file, projectId)
             .pipe(
                 switchMap(file => {
                     return this.storageService.getDownloadUrl(file.metadata.fullPath).pipe(

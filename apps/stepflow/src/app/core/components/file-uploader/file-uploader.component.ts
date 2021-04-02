@@ -132,13 +132,14 @@ export class FileUploaderComponent extends BaseFieldComponent implements OnInit 
 
     public onDialogSubmit($event: Event) {
         const file = this.dialogData.file;
+        const projectId = this.projectService.projectConfig.id;
 
-        if (!file) {
+        if (!file || !projectId) {
             return;
         }
 
         this.storageService
-            .uploadFile(file)
+            .uploadProjectFile(file, projectId)
             .pipe(
                 switchMap(file => {
                     return this.storageService.getDownloadUrl(file.metadata.fullPath).pipe(
