@@ -89,7 +89,7 @@ export class ProfileComponent implements OnInit {
             this.storageService.deleteFile(this.userDetails.photoFilePath);
         }
         this.storageService
-            .uploadFile(file)
+            .uploadProfileImage(file)
             .pipe(
                 switchMap(file => {
                     return this.storageService.getDownloadUrl(file.metadata.fullPath).pipe(
