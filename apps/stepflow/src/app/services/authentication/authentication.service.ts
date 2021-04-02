@@ -33,7 +33,7 @@ export class AuthenticationService {
     public readonly $loginStatus = new BehaviorSubject<{ authStatus: AuthStatus }>({ authStatus: AuthStatus.UNKNOWN });
 
     private subscriptions = new Subscription();
-    public redirectUrl = '/dashboard';
+    public redirectUrl = '/project';
 
     constructor(
         private firebaseService: FirebaseService,
