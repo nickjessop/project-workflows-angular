@@ -23,10 +23,7 @@
                         "polyfills": "apps/stepflow/src/polyfills.ts",
                         "tsConfig": "apps/stepflow/tsconfig.app.json",
                         "aot": false,
-                        "assets": [
-                            "apps/stepflow/src/favicon.ico",
-                            "apps/stepflow/src/assets"
-                        ],
+                        "assets": ["apps/stepflow/src/favicon.ico", "apps/stepflow/src/assets"],
                         "styles": [
                             "node_modules/primeng/resources/themes/saga-blue/theme.css",
                             "node_modules/primeng/resources/primeng.min.css",
@@ -37,13 +34,9 @@
                             "apps/stepflow/src/sass/styles.scss"
                         ],
                         "stylePreprocessorOptions": {
-                            "includePaths": [
-                                "apps/stepflow/src/sass"
-                            ]
+                            "includePaths": ["apps/stepflow/src/sass"]
                         },
-                        "scripts": [
-                            "node_modules/quill/dist/quill.js"
-                        ]
+                        "scripts": ["node_modules/quill/dist/quill.js"]
                     },
                     "configurations": {
                         "production": {
@@ -94,13 +87,8 @@
                 "lint": {
                     "builder": "@angular-devkit/build-angular:tslint",
                     "options": {
-                        "tsConfig": [
-                            "apps/stepflow/tsconfig.app.json",
-                            "apps/stepflow/tsconfig.spec.json"
-                        ],
-                        "exclude": [
-                            "**/node_modules/**"
-                        ]
+                        "tsConfig": ["apps/stepflow/tsconfig.app.json", "apps/stepflow/tsconfig.spec.json"],
+                        "exclude": ["**/node_modules/**"]
                     }
                 }
             }
@@ -125,70 +113,7 @@
                     "builder": "@angular-devkit/build-angular:tslint",
                     "options": {
                         "tsConfig": "apps/stepflow-e2e/tsconfig.json",
-                        "exclude": [
-                            "**/node_modules/**"
-                        ]
-                    }
-                }
-            }
-        },
-        "stepflow-backend": {
-            "root": "apps/stepflow-backend",
-            "sourceRoot": "apps/stepflow-backend/src",
-            "projectType": "application",
-            "prefix": "stepflow-backend",
-            "schematics": {},
-            "architect": {
-                "build": {
-                    "builder": "@nrwl/node:build",
-                    "options": {
-                        "outputPath": "dist/apps/stepflow-backend",
-                        "main": "apps/stepflow-backend/src/main.ts",
-                        "tsConfig": "apps/stepflow-backend/tsconfig.app.json",
-                        "assets": [
-                            "apps/stepflow-backend/src/assets"
-                        ]
-                    },
-                    "configurations": {
-                        "production": {
-                            "optimization": true,
-                            "extractLicenses": true,
-                            "inspect": false,
-                            "fileReplacements": [
-                                {
-                                    "replace": "apps/stepflow-backend/src/environments/environment.ts",
-                                    "with": "apps/stepflow-backend/src/environments/environment.prod.ts"
-                                }
-                            ]
-                        }
-                    }
-                },
-                "serve": {
-                    "builder": "@nrwl/node:execute",
-                    "options": {
-                        "port": 8085,
-                        "buildTarget": "stepflow-backend:build"
-                    }
-                },
-                "lint": {
-                    "builder": "@angular-devkit/build-angular:tslint",
-                    "options": {
-                        "tsConfig": [
-                            "apps/stepflow-backend/tsconfig.app.json",
-                            "apps/stepflow-backend/tsconfig.spec.json"
-                        ],
-                        "exclude": [
-                            "**/node_modules/**",
-                            "!apps/stepflow-backend/**"
-                        ]
-                    }
-                },
-                "test": {
-                    "builder": "@nrwl/jest:jest",
-                    "options": {
-                        "jestConfig": "apps/stepflow-backend/jest.config.js",
-                        "tsConfig": "apps/stepflow-backend/tsconfig.spec.json",
-                        "passWithNoTests": true
+                        "exclude": ["**/node_modules/**"]
                     }
                 }
             }
@@ -206,10 +131,7 @@
                             "libs/shared/interfaces/tsconfig.lib.json",
                             "libs/shared/interfaces/tsconfig.spec.json"
                         ],
-                        "exclude": [
-                            "**/node_modules/**",
-                            "!libs/shared/interfaces/**"
-                        ]
+                        "exclude": ["**/node_modules/**", "!libs/shared/interfaces/**"]
                     }
                 },
                 "test": {
@@ -221,10 +143,62 @@
                     }
                 }
             }
+        },
+        "api": {
+            "root": "apps/api",
+            "sourceRoot": "apps/api/src",
+            "projectType": "application",
+            "prefix": "api",
+            "schematics": {},
+            "architect": {
+                "build": {
+                    "builder": "@nrwl/node:build",
+                    "options": {
+                        "outputPath": "dist/apps/api",
+                        "main": "apps/api/src/main.ts",
+                        "tsConfig": "apps/api/tsconfig.app.json",
+                        "assets": ["apps/api/src/assets"]
+                    },
+                    "configurations": {
+                        "production": {
+                            "optimization": true,
+                            "extractLicenses": true,
+                            "inspect": false,
+                            "fileReplacements": [
+                                {
+                                    "replace": "apps/api/src/environments/environment.ts",
+                                    "with": "apps/api/src/environments/environment.prod.ts"
+                                }
+                            ]
+                        }
+                    }
+                },
+                "serve": {
+                    "builder": "@nrwl/node:execute",
+                    "options": {
+                        "buildTarget": "api:build"
+                    }
+                },
+                "lint": {
+                    "builder": "@angular-devkit/build-angular:tslint",
+                    "options": {
+                        "tsConfig": ["apps/api/tsconfig.app.json", "apps/api/tsconfig.spec.json"],
+                        "exclude": ["**/node_modules/**", "!apps/api/**"]
+                    }
+                },
+                "test": {
+                    "builder": "@nrwl/jest:jest",
+                    "options": {
+                        "jestConfig": "apps/api/jest.config.js",
+                        "tsConfig": "apps/api/tsconfig.spec.json",
+                        "passWithNoTests": true
+                    }
+                }
+            }
         }
     },
     "defaultProject": "stepflow",
     "cli": {
-        "defaultCollection": "@nrwl/nest"
+        "defaultCollection": "@nrwl/angular"
     }
 }
