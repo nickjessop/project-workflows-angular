@@ -1,31 +1,27 @@
 {
-  "extends": "./node_modules/gts/tsconfig-google.json",
-  "compileOnSave": true,
-  "compilerOptions": {
-    "strict": true,
-    "baseUrl": ".",
-    "outDir": "./dist/out-tsc",
-    "sourceMap": true,
-    "declaration": false,
-    "downlevelIteration": true,
-    "experimentalDecorators": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "importHelpers": true,
-    "target": "es2015",
-    "typeRoots": [
-      "node_modules/@types"
-    ],
-    "lib": [
-      "es2018",
-      "dom"
-    ],
-    "paths": {
+    "extends": "./node_modules/gts/tsconfig-google.json",
+    "compileOnSave": true,
+    "compilerOptions": {
+        "strict": true,
+        "baseUrl": ".",
+        "outDir": "./dist/out-tsc",
+        "sourceMap": true,
+        "declaration": false,
+        "downlevelIteration": true,
+        "experimentalDecorators": true,
+        "module": "esnext",
+        "moduleResolution": "node",
+        "importHelpers": true,
+        "target": "es2015",
+        "typeRoots": ["./node_modules/@types"],
+        "lib": ["es2018", "dom"],
+        "paths": {
+            "@stepflow/shared/interfaces": ["libs/shared/interfaces/src/index.ts"]
+        },
+        "rootDir": "."
     },
-    "rootDir": "."
-  },
-  "angularCompilerOptions": {
-    "fullTemplateTypeCheck": true,
-    "strictInjectionParameters": true
-  }
+    "angularCompilerOptions": {
+        "fullTemplateTypeCheck": true,
+        "strictInjectionParameters": true
+    }
 }

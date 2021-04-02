@@ -1,7 +1,7 @@
 {
     "hosting": [
         {
-            "public": "dist/authentication",
+            "public": "dist/apps/authentication",
             "target": "authentication",
             "ignore": [
                 "firebase.json",
@@ -17,7 +17,7 @@
         },
         {
             "site": "stepflow-app",
-            "public": "dist/stepflow",
+            "public": "dist/apps/stepflow",
             "ignore": [
                 "firebase.json",
                 "**/.*",
