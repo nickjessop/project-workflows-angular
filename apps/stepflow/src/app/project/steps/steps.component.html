@@ -1,4 +1,4 @@
-<div class="steps-container p-pt-5 p-pl-4 p-pr-3">
+<div class="steps-container p-mt-5 p-ml-5 p-mr-3 p-py-3 p-px-3">
     <div class="p-d-flex p-ai-center p-jc-between p-pb-2">
         <div class="p-text-uppercase ms-01">Steps</div>
         <button
@@ -11,7 +11,7 @@
     </div>
     <ng-container *ngIf="steps?.length; else showEmptyState">
         <div cdkDropList (cdkDropListDropped)="drop($event)">
-            <div *ngFor="let stepConfig of steps; index as i">
+            <div *ngFor="let stepConfig of steps; index as i" class="steps">
                 <div
                     cdkDrag
                     class="step p-d-flex p-jc-between p-mb-3 p-p-2"
@@ -29,6 +29,7 @@
                         <ng-template #nostatus>
                             <div class="step-status__icon step-status__icon--default"></div>
                         </ng-template>
+                        <div class="step-line"></div>
                     </div>
 
                     <div class="p-d-flex p-jc-between p-pl-3" style="flex-grow: 1;">
