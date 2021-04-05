@@ -3,7 +3,8 @@
     margin: 35px 20px;
     box-shadow: 0px -1px 3px 0px #00000012;
     border-radius: 6px;
-    height: calc(100vh - 9rem);
+    max-height: calc(100vh - 9rem);
+    overflow: scroll;
     .steps:last-child {
         .step-status .step-line {
             width: 0px;
