@@ -37,6 +37,10 @@ export class FirebaseService {
 
     private readonly db: firebase.firestore.Firestore;
     private readonly auth: firebase.auth.Auth;
+    private readonly provider = {
+        emailAuth: firebase.auth.EmailAuthProvider,
+        //GoogleAuth, etc.
+    };
     private readonly functions: firebase.functions.Functions;
     private readonly storage: firebase.storage.Storage;
 
@@ -45,6 +49,9 @@ export class FirebaseService {
 
         this.db = firebase.firestore();
         this.auth = firebase.auth();
+        this.provider = {
+            emailAuth: firebase.auth.EmailAuthProvider,
+        };
         this.auth.setPersistence('local');
 
         this.functions = firebase.functions();
@@ -59,6 +66,11 @@ export class FirebaseService {
     public getAuthInstance() {
         return this.auth;
     }
+
+    public getProviderInstance() {
+        return this.provider;
+    }
+
     public getFunctionsInstance() {
         return this.functions;
     }

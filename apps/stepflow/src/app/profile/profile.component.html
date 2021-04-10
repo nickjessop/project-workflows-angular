@@ -127,7 +127,7 @@
             </div>
         </div>
         <p-footer
-            ><button pButton type="button" label="Update profile" (click)="updateProfileDetails()"></button
+            ><button pButton type="button" label="Update profile" (click)="onSaveProfileSelected()"></button
         ></p-footer>
     </p-dialog>
 
@@ -139,6 +139,18 @@
         [style]="{ width: '100%', maxWidth: '600px' }"
     >
         <div class="p-fluid">
+            <div class="p-field">
+                <label for="email">Password</label>
+                <input
+                    id="passwordEmail"
+                    type="password"
+                    pInputText
+                    aria-describedby="Your password"
+                    placeholder="Enter your password"
+                    [(ngModel)]="passwordVerification"
+                />
+                <small id="password-help">Your current password is required to change your email.</small>
+            </div>
             <div class="p-field">
                 <label for="email">Email</label>
                 <input
@@ -152,7 +164,14 @@
                 <small id="password-help">A verification email will be sent to your new address.</small>
             </div>
         </div>
-        <p-footer><button pButton type="button" label="Update email" (click)="updateEmailAddress()"></button></p-footer>
+        <p-footer
+            ><button
+                pButton
+                type="button"
+                label="Update email"
+                (click)="onChangeEmailSelected(passwordVerification)"
+            ></button
+        ></p-footer>
     </p-dialog>
 
     <p-dialog
@@ -196,7 +215,7 @@
             </div>
         </div>
         <p-footer>
-            <button pButton type="button" label="Update password"></button>
+            <button pButton type="button" label="Update password" (click)="onChangePasswordSelected()"></button>
         </p-footer>
     </p-dialog>
 </div>
