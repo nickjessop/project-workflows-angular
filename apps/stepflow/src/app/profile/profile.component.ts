@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/api';
-import { map, switchMap } from 'rxjs/operators';
 import { AuthenticationService, User } from '../services/authentication/authentication.service';
-import { StorageService } from '../services/storage/storage.service';
+import { UserService } from '../services/user/user.service';
 
 @Component({
     selector: 'app-profile',
@@ -14,10 +13,11 @@ export class ProfileComponent implements OnInit {
     public displayProfileModal: boolean = false;
     public displayEmailModal: boolean = false;
     public displayPasswordModal: boolean = false;
+    public passwordVerification: string = '';
 
     constructor(
         private authService: AuthenticationService,
-        private storageService: StorageService,
+        private userService: UserService,
         private messageService: MessageService
     ) {}
 
@@ -36,88 +36,32 @@ export class ProfileComponent implements OnInit {
         }
     }
 
-    updateProfileDetails() {
-        const currentUser = this.authService.getCurrentUser();
-        const photoURL = this.userDetails.photoURL || '';
-        const plan = this.userDetails.plan || '';
-        const photoFilePath = this.userDetails.photoFilePath || '';
-        const firstName = this.userDetails.firstName || '';
-        const lastName = this.userDetails.lastName || '';
-        if (currentUser) {
-            currentUser
-                .updateProfile({
-                    displayName: firstName + ' ' + lastName,
-                    photoURL: photoURL,
-                })
-                .then(
-                    () => {
-                        this.userDetails.displayName = currentUser.displayName || '';
-                        this.userDetails.photoURL =
-                            currentUser.photoURL || '/assets/placeholder/placeholder-profile.png';
-                        this.authService.setUserMetaData(photoFilePath, plan, firstName, lastName);
-                        this.displayProfileModal = false;
-                        this.messageService.add({
-                            severity: 'success',
-                            key: 'global-toast',
-                            life: 3000,
-                            closable: true,
-                            detail: 'Profile updated',
-                        });
-                    },
-                    err => {
-                        this.messageService.add({
-                            severity: 'error',
-                            key: 'global-toast',
-                            life: 3000,
-                            closable: true,
-                            detail: 'Failed to update profile',
-                        });
-                    }
-                );
-        }
+    public onSaveProfileSelected() {
+        this.userService.updateProfileDetails(this.userDetails);
+        this.displayProfileModal = false;
     }
 
-    onProfileImageUploadSelected($event: { originalEvent: Event; files: FileList; currentFiles: File[] }) {
-        this.changeFile($event.currentFiles[0]);
+    public onProfileImageUploadSelected($event: { originalEvent: Event; files: FileList; currentFiles: File[] }) {
+        this.userService.changeProfilePhoto($event.currentFiles[0]);
     }
 
-    private changeFile(file: File) {
-        if (!file) {
-            return;
+    public onChangeEmailSelected(password: string) {
+        const currentEmail = this.authService.getCurrentUser()?.email;
+        console.log('profile' + this.userDetails.email + currentEmail);
+        if (this.userDetails.email && this.userDetails.email != currentEmail) {
+            this.userService.updateEmail(this.userDetails.email, password);
+        } else {
+            this.messageService.add({
+                severity: 'error',
+                key: 'global-toast',
+                life: 5000,
+                closable: true,
+                detail: 'Please enter a valid email address and try again.',
+            });
         }
-        if (this.userDetails.photoFilePath) {
-            this.storageService.deleteFile(this.userDetails.photoFilePath);
-        }
-        this.storageService
-            .uploadProfileImage(file)
-            .pipe(
-                switchMap(file => {
-                    return this.storageService.getDownloadUrl(file.metadata.fullPath).pipe(
-                        map(downloadUrl => {
-                            return {
-                                downloadUrl: downloadUrl as string,
-                                filePath: file.metadata.fullPath,
-                            };
-                        })
-                    );
-                })
-            )
-            .subscribe(
-                filedata => {
-                    this.userDetails.photoURL = filedata.downloadUrl;
-                    this.userDetails.photoFilePath = filedata.filePath;
-                },
-                err => {
-                    this.messageService.add({
-                        severity: 'error',
-                        key: 'global-toast',
-                        life: 3000,
-                        closable: true,
-                        detail: 'Failed to upload profile image',
-                    });
-                }
-            );
+        this.passwordVerification = '';
+        this.displayProfileModal = false;
     }
 
-    updateEmailAddress() {}
+    public onChangePasswordSelected() {}
 }

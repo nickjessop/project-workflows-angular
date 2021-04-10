@@ -174,8 +174,14 @@ export class AuthenticationService {
                 } else {
                     console.log('User does not exist.');
                 }
-            } catch (err) {
-                console.log(`Error while fetching user info`);
+            } catch (error) {
+                this.messageService.add({
+                    severity: 'error',
+                    key: 'global-toast',
+                    life: 5000,
+                    closable: true,
+                    detail: 'Error fetching user details.',
+                });
             }
         }
     }
@@ -265,6 +271,24 @@ export class AuthenticationService {
     public logout() {
         from(this.firebaseService.getAuthInstance()!.signOut()).subscribe(success => {
             this.router.navigate(['/auth/login']);
+        });
+    }
+
+    public reAuthenticateUser(userProvidedPassword: string): Promise<any> {
+        return new Promise((resolve, reject) => {
+            const user = this.getCurrentUser();
+            if (user && user.email) {
+                const credential = this.firebaseService
+                    .getProviderInstance()
+                    .emailAuth.credential(user.email, userProvidedPassword);
+                user.reauthenticateWithCredential(credential)
+                    .then(function() {
+                        resolve({ success: true });
+                    })
+                    .catch(error => {
+                        reject(error);
+                    });
+            }
         });
     }
 }
