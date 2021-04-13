@@ -49,7 +49,7 @@
     >
         <div class="p-grid p-d-flex p-ai-center">
             <div class="p-col-10">
-                Choose a new password.
+                Send a password reset email.
             </div>
             <div class="p-col-2 p-d-flex p-jc-end">
                 <button
@@ -183,39 +183,25 @@
     >
         <div class="p-fluid">
             <div class="p-field">
-                <label for="password">Old password</label>
+                <label for="password">Password</label>
                 <input
                     id="password"
                     type="password"
                     pInputText
-                    aria-describedby="Enter your old password"
-                    placeholder="Enter your old password"
+                    aria-describedby="Your password"
+                    placeholder="Enter your password"
+                    [(ngModel)]="passwordVerification"
                 />
-                <small id="password-help">Your old password is required create a new one.</small>
-            </div>
-            <div class="p-field">
-                <label for="npassword">New password</label>
-                <input
-                    id="npassword"
-                    type="password"
-                    pInputText
-                    aria-describedby="Enter a new password"
-                    placeholder="Enter a new password"
-                />
-            </div>
-            <div class="p-field">
-                <label for="vnpassword">Verify new password</label>
-                <input
-                    id="vnpassword"
-                    type="password"
-                    pInputText
-                    aria-describedby="Verify your new password"
-                    placeholder="Verify your new password"
-                />
+                <small id="password-help">Your current password is required to send a password reset email.</small>
             </div>
         </div>
         <p-footer>
-            <button pButton type="button" label="Update password" (click)="onChangePasswordSelected()"></button>
+            <button
+                pButton
+                type="button"
+                label="Reset password"
+                (click)="onChangePasswordSelected(passwordVerification)"
+            ></button>
         </p-footer>
     </p-dialog>
 </div>

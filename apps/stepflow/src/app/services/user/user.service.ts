@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { map, switchMap } from 'rxjs/operators';
 import { AuthenticationService, User } from '../authentication/authentication.service';
+import { FirebaseService } from '../firebase/firebase.service';
 import { StorageService } from '../storage/storage.service';
 
 @Injectable({
@@ -14,7 +15,8 @@ export class UserService {
     constructor(
         private authService: AuthenticationService,
         private storageService: StorageService,
-        private messageService: MessageService
+        private messageService: MessageService,
+        private firebaseService: FirebaseService
     ) {
         this.currentUser = this.authService.getCurrentUser();
     }
@@ -37,7 +39,7 @@ export class UserService {
                         this.messageService.add({
                             severity: 'success',
                             key: 'global-toast',
-                            life: 3000,
+                            life: 5000,
                             closable: true,
                             detail: 'Profile updated',
                         });
@@ -46,7 +48,7 @@ export class UserService {
                         this.messageService.add({
                             severity: 'error',
                             key: 'global-toast',
-                            life: 3000,
+                            life: 5000,
                             closable: true,
                             detail: 'Failed to update profile',
                         });
@@ -85,7 +87,7 @@ export class UserService {
                     this.messageService.add({
                         severity: 'error',
                         key: 'global-toast',
-                        life: 3000,
+                        life: 5000,
                         closable: true,
                         detail: 'Failed to upload profile image',
                     });
@@ -93,75 +95,94 @@ export class UserService {
             );
     }
 
-    public updateEmail(email: string, password: string) {
-        console.log('hello!');
-        var actionCodeSettings = {
-            url: 'https://app.stepflow.co/profile',
-        };
-        if (this.currentUser) {
-            this.authService
-                .reAuthenticateUser(password)
-                .then(() => {
-                    this.currentUser
-                        .verifyBeforeUpdateEmail(email, actionCodeSettings)
-                        .then(() => {
-                            this.messageService.add({
-                                severity: 'success',
-                                key: 'global-toast',
-                                life: 3000,
-                                closable: true,
-                                detail: 'Verification email sent.',
+    public updateEmail(email: string, userProvidedPassword: string): Promise<any> {
+        return new Promise((resolve, reject) => {
+            const actionCodeSettings = {
+                url: 'https://app.stepflow.co/profile',
+            };
+            if (this.currentUser) {
+                this.authService
+                    .reAuthenticateUser(userProvidedPassword)
+                    .then(() => {
+                        this.currentUser
+                            .verifyBeforeUpdateEmail(email, actionCodeSettings)
+                            .then(() => {
+                                this.messageService.add({
+                                    severity: 'success',
+                                    key: 'global-toast',
+                                    life: 5000,
+                                    closable: true,
+                                    detail: 'Verification email sent.',
+                                });
+                                resolve({ success: true });
+                            })
+                            .catch((error: Error) => {
+                                this.messageService.add({
+                                    severity: 'error',
+                                    key: 'global-toast',
+                                    life: 5000,
+                                    closable: true,
+                                    detail: 'Failed to update email address.',
+                                });
+                                reject(error);
                             });
-                        })
-                        .catch((error: Error) => {
-                            this.messageService.add({
-                                severity: 'error',
-                                key: 'global-toast',
-                                life: 3000,
-                                closable: true,
-                                detail: 'Failed to update email address.',
-                            });
-                            console.log(error);
+                    })
+                    .catch((error: Error) => {
+                        this.messageService.add({
+                            severity: 'error',
+                            key: 'global-toast',
+                            life: 5000,
+                            closable: true,
+                            detail: 'Incorrect password. Please try again.',
                         });
-                    // this.currentUser
-                    //     .updateEmail(email)
-                    //     .then(() => {
-                    //         this.messageService.add({
-                    //             severity: 'success',
-                    //             key: 'global-toast',
-                    //             life: 3000,
-                    //             closable: true,
-                    //             detail: 'Email address updated.',
-                    //         });
-                    //         this.currentUser.emailVerified = false;
-                    //         console.log(this.currentUser);
-                    //         this.currentUser.sendEmailVerification();
-                    //     })
-                    //     .catch((error: Error) => {
-                    //         this.messageService.add({
-                    //             severity: 'error',
-                    //             key: 'global-toast',
-                    //             life: 3000,
-                    //             closable: true,
-                    //             detail: 'Failed to update email address.',
-                    //         });
-                    //         console.log(error);
-                    //     });
-                })
-                .catch(error => {
-                    this.messageService.add({
-                        severity: 'error',
-                        key: 'global-toast',
-                        life: 5000,
-                        closable: true,
-                        detail: 'Incorrect password. Please try again.',
                     });
-                    console.log(error);
-                });
-        }
+            }
+        });
     }
 
-    public updatePassword(email: string, password: string) {
-        //
+    public updatePassword(userProvidedPassword: string): Promise<any> {
+        return new Promise((resolve, reject) => {
+            if (this.currentUser) {
+                const email = this.currentUser.email;
+                this.authService
+                    .reAuthenticateUser(userProvidedPassword)
+                    .then(() => {
+                        this.firebaseService
+                            .getAuthInstance()
+                            .sendPasswordResetEmail(email)
+                            .then(() => {
+                                this.messageService.add({
+                                    severity: 'success',
+                                    key: 'global-toast',
+                                    life: 5000,
+                                    closable: true,
+                                    detail: 'Password reset email sent to ' + email,
+                                });
+                                resolve({ success: true });
+                            })
+                            .catch((error: Error) => {
+                                this.messageService.add({
+                                    severity: 'error',
+                                    key: 'global-toast',
+                                    life: 5000,
+                                    closable: true,
+                                    detail: 'Unable to send password reset email at this time.',
+                                });
+                                reject(error);
+                                console.log(error);
+                            });
+                    })
+                    .catch((error: Error) => {
+                        this.messageService.add({
+                            severity: 'error',
+                            key: 'global-toast',
+                            life: 5000,
+                            closable: true,
+                            detail: 'Incorrect password. Please try again.',
+                        });
+                        console.log(error);
+                    });
+            }
+        });
     }
 }
