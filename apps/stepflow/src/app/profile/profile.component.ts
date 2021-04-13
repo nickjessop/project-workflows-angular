@@ -49,19 +49,47 @@ export class ProfileComponent implements OnInit {
         const currentEmail = this.authService.getCurrentUser()?.email;
         console.log('profile' + this.userDetails.email + currentEmail);
         if (this.userDetails.email && this.userDetails.email != currentEmail) {
-            this.userService.updateEmail(this.userDetails.email, password);
+            this.userService
+                .updateEmail(this.userDetails.email, password)
+                .then(() => {
+                    this.passwordVerification = '';
+                    this.displayEmailModal = false;
+                })
+                .catch((error: Error) => {
+                    this.messageService.add({
+                        severity: 'error',
+                        key: 'global-toast',
+                        life: 5000,
+                        closable: true,
+                        detail: 'Unable to send email reset. Please check your email and password and try again.',
+                    });
+                });
         } else {
             this.messageService.add({
                 severity: 'error',
                 key: 'global-toast',
                 life: 5000,
                 closable: true,
-                detail: 'Please enter a valid email address and try again.',
+                detail: 'Incorrect password or email. Please try again.',
             });
         }
-        this.passwordVerification = '';
-        this.displayProfileModal = false;
     }
 
-    public onChangePasswordSelected() {}
+    public onChangePasswordSelected(password: string) {
+        this.userService
+            .updatePassword(password)
+            .then(() => {
+                this.passwordVerification = '';
+                this.displayPasswordModal = false;
+            })
+            .catch((error: Error) => {
+                this.messageService.add({
+                    severity: 'error',
+                    key: 'global-toast',
+                    life: 5000,
+                    closable: true,
+                    detail: 'Unable to send password reset email. Please check your password and try again.',
+                });
+            });
+    }
 }

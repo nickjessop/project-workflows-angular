@@ -202,7 +202,7 @@ export class AuthenticationService {
                 .then(() => {
                     return true;
                 })
-                .catch((err: any) => {
+                .catch((error: Error) => {
                     this.messageService.add({
                         severity: 'error',
                         key: 'global-toast',
