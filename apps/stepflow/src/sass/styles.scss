@@ -189,12 +189,12 @@ button {
     border-color: var(--text-color);
     color: var(--text-color);
 }
-.p-button.p-button-secondary,
-.p-buttonset.p-button-secondary > .p-button,
-.p-splitbutton.p-button-secondary > .p-button {
-    border-color: var(--text-color);
-    color: var(--text-color);
-}
+// .p-button.p-button-secondary,
+// .p-buttonset.p-button-secondary > .p-button,
+// .p-splitbutton.p-button-secondary > .p-button {
+//     border-color: var(--text-color);
+//     color: var(--text-color);
+// }
 .p-inputtext:enabled:focus,
 .p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box.p-focus,
 .p-button:focus,
