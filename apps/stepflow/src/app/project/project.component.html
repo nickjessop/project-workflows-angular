@@ -9,7 +9,7 @@
     </div>
 </div>
 
-<div class="projects p-py-3">
+<div class="projects">
     <ng-container *ngIf="isLoadingProjects; else showProjects">
         <div class="p-d-flex p-jc-center p-py-6">
             <p-progressSpinner></p-progressSpinner>
@@ -17,7 +17,11 @@
     </ng-container>
 
     <ng-template #showProjects>
-        <div class="container p-px-5" *ngIf="projects?.length; else showNoProjects">
+        <div
+            class="container p-p-5 p-shadow-4"
+            *ngIf="projects?.length; else showNoProjects"
+            [ngStyle]="{ backgroundColor: 'var(--surface-a)', borderRadius: 'var(--border-radius-lg)' }"
+        >
             <p-tabView>
                 <p-tabPanel header="All projects">
                     <p-table [value]="projects" styleClass="p-datatable-gridlines p-datatable-lg p-py-3">
@@ -43,7 +47,7 @@
             </p-tabView>
         </div>
         <ng-template #showNoProjects>
-            <div class="p-py-3">Looks like you're not a part of any projects yet.</div>
+            <div class="p-py-3 p-text-center">Looks like you're not a part of any projects yet.</div>
         </ng-template>
     </ng-template>
     <p-confirmDialog header="Delete Project?" icon="pi pi-exclamation-triangle"></p-confirmDialog>

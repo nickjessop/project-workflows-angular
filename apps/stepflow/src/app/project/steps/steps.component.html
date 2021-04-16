@@ -1,4 +1,4 @@
-<div class="steps-container p-mt-5 p-ml-5 p-mr-3 p-py-3 p-px-3">
+<div class="steps-container p-mt-5 p-ml-5 p-mr-3 p-py-3 p-px-3 p-shadow-2">
     <div class="p-d-flex p-ai-center p-jc-between p-pb-2">
         <div class="p-text-uppercase ms-01">Steps</div>
         <button
@@ -14,11 +14,11 @@
             <div *ngFor="let stepConfig of steps; index as i" class="steps">
                 <div
                     cdkDrag
-                    class="step p-d-flex p-jc-between p-mb-3 p-p-2"
+                    class="step p-d-flex p-jc-between p-ai-center p-mb-3 p-p-2"
                     [class.step-selected]="stepConfig.step.isCurrentStep"
                     (click)="onStepPress(i)"
                 >
-                    <div class="step-status p-d-flex p-jc-center">
+                    <div class="step-status p-d-flex p-ai-center p-jc-center">
                         <ng-container
                             *ngIf="stepConfig.step.status && stepConfig.step.status.value != 'no-status'; else nostatus"
                         >
