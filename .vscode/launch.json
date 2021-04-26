@@ -1,0 +1,20 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    // {
+    //     "name": "Debug API",
+    //     "type": "node",
+    //     "request": "attach",
+    //     "port": 58433
+    //   }
+    {
+        "type": "node",
+        "request": "launch",
+        "name": "Launch API and Debug",
+        "program": "${workspaceFolder}/apps/api/src/main.ts"
+    }
+  ]
+}

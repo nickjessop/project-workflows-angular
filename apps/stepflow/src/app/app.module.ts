@@ -1,6 +1,6 @@
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -23,6 +23,7 @@ import { StepDialogComponent } from './project/step-dialog/step-dialog.component
 import { StepsComponent } from './project/steps/steps.component';
 import { ViewerComponent } from './project/viewer/viewer.component';
 import { ProtectedRoutingModule } from './protected-routing.module';
+import { ApiService } from './services/api/api.service';
 
 @NgModule({
     declarations: [
@@ -54,7 +55,13 @@ import { ProtectedRoutingModule } from './protected-routing.module';
         FormsModule,
         DragDropModule,
     ],
-    providers: [],
+    providers: [
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: ApiService,
+            multi: true,
+        },
+    ],
     bootstrap: [AppComponent],
     exports: [SliceEllipsisPipe],
 })
