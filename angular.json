@@ -23,7 +23,10 @@
                         "polyfills": "apps/stepflow/src/polyfills.ts",
                         "tsConfig": "apps/stepflow/tsconfig.app.json",
                         "aot": false,
-                        "assets": ["apps/stepflow/src/favicon.ico", "apps/stepflow/src/assets"],
+                        "assets": [
+                            "apps/stepflow/src/favicon.ico",
+                            "apps/stepflow/src/assets"
+                        ],
                         "styles": [
                             "node_modules/primeng/resources/themes/saga-blue/theme.css",
                             "node_modules/primeng/resources/primeng.min.css",
@@ -34,9 +37,13 @@
                             "apps/stepflow/src/sass/styles.scss"
                         ],
                         "stylePreprocessorOptions": {
-                            "includePaths": ["apps/stepflow/src/sass"]
+                            "includePaths": [
+                                "apps/stepflow/src/sass"
+                            ]
                         },
-                        "scripts": ["node_modules/quill/dist/quill.js"]
+                        "scripts": [
+                            "node_modules/quill/dist/quill.js"
+                        ]
                     },
                     "configurations": {
                         "production": {
@@ -87,8 +94,13 @@
                 "lint": {
                     "builder": "@angular-devkit/build-angular:tslint",
                     "options": {
-                        "tsConfig": ["apps/stepflow/tsconfig.app.json", "apps/stepflow/tsconfig.spec.json"],
-                        "exclude": ["**/node_modules/**"]
+                        "tsConfig": [
+                            "apps/stepflow/tsconfig.app.json",
+                            "apps/stepflow/tsconfig.spec.json"
+                        ],
+                        "exclude": [
+                            "**/node_modules/**"
+                        ]
                     }
                 }
             }
@@ -113,7 +125,9 @@
                     "builder": "@angular-devkit/build-angular:tslint",
                     "options": {
                         "tsConfig": "apps/stepflow-e2e/tsconfig.json",
-                        "exclude": ["**/node_modules/**"]
+                        "exclude": [
+                            "**/node_modules/**"
+                        ]
                     }
                 }
             }
@@ -131,7 +145,10 @@
                             "libs/shared/interfaces/tsconfig.lib.json",
                             "libs/shared/interfaces/tsconfig.spec.json"
                         ],
-                        "exclude": ["**/node_modules/**", "!libs/shared/interfaces/**"]
+                        "exclude": [
+                            "**/node_modules/**",
+                            "!libs/shared/interfaces/**"
+                        ]
                     }
                 },
                 "test": {
@@ -157,7 +174,9 @@
                         "outputPath": "dist/apps/api",
                         "main": "apps/api/src/main.ts",
                         "tsConfig": "apps/api/tsconfig.app.json",
-                        "assets": ["apps/api/src/assets"]
+                        "assets": [
+                            "apps/api/src/assets"
+                        ]
                     },
                     "configurations": {
                         "production": {
@@ -176,14 +195,21 @@
                 "serve": {
                     "builder": "@nrwl/node:execute",
                     "options": {
-                        "buildTarget": "api:build"
+                        "buildTarget": "api:build",
+                        "inspect": true
                     }
                 },
                 "lint": {
                     "builder": "@angular-devkit/build-angular:tslint",
                     "options": {
-                        "tsConfig": ["apps/api/tsconfig.app.json", "apps/api/tsconfig.spec.json"],
-                        "exclude": ["**/node_modules/**", "!apps/api/**"]
+                        "tsConfig": [
+                            "apps/api/tsconfig.app.json",
+                            "apps/api/tsconfig.spec.json"
+                        ],
+                        "exclude": [
+                            "**/node_modules/**",
+                            "!apps/api/**"
+                        ]
                     }
                 },
                 "test": {
