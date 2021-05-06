@@ -228,6 +228,8 @@ export class AuthenticationService {
             '06T4lgj7x1emjUEMCmPnJYPFjum2',
             'iIeZlcLjmebZSoEMuquh4F2htN92',
             'LkkX7f9yheRFHNwZkoCHhMb6AmC2',
+            'S09Ert0pOpRKdb7pnc4rXFfyeWe2',
+            'o24opqInUhbxnC9MFywy3YLLBE03',
         ];
 
         from(this.firebaseService.getAuthInstance()!.signInWithEmailAndPassword(email, password)).subscribe(
