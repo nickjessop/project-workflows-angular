@@ -166,7 +166,7 @@ export type ComponentType =
     | 'table'
     | 'embed';
 
-export type ComponentMode = 'edit' | 'view' | 'interact';
+export type ComponentMode = 'edit' | 'view' | 'configure';
 
 export type ComponentMetadata = Checkboxes | FileUploader | ImageUploader | RichTextInput | TextInput | Table | Embed;
 
