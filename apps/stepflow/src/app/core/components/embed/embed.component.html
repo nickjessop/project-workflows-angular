@@ -1,7 +1,10 @@
 <app-base-field [field]="field" [index]="index" [resizable]="true">
     <ng-container *ngIf="componentMode === 'view'">
-        <div class="view" *ngIf="embedData.data.value[0].href; else placeholder">
-            <iframe [src]="cleanUrl" allowfullscreen class="p-mb-2" frameBorder="0" style="height: 100%;"></iframe>
+        <div
+            class="view p-d-flex p-flex-column p-mb-2"
+            *ngIf="embedData.data.value[0].href && domain.hostname != ''; else placeholder"
+        >
+            <iframe [src]="cleanUrl" allowfullscreen frameBorder="0"></iframe>
             <div class="p-mt-2 p-d-flex p-ai-center">
                 <i class="pi pi-external-link p-mr-2"></i>
                 <a [href]="embedData.data.value[0].href" target="_blank">{{ domain.hostname }}</a>
