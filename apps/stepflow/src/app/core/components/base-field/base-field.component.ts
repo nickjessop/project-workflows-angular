@@ -33,7 +33,6 @@ export class BaseFieldComponent {
 
     ngOnInit() {
         this.updateHeight(this.field.metadata.settings?.height);
-        console.log(this.componentMode);
     }
 
     public onDeleteBlock() {

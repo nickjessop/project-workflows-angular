@@ -23,6 +23,8 @@ export class ProjectService {
     );
     public readonly projectMode$ = this._projectMode.asObservable();
 
+    public projectMode: ComponentMode = 'view';
+
     // private _currentStepConfig: BehaviorSubject<StepConfig | undefined> = new BehaviorSubject<StepConfig | undefined>(
     //     this._projectConfig.value.configuration?.[0]
     // );
@@ -374,8 +376,10 @@ export class ProjectService {
                         })
                     ) {
                         this._projectMode.next('view');
+                        this.projectMode = 'view';
                     } else {
                         this._projectMode.next('edit');
+                        this.projectMode = 'edit';
                     }
 
                     const currentStepSet = project.configuration?.some(stepConfig => {

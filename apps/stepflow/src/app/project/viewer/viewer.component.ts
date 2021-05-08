@@ -37,6 +37,9 @@ export class ViewerComponent implements OnInit {
             })
         );
 
+        // Here we set the mode of the project, we can go further and set individual modes per component
+        this.componentMode = this.projectService.projectMode;
+
         this.subscriptions.add(
             this.projectService.projectMode$.subscribe(componentMode => {
                 if (componentMode) {
