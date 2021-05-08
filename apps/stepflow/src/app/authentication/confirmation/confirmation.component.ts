@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'app-confirmation',
@@ -8,7 +9,12 @@ import { Component, OnInit } from '@angular/core';
 export class ConfirmationComponent implements OnInit {
     public msg: string =
         'I just joined the waitlist for Stepflow, an upcoming app that lets you collaborate more efficiently with people outside your organization. Read more at';
-    constructor() {}
+    public authPlan: string = 'Essential';
+    constructor(private activatedRoute: ActivatedRoute) {}
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        this.activatedRoute.queryParams.subscribe(params => {
+            this.authPlan = params['plan'] || 'Essential';
+        });
+    }
 }

@@ -107,7 +107,11 @@ export class AuthenticationService {
     public register(email: string, password: string, firstName: string, lastName: string, plan: UserPlan) {
         from(this.createUserAndAttachMetadata(email, password, firstName, lastName, plan)).subscribe(
             success => {
-                this.router.navigate(['/auth/confirmation']);
+                if (plan != 'Essential') {
+                    this.router.navigate(['/auth/confirmation?plan=' + plan]);
+                } else {
+                    this.router.navigate(['/auth/confirmation']);
+                }
             },
             error => {
                 const msg = {
