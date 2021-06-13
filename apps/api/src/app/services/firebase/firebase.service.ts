@@ -25,4 +25,20 @@ export class FirebaseService {
             return;
         }
     }
+
+    public async updateUser(user: { id: string; email: string; firstName: string; lastName: string; plan?: UserPlan }) {
+        // const updatedUser = await admin
+        //     .auth()
+        //     .updateUser(user.id, { email: user.email, displayName: `${user.firstName} ${user.lastName}` });
+
+        const _updatedUser = await admin
+            .firestore()
+            .collection('users')
+            .doc(user.id)
+            .update({ firstName: user.firstName, lastName: user.lastName, email: user.email, plan: user.plan });
+
+        return _updatedUser;
+    }
 }
+
+export type UserPlan = 'Plus' | 'Growth' | 'Essential' | 'Free';
