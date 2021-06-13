@@ -13,6 +13,6 @@ import { FirebaseService } from './services/firebase/firebase.service';
 })
 export class AppModule implements NestModule {
     configure(consumer: MiddlewareConsumer) {
-        consumer.apply(AuthenticationMiddleware).forRoutes('project');
+        consumer.apply(AuthenticationMiddleware).forRoutes('project', 'user');
     }
 }

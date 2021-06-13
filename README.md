@@ -6,7 +6,14 @@ Install npm version 6.10.2 and node 12.9.1.
 
 ## Development server
 
+For Angular CLI
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+
+For NX CLI
+Run `nx serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+
+For running NX CLI without it install globally
+Run `npm run nx serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
 ## Code scaffolding
 
