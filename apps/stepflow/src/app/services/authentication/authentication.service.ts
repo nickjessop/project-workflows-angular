@@ -136,6 +136,7 @@ export class AuthenticationService {
         lastName: string,
         plan: UserPlan
     ) {
+        console.log(email);
         const firebaseAuth = this.firebaseService.getAuthInstance();
         return firebaseAuth.setPersistence('local').then(() => {
             firebaseAuth
@@ -150,9 +151,10 @@ export class AuthenticationService {
                     this.user = parsedUser;
                     const updateUserMetadata = this.firebaseService
                         .getFunctionsInstance()
-                        .httpsCallable('updateUserMetadata', {});
+                        .httpsCallable('updateUserMetadata');
+                    // .httpsCallable('updateUserMetadata', {});
 
-                    return from(updateUserMetadata({ firstName, lastName, plan }));
+                    return from(updateUserMetadata({ firstName, lastName, plan, email }));
                 })
                 .then(() => {
                     this.getCurrentUser()!.updateProfile({
@@ -190,7 +192,27 @@ export class AuthenticationService {
         }
     }
 
-    public setUserMetaData(photoFilePath: string, plan: string, firstName: string, lastName: string) {
+    public getUserGroupMetaData(projectMembers: string[]) {
+        const members: User[] = [];
+        return this.firebaseService
+            .getDbInstance()
+            .collection('users')
+            .where(this.firebaseService.getFieldPathId(), 'in', projectMembers)
+            .get()
+            .then(querySnapshot => {
+                querySnapshot.forEach(doc => {
+                    const data = doc.data() as User;
+                    members.push({ ...data, id: doc.id });
+                });
+                return members;
+            })
+            .catch(error => {
+                console.log('Error getting documents: ', error);
+                return undefined;
+            });
+    }
+
+    public setUserMetaData(photoFilePath: string, plan: string, firstName: string, lastName: string, email: string) {
         if (this.user) {
             const userRef = this.firebaseService
                 .getDbInstance()
@@ -202,6 +224,7 @@ export class AuthenticationService {
                     plan: plan,
                     firstName: firstName,
                     lastName: lastName,
+                    email: email,
                 })
                 .then(() => {
                     return true;

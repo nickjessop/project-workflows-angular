@@ -124,13 +124,29 @@ button {
     font-family: 'Inter', sans-serif;
 }
 
-.dialog {
+.p-dialog {
     width: 40vw;
 }
 
 @media screen and (max-width: 40em) {
-    .dialog {
+    .p-dialog {
         width: 75vw;
+    }
+}
+
+.share-dialog.p-dialog {
+    width: 85vw;
+}
+
+@media screen and (min-width: 70em) {
+    .share-dialog.p-dialog {
+        width: 60vw;
+    }
+}
+
+@media screen and (min-width: 90em) {
+    .share-dialog.p-dialog {
+        width: 45vw;
     }
 }
 

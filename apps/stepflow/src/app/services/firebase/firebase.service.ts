@@ -43,6 +43,7 @@ export class FirebaseService {
     };
     private readonly functions: firebase.functions.Functions;
     private readonly storage: firebase.storage.Storage;
+    private readonly fieldPathId: firebase.firestore.FieldPath;
 
     constructor() {
         firebase.initializeApp(this.stepflowAppFirebaseConfig);
@@ -57,6 +58,8 @@ export class FirebaseService {
         this.functions = firebase.functions();
 
         this.storage = firebase.storage();
+
+        this.fieldPathId = firebase.firestore.FieldPath.documentId();
     }
 
     public getDbInstance() {
@@ -77,5 +80,9 @@ export class FirebaseService {
 
     public getStorageInstance() {
         return this.storage;
+    }
+
+    public getFieldPathId() {
+        return this.fieldPathId;
     }
 }

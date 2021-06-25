@@ -12,7 +12,7 @@ exports.updateUserMetadata = functions.https.onCall((data, context) => {
         .firestore()
         .collection(USER_DOCUMENT_PATH)
         .doc(context.auth.uid)
-        .set({ firstName: data.firstName, lastName: data.lastName, plan: data.plan }, { merge: true })
+        .set({ firstName: data.firstName, lastName: data.lastName, plan: data.plan, email: data.email }, { merge: true })
         .then(success => {
         return {};
     }, err => {
