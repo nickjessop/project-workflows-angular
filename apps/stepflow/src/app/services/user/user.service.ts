@@ -27,6 +27,7 @@ export class UserService {
         const photoFilePath = userDetails.photoFilePath || '';
         const firstName = userDetails.firstName || '';
         const lastName = userDetails.lastName || '';
+        const email = userDetails.email || '';
         if (this.currentUser) {
             this.currentUser
                 .updateProfile({
@@ -35,7 +36,7 @@ export class UserService {
                 })
                 .then(
                     () => {
-                        this.authService.setUserMetaData(photoFilePath, plan, firstName, lastName);
+                        this.authService.setUserMetaData(photoFilePath, plan, firstName, lastName, email);
                         this.messageService.add({
                             severity: 'success',
                             key: 'global-toast',
@@ -96,6 +97,7 @@ export class UserService {
     }
 
     public updateEmail(email: string, userProvidedPassword: string): Promise<any> {
+        // TODO: update email in user collection as well.. or switch to a different Auth provider?
         return new Promise((resolve, reject) => {
             const actionCodeSettings = {
                 url: 'https://app.stepflow.co/profile',

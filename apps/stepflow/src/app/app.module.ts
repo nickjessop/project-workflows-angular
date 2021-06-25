@@ -24,6 +24,7 @@ import { StepsComponent } from './project/steps/steps.component';
 import { ViewerComponent } from './project/viewer/viewer.component';
 import { ProtectedRoutingModule } from './protected-routing.module';
 import { ApiService } from './services/api/api.service';
+import { ShareComponent } from './project/share/share.component';
 
 @NgModule({
     declarations: [
@@ -42,6 +43,7 @@ import { ApiService } from './services/api/api.service';
         ProfileComponent,
         AuthenticationComponent,
         ConfirmationComponent,
+        ShareComponent,
     ],
     imports: [
         ProtectedRoutingModule,

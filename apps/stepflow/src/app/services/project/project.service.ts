@@ -5,7 +5,7 @@ import * as _ from 'lodash';
 import { BehaviorSubject, from } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { BlockConfig, ComponentMode, createBlockConfig } from '../../core/interfaces/core-component';
-import { Project, Role, Status, Step, StepConfig } from '../../models/interfaces/project';
+import { Project, ProjectUsers, Role, Status, Step, StepConfig } from '../../models/interfaces/project';
 import { AuthenticationService } from '../authentication/authentication.service';
 import { FirebaseService } from '../firebase/firebase.service';
 
@@ -46,17 +46,19 @@ export class ProjectService {
         this._projectConfig.next(project);
     }
 
-    private setProject(project: Project) {
+    private async setProject(project: Project) {
         const projectCopy1 = _.cloneDeep(this.projectConfig);
         const projectCopy2 = _.cloneDeep(project);
 
         const didProjectChange = this.areProjectsDifferent(projectCopy1, projectCopy2);
 
         if (didProjectChange) {
-            this.updateProject(project);
+            const updateResult = await this.updateProject(project);
+            this.projectConfig = project;
+            return updateResult;
+        } else {
+            return false;
         }
-
-        this.projectConfig = project;
     }
 
     private areProjectsDifferent(project1: Project, project2: Project) {
@@ -74,7 +76,10 @@ export class ProjectService {
         const project1Len = project1.configuration?.length || 0;
         const project2Len = project2.configuration?.length || 0;
 
-        if (project1Len !== project2Len) {
+        const project1RolesLen = project1.memberRoles?.length || 0;
+        const project2RolesLen = project2.memberRoles?.length || 0;
+
+        if (project1Len !== project2Len || project1RolesLen !== project2RolesLen) {
             return true;
         }
 
@@ -97,6 +102,19 @@ export class ProjectService {
                 return true;
             }
             if (JSON.stringify(step1) !== JSON.stringify(step2)) {
+                return true;
+            }
+        }
+
+        for (let i = 0; i < (project1.memberRoles || []).length; i++) {
+            const roles1 = project1.memberRoles?.[i];
+            const roles2 = project2.memberRoles?.[i];
+
+            if (!roles2 || !roles1) {
+                return true;
+            }
+
+            if (JSON.stringify(roles1) !== JSON.stringify(roles2)) {
                 return true;
             }
         }
@@ -260,6 +278,23 @@ export class ProjectService {
         );
     }
 
+    public async getProjectUserDetails(projectMemberRoles: Project['memberRoles']) {
+        const memberIds = projectMemberRoles.map(member => {
+            return member.userId;
+        });
+        const projectMembersDetails = await this.authenticationService.getUserGroupMetaData(memberIds);
+
+        const memberList: ProjectUsers[] | undefined = projectMembersDetails?.map(projectMember => {
+            const found = projectMemberRoles.find(_member => {
+                return _member.userId === projectMember.id;
+            });
+
+            return { ...projectMember, ...found };
+        });
+
+        return memberList;
+    }
+
     public addProjectBlock(projectBlock: BlockConfig) {
         const currentStepIndex = this.getCurrentStepIndex() || 0;
 
@@ -354,6 +389,14 @@ export class ProjectService {
         );
     }
 
+    public async updateProjectRoles(projectRoles: { userId: string; role: Role }[]) {
+        const _projectConfig = _.cloneDeep(this.projectConfig);
+        _projectConfig.memberRoles = projectRoles;
+
+        const setResult = await this.setProject(_projectConfig);
+        return setResult;
+    }
+
     public subscribeAndSetProject(projectId: string) {
         this.unsubscribeToProjectListener = this.firebaseService
             .getDbInstance()!
@@ -371,7 +414,7 @@ export class ProjectService {
                         project.memberRoles.some(member => {
                             return (
                                 member.userId === this.authenticationService.user?.id &&
-                                ['guest', 'viewer'].includes(member.role)
+                                ['viewer'].includes(member.role)
                             );
                         })
                     ) {

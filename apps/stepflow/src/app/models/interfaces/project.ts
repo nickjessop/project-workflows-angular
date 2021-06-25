@@ -1,4 +1,5 @@
 import { BlockConfig } from '../../core/interfaces/core-component';
+import { User } from '../../services/authentication/authentication.service';
 
 export interface Project {
     name: string;
@@ -7,6 +8,11 @@ export interface Project {
     members: string[];
     memberRoles: Array<{ userId: string; role: Role }>;
     id?: string;
+}
+
+export interface ProjectUsers extends User {
+    userId?: string;
+    role?: Role;
 }
 
 export interface StepConfig {
@@ -23,7 +29,13 @@ export interface Step {
     isCurrentStep?: boolean;
     status: Status;
 }
-export type Role = 'owner' | 'admin' | 'editor' | 'viewer' | 'guest';
+
+// owner: creator of the project
+// creator: can configure project details, steps, and blocks
+// editor: can edit the content within blocks
+// viewer: read-only access to entire project
+// (future) commenter: read-only + ability to leave comments
+export type Role = 'owner' | 'creator' | 'editor' | 'viewer';
 
 export type Status = typeof NoStatus | typeof InProgress | typeof NeedsReview | typeof Upcoming | typeof Complete;
 
