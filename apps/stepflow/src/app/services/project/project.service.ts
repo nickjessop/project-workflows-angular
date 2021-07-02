@@ -46,21 +46,24 @@ export class ProjectService {
         this._projectConfig.next(project);
     }
 
-    private async setProject(project: Project) {
+    private async setProject(project: Project, persistChange = true) {
         const projectCopy1 = _.cloneDeep(this.projectConfig);
         const projectCopy2 = _.cloneDeep(project);
 
-        const didProjectChange = this.areProjectsDifferent(projectCopy1, projectCopy2);
-
-        if (didProjectChange) {
-            const updateResult = await this.updateProject(project);
-            this.projectConfig = project;
-            return updateResult;
+        if (persistChange) {
+            const didProjectChange = this.areProjectsDifferent(projectCopy1, projectCopy2);
+            if (didProjectChange) {
+                const updateResult = await this.updateProject(project);
+                return updateResult;
+            } else {
+                return true;
+            }
         } else {
-            return false;
+            this.projectConfig = project;
+
+            return true;
         }
     }
-
     private areProjectsDifferent(project1: Project, project2: Project) {
         // Drop values we shouldn't save or compare
         project1.configuration?.forEach(config => {
@@ -369,7 +372,7 @@ export class ProjectService {
             _projectConfig.configuration![0].step.isCurrentStep = true;
         }
 
-        this.setProject(_projectConfig);
+        this.setProject(_projectConfig, false);
     }
 
     public getProjects() {
