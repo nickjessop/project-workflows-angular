@@ -1,23 +1,46 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-// The Firebase Admin SDK to access Cloud Firestore.
+exports.invitationEmail = void 0;
+// // Start writing Firebase Functions
+// // https://firebase.google.com/docs/functions/typescript
+//
+// export const helloWorld = functions.https.onRequest((request, response) => {
+//   functions.logger.info("Hello logs!", {structuredData: true});
+//   response.send("Hello from Firebase!");
+// });
+// firebase deploy --only functions
+const sgMail = require("@sendgrid/mail");
 const admin = require("firebase-admin");
 const functions = require("firebase-functions");
 admin.initializeApp();
-const USER_DOCUMENT_PATH = 'users';
-// const PROJECT_DOCUMENT_PATH = 'projects' as const;
-exports.updateUserMetadata = functions.https.onCall((data, context) => {
+// const db = admin.firestore();
+const API_KEY = functions.config().sendgrid.key;
+const TEMPLATE_ID = functions.config().sendgrid.template;
+sgMail.setApiKey(API_KEY);
+// Sends invitation email via HTTP
+exports.invitationEmail = functions.https.onCall(async (data, context) => {
     isAuthenticated(context);
-    admin
-        .firestore()
-        .collection(USER_DOCUMENT_PATH)
-        .doc(context.auth.uid)
-        .set({ firstName: data.firstName, lastName: data.lastName, plan: data.plan, email: data.email }, { merge: true })
-        .then(success => {
-        return {};
-    }, err => {
-        throw new functions.https.HttpsError('internal', 'An error occurred while updating user');
+    const emails = [];
+    data.emails.map((email) => {
+        emails.push({ to: email });
     });
+    const msg = {
+        personalizations: emails,
+        from: { email: 'noreply@stepflow.co', name: 'Stepflow' },
+        templateId: TEMPLATE_ID,
+        dynamic_template_data: {
+            subject: data.subject,
+            fromEmail: data.fromEmail,
+            projectName: data.projectName,
+            projectSender: data.projectSender,
+            projectLink: data.projectLink,
+            projectRole: data.projectRole,
+        },
+    };
+    await sgMail.send(msg);
+    // Handle errors here
+    // Response must be JSON serializable
+    return { success: true };
 });
 function isAuthenticated(context) {
     var _a;

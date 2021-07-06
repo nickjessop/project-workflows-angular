@@ -6,20 +6,41 @@
     focusTrap="true"
     modal="true"
 >
-    <div class="p-mt-1 p-inputgroup">
-        <input type="text" pInputText placeholder="Email" />
-        <button type="button" pButton pRipple label="Share" class="p-button"></button>
+    <div class="p-mt-1 p-d-flex p-jc-between">
+        <div style="flex: 1">
+            <p-chips
+                [(ngModel)]="invitationEmails"
+                [style]="{ height: '36px', minWidth: '100%' }"
+                (onAdd)="validateEmails()"
+                (onRemove)="validateEmails()"
+            ></p-chips>
+        </div>
+        <div>
+            <p-dropdown
+                appendTo="body"
+                [options]="roles"
+                [(ngModel)]="invitationRole"
+                [style]="{ width: '150px', textAlign: 'left' }"
+                styleClass="p-mx-2"
+            ></p-dropdown>
+            <button type="button" pButton label="Share" class="p-button" (click)="onSendInvitationsSelected()"></button>
+        </div>
     </div>
+    <p-message
+        *ngIf="emailValidationMsg != ''"
+        severity="error"
+        text="{{ emailValidationMsg }}"
+        styleClass="p-mt-2"
+    ></p-message>
+
     <div class="ms-01 p-mt-4 p-mb-2 p-text-uppercase p-text-bold">Shared with</div>
     <p-table styleClass="p-datatable-sm" [value]="projectOwners">
         <ng-template pTemplate="body" let-user>
             <tr>
                 <td style="width: 30%">{{ user.firstName }} {{ user.lastName }}</td>
-                <td style="width: 50%">{{ user.email }}</td>
+                <td style="width: 40%">{{ user.email }}</td>
                 <td>
-                    <i [style]="{ width: '150px', height: '31px', display: 'block', textAlign: 'center' }">{{
-                        user.role
-                    }}</i>
+                    <i [style]="{ height: '32px', display: 'block', textAlign: 'center' }">{{ user.role }}</i>
                 </td>
             </tr>
         </ng-template>
@@ -42,16 +63,21 @@
         </ng-template>
     </p-table>
 
-    <div class="p-d-flex p-jc-end p-ai-center p-mt-4" *ngIf="displayDialogSave">
-        <i class="p-mr-2">Pending changes</i>
-        <button
-            type="button"
-            pButton
-            pRipple
-            label="Save"
-            class="p-button"
-            (click)="onSavePermissionsSelected()"
-        ></button>
+    <div class="p-d-flex p-jc-end p-ai-center p-mt-4">
+        <ng-container *ngIf="displayDialogSave; else dialogDone"
+            ><i class="p-mr-2">Pending changes</i>
+            <button
+                type="button"
+                pButton
+                pRipple
+                label="Save"
+                class="p-button"
+                (click)="onSavePermissionsSelected()"
+            ></button>
+        </ng-container>
+        <ng-template #dialogDone>
+            <button type="button" pButton pRipple label="Done" class="p-button" (click)="hideShareDialog()"></button>
+        </ng-template>
     </div>
 
     <!-- <div class="ms-01 p-mt-3 p-text-uppercase p-text-bold">Shareable link</div>

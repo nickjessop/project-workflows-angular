@@ -320,4 +320,33 @@ export class AuthenticationService {
             }
         });
     }
+
+    public findUsersMatchingEmail(emails: string[]) {
+        // Firebase SDK limitation: 'in' supports up to 10 comparison values
+        const newMembers: string[] = [];
+        let pendingMembers: any[] = [];
+        const foundMembers: string[] = [];
+        return this.firebaseService
+            .getDbInstance()
+            .collection('users')
+            .where('email', 'in', emails)
+            .get()
+            .then(querySnapshot => {
+                querySnapshot.forEach(doc => {
+                    console.log('doc', doc);
+                    if (doc.id != '' || doc.id != undefined) {
+                        newMembers.push(doc.id);
+                        const data = doc.data() as User;
+                        const docEmail = data.email || '';
+                        foundMembers.push(docEmail);
+                    }
+                });
+                pendingMembers = emails.filter(e => !foundMembers.includes(e));
+                return { newMembers: newMembers, pendingMembers: pendingMembers };
+            })
+            .catch(error => {
+                console.log('Error getting documents: ', error);
+                return undefined;
+            });
+    }
 }
