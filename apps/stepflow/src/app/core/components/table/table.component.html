@@ -1,4 +1,9 @@
-<app-base-field [field]="field" [index]="index">
+<project-drag
+    [isDraggable]="componentMode === 'configure'"
+    [(field)]="field"
+    [componentMode]="componentMode"
+    [index]="index"
+>
     <ng-container *ngIf="componentMode === 'view'">
         <div class="table view">
             <p-table [resizableColumns]="true" [value]="tableValues?.row" styleClass="p-datatable-gridlines">
@@ -25,7 +30,7 @@
             </p-table>
         </div>
     </ng-container>
-    <ng-container *ngIf="componentMode === 'edit'">
+    <ng-container *ngIf="componentMode === 'edit' || componentMode === 'configure'">
         <p-contextMenu #cm [model]="menuItems" appendTo="body"></p-contextMenu>
         <div class="table" aria-haspopup="true">
             <p-table
@@ -85,4 +90,4 @@
             </p-table>
         </div>
     </ng-container>
-</app-base-field>
+</project-drag>

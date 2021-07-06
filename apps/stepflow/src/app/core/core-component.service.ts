@@ -7,7 +7,7 @@ import { ImageUploaderComponent } from './components/image-uploader/image-upload
 import { RichTextInputComponent } from './components/rich-text-input/rich-text-input.component';
 import { TableComponent } from './components/table/table.component';
 import { TextInputComponent } from './components/text-input/text-input.component';
-import { BlockConfig, ComponentType } from './interfaces/core-component';
+import { BlockConfig, ComponentMode, ComponentType } from './interfaces/core-component';
 
 @Injectable({
     providedIn: 'root',
@@ -18,13 +18,20 @@ export class CoreComponentService {
         private viewContainerRef: ViewContainerRef
     ) {}
 
-    public resolveComponent(componentType: ComponentType, index: number, field: BlockConfig, group: FormGroup) {
+    public resolveComponent(
+        componentType: ComponentType,
+        index: number,
+        field: BlockConfig,
+        group: FormGroup,
+        componentMode: ComponentMode
+    ) {
         if (componentType === 'fileUploader') {
             const factory = this.componentFactoryResolver.resolveComponentFactory(FileUploaderComponent);
             const _componentRef = this.viewContainerRef.createComponent<FileUploaderComponent>(factory);
             _componentRef.instance.field = field;
             _componentRef.instance.group = group;
             _componentRef.instance.index = index;
+            _componentRef.instance.componentMode = componentMode;
 
             return _componentRef;
         } else if (componentType === 'checkboxes') {
@@ -33,6 +40,7 @@ export class CoreComponentService {
             _componentRef.instance.index = index;
             // _componentRef.instance.field = this.field;
             // _componentRef.instance.group = this.group;
+            _componentRef.instance.componentMode = componentMode;
 
             return _componentRef;
         } else if (componentType === 'imageUploader') {
@@ -41,6 +49,7 @@ export class CoreComponentService {
             _componentRef.instance.field = field;
             _componentRef.instance.group = group;
             _componentRef.instance.index = index;
+            _componentRef.instance.componentMode = componentMode;
 
             return _componentRef;
         } else if (componentType === 'richTextInput') {
@@ -49,6 +58,7 @@ export class CoreComponentService {
             _componentRef.instance.field = field;
             _componentRef.instance.group = group;
             _componentRef.instance.index = index;
+            _componentRef.instance.componentMode = componentMode;
 
             return _componentRef;
         } else if (componentType === 'textInput') {
@@ -57,6 +67,7 @@ export class CoreComponentService {
             _componentRef.instance.field = field;
             _componentRef.instance.group = group;
             _componentRef.instance.index = index;
+            _componentRef.instance.componentMode = componentMode;
 
             return _componentRef;
         } else if (componentType === 'table') {
@@ -65,6 +76,7 @@ export class CoreComponentService {
             _componentRef.instance.field = field;
             _componentRef.instance.group = group;
             _componentRef.instance.index = index;
+            _componentRef.instance.componentMode = componentMode;
 
             return _componentRef;
         } else if (componentType === 'embed') {
@@ -73,6 +85,7 @@ export class CoreComponentService {
             _componentRef.instance.field = field;
             _componentRef.instance.group = group;
             _componentRef.instance.index = index;
+            _componentRef.instance.componentMode = componentMode;
 
             return _componentRef;
         }

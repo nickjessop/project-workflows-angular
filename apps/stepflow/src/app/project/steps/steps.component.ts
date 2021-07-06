@@ -125,7 +125,6 @@ export class StepsComponent implements OnInit {
     public onDialogSubmitEvent($event: { step?: Step; mode: 'edit' | 'new' | 'delete' }) {
         this.showDialog = false;
 
-        console.log($event);
         const mode = $event.mode;
         if (mode === 'edit') {
             console.log('Edit submit event called', $event);

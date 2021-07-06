@@ -1,4 +1,4 @@
-<app-base-field [field]="field" [index]="index">
+<project-drag [isDraggable]="componentMode === 'configure'" [(field)]="field" [index]="index">
     <ng-container *ngIf="componentMode === 'view'">
         <div class="checkboxes checkboxes--view mb-2">
             <div class="p-d-flex p-ai-center p-pl-2 p-py-3 checkbox" *ngFor="let val of field.metadata.data.value">
@@ -7,8 +7,8 @@
             </div>
         </div>
     </ng-container>
-    <ng-container *ngIf="componentMode === 'edit'">
-        <div class="checkboxes checkboxes--edit" cdkDropList (cdkDropListDropped)="drop($event)">
+    <ng-container *ngIf="componentMode === 'edit' || componentMode === 'configure'">
+        <div class="checkboxes checkboxes--edit">
             <div
                 class="p-d-flex p-ai-center p-pl-2 p-py-2 checkbox"
                 *ngFor="let val of field.metadata.data.value; index as index"
@@ -54,4 +54,4 @@
             </div>
         </p-toolbar>
     </ng-container>
-</app-base-field>
+</project-drag>

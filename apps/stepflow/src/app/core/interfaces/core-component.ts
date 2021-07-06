@@ -7,7 +7,7 @@ export interface Validator {
 }
 
 export interface BlockConfig {
-    label?: string;
+    label: string;
     name: string;
     metadata: ComponentMetadata;
 }
