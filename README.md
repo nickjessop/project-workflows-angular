@@ -13,6 +13,11 @@ For NX CLI
 Run `nx serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
 For running NX CLI without it install globally
+
+Run `npm run stepflow` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+OR
+Run `npm run stepflow-api` for a API dev server. API route at `http://localhost:3333/api/`.
+OR
 Run `npm run nx serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
 ## Code scaffolding
