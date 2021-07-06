@@ -205,6 +205,9 @@ button {
     border-color: var(--text-color);
     color: var(--text-color);
 }
+.p-chips .p-chips-multiple-container .p-chips-token {
+    background: var(--primary-color-light);
+}
 // .p-button.p-button-secondary,
 // .p-buttonset.p-button-secondary > .p-button,
 // .p-splitbutton.p-button-secondary > .p-button {
@@ -217,16 +220,19 @@ button {
 .p-column-filter-menu-button:focus,
 .p-breadcrumb ul li .p-menuitem-link:focus,
 .p-contextmenu .p-menuitem-link:focus,
-.p-menu .p-menuitem-link:focus {
+.p-menu .p-menuitem-link:focus,
+.p-chips ul.p-chips-multiple-container:focus {
     box-shadow: 0 0 0 0.2rem var(--primary-color-light);
     border-color: transparent;
 }
-.p-dropdown:not(.p-disabled).p-focus {
+.p-dropdown:not(.p-disabled).p-focus,
+.p-chips .p-chips-multiple-container:not(.p-disabled).p-focus {
     box-shadow: 0 0 0 0.2rem var(--primary-color-light);
     border-color: var(--primary-color);
 }
 .p-inputtext:enabled:focus,
-.p-inputtext:enabled:hover {
+.p-inputtext:enabled:hover,
+.p-chips .p-chips-multiple-container:not(.p-disabled):hover {
     border-color: var(--primary-color);
 }
 

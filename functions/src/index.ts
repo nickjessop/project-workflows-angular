@@ -1,6 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.invitationEmail = void 0;
 // // Start writing Firebase Functions
 // // https://firebase.google.com/docs/functions/typescript
 //
@@ -9,19 +6,22 @@ exports.invitationEmail = void 0;
 //   response.send("Hello from Firebase!");
 // });
 // firebase deploy --only functions
-const sgMail = require("@sendgrid/mail");
-const admin = require("firebase-admin");
-const functions = require("firebase-functions");
+import * as sgMail from '@sendgrid/mail';
+import * as admin from 'firebase-admin';
+import * as functions from 'firebase-functions';
 admin.initializeApp();
 // const db = admin.firestore();
+
 const API_KEY = functions.config().sendgrid.key;
 const TEMPLATE_ID = functions.config().sendgrid.template;
+
 sgMail.setApiKey(API_KEY);
+
 // Sends invitation email via HTTP
-exports.invitationEmail = functions.https.onCall(async (data, context) => {
+export const invitationEmail = functions.https.onCall(async (data, context) => {
     isAuthenticated(context);
-    const emails = [];
-    data.emails.map((email) => {
+    const emails: { to: string }[] = [];
+    data.emails.map((email: string) => {
         emails.push({ to: email });
     });
     const msg = {
@@ -37,16 +37,19 @@ exports.invitationEmail = functions.https.onCall(async (data, context) => {
             projectRole: data.projectRole,
         },
     };
+
     await sgMail.send(msg);
+
     // Handle errors here
+
     // Response must be JSON serializable
     return { success: true };
 });
-function isAuthenticated(context) {
+
+function isAuthenticated(context: functions.https.CallableContext) {
     var _a;
     const uid = (_a = context.auth) === null || _a === void 0 ? void 0 : _a.uid;
     if (!uid) {
         throw new functions.https.HttpsError('unauthenticated', 'User not authenticated.');
     }
 }
-//# sourceMappingURL=index.js.map

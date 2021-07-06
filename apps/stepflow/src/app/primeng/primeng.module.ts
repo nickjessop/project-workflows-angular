@@ -7,6 +7,7 @@ import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ChipModule } from 'primeng/chip';
+import { ChipsModule } from 'primeng/chips';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ContextMenuModule } from 'primeng/contextmenu';
 import { DialogModule } from 'primeng/dialog';
@@ -60,6 +61,7 @@ import { TooltipModule } from 'primeng/tooltip';
         EditorModule,
         TooltipModule,
         ChipModule,
+        ChipsModule,
     ],
     exports: [
         AccordionModule,
@@ -88,6 +90,7 @@ import { TooltipModule } from 'primeng/tooltip';
         EditorModule,
         TooltipModule,
         ChipModule,
+        ChipsModule,
     ],
     providers: [ConfirmationService, MessageService],
 })

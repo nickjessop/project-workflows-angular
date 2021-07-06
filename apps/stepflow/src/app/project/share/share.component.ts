@@ -16,6 +16,10 @@ export class ShareComponent implements OnInit {
     public projectUsers?: ProjectUsers[];
     public projectOwners?: ProjectUsers[];
     public updatedMemberRoles?: any;
+    public invitationEmails: string[] = [];
+    public invitationRole: Role = 'viewer';
+    public allowEmailSubmission: boolean = false;
+    public emailValidationMsg: string = '';
 
     displayShareDialog: boolean = false;
     displayDialogSave: boolean = false;
@@ -46,6 +50,31 @@ export class ShareComponent implements OnInit {
         this.displayShareDialog = false;
     }
 
+    public validateEmails() {
+        const emails: boolean[] = [];
+        this.invitationEmails?.map(email => {
+            const validEmail = /\S+@\S+\.\S+/;
+            emails.push(validEmail.test(email));
+        });
+        const checkValidEmails = (emails: boolean[]) => emails.every(email => email === true);
+        let checkDuplicateEmails = (arr: string[]) => arr.filter((e: string, i: number) => arr.indexOf(e) != i);
+        const duplicateEmails = [...new Set(checkDuplicateEmails(this.invitationEmails))];
+        if (checkValidEmails(emails) === false) {
+            this.allowEmailSubmission = false;
+            this.emailValidationMsg = 'Please enter valid emails.';
+        } else if (emails.length > 10) {
+            // emails.length > 10 required for a firebase limitation
+            this.allowEmailSubmission = false;
+            this.emailValidationMsg = 'Please enter no more than 10 emails to invite.';
+        } else if (duplicateEmails.length > 0) {
+            this.allowEmailSubmission = false;
+            this.emailValidationMsg = 'Please remove the following duplicate emails: ' + duplicateEmails;
+        } else {
+            this.allowEmailSubmission = true;
+            this.emailValidationMsg = '';
+        }
+    }
+
     public updatePermissions(event: { value: Role }, userId: string) {
         let _projectUsers = _.cloneDeep(this.projectUsers);
         let _projectOwners = _.cloneDeep(this.projectOwners);
@@ -68,6 +97,7 @@ export class ShareComponent implements OnInit {
         this.projectService.updateProjectRoles(this.updatedMemberRoles).then(
             (value: any) => {
                 if (value === true) {
+                    this.displayShareDialog = false;
                     this.displayDialogSave = false;
                     this.messageService.add({
                         key: 'global-toast',
@@ -75,16 +105,48 @@ export class ShareComponent implements OnInit {
                         detail: 'Permissions updated.',
                     });
                 } else {
+                    this.displayShareDialog = false;
+                    this.displayDialogSave = false;
                     this.messageService.add({
                         key: 'global-toast',
                         severity: 'error',
                         detail: "Can't update permissions. Please try again.",
                     });
-                    this.displayDialogSave = false;
                 }
             },
-            reason => {}
+            reason => {
+                // TODO: Error handling
+            }
         );
+    }
+
+    public onSendInvitationsSelected() {
+        if (this.invitationEmails.length != 0 && this.allowEmailSubmission === true) {
+            this.projectService.sendProjectInvitations(this.invitationEmails, this.invitationRole).then(value => {
+                if (value?.data.success === true) {
+                    this.displayShareDialog = false;
+                    this.messageService.add({
+                        key: 'global-toast',
+                        severity: 'success',
+                        detail: 'Invitations sent.',
+                    });
+                } else {
+                    this.displayShareDialog = false;
+                    this.messageService.add({
+                        key: 'global-toast',
+                        severity: 'error',
+                        detail: "Can't send invitation emails. Please try again.",
+                    });
+                }
+            });
+        } else {
+            this.messageService.add({
+                key: 'global-toast',
+                severity: 'error',
+                summary: "Can't send invitation emails.",
+                detail: 'Please make sure you have entered valid emails. The number of emails must be 10 or less.',
+            });
+        }
     }
 
     // copyInputMessage(linkInput: any) {

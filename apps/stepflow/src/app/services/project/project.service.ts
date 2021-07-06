@@ -153,6 +153,7 @@ export class ProjectService {
             description,
             memberRoles: [{ userId, role: 'owner' }],
             members: [userId],
+            pendingMembers: [],
             configuration: config,
         };
 
@@ -442,6 +443,69 @@ export class ProjectService {
                     this.router.navigate(['404']);
                 }
             );
+    }
+
+    public async sendProjectInvitations(emails: string[], role: Role) {
+        const addMemberResult = await this.addNewProjectMembers(emails, role);
+        if (addMemberResult === false) {
+            return undefined;
+        }
+        const callable = this.firebaseService.getFunctionsInstance().httpsCallable('invitationEmail');
+        return callable({
+            emails: emails,
+            subject: `${this.projectConfig?.name} - Invitation to collaborate`,
+            projectName: `${this.projectConfig?.name}`,
+            projectSender: `${this.authenticationService.getCurrentUser()?.displayName}`,
+            projectRole: `${role}`,
+            fromEmail:
+                this.authenticationService.getCurrentUser()?.email ||
+                this.authenticationService.getCurrentUser()?.displayName ||
+                '',
+            projectLink: `https://app.stepflow.co/project/${this.projectConfig.id}`,
+        }).then(
+            (response: { data: { success: boolean } }) => {
+                console.log(response);
+                return response;
+            },
+            (error: Error) => {
+                return undefined;
+            }
+        );
+    }
+
+    public async addNewProjectMembers(emails: string[], role: Role) {
+        return this.authenticationService
+            .findUsersMatchingEmail(emails)
+            .then(async users => {
+                const _projectConfig = _.cloneDeep(this.projectConfig);
+                const newMembers: { userId: string; role: Role }[] = [];
+                const pendingMembers: { email: string; role: Role }[] = [];
+                users?.newMembers.map(member => {
+                    return newMembers.push({ userId: member, role: role || 'viewer' });
+                });
+                users?.pendingMembers.map(member => {
+                    return pendingMembers.push({ email: member, role: role || 'viewer' });
+                });
+                if (users?.newMembers) {
+                    _projectConfig.members = _.union(_projectConfig.members, users.newMembers);
+                    _projectConfig.memberRoles = _.union(_projectConfig.memberRoles, newMembers);
+                }
+                if (_projectConfig.pendingMembers && users?.pendingMembers) {
+                    _projectConfig.pendingMembers = _.union(_projectConfig.pendingMembers, users.pendingMembers);
+                }
+                const setResult = await this.setProject(_projectConfig);
+                return setResult;
+            })
+            .catch(function(error: Error) {
+                // TODO handle error
+                return false;
+            });
+    }
+
+    public checkPendingMembers() {
+        if (this.projectConfig.pendingMembers) {
+            // TODO
+        }
     }
 
     private isReadOnlyRole(projectMemberRoles: { userId: string; role: Role }[]) {}

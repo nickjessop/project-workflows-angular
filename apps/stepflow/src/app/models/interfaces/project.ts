@@ -7,6 +7,7 @@ export interface Project {
     configuration?: StepConfig[];
     members: string[];
     memberRoles: Array<{ userId: string; role: Role }>;
+    pendingMembers?: Array<{ email: string; role: Role }>;
     id?: string;
 }
 
