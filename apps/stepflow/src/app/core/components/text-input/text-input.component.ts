@@ -1,31 +1,80 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { AngularResizeElementDirection, AngularResizeElementEvent } from 'angular-resize-element';
+import { MenuItem } from 'primeng/api';
 import { ProjectService } from '../../../services/project/project.service';
-import { ComponentSettings, createComponentMetadataTemplate, TextInput } from '../../interfaces/core-component';
-import { BaseFieldComponent } from '../base-field/base-field.component';
+import {
+    BlockConfig,
+    ComponentMode,
+    ComponentSettings,
+    createComponentMetadataTemplate,
+    TextInput,
+} from '../../interfaces/core-component';
 
 @Component({
     selector: 'app-text-input',
     templateUrl: './text-input.component.html',
     styleUrls: ['./text-input.component.scss'],
 })
-export class TextInputComponent extends BaseFieldComponent implements OnInit {
-    // @Input() field: FieldConfig = createFieldConfig();
+export class TextInputComponent implements OnInit {
     @Input() group!: FormGroup;
-    // @Input() componentMode: ComponentMode = 'view';
-    // @Input() index = 0;
+    @Input() field!: BlockConfig;
+    @Input() index = 0;
+    @Input() resizable?: boolean;
+    @Input() componentMode?: ComponentMode;
 
     public textInputData = createComponentMetadataTemplate('textInput') as TextInput;
     public settings?: ComponentSettings;
 
-    constructor(public projectService: ProjectService) {
-        super(projectService);
-    }
+    constructor(private projectService: ProjectService) {}
+
+    public height?: number;
+    public readonly AngularResizeElementDirection = AngularResizeElementDirection;
+
+    public items: MenuItem[] = [
+        {
+            label: 'Delete Block',
+            icon: 'pi pi-times',
+            command: () => {
+                this.onDeleteBlock();
+            },
+        },
+    ];
 
     ngOnInit() {
-        this.textInputData = this.field.metadata as TextInput;
+        this.textInputData = this.field?.metadata as TextInput;
         this.settings = this.textInputData.settings;
-        // console.log('aaaa', this.settings,)
+    }
+
+    public onDeleteBlock() {
+        const index = this.index ? this.index : 0;
+        this.projectService.deleteProjectBlock(index);
+    }
+
+    public dragStarted() {
+        this.projectService.setBlockDrag(true);
+    }
+
+    public dragFinished() {
+        this.projectService.setBlockDrag(false);
+    }
+
+    private updateHeight(height: number = 400) {
+        if (!this.resizable) {
+            return;
+        }
+        this.height = height;
+        this.field.metadata.settings = { ...this.field.metadata.settings, height: height };
+    }
+
+    public onResize(evt: AngularResizeElementEvent): void {
+        this.height = evt.currentHeightValue;
+    }
+
+    public onResizeEnd(evt: AngularResizeElementEvent): void {
+        const height = evt.currentHeightValue;
+        this.updateHeight(height);
+        this.projectService.syncProject();
     }
 
     onFocusOut(event: { srcElement: { clientHeight: string } }) {

@@ -18,12 +18,8 @@ export class ProjectService {
     public readonly projectConfig$ = this._projectConfig.asObservable();
     public isDragging: EventEmitter<boolean> = new EventEmitter();
 
-    private _projectMode: BehaviorSubject<ComponentMode | undefined> = new BehaviorSubject<ComponentMode | undefined>(
-        undefined
-    );
+    private _projectMode: BehaviorSubject<ComponentMode> = new BehaviorSubject<ComponentMode>('view');
     public readonly projectMode$ = this._projectMode.asObservable();
-
-    public projectMode: ComponentMode = 'view';
 
     // private _currentStepConfig: BehaviorSubject<StepConfig | undefined> = new BehaviorSubject<StepConfig | undefined>(
     //     this._projectConfig.value.configuration?.[0]
@@ -46,6 +42,13 @@ export class ProjectService {
         this._projectConfig.next(project);
     }
 
+    public get projectMode() {
+        return this._projectMode.getValue();
+    }
+
+    public set projectMode(mode: ComponentMode) {
+        this._projectMode.next(mode);
+    }
     private async setProject(project: Project, persistChange = true) {
         const projectCopy1 = _.cloneDeep(this.projectConfig);
         const projectCopy2 = _.cloneDeep(project);
@@ -401,6 +404,7 @@ export class ProjectService {
     }
 
     public subscribeAndSetProject(projectId: string) {
+        // this.firebaseService.getDbInstance()!.collection(this.PROJECT_COLLECTION_NAME).doc(projectId).onSnapshot()
         this.unsubscribeToProjectListener = this.firebaseService
             .getDbInstance()!
             .collection(this.PROJECT_COLLECTION_NAME)
@@ -422,10 +426,17 @@ export class ProjectService {
                         })
                     ) {
                         this._projectMode.next('view');
-                        this.projectMode = 'view';
+                    } else if (
+                        project.memberRoles.some(member => {
+                            return (
+                                member.userId === this.authenticationService.user?.id && ['owner'].includes(member.role)
+                            );
+                        })
+                    ) {
+                        this._projectMode.next('configure');
+                        // this._projectMode.next('edit');
                     } else {
                         this._projectMode.next('edit');
-                        this.projectMode = 'edit';
                     }
 
                     const currentStepSet = project.configuration?.some(stepConfig => {
@@ -446,8 +457,6 @@ export class ProjectService {
                 }
             );
     }
-
-    private isReadOnlyRole(projectMemberRoles: { userId: string; role: Role }[]) {}
 
     public resetProject() {
         this.projectConfig = this.createBaseProject('', '', '');

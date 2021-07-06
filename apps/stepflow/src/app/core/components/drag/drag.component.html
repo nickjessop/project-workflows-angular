@@ -1,4 +1,7 @@
-<ng-container *ngIf="componentMode === 'configure'; else showDefault">
+<!-- <ng-container *ngIf="isDraggable; else showDefault">
+</ng-container>
+<ng-template #showDefault></ng-template> -->
+<ng-container *ngIf="componentMode === 'configure' || componentMode === 'edit'; else showView">
     <div
         class="field p-mb-3 p-py-4 p-px-2"
         cdkDrag
@@ -7,7 +10,7 @@
         (cdkDragReleased)="dragFinished()"
         [style.height.px]="height"
     >
-        <div class="field__handle"><i class="pi pi-drag" cdkDragHandle></i></div>
+        <div *ngIf="isDraggable" class="field__handle"><i class="pi pi-drag" cdkDragHandle></i></div>
         <div
             class="resize resize__bottom--right"
             (resize)="onResize($event)"
@@ -20,7 +23,7 @@
             <div class="field__label">
                 <p-inplace closable="true" closeIcon="pi pi-check">
                     <ng-template pTemplate="display">
-                        {{ field?.label ? field.label : 'Untitled block' }}
+                        {{ field.label ? field.label : '(Untitled block)' }}
                     </ng-template>
                     <ng-template pTemplate="content">
                         <input type="text" class="p-inputtext" [(ngModel)]="field.label" pInputText />
@@ -39,17 +42,18 @@
             </div>
         </div>
         <div class="field__description mb-2 ms-01">Description</div>
-        <ng-content></ng-content>
+        <ng-container *ngTemplateOutlet="transposedContent"></ng-container>
     </div>
 </ng-container>
-<ng-template #showDefault>
+<ng-template #showView>
     <div class="field p-mb-3 p-py-4 p-px-2" #fieldContainer [style.height.px]="height">
         <div class="p-d-flex p-jc-between p-ai-center p-mb-2">
             <div class="field__label p-ml-2 p-mb-2">
-                {{ field?.label ? field.label : 'Untitled block' }}
+                {{ field.label ? field.label : '(Untitled block)' }}
             </div>
         </div>
         <div class="field__description mb-2 ms-01">Description</div>
-        <ng-content></ng-content>
+        <ng-container *ngTemplateOutlet="transposedContent"></ng-container>
     </div>
 </ng-template>
+<ng-template #transposedContent><ng-content></ng-content></ng-template>
