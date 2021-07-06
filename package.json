@@ -5,6 +5,8 @@
         "ng": "ng",
         "start": "ng serve",
         "build": "ng build",
+        "stepflow": "nx serve stepflow",
+        "stepflow-api": "nx serve api",
         "build-auth-prod": "ng build authentication --prod",
         "build-stepflow-prod": "ng build stepflow --prod",
         "auth-app": "ng serve authentication",

@@ -1,4 +1,9 @@
-<app-base-field [field]="field" [index]="index">
+<project-drag
+    [isDraggable]="componentMode === 'configure'"
+    [(field)]="field"
+    [componentMode]="componentMode"
+    [index]="index"
+>
     <ng-container *ngIf="componentMode === 'view'">
         <div class="text view">
             <textarea
@@ -11,7 +16,7 @@
             ></textarea>
         </div>
     </ng-container>
-    <ng-container *ngIf="componentMode === 'edit'">
+    <ng-container *ngIf="componentMode === 'edit' || componentMode === 'configure'">
         <div class="text edit">
             <textarea
                 pInputTextarea
@@ -25,4 +30,4 @@
             </textarea>
         </div>
     </ng-container>
-</app-base-field>
+</project-drag>

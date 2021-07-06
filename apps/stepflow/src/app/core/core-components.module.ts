@@ -8,6 +8,7 @@ import { AngularResizeElementModule } from 'angular-resize-element';
 import { PrimengModule } from '../primeng/primeng.module';
 import { BaseFieldComponent } from './components/base-field/base-field.component';
 import { CheckboxesComponent } from './components/checkboxes/checkboxes.component';
+import { DragComponent } from './components/drag/drag.component';
 import { DynamicFormComponent } from './components/dynamic-form/dynamic-form.component';
 import { EmbedComponent } from './components/embed/embed.component';
 import { FileUploaderComponent } from './components/file-uploader/file-uploader.component';
@@ -29,6 +30,7 @@ import { CoreComponentResolverDirective } from './core-component-resolver.direct
         CheckboxesComponent,
         BaseFieldComponent,
         EmbedComponent,
+        DragComponent,
     ],
     imports: [
         CommonModule,
@@ -49,6 +51,7 @@ import { CoreComponentResolverDirective } from './core-component-resolver.direct
         DynamicFormComponent,
         CheckboxesComponent,
         EmbedComponent,
+        DragComponent,
     ],
     entryComponents: [
         RichTextInputComponent,
@@ -59,6 +62,7 @@ import { CoreComponentResolverDirective } from './core-component-resolver.direct
         DynamicFormComponent,
         CheckboxesComponent,
         EmbedComponent,
+        DragComponent,
     ],
 })
 export class CoreComponentsModule {}

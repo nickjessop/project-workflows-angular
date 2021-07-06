@@ -1,4 +1,9 @@
-<app-base-field [field]="field" [index]="index">
+<project-drag
+    [isDraggable]="componentMode === 'configure'"
+    [(field)]="field"
+    [componentMode]="componentMode"
+    [index]="index"
+>
     <ng-container *ngIf="componentMode === 'view'">
         <div class="rich-text view">
             <div
@@ -7,7 +12,7 @@
             ></div>
         </div>
     </ng-container>
-    <ng-container *ngIf="componentMode === 'edit'">
+    <ng-container *ngIf="componentMode === 'edit' || componentMode === 'configure'">
         <div class="rich-text edit">
             <p-editor
                 placeholder="Add content"
@@ -27,4 +32,4 @@
             </p-editor>
         </div>
     </ng-container>
-</app-base-field>
+</project-drag>

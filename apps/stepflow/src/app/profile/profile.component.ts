@@ -23,7 +23,6 @@ export class ProfileComponent implements OnInit {
 
     ngOnInit() {
         this.userDetails = this.authService.user!;
-        console.log(this.userDetails);
     }
 
     showDialog(modal: string) {
@@ -47,7 +46,6 @@ export class ProfileComponent implements OnInit {
 
     public onChangeEmailSelected(password: string) {
         const currentEmail = this.authService.getCurrentUser()?.email;
-        console.log('profile' + this.userDetails.email + currentEmail);
         if (this.userDetails.email && this.userDetails.email != currentEmail) {
             this.userService
                 .updateEmail(this.userDetails.email, password)

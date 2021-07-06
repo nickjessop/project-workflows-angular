@@ -10,10 +10,10 @@
         <ng-container
             *ngFor="let field of fields; index as index"
             appCoreComponentResolver
+            [componentMode]="componentMode"
             [field]="field"
             [group]="form"
             [index]="index"
-            [componentMode]="componentMode"
         ></ng-container>
     </ng-container>
     <ng-template #showEmptyState>
