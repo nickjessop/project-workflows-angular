@@ -1,4 +1,9 @@
-<app-base-field [field]="field" [index]="index">
+<project-drag
+    [isDraggable]="componentMode === 'configure'"
+    [(field)]="field"
+    [componentMode]="componentMode"
+    [index]="index"
+>
     <ng-container *ngIf="componentMode === 'view'">
         <p-table
             [scrollable]="true"
@@ -52,7 +57,7 @@
             </ng-template>
         </p-table>
     </ng-container>
-    <ng-container *ngIf="componentMode === 'edit'">
+    <ng-container *ngIf="componentMode === 'edit' || componentMode === 'configure'">
         <p-table
             [scrollable]="true"
             [rows]="20"
@@ -164,4 +169,4 @@
             <button type="button" label="Save" pButton (click)="updateFileMetadata(this.dialogData)"></button>
         </ng-template>
     </p-dialog>
-</app-base-field>
+</project-drag>

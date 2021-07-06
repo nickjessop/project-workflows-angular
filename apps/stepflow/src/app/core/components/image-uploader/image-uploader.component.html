@@ -1,4 +1,9 @@
-<app-base-field [field]="field" [index]="index">
+<project-drag
+    [isDraggable]="componentMode === 'configure'"
+    [(field)]="field"
+    [componentMode]="componentMode"
+    [index]="index"
+>
     <ng-container *ngIf="componentMode === 'view'">
         <div class="images">
             <div *ngFor="let image of imageData; let index = index" class="images__item" key="index">
@@ -11,7 +16,7 @@
             </div>
         </div>
     </ng-container>
-    <ng-container *ngIf="componentMode === 'edit'">
+    <ng-container *ngIf="componentMode === 'edit' || componentMode === 'configure'">
         <div class="images view p-p-2">
             <div *ngFor="let image of imageData; let index = index" class="images__item" key="index">
                 <img [src]="image.thumbnail" [alt]="image.description" (click)="imageClick(index)" />
@@ -141,4 +146,4 @@
             </div>
         </ng-template>
     </p-galleria>
-</app-base-field>
+</project-drag>

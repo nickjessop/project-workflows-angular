@@ -18,12 +18,8 @@ export class ProjectService {
     public readonly projectConfig$ = this._projectConfig.asObservable();
     public isDragging: EventEmitter<boolean> = new EventEmitter();
 
-    private _projectMode: BehaviorSubject<ComponentMode | undefined> = new BehaviorSubject<ComponentMode | undefined>(
-        undefined
-    );
+    private _projectMode: BehaviorSubject<ComponentMode> = new BehaviorSubject<ComponentMode>('view');
     public readonly projectMode$ = this._projectMode.asObservable();
-
-    public projectMode: ComponentMode = 'view';
 
     // private _currentStepConfig: BehaviorSubject<StepConfig | undefined> = new BehaviorSubject<StepConfig | undefined>(
     //     this._projectConfig.value.configuration?.[0]
@@ -46,21 +42,31 @@ export class ProjectService {
         this._projectConfig.next(project);
     }
 
-    private async setProject(project: Project) {
+    public get projectMode() {
+        return this._projectMode.getValue();
+    }
+
+    public set projectMode(mode: ComponentMode) {
+        this._projectMode.next(mode);
+    }
+    private async setProject(project: Project, persistChange = true) {
         const projectCopy1 = _.cloneDeep(this.projectConfig);
         const projectCopy2 = _.cloneDeep(project);
 
-        const didProjectChange = this.areProjectsDifferent(projectCopy1, projectCopy2);
-
-        if (didProjectChange) {
-            const updateResult = await this.updateProject(project);
-            this.projectConfig = project;
-            return updateResult;
+        if (persistChange) {
+            const didProjectChange = this.areProjectsDifferent(projectCopy1, projectCopy2);
+            if (didProjectChange) {
+                const updateResult = await this.updateProject(project);
+                return updateResult;
+            } else {
+                return true;
+            }
         } else {
-            return false;
+            this.projectConfig = project;
+
+            return true;
         }
     }
-
     private areProjectsDifferent(project1: Project, project2: Project) {
         // Drop values we shouldn't save or compare
         project1.configuration?.forEach(config => {
@@ -370,7 +376,7 @@ export class ProjectService {
             _projectConfig.configuration![0].step.isCurrentStep = true;
         }
 
-        this.setProject(_projectConfig);
+        this.setProject(_projectConfig, false);
     }
 
     public getProjects() {
@@ -399,6 +405,7 @@ export class ProjectService {
     }
 
     public subscribeAndSetProject(projectId: string) {
+        // this.firebaseService.getDbInstance()!.collection(this.PROJECT_COLLECTION_NAME).doc(projectId).onSnapshot()
         this.unsubscribeToProjectListener = this.firebaseService
             .getDbInstance()!
             .collection(this.PROJECT_COLLECTION_NAME)
@@ -420,10 +427,17 @@ export class ProjectService {
                         })
                     ) {
                         this._projectMode.next('view');
-                        this.projectMode = 'view';
+                    } else if (
+                        project.memberRoles.some(member => {
+                            return (
+                                member.userId === this.authenticationService.user?.id && ['owner'].includes(member.role)
+                            );
+                        })
+                    ) {
+                        this._projectMode.next('configure');
+                        // this._projectMode.next('edit');
                     } else {
                         this._projectMode.next('edit');
-                        this.projectMode = 'edit';
                     }
 
                     const currentStepSet = project.configuration?.some(stepConfig => {

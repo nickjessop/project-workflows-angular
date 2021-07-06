@@ -31,13 +31,22 @@ export class ApiService implements HttpInterceptor {
         return this.http.get(`${this.API_URL}project`);
     }
 
-    public get(path: string) {}
+    public get(url: string, id?: string) {
+        const _url = id ? `${url}/${id}` : url;
 
-    public post() {}
+        return this.http.get(_url);
+    }
 
-    public put() {}
+    public post(url: string, payload?: any) {
+        return this.http.post(url, payload);
+    }
 
-    public delete() {}
+    public put(url: string, payload?: any) {
+        return this.http.put(url, payload);
+    }
 
-    public patch() {}
+    public delete(url: string, id?: string) {
+        const _url = id ? `${url}/${id}` : url;
+        return this.http.delete(_url);
+    }
 }

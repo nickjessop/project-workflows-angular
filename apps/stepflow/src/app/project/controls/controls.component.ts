@@ -36,8 +36,6 @@ export class ControlsComponent implements OnInit {
     }
 
     public onSelectNewBlock(blockType: ComponentType) {
-        console.log(`adding new block: ${blockType}`);
-        // const componentMetadata = createComponentMetadataTemplate(blockType);
         this.addNewBlock(blockType);
     }
 

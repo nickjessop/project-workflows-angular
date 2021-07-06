@@ -1,22 +1,34 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { AngularResizeElementDirection, AngularResizeElementEvent } from 'angular-resize-element';
 import * as mime from 'mime';
 import { MenuItem, MessageService } from 'primeng/api';
 import { FileUpload } from 'primeng/fileupload';
 import { map, switchMap } from 'rxjs/operators';
 import { ProjectService } from '../../../services/project/project.service';
 import { StorageService } from '../../../services/storage/storage.service';
-import { FileUploader, Link } from '../../interfaces/core-component';
-import { BaseFieldComponent } from '../base-field/base-field.component';
+import {
+    BlockConfig,
+    ComponentMode,
+    ComponentSettings,
+    createBlockConfig,
+    FileUploader,
+    Link,
+} from '../../interfaces/core-component';
 
 @Component({
     selector: 'app-file-uploader',
     templateUrl: './file-uploader.component.html',
     styleUrls: ['./file-uploader.component.scss'],
 })
-export class FileUploaderComponent extends BaseFieldComponent implements OnInit {
-    @Input() group!: FormGroup;
+export class FileUploaderComponent implements OnInit {
     @ViewChild('fileUploader', { static: true }) fileUploaderButton!: FileUpload;
+
+    @Input() group!: FormGroup;
+    @Input() componentMode?: ComponentMode;
+    @Input() index = 0;
+    @Input() field: BlockConfig = createBlockConfig('textInput');
+    @Input() resizable?: boolean;
 
     public cols = [
         { field: 'title', header: 'Name', size: '30' },
@@ -32,17 +44,58 @@ export class FileUploaderComponent extends BaseFieldComponent implements OnInit 
     public fileDialogMode = 'upload';
 
     constructor(
-        public projectService: ProjectService,
         private storageService: StorageService,
-        private messageService: MessageService
-    ) {
-        super(projectService);
-    }
+        private messageService: MessageService,
+        private projectService: ProjectService
+    ) {}
 
     ngOnInit() {
         this.fileData = (this.field.metadata as FileUploader).data.value;
     }
+    public height?: number;
+    public settings?: ComponentSettings;
+    public readonly AngularResizeElementDirection = AngularResizeElementDirection;
 
+    public items: MenuItem[] = [
+        {
+            label: 'Delete Block',
+            icon: 'pi pi-times',
+            command: () => {
+                this.onDeleteBlock();
+            },
+        },
+    ];
+
+    public onDeleteBlock() {
+        const index = this.index ? this.index : 0;
+        this.projectService.deleteProjectBlock(index);
+    }
+
+    public dragStarted() {
+        this.projectService.setBlockDrag(true);
+    }
+
+    public dragFinished() {
+        this.projectService.setBlockDrag(false);
+    }
+
+    private updateHeight(height: number = 400) {
+        if (!this.resizable) {
+            return;
+        }
+        this.height = height;
+        this.field.metadata.settings = { ...this.field.metadata.settings, height: height };
+    }
+
+    public onResize(evt: AngularResizeElementEvent): void {
+        this.height = evt.currentHeightValue;
+    }
+
+    public onResizeEnd(evt: AngularResizeElementEvent): void {
+        const height = evt.currentHeightValue;
+        this.updateHeight(height);
+        this.projectService.syncProject();
+    }
     public getFileMenuItems(index: number, file: Link): MenuItem[] {
         return [
             {

@@ -15,7 +15,7 @@ import { BlockConfig, ComponentMode, ComponentType } from './interfaces/core-com
 export class CoreComponentResolverDirective implements OnInit {
     @Input() field!: BlockConfig;
     @Input() group!: FormGroup;
-    @Input() componentMode: ComponentMode = 'edit';
+    @Input() componentMode!: ComponentMode;
     @Input() index = 0;
 
     componentRef?: ComponentRef<

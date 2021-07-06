@@ -136,7 +136,6 @@ export class AuthenticationService {
         lastName: string,
         plan: UserPlan
     ) {
-        console.log(email);
         const firebaseAuth = this.firebaseService.getAuthInstance();
         return firebaseAuth.setPersistence('local').then(() => {
             firebaseAuth
