@@ -15,21 +15,11 @@
             max-height: 100%;
             overflow: auto;
             background: var(--surface-b);
+            .step-container {
+                background: white;
+                border-radius: 6px;
+                min-height: calc(100vh - 130px);
+            }
         }
     }
-}
-.beta-tag {
-    position: absolute;
-    bottom: 10px;
-    left: 10px;
-    color: red;
-    text-transform: uppercase;
-    font-weight: bold;
-    opacity: 0.8;
-}
-
-:host ::ng-deep .p-chip.custom-chip {
-    background: var(--primary-color);
-    color: var(--primary-color-text);
-    font-size: 10px;
 }

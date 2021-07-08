@@ -4,12 +4,13 @@
             <div class="navigation-logo p-col-6 p-d-flex p-ai-center">
                 <i class="pi pi-chevron-left p-pr-2 navigation__back" [routerLink]="['/project']"></i>
                 <img
-                    src="/assets/stepflow-logo.svg"
+                    src="/assets/stepflow-icon.svg"
                     [routerLink]="['/project']"
                     alt="Stepflow logo"
                     height="26px"
                     class="navigation__back-link"
                 />
+                <p-chip label="Beta" styleClass="p-ml-2 custom-chip"></p-chip>
                 <div class="navigation__divider p-mx-3"></div>
                 <div class="ms-1 p-text-bold">{{ project.name }}</div>
             </div>
