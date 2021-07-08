@@ -1,9 +1,8 @@
 .control {
     position: sticky;
-    height: calc(100vh - (50px + 3.5rem + 60px)); //step controls + padding + top nav
+    height: calc(100vh - (50px + 60px)); //step controls + top nav
     top: 0;
     left: 0;
-    margin-top: 50px;
     &__button {
         width: auto;
         margin-right: auto;
