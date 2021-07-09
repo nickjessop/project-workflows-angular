@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import { Project } from '../models/interfaces/project';
@@ -29,11 +28,7 @@ export class NavBarComponent implements OnInit {
     public navMode: 'default' | 'project' = 'default';
     public project?: Project;
 
-    constructor(
-        private authService: AuthenticationService,
-        private projectService: ProjectService,
-        private router: Router
-    ) {}
+    constructor(private authService: AuthenticationService, private projectService: ProjectService) {}
 
     ngOnInit(): void {
         this.items = [
@@ -93,11 +88,8 @@ export class NavBarComponent implements OnInit {
     }
 
     private logout() {
-        this.authService.logout().subscribe(() => {
-            this.authService.user = undefined;
-            this.authenticated = false;
-            this.router.navigate(['/auth/login']);
-        });
+        this.authService.logout(true);
+        this.authenticated = false;
     }
 
     displaySettingsDialog: boolean = false;

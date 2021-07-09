@@ -18,7 +18,12 @@ export class ProtectedGuard implements CanActivate {
             take(1),
             switchMap(status => {
                 const user = this.authenticationService.user;
-                if (user === undefined || user === null) {
+                if (
+                    user === undefined ||
+                    user === null ||
+                    !this.authenticationService.allowedUserIds.includes(user.id || '')
+                ) {
+                    this.authenticationService.logout(true);
                     this.router.navigate(['/auth/login']);
                     return of(false);
                 } else {

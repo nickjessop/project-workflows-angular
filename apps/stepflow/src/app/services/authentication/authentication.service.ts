@@ -120,6 +120,10 @@ export class AuthenticationService {
                 } else {
                     this.router.navigate(['/auth/confirmation']);
                 }
+
+                if (!this.allowedUserIds.includes(this.user?.id || '')) {
+                    this.logout(false);
+                }
             },
             error => {
                 const msg = {
@@ -297,8 +301,16 @@ export class AuthenticationService {
         );
     }
 
-    public logout() {
-        return from(this.firebaseService.getAuthInstance()!.signOut());
+    public logout(redirect?: boolean) {
+        this.firebaseService
+            .getAuthInstance()!
+            .signOut()
+            .then(() => {
+                this.user = undefined;
+                if (redirect) {
+                    this.router.navigate(['/auth/login']);
+                }
+            });
     }
 
     public reAuthenticateUser(userProvidedPassword: string): Promise<any> {
