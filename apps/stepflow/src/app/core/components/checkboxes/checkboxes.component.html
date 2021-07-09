@@ -1,4 +1,9 @@
-<project-drag [isDraggable]="componentMode === 'configure'" [(field)]="field" [index]="index">
+<project-drag
+    [isDraggable]="componentMode === 'configure'"
+    [(field)]="field"
+    [index]="index"
+    [componentMode]="componentMode"
+>
     <ng-container *ngIf="componentMode === 'view'">
         <div class="checkboxes checkboxes--view mb-2">
             <div class="p-d-flex p-ai-center p-pl-2 p-py-3 checkbox" *ngFor="let val of field.metadata.data.value">
