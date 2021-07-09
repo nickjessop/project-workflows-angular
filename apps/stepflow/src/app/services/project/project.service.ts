@@ -500,6 +500,7 @@ export class ProjectService {
                 users?.pendingMembers.map(member => {
                     return pendingMembers.push({ email: member, role: role || 'viewer' });
                 });
+                // combine existing members and pending members with new ones
                 if (users?.newMembers) {
                     _projectConfig.members = _.union(_projectConfig.members, users.newMembers);
                     _projectConfig.memberRoles = _.union(_projectConfig.memberRoles, newMembers);
@@ -514,12 +515,6 @@ export class ProjectService {
                 // TODO handle error
                 return false;
             });
-    }
-
-    public checkPendingMembers() {
-        if (this.projectConfig.pendingMembers) {
-            // TODO
-        }
     }
 
     private isReadOnlyRole(projectMemberRoles: { userId: string; role: Role }[]) {}
