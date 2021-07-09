@@ -1,14 +1,13 @@
 <div class="project p-d-flex p-ai-center">
-    <div class="project__row p-p-3 p-d-flex p-jc-between">
-        <td (click)="navigate()">
-            <strong>{{ projectName | sliceEllipsis: 0:80 }}</strong
-            ><br />
-            <span>{{ projectDescription | sliceEllipsis: 0:80 }}</span>
-        </td>
-        <td>
-            <span title="{{ openedDate }}">{{ openedDate | sliceEllipsis: 0:40 }}</span>
-        </td>
-        <div *ngIf="projectId?.length > 0" class="project__menu p-ml-auto">
+    <div class="project__row p-p-2 p-d-flex p-jc-between">
+        <div class="project__row--desc p-p-3" (click)="navigate()">
+            <strong>{{ projectName | sliceEllipsis: 0:80 }}</strong>
+            <div>
+                <span>{{ projectDescription | sliceEllipsis: 0:80 }}</span>
+                <span title="{{ openedDate }}">{{ openedDate | sliceEllipsis: 0:40 }}</span>
+            </div>
+        </div>
+        <div *ngIf="projectId?.length > 0" class="project__menu p-m-auto">
             <button
                 type="button"
                 class="p-button-text p-button-plain"
