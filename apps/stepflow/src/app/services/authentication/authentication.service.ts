@@ -348,4 +348,6 @@ export class AuthenticationService {
                 return undefined;
             });
     }
+
+    private checkForExistingProjects(userId: string) {}
 }

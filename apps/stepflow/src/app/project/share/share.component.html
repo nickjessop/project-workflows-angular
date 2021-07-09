@@ -23,7 +23,15 @@
                 [style]="{ width: '150px', textAlign: 'left' }"
                 styleClass="p-mx-2"
             ></p-dropdown>
-            <button type="button" pButton label="Share" class="p-button" (click)="onSendInvitationsSelected()"></button>
+            <button
+                type="button"
+                pButton
+                label="Share"
+                icon="pi pi-send"
+                class="p-button"
+                [loading]="isLoading"
+                (click)="onSendInvitationsSelected()"
+            ></button>
         </div>
     </div>
     <p-message
