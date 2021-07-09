@@ -35,6 +35,14 @@ export class AuthenticationService {
     private subscriptions = new Subscription();
     public redirectUrl = '/project';
 
+    public allowedUserIds = [
+        '06T4lgj7x1emjUEMCmPnJYPFjum2',
+        'iIeZlcLjmebZSoEMuquh4F2htN92',
+        'LkkX7f9yheRFHNwZkoCHhMb6AmC2',
+        'S09Ert0pOpRKdb7pnc4rXFfyeWe2',
+        'o24opqInUhbxnC9MFywy3YLLBE03',
+    ];
+
     constructor(
         private firebaseService: FirebaseService,
         private router: Router,
@@ -107,10 +115,14 @@ export class AuthenticationService {
     public register(email: string, password: string, firstName: string, lastName: string, plan: UserPlan) {
         from(this.createUserAndAttachMetadata(email, password, firstName, lastName, plan)).subscribe(
             success => {
-                if (plan != 'Essential') {
+                if (plan !== 'Essential') {
                     this.router.navigate(['/auth/confirmation?plan=' + plan]);
                 } else {
                     this.router.navigate(['/auth/confirmation']);
+                }
+
+                if (!this.allowedUserIds.includes(this.user?.id || '')) {
+                    this.logout(false);
                 }
             },
             error => {
@@ -180,13 +192,13 @@ export class AuthenticationService {
                     console.log('User does not exist.');
                 }
             } catch (error) {
-                this.messageService.add({
-                    severity: 'error',
-                    key: 'global-toast',
-                    life: 5000,
-                    closable: true,
-                    detail: 'Error fetching user details.',
-                });
+                // this.messageService.add({
+                //     severity: 'error',
+                //     key: 'global-toast',
+                //     life: 5000,
+                //     closable: true,
+                //     detail: 'Error fetching user details.',
+                // });
             }
         }
     }
@@ -250,19 +262,12 @@ export class AuthenticationService {
         // });
 
         // return;
-        const allowedUserIds = [
-            '06T4lgj7x1emjUEMCmPnJYPFjum2',
-            'iIeZlcLjmebZSoEMuquh4F2htN92',
-            'LkkX7f9yheRFHNwZkoCHhMb6AmC2',
-            'S09Ert0pOpRKdb7pnc4rXFfyeWe2',
-            'o24opqInUhbxnC9MFywy3YLLBE03',
-        ];
 
         from(this.firebaseService.getAuthInstance()!.signInWithEmailAndPassword(email, password)).subscribe(
             firebaseUser => {
                 const { user } = firebaseUser;
 
-                if (user && !allowedUserIds.includes(user?.uid)) {
+                if (user && !this.allowedUserIds.includes(user?.uid)) {
                     this.firebaseService.getAuthInstance()!.signOut();
 
                     this.messageService.add({
@@ -296,10 +301,16 @@ export class AuthenticationService {
         );
     }
 
-    public logout() {
-        from(this.firebaseService.getAuthInstance()!.signOut()).subscribe(success => {
-            this.router.navigate(['/auth/login']);
-        });
+    public logout(redirect?: boolean) {
+        this.firebaseService
+            .getAuthInstance()!
+            .signOut()
+            .then(() => {
+                this.user = undefined;
+                if (redirect) {
+                    this.router.navigate(['/auth/login']);
+                }
+            });
     }
 
     public reAuthenticateUser(userProvidedPassword: string): Promise<any> {
