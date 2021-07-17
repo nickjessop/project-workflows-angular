@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { AngularResizeElementDirection, AngularResizeElementEvent } from 'angular-resize-element';
+import { AngularResizeElementDirection } from 'angular-resize-element';
 import { MenuItem, MessageService } from 'primeng/api';
 import { ProjectService } from '../../../services/project/project.service';
 import {
@@ -31,8 +31,6 @@ export class EmbedComponent implements OnInit {
     public cleanUrl: SafeResourceUrl = '';
     public href = '';
     public domain: { hostname: string } = { hostname: '' };
-
-    public height?: number;
     public settings?: ComponentSettings;
     public readonly AngularResizeElementDirection = AngularResizeElementDirection;
 
@@ -97,24 +95,6 @@ export class EmbedComponent implements OnInit {
 
     public dragFinished() {
         this.projectService.setBlockDrag(false);
-    }
-
-    private updateHeight(height: number = 400) {
-        if (!this.resizable) {
-            return;
-        }
-        this.height = height;
-        this.field.metadata.settings = { ...this.field.metadata.settings, height: height };
-    }
-
-    public onResize(evt: AngularResizeElementEvent): void {
-        this.height = evt.currentHeightValue;
-    }
-
-    public onResizeEnd(evt: AngularResizeElementEvent): void {
-        const height = evt.currentHeightValue;
-        this.updateHeight(height);
-        this.projectService.syncProject();
     }
 
     public onAddNewUrlPress() {
