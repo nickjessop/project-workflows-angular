@@ -12,7 +12,10 @@
                 />
                 <p-chip label="Beta" styleClass="p-ml-2 custom-chip"></p-chip>
                 <div class="navigation__divider p-mx-3"></div>
-                <div class="ms-1 p-text-bold">{{ project.name }}</div>
+                <div class="ms-1 p-text-bold">
+                    {{ project.name }}
+                    <i class="pi pi-info-circle ms-02 text-secondary" pTooltip="{{ project.description }}"></i>
+                </div>
             </div>
             <div class="navigation-profile p-col-6 p-d-flex p-ai-center p-jc-end">
                 <div class="p-col-6 p-d-flex p-jc-end p-ai-center">
