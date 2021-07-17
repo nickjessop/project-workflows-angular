@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MenuItem } from 'primeng/api';
+import { MenuItem, MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import { Project } from '../models/interfaces/project';
 import { AuthenticationService } from '../services/authentication/authentication.service';
@@ -27,8 +27,19 @@ export class NavBarComponent implements OnInit {
 
     public navMode: 'default' | 'project' = 'default';
     public project?: Project;
+    public projectSettings: {
+        name: string;
+        description: string;
+    } = {
+        name: '',
+        description: '',
+    };
 
-    constructor(private authService: AuthenticationService, private projectService: ProjectService) {}
+    constructor(
+        private authService: AuthenticationService,
+        private projectService: ProjectService,
+        private messageService: MessageService
+    ) {}
 
     ngOnInit(): void {
         this.items = [
@@ -96,9 +107,32 @@ export class NavBarComponent implements OnInit {
 
     showSettingsDialog() {
         this.displaySettingsDialog = true;
+        this.projectSettings = {
+            name: this.project?.name || '',
+            description: this.project?.description || '',
+        };
     }
 
     hideSettingsDialog() {
         this.displaySettingsDialog = false;
+    }
+
+    onSaveSettingsSelected() {
+        this.projectService.updateProjectSettings(this.projectSettings).then(value => {
+            if (value === true) {
+                this.messageService.add({
+                    key: 'global-toast',
+                    severity: 'success',
+                    detail: 'Project details updated.',
+                });
+            } else {
+                this.messageService.add({
+                    key: 'global-toast',
+                    severity: 'error',
+                    detail: "Can't update project details. Please try again.",
+                });
+            }
+        });
+        this.hideSettingsDialog();
     }
 }

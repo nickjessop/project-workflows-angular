@@ -52,7 +52,6 @@ export class ProjectService {
     private async setProject(project: Project, persistChange = true) {
         const projectCopy1 = _.cloneDeep(this.projectConfig);
         const projectCopy2 = _.cloneDeep(project);
-
         if (persistChange) {
             const didProjectChange = this.areProjectsDifferent(projectCopy1, projectCopy2);
             if (didProjectChange) {
@@ -63,7 +62,6 @@ export class ProjectService {
             }
         } else {
             this.projectConfig = project;
-
             return true;
         }
     }
@@ -86,6 +84,10 @@ export class ProjectService {
         const project2RolesLen = project2.memberRoles?.length || 0;
 
         if (project1Len !== project2Len || project1RolesLen !== project2RolesLen) {
+            return true;
+        }
+
+        if (project1.name || project1.description !== project2.name || project2.description) {
             return true;
         }
 
@@ -310,6 +312,16 @@ export class ProjectService {
 
         // this.projectConfig = _projectConfig;
         this.setProject(_projectConfig);
+    }
+
+    public async updateProjectSettings(projectSettings: { name: string; description: string }) {
+        const _projectConfig = _.cloneDeep(this.projectConfig);
+        _projectConfig.name = projectSettings.name;
+        _projectConfig.description = projectSettings.description;
+        console.log(projectSettings);
+        const setResult = await this.setProject(_projectConfig);
+        console.log(setResult);
+        return setResult;
     }
 
     public addProjectStep(newStep: StepConfig) {
