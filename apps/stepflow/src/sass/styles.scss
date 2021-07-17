@@ -2,10 +2,11 @@
 
 // CSS RESET
 @import '~normalize.css';
-// @import url('https://fonts.googleapis.com/css?family=Roboto:400,400i,500,700&display=swap');
+
+// FONTS
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-// VARIABLES AND MIXINS
+// VARIABLES, MIXINS, UTILS
 @import 'core';
 
 :root {
@@ -282,6 +283,7 @@ button {
 }
 
 // CDK DRAG & DROP
+
 .cdk-drag-preview {
     box-sizing: border-box;
     border-radius: 4px;
