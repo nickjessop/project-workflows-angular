@@ -24,8 +24,7 @@ export class BlockPanelOverlayComponent implements OnInit {
             { enabled: true, icon: 'pi-check-square', label: 'Checklist', component: 'checkboxes' },
             { enabled: true, icon: 'pi-folder', label: 'Files', component: 'fileUploader' },
             { enabled: true, icon: 'pi-images', label: 'Images', component: 'imageUploader' },
-            { enabled: true, icon: 'pi-small-text', label: 'Text', component: 'textInput' },
-            { enabled: true, icon: 'pi-large-text', label: 'Rich Text', component: 'richTextInput' },
+            { enabled: true, icon: 'pi-large-text', label: 'Text', component: 'richTextInput' },
             { enabled: true, icon: 'pi-table', label: 'Table', component: 'table' },
             { enabled: true, icon: 'pi-embed', label: 'Embed', component: 'embed' },
         ];
