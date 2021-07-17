@@ -2,10 +2,10 @@
     <div class="navigation__content p-grid p-nogutter p-px-3">
         <ng-container *ngIf="navMode === 'project' && project">
             <div class="navigation-logo p-col-6 p-d-flex p-ai-center">
-                <i class="pi pi-chevron-left p-pr-2 navigation__back" [routerLink]="['/project']"></i>
+                <i class="pi pi-chevron-left p-pr-2 navigation__back" (click)="onBack()"></i>
                 <img
                     src="/assets/stepflow-icon.svg"
-                    [routerLink]="['/project']"
+                    (click)="onBack()"
                     alt="Stepflow logo"
                     height="26px"
                     class="navigation__back-link"

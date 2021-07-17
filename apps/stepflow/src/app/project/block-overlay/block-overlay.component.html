@@ -1,4 +1,10 @@
-<p-sidebar [(visible)]="displayBlockSidebar" position="right" appendTo="body" styleClass="block-sidebar">
+<p-sidebar
+    *ngIf="displayBlockSidebar"
+    [(visible)]="displayBlockSidebar"
+    position="right"
+    appendTo="body"
+    styleClass="block-sidebar"
+>
     <div class="p-grid p-nogutter block-overlay">
         <ng-container *ngIf="blockOptions?.length">
             <div class="p-col-4" *ngFor="let blockOption of blockOptions">

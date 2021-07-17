@@ -546,9 +546,10 @@ export class ProjectService {
         });
     }
 
-    private isReadOnlyRole(projectMemberRoles: { userId: string; role: Role }[]) {}
-
     public resetProject() {
-        this.projectConfig = this.createBaseProject('', '', '');
+        const unsub = this.unsubscribeToProjectListener ? this.unsubscribeToProjectListener() : undefined;
+        this._projectConfig.next(this.createBaseProject('', '', ''));
+        this._projectMode.next('view');
+        this.router.navigate(['/project']);
     }
 }
