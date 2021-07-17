@@ -318,9 +318,7 @@ export class ProjectService {
         const _projectConfig = _.cloneDeep(this.projectConfig);
         _projectConfig.name = projectSettings.name;
         _projectConfig.description = projectSettings.description;
-        console.log(projectSettings);
         const setResult = await this.setProject(_projectConfig);
-        console.log(setResult);
         return setResult;
     }
 
