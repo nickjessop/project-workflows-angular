@@ -35,8 +35,6 @@ export class DragComponent implements OnInit {
 
     ngOnInit() {
         this.updateHeight();
-
-        console.log('is resizable?', this.resizable);
     }
 
     public onDeleteBlock() {
