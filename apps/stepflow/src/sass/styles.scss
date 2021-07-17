@@ -150,6 +150,8 @@ button {
     }
 }
 
+// PRIME OVERRIDES
+
 .p-field > label {
     display: block;
 }
@@ -267,6 +269,16 @@ button {
 }
 .p-shadow-4 {
     box-shadow: 0 2px 4px -1px rgb(0 0 0 / 10%), 0 4px 5px 0 rgb(0 0 0 / 7%), 0 1px 10px 0 rgb(0 0 0 / 5%);
+}
+
+.block-sidebar .p-sidebar-header {
+    justify-content: space-between;
+    &:before {
+        content: 'Add block';
+        display: block;
+        font-weight: bold;
+        font-size: 1.25rem;
+    }
 }
 
 // CDK DRAG & DROP
