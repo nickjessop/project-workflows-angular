@@ -23,47 +23,43 @@
         </ng-template>
     </ng-container>
     <ng-container *ngIf="componentMode === 'edit' || componentMode === 'configure'">
-        <div>
-            <div class="edit p-d-flex p-flex-column p-mb-2">
-                <ng-container *ngIf="embedData.data.value[0].href && domain.hostname != ''; else add">
-                    <iframe [src]="cleanUrl" allowfullscreen frameBorder="0" #iframe></iframe>
-                    <div class="url p-mt-2 p-d-flex p-ai-center">
-                        <i class="pi pi-external-link p-mr-2"></i>
-                        <a [href]="embedData.data.value[0].href" target="_blank" class="p-mr-2">{{
-                            domain.hostname
-                        }}</a>
+        <div class="edit p-d-flex p-flex-column p-mb-2">
+            <ng-container *ngIf="embedData.data.value[0].href && domain.hostname != ''; else add">
+                <iframe [src]="cleanUrl" allowfullscreen frameBorder="0" #iframe></iframe>
+                <div class="url p-mt-2 p-d-flex p-ai-center">
+                    <i class="pi pi-external-link p-mr-2"></i>
+                    <a [href]="embedData.data.value[0].href" target="_blank" class="p-mr-2">{{ domain.hostname }}</a>
+                    <button
+                        pButton
+                        class="p-button-rounded p-button-text"
+                        type="button"
+                        icon="pi pi-trash"
+                        (click)="onRemoveUrlPress()"
+                    ></button>
+                </div>
+            </ng-container>
+            <ng-template #add>
+                <div class="placeholder">
+                    <img src="/assets/placeholder/embed-placeholder.jpg" alt="Embed placeholder" />
+                    <div class="text-secondary">Enter a URL below to embed content.</div>
+                </div>
+                <div class="p-field p-d-flex p-ai-center p-jc-center add p-mt-5">
+                    <span class="p-float-label">
+                        <input id="float-input-add" type="url" pInputText [(ngModel)]="href" />
+                        <label for="float-input-add">Url</label>
+                    </span>
+                    <div>
                         <button
                             pButton
-                            class="p-button-rounded p-button-text"
+                            class="p-button-icon p-ml-2"
                             type="button"
-                            icon="pi pi-trash"
-                            (click)="onRemoveUrlPress()"
+                            icon="pi pi-plus"
+                            label="Embed URL"
+                            (click)="onAddNewUrlPress()"
                         ></button>
                     </div>
-                </ng-container>
-                <ng-template #add>
-                    <div class="placeholder">
-                        <img src="/assets/placeholder/embed-placeholder.jpg" alt="Embed placeholder" />
-                        <div class="text-secondary">Enter a URL below to embed content.</div>
-                    </div>
-                    <div class="p-field p-d-flex p-ai-center p-jc-center add p-mt-5">
-                        <span class="p-float-label">
-                            <input id="float-input-add" type="url" pInputText [(ngModel)]="href" />
-                            <label for="float-input-add">Url</label>
-                        </span>
-                        <div>
-                            <button
-                                pButton
-                                class="p-button-icon p-ml-2"
-                                type="button"
-                                icon="pi pi-plus"
-                                label="Embed URL"
-                                (click)="onAddNewUrlPress()"
-                            ></button>
-                        </div>
-                    </div>
-                </ng-template>
-            </div>
+                </div>
+            </ng-template>
         </div>
     </ng-container>
 </project-drag-and-resize>

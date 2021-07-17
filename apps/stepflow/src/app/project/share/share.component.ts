@@ -20,9 +20,9 @@ export class ShareComponent implements OnInit {
     public invitationRole: Role = 'viewer';
     public allowEmailSubmission: boolean = false;
     public emailValidationMsg: string = '';
-
-    displayShareDialog: boolean = false;
-    displayDialogSave: boolean = false;
+    public isLoading: boolean = false;
+    public displayShareDialog: boolean = false;
+    public displayDialogSave: boolean = false;
 
     public roles: { value: Role; label: string }[] = [
         { value: 'creator', label: 'Can configure' },
@@ -122,9 +122,12 @@ export class ShareComponent implements OnInit {
 
     public onSendInvitationsSelected() {
         if (this.invitationEmails.length != 0 && this.allowEmailSubmission === true) {
+            this.isLoading = true;
             this.projectService.sendProjectInvitations(this.invitationEmails, this.invitationRole).then(value => {
                 if (value?.data.success === true) {
                     this.displayShareDialog = false;
+                    this.isLoading = false;
+                    this.invitationEmails = [];
                     this.messageService.add({
                         key: 'global-toast',
                         severity: 'success',
@@ -132,6 +135,8 @@ export class ShareComponent implements OnInit {
                     });
                 } else {
                     this.displayShareDialog = false;
+                    this.isLoading = false;
+                    this.invitationEmails = [];
                     this.messageService.add({
                         key: 'global-toast',
                         severity: 'error',
