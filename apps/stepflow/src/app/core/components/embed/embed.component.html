@@ -1,9 +1,8 @@
-<project-drag
+<project-drag-and-resize
     [isDraggable]="componentMode === 'configure'"
     [(field)]="field"
     [componentMode]="componentMode"
     [index]="index"
-    [style.height.px]="height"
     [resizable]="componentMode === 'configure'"
 >
     <ng-container *ngIf="componentMode === 'view'">
@@ -63,4 +62,4 @@
             </ng-template>
         </div>
     </ng-container>
-</project-drag>
+</project-drag-and-resize>

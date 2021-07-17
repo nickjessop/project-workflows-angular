@@ -8,7 +8,7 @@
         #fieldContainer
         (cdkDragStarted)="dragStarted()"
         (cdkDragReleased)="dragFinished()"
-        [style.height.px]="height"
+        [style.height.px]="field.metadata.settings?.height && resizable ? field.metadata.settings!.height : ''"
     >
         <div *ngIf="isDraggable" class="field__handle"><i class="pi pi-drag" cdkDragHandle></i></div>
         <div
