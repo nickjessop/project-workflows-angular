@@ -46,7 +46,7 @@
                     <input
                         type="text"
                         pInputText
-                        value="{{ project.name }}"
+                        [(ngModel)]="projectSettings.name"
                         id="settingsDialogTitle"
                         style="width: 100%"
                     />
@@ -56,13 +56,13 @@
                     <input
                         type="text"
                         pInputText
-                        value="{{ project.description }}"
+                        [(ngModel)]="projectSettings.description"
                         id="settingsDialogDescription"
                         style="width: 100%"
                     />
                 </div>
                 <p-footer>
-                    <button type="button" pButton label="Save" (click)="hideSettingsDialog()"></button>
+                    <button type="button" pButton label="Save" (click)="onSaveSettingsSelected()"></button>
                 </p-footer>
             </p-dialog>
         </ng-container>
