@@ -1,4 +1,6 @@
+import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import { Project } from '../models/interfaces/project';
@@ -25,10 +27,17 @@ export class NavBarComponent implements OnInit {
     baseUrl = this.parsedUrl.origin;
     linkCopiedMsg: any[] = [];
 
+    displaySettingsDialog: boolean = false;
+
     public navMode: 'default' | 'project' = 'default';
     public project?: Project;
 
-    constructor(private authService: AuthenticationService, private projectService: ProjectService) {}
+    constructor(
+        private authService: AuthenticationService,
+        private projectService: ProjectService,
+        private location: Location,
+        private router: Router
+    ) {}
 
     ngOnInit(): void {
         this.items = [
@@ -46,7 +55,7 @@ export class NavBarComponent implements OnInit {
         this.subscriptions.add(
             this.projectService.projectConfig$.subscribe(projectData => {
                 this.project = projectData;
-                if (projectData.id) {
+                if (projectData?.id) {
                     this.navMode = 'project';
                 } else {
                     this.navMode = 'default';
@@ -92,13 +101,15 @@ export class NavBarComponent implements OnInit {
         this.authenticated = false;
     }
 
-    displaySettingsDialog: boolean = false;
-
     showSettingsDialog() {
         this.displaySettingsDialog = true;
     }
 
     hideSettingsDialog() {
         this.displaySettingsDialog = false;
+    }
+
+    onBack() {
+        this.projectService.resetProject();
     }
 }

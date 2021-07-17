@@ -127,19 +127,16 @@ export class StepsComponent implements OnInit {
 
         const mode = $event.mode;
         if (mode === 'edit') {
-            console.log('Edit submit event called', $event);
             if ($event.step) {
                 this.projectService.updateProjectStep($event.step);
             }
         } else if (mode === 'new') {
-            console.log('New submit event called', $event);
             if ($event.step) {
                 const newStep = this.projectService.createNewProjectStep();
                 newStep.step = $event.step;
                 this.projectService.addProjectStep(newStep);
             }
         } else if (mode === 'delete') {
-            console.log('Delete submit event called', $event);
             this.projectService.deleteCurrentProjectStep();
         }
     }

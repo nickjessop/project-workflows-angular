@@ -1,4 +1,4 @@
-<p-sidebar [(visible)]="displayBlockSidebar" position="right" appendTo="body">
+<p-sidebar *ngIf="displayBlockSidebar" [(visible)]="displayBlockSidebar" position="right" appendTo="body">
     <div class="ms-1 p-pt-2">Add block</div>
     <div class="p-grid p-nogutter block-overlay p-mt-3">
         <ng-container *ngIf="blockOptions?.length">
