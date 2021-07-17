@@ -14,7 +14,9 @@ import { FirebaseService } from '../firebase/firebase.service';
 })
 export class ProjectService {
     private readonly PROJECT_COLLECTION_NAME = 'projects';
-    private _projectConfig: BehaviorSubject<Project> = new BehaviorSubject<Project>(this.createBaseProject('', '', ''));
+    private _projectConfig: BehaviorSubject<Project | undefined> = new BehaviorSubject<Project | undefined>(
+        this.createBaseProject('', '', '')
+    );
     public readonly projectConfig$ = this._projectConfig.asObservable();
     public isDragging: EventEmitter<boolean> = new EventEmitter();
 
@@ -34,9 +36,9 @@ export class ProjectService {
         private router: Router
     ) {}
 
-    public get projectConfig() {
-        return this._projectConfig.getValue();
-    }
+    // public get projectConfig() {
+    //     return this._projectConfig.getValue();
+    // }
 
     public set projectConfig(project: Project) {
         this._projectConfig.next(project);
@@ -534,9 +536,10 @@ export class ProjectService {
         });
     }
 
-    private isReadOnlyRole(projectMemberRoles: { userId: string; role: Role }[]) {}
-
     public resetProject() {
-        this.projectConfig = this.createBaseProject('', '', '');
+        const unsub = this.unsubscribeToProjectListener ? this.unsubscribeToProjectListener() : undefined;
+        this._projectConfig.next(undefined);
+        this._projectMode.next('view');
+        this.router.navigate(['/project']);
     }
 }
