@@ -1,7 +1,7 @@
 <!-- <ng-container *ngIf="isDraggable; else showDefault">
 </ng-container>
 <ng-template #showDefault></ng-template> -->
-<ng-container *ngIf="componentMode === 'configure' || componentMode === 'edit'; else showView">
+<ng-container *ngIf="componentMode === 'configure'; else showView">
     <div
         class="field p-mb-3 p-py-4 p-px-2"
         cdkDrag
