@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { AngularResizeElementDirection, AngularResizeElementEvent } from 'angular-resize-element';
 import { MenuItem } from 'primeng/api';
 import { ProjectService } from '../../../services/project/project.service';
@@ -9,7 +9,7 @@ import { BlockConfig, ComponentMode, ComponentSettings, createBlockConfig } from
     templateUrl: './drag-and-resize.component.html',
     styleUrls: ['./drag-and-resize.component.scss'],
 })
-export class DragAndResizeComponent implements OnInit {
+export class DragAndResizeComponent {
     @Input() isDraggable = false;
     @Input() componentMode: ComponentMode = 'view';
     @Input() field: BlockConfig = createBlockConfig('textInput');
