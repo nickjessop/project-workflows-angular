@@ -2,21 +2,19 @@ import { Component, Input, OnInit } from '@angular/core';
 import { AngularResizeElementDirection, AngularResizeElementEvent } from 'angular-resize-element';
 import { MenuItem } from 'primeng/api';
 import { ProjectService } from '../../../services/project/project.service';
-import { ComponentMode, ComponentSettings, createBlockConfig } from '../../interfaces/core-component';
-import { BlockConfig } from './../../interfaces/core-component';
+import { BlockConfig, ComponentMode, ComponentSettings, createBlockConfig } from '../../interfaces/core-component';
 
 @Component({
-    selector: 'project-drag',
-    templateUrl: './drag.component.html',
-    styleUrls: ['./drag.component.scss'],
+    selector: 'project-drag-and-resize',
+    templateUrl: './drag-and-resize.component.html',
+    styleUrls: ['./drag-and-resize.component.scss'],
 })
-export class DragComponent implements OnInit {
+export class DragAndResizeComponent implements OnInit {
     @Input() isDraggable = false;
     @Input() componentMode: ComponentMode = 'view';
     @Input() field: BlockConfig = createBlockConfig('textInput');
     @Input() index = 0;
     @Input() resizable?: boolean;
-    @Input() height?: number;
     @Input() settings?: ComponentSettings;
 
     public readonly AngularResizeElementDirection = AngularResizeElementDirection;
@@ -33,10 +31,6 @@ export class DragComponent implements OnInit {
 
     constructor(private projectService: ProjectService) {}
 
-    ngOnInit() {
-        this.updateHeight();
-    }
-
     public onDeleteBlock() {
         this.projectService.deleteProjectBlock(this.index);
     }
@@ -49,20 +43,22 @@ export class DragComponent implements OnInit {
         this.projectService.setBlockDrag(false);
     }
 
-    private updateHeight(height: number = 400) {
+    private updateHeight(height?: number) {
         if (!this.resizable) {
             return;
         }
-        this.height = height;
         this.field.metadata.settings = { ...this.field.metadata.settings, height };
     }
 
     public onResize(evt: AngularResizeElementEvent): void {
-        this.height = evt.currentHeightValue;
+        const height = evt.currentHeightValue as number;
+
+        this.field.metadata.settings = { ...this.field.metadata.settings, height };
     }
 
     public onResizeEnd(evt: AngularResizeElementEvent): void {
-        const height = evt.currentHeightValue;
+        const height = evt.currentHeightValue as number;
         this.updateHeight(height);
+        this.projectService.syncProject();
     }
 }
