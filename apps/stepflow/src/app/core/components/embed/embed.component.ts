@@ -22,34 +22,15 @@ export class EmbedComponent implements OnInit {
     @Input() group!: FormGroup;
     @Input() index = 0;
     @Input() field: BlockConfig = createBlockConfig('textInput');
-    @Input() resizable?: boolean;
+    @Input() resizable = true;
     @Input() componentMode?: ComponentMode;
 
-    @ViewChild('iframe')
-    public iframe!: ElementRef;
+    @ViewChild('iframe') iframe!: ElementRef;
 
     public embedData = createComponentMetadataTemplate('embed') as Embed;
     public cleanUrl: SafeResourceUrl = '';
-    public href: string = '';
+    public href = '';
     public domain: { hostname: string } = { hostname: '' };
-
-    constructor(
-        public projectService: ProjectService,
-        private domSantizer: DomSanitizer,
-        private messageService: MessageService
-    ) {}
-
-    private getBlockDrag() {
-        this.projectService.isDragging.subscribe((dragging: boolean) => {
-            if (this.iframe.nativeElement) {
-                if (dragging === true) {
-                    this.iframe.nativeElement.src = '';
-                } else {
-                    this.iframe.nativeElement.src = this.cleanUrl;
-                }
-            }
-        });
-    }
 
     public height?: number;
     public settings?: ComponentSettings;
@@ -64,6 +45,46 @@ export class EmbedComponent implements OnInit {
             },
         },
     ];
+
+    constructor(
+        public projectService: ProjectService,
+        private domSantizer: DomSanitizer,
+        private messageService: MessageService
+    ) {}
+
+    ngOnInit(): void {
+        this.embedData = this.field.metadata as Embed;
+
+        this.cleanUrl = this.domSantizer.bypassSecurityTrustResourceUrl(this.embedData.data.value[0].href || '');
+
+        const isResizable = this.componentMode === 'configure' || this.componentMode === 'edit';
+
+        this.resizable = isResizable;
+
+        try {
+            if (this.embedData.data.value[0].href) {
+                this.domain = new URL(this.embedData.data.value[0].href);
+            }
+        } catch (e) {
+            this.domain.hostname = '';
+        }
+    }
+
+    ngAfterViewInit() {
+        // this.getBlockDrag();
+    }
+
+    private getBlockDrag() {
+        this.projectService.isDragging.subscribe((dragging: boolean) => {
+            if (this.iframe.nativeElement) {
+                if (dragging === true) {
+                    this.iframe.nativeElement.src = '';
+                } else {
+                    this.iframe.nativeElement.src = this.cleanUrl;
+                }
+            }
+        });
+    }
 
     public onDeleteBlock() {
         const index = this.index ? this.index : 0;
@@ -94,24 +115,6 @@ export class EmbedComponent implements OnInit {
         const height = evt.currentHeightValue;
         this.updateHeight(height);
         this.projectService.syncProject();
-    }
-
-    ngOnInit(): void {
-        this.embedData = this.field.metadata as Embed;
-
-        this.cleanUrl = this.domSantizer.bypassSecurityTrustResourceUrl(this.embedData.data.value[0].href || '');
-
-        try {
-            if (this.embedData.data.value[0].href) {
-                this.domain = new URL(this.embedData.data.value[0].href);
-            }
-        } catch (e) {
-            this.domain.hostname = '';
-        }
-    }
-
-    ngAfterViewInit() {
-        this.getBlockDrag();
     }
 
     public onAddNewUrlPress() {

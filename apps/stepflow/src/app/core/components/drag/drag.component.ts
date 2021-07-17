@@ -35,6 +35,8 @@ export class DragComponent implements OnInit {
 
     ngOnInit() {
         this.updateHeight();
+
+        console.log('is resizable?', this.resizable);
     }
 
     public onDeleteBlock() {
@@ -42,11 +44,11 @@ export class DragComponent implements OnInit {
     }
 
     public dragStarted() {
-        // this.projectService.setBlockDrag(true);
+        this.projectService.setBlockDrag(true);
     }
 
     public dragFinished() {
-        // this.projectService.setBlockDrag(false);
+        this.projectService.setBlockDrag(false);
     }
 
     private updateHeight(height: number = 400) {
@@ -54,7 +56,7 @@ export class DragComponent implements OnInit {
             return;
         }
         this.height = height;
-        // this.field.metadata.settings = { ...this.field.metadata.settings, height: height };
+        this.field.metadata.settings = { ...this.field.metadata.settings, height };
     }
 
     public onResize(evt: AngularResizeElementEvent): void {

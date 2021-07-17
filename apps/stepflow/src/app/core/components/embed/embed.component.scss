@@ -1,3 +1,5 @@
+@import 'variables.scss';
+
 .edit,
 .view {
     height: calc(100% - 40px);
@@ -6,6 +8,32 @@
         width: 100%;
         border: 2px solid var(--surface-c);
         background: var(--surface-c);
+    }
+}
+.resize-container {
+    .resize {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 20px;
+        height: 20px;
+        border-right: 3px solid var(--surface-d);
+        border-bottom: 3px solid var(--surface-d);
+        border-radius: 1px;
+        &:hover,
+        &:focus,
+        &:focus-within {
+            cursor: s-resize;
+            border-color: var(--surface-f);
+        }
+    }
+    &:hover,
+    &:focus-within {
+        border: 0.065rem solid var(--primary-color-medium);
+        .field__settings,
+        .field__handle {
+            visibility: visible;
+        }
     }
 }
 
