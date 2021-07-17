@@ -440,8 +440,6 @@ export class ProjectService {
                         this._projectMode.next('edit');
                     }
 
-                    console.log('project mode', this._projectMode.getValue());
-
                     const currentStepSet = project.configuration?.some(stepConfig => {
                         return stepConfig.step.isCurrentStep;
                     });
