@@ -120,7 +120,6 @@ export class AuthenticationService {
                 } else {
                     this.router.navigate(['/auth/confirmation']);
                 }
-
                 if (!this.allowedUserIds.includes(this.user?.id || '')) {
                     this.logout(false);
                 }
@@ -160,6 +159,7 @@ export class AuthenticationService {
                         emailVerified: user!.emailVerified,
                     };
                     this.user = parsedUser;
+                    this.checkForExistingProjects(this.user.id || '');
                     const updateUserMetadata = this.firebaseService
                         .getFunctionsInstance()
                         .httpsCallable('updateUserMetadata');
@@ -360,5 +360,8 @@ export class AuthenticationService {
             });
     }
 
-    private checkForExistingProjects(userId: string) {}
+    private checkForExistingProjects(userId: string) {
+        if (userId != '') {
+        }
+    }
 }

@@ -494,18 +494,20 @@ export class ProjectService {
                 const _projectConfig = _.cloneDeep(this.projectConfig);
                 const newMembers: { userId: string; role: Role }[] = [];
                 const pendingMembers: { email: string; role: Role }[] = [];
-                users?.newMembers.map(member => {
-                    return newMembers.push({ userId: member, role: role || 'viewer' });
-                });
-                users?.pendingMembers.map(member => {
-                    return pendingMembers.push({ email: member, role: role || 'viewer' });
-                });
+
                 // combine existing members and pending members with new ones
                 if (users?.newMembers) {
+                    users?.newMembers.map(member => {
+                        return newMembers.push({ userId: member, role: role || 'viewer' });
+                    });
                     _projectConfig.members = _.union(_projectConfig.members, users.newMembers);
                     _projectConfig.memberRoles = _.union(_projectConfig.memberRoles, newMembers);
                 }
-                if (_projectConfig.pendingMembers && users?.pendingMembers) {
+                if (users?.pendingMembers) {
+                    users?.pendingMembers.map(member => {
+                        return pendingMembers.push({ email: member, role: role || 'viewer' });
+                    });
+                    const addInvitations = await this.addInvitations(pendingMembers);
                     _projectConfig.pendingMembers = _.union(_projectConfig.pendingMembers, users.pendingMembers);
                 }
                 const setResult = await this.setProject(_projectConfig);
@@ -515,6 +517,21 @@ export class ProjectService {
                 // TODO handle error
                 return false;
             });
+    }
+
+    private addInvitations(pendingMembers: { email: string; role: Role }[]) {
+        const db = this.firebaseService.getDbInstance()!;
+        let batch = db.batch();
+        let invitationRef = db.collection('invitations').doc();
+
+        pendingMembers.map(member => {
+            batch.set(invitationRef, { email: member.email, role: member.role });
+        });
+
+        // Commit the batch
+        batch.commit().then(() => {
+            // ...
+        });
     }
 
     private isReadOnlyRole(projectMemberRoles: { userId: string; role: Role }[]) {}
