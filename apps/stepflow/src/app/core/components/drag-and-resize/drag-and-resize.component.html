@@ -46,7 +46,7 @@
     </div>
 </ng-container>
 <ng-template #showView>
-    <div class="field p-mb-3 p-py-4 p-px-2" #fieldContainer [style.height.px]="height">
+    <div class="field p-mb-3 p-py-4 p-px-2" #fieldContainer [style.height.px]="field.metadata.settings?.height">
         <div class="p-d-flex p-jc-between p-ai-center p-mb-2">
             <div class="field__label p-ml-2 p-mb-2">
                 {{ field.label ? field.label : '(Untitled block)' }}
