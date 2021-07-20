@@ -32,7 +32,7 @@ export class StepsComponent implements OnInit {
 
     statusOptions: Status[];
 
-    constructor(private projectService: ProjectService) {
+    constructor(public projectService: ProjectService) {
         this.statusOptions = [
             { label: 'No status', value: 'no-status', icon: '' },
             { label: 'In progress', value: 'in-progress', icon: 'pi-progress' },

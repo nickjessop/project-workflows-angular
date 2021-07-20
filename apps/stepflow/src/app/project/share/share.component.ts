@@ -30,7 +30,7 @@ export class ShareComponent implements OnInit {
         { value: 'viewer', label: 'Can view' },
     ];
 
-    constructor(private projectService: ProjectService, private messageService: MessageService) {}
+    constructor(public projectService: ProjectService, private messageService: MessageService) {}
 
     ngOnInit(): void {
         if (this.project) {

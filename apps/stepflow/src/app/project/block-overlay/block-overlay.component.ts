@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { ComponentType } from '../../core/interfaces/core-component';
 @Component({
     selector: 'project-block-overlay',
@@ -7,6 +7,7 @@ import { ComponentType } from '../../core/interfaces/core-component';
 })
 export class BlockPanelOverlayComponent implements OnInit {
     @Output() onSelectNewBlock = new EventEmitter<ComponentType>();
+    @Input() isDisabled = false;
 
     public blockOptions = this.getBlockOptions();
 

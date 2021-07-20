@@ -1,4 +1,13 @@
-<p-button label="Share" icon="pi pi-users" class="p-mr-3" (click)="showShareDialog()"></p-button>
+<button
+    pButton
+    type="button"
+    label="Share"
+    icon="pi pi-users"
+    class="p-mr-3"
+    (click)="showShareDialog()"
+    [disabled]="(projectService.projectMode$ | async) === 'view'"
+></button>
+
 <p-dialog
     header="Share project"
     [(visible)]="displayShareDialog"
