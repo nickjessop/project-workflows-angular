@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { UserPlan } from '@stepflow/interfaces';
 import { MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
-import { AuthenticationService, UserPlan } from '../services/authentication/authentication.service';
+import { AuthenticationService } from '../services/authentication/authentication.service';
 
 @Component({
     selector: 'app-authentication',

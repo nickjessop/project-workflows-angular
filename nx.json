@@ -14,10 +14,10 @@
         "stepflow-e2e": {
             "tags": []
         },
-        "shared-interfaces": {
+        "api": {
             "tags": []
         },
-        "api": {
+        "interfaces": {
             "tags": []
         }
     }

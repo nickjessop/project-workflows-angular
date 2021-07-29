@@ -16,7 +16,7 @@
         "typeRoots": ["./node_modules/@types"],
         "lib": ["es2018", "dom"],
         "paths": {
-            "@stepflow/shared/interfaces": ["libs/shared/interfaces/src/index.ts"]
+            "@stepflow/interfaces": ["libs/interfaces/src/index.ts"]
         },
         "rootDir": "."
     },

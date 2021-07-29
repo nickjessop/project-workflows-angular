@@ -92,7 +92,7 @@
                     }
                 },
                 "lint": {
-                    "builder": "@angular-devkit/build-angular:tslint",
+                    "builder": "@nrwl/linter:eslint",
                     "options": {
                         "tsConfig": [
                             "apps/stepflow/tsconfig.app.json",
@@ -110,7 +110,7 @@
             "root": "apps/stepflow-e2e",
             "architect": {
                 "e2e": {
-                    "builder": "@angular-devkit/build-angular:protractor",
+                    "builder": "@nrwl/build-angular:protractor",
                     "options": {
                         "protractorConfig": "apps/stepflow-e2e/protractor.conf.js",
                         "devServerTarget": "stepflow:serve"
@@ -122,41 +122,12 @@
                     }
                 },
                 "lint": {
-                    "builder": "@angular-devkit/build-angular:tslint",
+                    "builder": "@nrwl/build-angular:tslint",
                     "options": {
                         "tsConfig": "apps/stepflow-e2e/tsconfig.json",
                         "exclude": [
                             "**/node_modules/**"
                         ]
-                    }
-                }
-            }
-        },
-        "shared-interfaces": {
-            "root": "libs/shared/interfaces",
-            "sourceRoot": "libs/shared/interfaces/src",
-            "projectType": "library",
-            "schematics": {},
-            "architect": {
-                "lint": {
-                    "builder": "@angular-devkit/build-angular:tslint",
-                    "options": {
-                        "tsConfig": [
-                            "libs/shared/interfaces/tsconfig.lib.json",
-                            "libs/shared/interfaces/tsconfig.spec.json"
-                        ],
-                        "exclude": [
-                            "**/node_modules/**",
-                            "!libs/shared/interfaces/**"
-                        ]
-                    }
-                },
-                "test": {
-                    "builder": "@nrwl/jest:jest",
-                    "options": {
-                        "jestConfig": "libs/shared/interfaces/jest.config.js",
-                        "tsConfig": "libs/shared/interfaces/tsconfig.spec.json",
-                        "passWithNoTests": true
                     }
                 }
             }
@@ -217,6 +188,35 @@
                     "options": {
                         "jestConfig": "apps/api/jest.config.js",
                         "tsConfig": "apps/api/tsconfig.spec.json",
+                        "passWithNoTests": true
+                    }
+                }
+            }
+        },
+        "interfaces": {
+            "root": "libs/interfaces",
+            "sourceRoot": "libs/interfaces/src",
+            "projectType": "library",
+            "schematics": {},
+            "architect": {
+                "lint": {
+                    "builder": "@nrwl/angular:tslint",
+                    "options": {
+                        "tsConfig": [
+                            "libs/interfaces/tsconfig.lib.json",
+                            "libs/interfaces/tsconfig.spec.json"
+                        ],
+                        "exclude": [
+                            "**/node_modules/**",
+                            "!libs/interfaces/**"
+                        ]
+                    }
+                },
+                "test": {
+                    "builder": "@nrwl/jest:jest",
+                    "options": {
+                        "jestConfig": "libs/interfaces/jest.config.js",
+                        "tsConfig": "libs/interfaces/tsconfig.spec.json",
                         "passWithNoTests": true
                     }
                 }

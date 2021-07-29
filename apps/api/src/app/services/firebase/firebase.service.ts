@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { UserPlan } from '@stepflow/interfaces';
 import * as admin from 'firebase-admin';
 
 @Injectable()
@@ -40,5 +41,3 @@ export class FirebaseService {
         return _updatedUser;
     }
 }
-
-export type UserPlan = 'Plus' | 'Growth' | 'Essential' | 'Free';
