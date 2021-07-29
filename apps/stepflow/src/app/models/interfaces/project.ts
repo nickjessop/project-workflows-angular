@@ -1,5 +1,5 @@
+import { User } from '@stepflow/interfaces';
 import { BlockConfig } from '../../core/interfaces/core-component';
-import { User } from '../../services/authentication/authentication.service';
 
 export interface Project {
     name: string;

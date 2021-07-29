@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
+import { User } from '@stepflow/interfaces';
 import { MessageService } from 'primeng/api';
 import { map, switchMap } from 'rxjs/operators';
-import { AuthenticationService, User } from '../authentication/authentication.service';
+import { AuthenticationService } from '../authentication/authentication.service';
 import { FirebaseService } from '../firebase/firebase.service';
 import { StorageService } from '../storage/storage.service';
 

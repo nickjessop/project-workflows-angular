@@ -1,22 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { User, UserPlan } from '@stepflow/interfaces';
 import { MessageService } from 'primeng/api';
 import { BehaviorSubject, from, Subscription } from 'rxjs';
 import { FirebaseService } from '../firebase/firebase.service';
 
-export interface User {
-    id?: string;
-    email?: string;
-    emailVerified?: boolean;
-    displayName?: string;
-    firstName?: string;
-    lastName?: string;
-    photoURL?: string;
-    photoFilePath?: string;
-    plan?: string;
-}
-
-export type UserPlan = 'Plus' | 'Growth' | 'Essential' | 'Free';
 export enum AuthStatus {
     AUTHENTICATED,
     UNAUTHENTICATED,

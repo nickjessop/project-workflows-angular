@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { User } from '@stepflow/interfaces';
 import { MessageService } from 'primeng/api';
-import { AuthenticationService, User } from '../services/authentication/authentication.service';
+import { AuthenticationService } from '../services/authentication/authentication.service';
 import { UserService } from '../services/user/user.service';
 
 @Component({
