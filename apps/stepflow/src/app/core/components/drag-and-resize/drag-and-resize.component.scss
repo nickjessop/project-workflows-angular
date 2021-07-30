@@ -43,6 +43,9 @@
             cursor: grab !important;
         }
     }
+    .field__label {
+        font-weight: bold;
+    }
     .field__description {
         color: $sub-text;
         font-style: italic;
