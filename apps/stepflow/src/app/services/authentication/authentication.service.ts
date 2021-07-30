@@ -29,6 +29,7 @@ export class AuthenticationService {
         'LkkX7f9yheRFHNwZkoCHhMb6AmC2',
         'S09Ert0pOpRKdb7pnc4rXFfyeWe2',
         'o24opqInUhbxnC9MFywy3YLLBE03',
+        '0ZLQk9ekq3RJXMc2RMpCE8NEkJ73',
     ];
 
     constructor(
