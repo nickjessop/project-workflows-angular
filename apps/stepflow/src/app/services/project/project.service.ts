@@ -517,8 +517,9 @@ export class ProjectService {
                     users?.pendingMembers.map(member => {
                         return pendingMembers.push({ email: member, role: role || 'viewer' });
                     });
-                    const addInvitations = await this.addInvitations(pendingMembers);
                     _projectConfig.pendingMembers = _.union(_projectConfig.pendingMembers, users.pendingMembers);
+                    const addInvitations = await this.addInvitations(pendingMembers, this.projectConfig?.id);
+                    return addInvitations;
                 }
                 const setResult = await this.setProject(_projectConfig);
                 return setResult;
@@ -529,19 +530,34 @@ export class ProjectService {
             });
     }
 
-    private addInvitations(pendingMembers: { email: string; role: Role }[]) {
+    // make private
+    public addInvitations(pendingMembers: { email: string; role: Role }[], projectId: string | undefined) {
+        if (!projectId) {
+            return;
+        }
         const db = this.firebaseService.getDbInstance()!;
-        let batch = db.batch();
-        let invitationRef = db.collection('invitations').doc();
+        const batch = db.batch();
+        const projectRef = db.collection('projects').doc(projectId);
 
         pendingMembers.map(member => {
-            batch.set(invitationRef, { email: member.email, role: member.role });
+            let invitationRef = db.collection('invitations').doc();
+            batch.set(invitationRef, { email: member.email, role: member.role, project: projectRef });
         });
 
         // Commit the batch
-        batch.commit().then(() => {
-            // ...
-        });
+        batch
+            .commit()
+            .then(() => {
+                return true;
+            })
+            .catch(() => {
+                return false;
+            });
+    }
+
+    public checkNewUserProjects() {
+        const db = this.firebaseService.getDbInstance()!;
+        const invitationRef = db.collection('invitations').doc();
     }
 
     public resetProject() {

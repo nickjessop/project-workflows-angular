@@ -30,6 +30,8 @@ export class ShareComponent implements OnInit {
         { value: 'viewer', label: 'Can view' },
     ];
 
+    public pendingEmails?: { email: string; role: Role }[];
+
     constructor(public projectService: ProjectService, private messageService: MessageService) {}
 
     ngOnInit(): void {
@@ -44,6 +46,14 @@ export class ShareComponent implements OnInit {
 
     public showShareDialog() {
         this.displayShareDialog = true;
+        // test code
+        // this.pendingEmails = [
+        //     { email: 'nick+pending1@stepflow.co', role: 'editor' },
+        //     { email: 'nick+pending2@stepflow.co', role: 'viewer' },
+        // ];
+        // const projectId = '4U9YahqU4Kwvj5rYu5Lm';
+        // console.log('showShareDialog');
+        // this.projectService.addInvitations(this.pendingEmails, projectId);
     }
 
     public hideShareDialog() {
