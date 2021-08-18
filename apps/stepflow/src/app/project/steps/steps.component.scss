@@ -1,71 +1,78 @@
 .steps-container {
-    margin: 35px 20px;
-    max-height: calc(100vh - 9rem);
+    height: calc(100vh - 4rem);
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.15) transparent;
+    overflow-y: overlay;
+    overflow-y: auto;
+    background: var(--surface-a);
+    border-right: 1px solid var(--surface-c);
     .steps:last-child {
-        .step-status .step-line {
+        .step__content:after {
             width: 0px;
         }
     }
     .step {
         margin-left: -0.5rem;
         position: relative;
+        border: 1px solid var(--surface-d);
+        border-radius: 6px;
+        z-index: 1;
         &:hover {
             cursor: pointer;
-            background: var(--surface-c);
-            border-radius: 6px;
         }
         &__edit-step {
             opacity: 0;
             transition: 0.1s;
             pointer-events: none;
         }
-
-        .step-status {
-            min-width: 25px;
-            max-width: 25px;
-            height: 25px;
-            position: relative;
-            &__icon {
-                width: 25px;
-                height: 25px;
-                border-radius: 50%;
-                border: var(--surface-f) 2px solid;
-                background: white;
-                z-index: 2;
-                position: relative;
-                i {
-                    color: var(--text-color-secondary);
-                    min-height: 13px;
-                    min-width: 13px;
-                }
-                &--default {
-                    width: 16px;
-                    height: 16px;
-                }
+        &__content {
+            background: white;
+            border-radius: 6px;
+            &:hover {
+                background: var(--surface-c);
+                border-radius: 6px;
             }
-            .step-line {
+            &::after {
+                content: '';
                 height: 70px;
                 position: absolute;
-                left: 12px;
+                left: 15px;
                 width: 2px;
-                top: 5px;
-                background: var(--surface-f);
-                z-index: 1;
+                top: 20px;
+                background: var(--surface-c);
+                z-index: -1;
+            }
+        }
+
+        .step-status {
+            .step-status__icon {
+                color: white;
+                position: absolute;
+                top: -10px;
+                right: -7px;
+                i {
+                    padding: 3.5px 3px;
+                    border-radius: 50%;
+                }
             }
         }
     }
-    .steps-container:last-child:after {
-        width: 0px;
-    }
+    // .step:last-child .step__content:after {
+    //     width: 0px;
+    // }
     .step-selected {
-        background: var(--primary-color-light);
         border-radius: 6px;
         color: var(--primary-color);
         font-weight: bold;
+        border-width: 0px;
+        .step__content {
+            border: 1px solid var(--primary-color);
+        }
         &:hover,
         &:focus,
         &:focus-within {
-            background: var(--primary-color-light);
             .step__edit-step {
                 opacity: 0.6;
                 pointer-events: initial;

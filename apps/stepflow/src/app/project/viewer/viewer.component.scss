@@ -16,9 +16,8 @@
             overflow: auto;
             background: var(--surface-b);
             .step-container {
-                background: white;
-                border-radius: 6px;
-                min-height: calc(100vh - 130px);
+                // min-height: calc(100vh - 130px);
+                height: auto;
             }
         }
     }

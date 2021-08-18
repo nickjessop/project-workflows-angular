@@ -1,13 +1,16 @@
 <div class="viewer" #viewer>
     <div class="p-grid p-nogutter viewer-container">
-        <div class="p-col-3">
+        <div class="p-col-3 overflow-hidden">
             <project-steps (dragAndDropStepEvent)="onDragAndDropStepEvent($event)"></project-steps>
         </div>
-        <div class="p-col-9 p-px-2 p-pt-5 viewer-container__step" *ngIf="currentStep; else showErrorState">
+        <div
+            class="p-col-9 p-px-3 p-pt-5 viewer-container__step overflow-hidden"
+            *ngIf="currentStep; else showErrorState"
+        >
             <div class="p-grid p-nogutter" style="min-height: 100%">
                 <div class="p-col-11">
                     <div
-                        class="step-container p-px-3 p-py-5 p-mb-5 p-shadow-4
+                        class="step-container p-px-3 p-pb-5 p-mb-5
                     "
                     >
                         <div class="p-mb-4 p-px-2">
