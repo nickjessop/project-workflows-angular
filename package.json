@@ -63,7 +63,7 @@
         "normalize.css": "^8.0.1",
         "prettier": "^1.19.1",
         "primeflex": "~2.0.0",
-        "primeicons": "git://github.com:stepflowapp/primeicons.git#1aadab7",
+        "primeicons": "git://github.com:stepflowapp/primeicons.git#d1738653b9289bb5be85087476a5b999fb6266ba",
         "primeng": "^11.4.3",
         "quill": "^1.3.7",
         "reflect-metadata": "^0.1.13",

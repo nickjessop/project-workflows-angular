@@ -89,8 +89,22 @@ body.noscroll {
 .text-secondary {
     color: var(--text-color-secondary);
 }
+.overflow-hidden {
+    overflow: hidden;
+}
 .rounded-image {
     border-radius: 50%;
+}
+.w-full {
+    width: 100%;
+}
+
+.custom-scroll::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.15) transparent;
+}
+.custom-scroll::-webkit-scrollbar-track {
+    background: transparent !important;
+    border: none;
 }
 
 a,

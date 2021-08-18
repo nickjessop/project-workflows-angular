@@ -2,10 +2,10 @@
     position: sticky;
     height: calc(100vh - (50px + 60px)); //step controls + top nav
     top: 0;
-    left: 0;
+    right: 0;
     &__button {
         width: auto;
-        margin-right: auto;
+        margin-left: auto;
         .control-label {
             color: var(--clr-greytext);
         }
