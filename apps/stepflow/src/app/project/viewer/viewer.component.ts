@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { ComponentMode, Project, StepConfig } from '@stepflow/interfaces';
 import { combineLatest, Subscription } from 'rxjs';
-import { ComponentMode } from '../../core/interfaces/core-component';
-import { Project, StepConfig } from '../../models/interfaces/project';
 import { ProjectService } from '../../services/project/project.service';
 
 @Component({

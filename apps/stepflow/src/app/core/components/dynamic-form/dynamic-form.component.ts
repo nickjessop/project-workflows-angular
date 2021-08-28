@@ -1,7 +1,7 @@
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
-import { BlockConfig, ComponentMode, Validator } from '../../interfaces/core-component';
+import { BlockConfig, ComponentMode, Validator } from '@stepflow/interfaces';
 
 @Component({
     selector: 'project-dynamic-form',

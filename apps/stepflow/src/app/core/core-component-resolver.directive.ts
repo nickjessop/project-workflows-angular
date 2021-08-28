@@ -1,5 +1,6 @@
 import { ComponentFactoryResolver, ComponentRef, Directive, Input, OnInit, ViewContainerRef } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { BlockConfig, ComponentMode, ComponentType } from '@stepflow/interfaces';
 import { CheckboxesComponent } from './components/checkboxes/checkboxes.component';
 import { EmbedComponent } from './components/embed/embed.component';
 import { FileUploaderComponent } from './components/file-uploader/file-uploader.component';
@@ -7,7 +8,6 @@ import { ImageUploaderComponent } from './components/image-uploader/image-upload
 import { RichTextInputComponent } from './components/rich-text-input/rich-text-input.component';
 import { TableComponent } from './components/table/table.component';
 import { TextInputComponent } from './components/text-input/text-input.component';
-import { BlockConfig, ComponentMode, ComponentType } from './interfaces/core-component';
 
 @Directive({
     selector: '[appCoreComponentResolver]',

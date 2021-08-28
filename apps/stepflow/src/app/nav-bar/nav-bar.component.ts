@@ -1,9 +1,9 @@
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Project } from '@stepflow/interfaces';
 import { MenuItem, MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
-import { Project } from '../models/interfaces/project';
 import { AuthenticationService } from '../services/authentication/authentication.service';
 import { ProjectService } from '../services/project/project.service';
 

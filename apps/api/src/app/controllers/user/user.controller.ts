@@ -1,15 +1,22 @@
-import { Controller, Post, Req } from '@nestjs/common';
+import { Controller, Post, Put, Req, Res } from '@nestjs/common';
 import { FirebaseService } from '../../services/firebase/firebase.service';
 
 @Controller('user')
 export class UserController {
     constructor(private firebaseService: FirebaseService) {}
 
-    @Post()
-    updateUser(@Req() req: Request) {
-        // req.locals
+    @Put() async updateUser(@Req() req: any, @Res() res: any) {
+        const uid = await res.locals.uid;
+
+        console.log(uid);
+
+        return {};
         // email: string, firstName: string, lastName: string, plan: UserPlan
         // res.locals.uid = uid;
         // this.firebaseService.updateUser({ id, email, firstName, lastName, plan });
+    }
+
+    @Post() createUser(@Req() req: any, @Res() res: any) {
+        // this.firebaseService
     }
 }

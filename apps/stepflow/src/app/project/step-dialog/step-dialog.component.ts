@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Status, Step } from '../../models/interfaces/project';
+import { Status, Step } from '@stepflow/interfaces';
 
 @Component({
     selector: 'project-step-dialog',

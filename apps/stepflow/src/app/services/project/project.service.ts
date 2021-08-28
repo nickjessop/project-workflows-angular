@@ -1,11 +1,20 @@
 import { moveItemInArray } from '@angular/cdk/drag-drop';
 import { EventEmitter, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import {
+    BlockConfig,
+    ComponentMode,
+    Project,
+    ProjectUsers,
+    Role,
+    Status,
+    Step,
+    StepConfig,
+} from '@stepflow/interfaces';
 import * as _ from 'lodash';
 import { BehaviorSubject, from } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { BlockConfig, ComponentMode, createBlockConfig } from '../../core/interfaces/core-component';
-import { Project, ProjectUsers, Role, Status, Step, StepConfig } from '../../models/interfaces/project';
+import { CoreComponentService } from '../../core/core-component.service';
 import { AuthenticationService } from '../authentication/authentication.service';
 import { FirebaseService } from '../firebase/firebase.service';
 
@@ -31,6 +40,7 @@ export class ProjectService {
     constructor(
         private firebaseService: FirebaseService,
         private authenticationService: AuthenticationService,
+        private coreComponentService: CoreComponentService,
         private router: Router
     ) {}
 
@@ -146,7 +156,7 @@ export class ProjectService {
             ? configuration
             : [
                   {
-                      components: [createBlockConfig('textInput')],
+                      components: [this.coreComponentService.createBlockConfig('textInput')],
                       step: {
                           title: 'Untitled Step',
                           description: 'Untitled Step Description',
@@ -199,7 +209,7 @@ export class ProjectService {
         label?: string,
         name?: string
     ) {
-        const fieldConfig = createBlockConfig('textInput', label, name);
+        const fieldConfig = this.coreComponentService.createBlockConfig('textInput', label, name);
 
         const stepConfig: StepConfig = {
             step: {
