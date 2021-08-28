@@ -1,17 +1,11 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, Input, OnInit } from '@angular/core';
+import { BlockConfig, Checkboxes, ComponentMode, ComponentSettings } from '@stepflow/interfaces';
 import { AngularResizeElementDirection, AngularResizeElementEvent } from 'angular-resize-element';
 import * as _ from 'lodash';
 import { MenuItem } from 'primeng/api';
 import { ProjectService } from '../../../services/project/project.service';
-import {
-    BlockConfig,
-    Checkboxes,
-    ComponentMode,
-    ComponentSettings,
-    createBlockConfig,
-} from '../../interfaces/core-component';
-
+import { CoreComponentService } from '../../core-component.service';
 @Component({
     selector: 'app-checkboxes',
     templateUrl: './checkboxes.component.html',
@@ -19,14 +13,14 @@ import {
 })
 export class CheckboxesComponent implements OnInit {
     @Input() index = 0;
-    @Input() field: BlockConfig = createBlockConfig('textInput');
+    @Input() field: BlockConfig = this.coreComponentService.createBlockConfig('textInput');
     @Input() resizable?: boolean;
     @Input() componentMode?: ComponentMode;
 
     public height?: number;
     public settings?: ComponentSettings;
 
-    constructor(private projectService: ProjectService) {}
+    constructor(private projectService: ProjectService, private coreComponentService: CoreComponentService) {}
 
     public readonly AngularResizeElementDirection = AngularResizeElementDirection;
 

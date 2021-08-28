@@ -27,26 +27,26 @@ export class ApiService implements HttpInterceptor {
         );
     }
 
-    public testApi() {
-        return this.http.get(`${this.API_URL}project`);
-    }
-
-    public get(url: string, id?: string) {
-        const _url = id ? `${url}/${id}` : url;
+    public get(path: string, id?: string) {
+        const _url = id ? `${path}/${id}` : path;
 
         return this.http.get(_url);
     }
 
-    public post(url: string, payload?: any) {
-        return this.http.post(url, payload);
+    public post(path: string, payload?: any) {
+        return this.http.post(path, payload);
     }
 
-    public put(url: string, payload?: any) {
-        return this.http.put(url, payload);
+    public put(path: string, payload?: any) {
+        return this.http.put(path, payload);
     }
 
-    public delete(url: string, id?: string) {
-        const _url = id ? `${url}/${id}` : url;
+    public delete(path: string, id?: string) {
+        const _url = id ? `${path}/${id}` : path;
         return this.http.delete(_url);
+    }
+
+    public testApi() {
+        return this.post(`${this.API_URL}user`, { test: 'asdf' });
     }
 }

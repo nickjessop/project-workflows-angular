@@ -20,7 +20,7 @@ export class ProjectComponent implements OnInit {
 
     ngOnInit() {
         this.getProjects();
-        // this.apiService.testApi().subscribe();
+        this.apiService.testApi().subscribe();
     }
 
     public getProjects() {

@@ -1,15 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { BlockConfig, ComponentMode, ComponentSettings, TextInput } from '@stepflow/interfaces';
 import { AngularResizeElementDirection, AngularResizeElementEvent } from 'angular-resize-element';
 import { MenuItem } from 'primeng/api';
 import { ProjectService } from '../../../services/project/project.service';
-import {
-    BlockConfig,
-    ComponentMode,
-    ComponentSettings,
-    createComponentMetadataTemplate,
-    TextInput,
-} from '../../interfaces/core-component';
+import { CoreComponentService } from '../../core-component.service';
 
 @Component({
     selector: 'app-text-input',
@@ -23,10 +18,10 @@ export class TextInputComponent implements OnInit {
     @Input() resizable?: boolean;
     @Input() componentMode?: ComponentMode;
 
-    public textInputData = createComponentMetadataTemplate('textInput') as TextInput;
+    public textInputData = this.coreComponentService.createComponentMetadataTemplate('textInput') as TextInput;
     public settings?: ComponentSettings;
 
-    constructor(private projectService: ProjectService) {}
+    constructor(private projectService: ProjectService, private coreComponentService: CoreComponentService) {}
 
     public height?: number;
     public readonly AngularResizeElementDirection = AngularResizeElementDirection;
