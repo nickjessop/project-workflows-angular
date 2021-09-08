@@ -16,7 +16,6 @@
     .step {
         margin-left: -0.5rem;
         position: relative;
-        border: 1px solid var(--surface-d);
         border-radius: 6px;
         z-index: 1;
         &:hover {
@@ -28,8 +27,9 @@
             pointer-events: none;
         }
         &__content {
-            background: white;
+            background: var(--surface-a);
             border-radius: 6px;
+            border: 1px solid var(--surface-d);
             &:hover {
                 background: var(--surface-c);
                 border-radius: 6px;
@@ -38,10 +38,10 @@
                 content: '';
                 height: 70px;
                 position: absolute;
-                left: 15px;
+                left: 50%;
                 width: 2px;
                 top: 20px;
-                background: var(--surface-c);
+                background: var(--surface-b);
                 z-index: -1;
             }
         }
@@ -69,6 +69,7 @@
         border-width: 0px;
         .step__content {
             border: 1px solid var(--primary-color);
+            background: var(--surface-a);
         }
         &:hover,
         &:focus,

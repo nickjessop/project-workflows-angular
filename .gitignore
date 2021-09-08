@@ -49,3 +49,4 @@ testem.log
 Thumbs.db
 .vscode/settings.json
 *.cache
+install.sh
