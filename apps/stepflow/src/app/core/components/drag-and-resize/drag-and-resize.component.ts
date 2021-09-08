@@ -1,8 +1,9 @@
 import { Component, Input } from '@angular/core';
+import { BlockConfig, ComponentMode, ComponentSettings } from '@stepflow/interfaces';
 import { AngularResizeElementDirection, AngularResizeElementEvent } from 'angular-resize-element';
 import { MenuItem } from 'primeng/api';
 import { ProjectService } from '../../../services/project/project.service';
-import { BlockConfig, ComponentMode, ComponentSettings, createBlockConfig } from '../../interfaces/core-component';
+import { CoreComponentService } from '../../core-component.service';
 
 @Component({
     selector: 'project-drag-and-resize',
@@ -12,7 +13,7 @@ import { BlockConfig, ComponentMode, ComponentSettings, createBlockConfig } from
 export class DragAndResizeComponent {
     @Input() isDraggable = false;
     @Input() componentMode: ComponentMode = 'view';
-    @Input() field: BlockConfig = createBlockConfig('textInput');
+    @Input() field: BlockConfig = this.coreComponentService.createBlockConfig('textInput');
     @Input() index = 0;
     @Input() resizable?: boolean;
     @Input() settings?: ComponentSettings;
@@ -29,7 +30,7 @@ export class DragAndResizeComponent {
         },
     ];
 
-    constructor(private projectService: ProjectService) {}
+    constructor(private projectService: ProjectService, private coreComponentService: CoreComponentService) {}
 
     public onDeleteBlock() {
         this.projectService.deleteProjectBlock(this.index);

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ComponentType, createBlockConfig } from '../../core/interfaces/core-component';
+import { ComponentType } from '@stepflow/interfaces';
+import { CoreComponentService } from '../../core/core-component.service';
 import { ProjectService } from '../../services/project/project.service';
 @Component({
     selector: 'step-controls',
@@ -9,7 +10,7 @@ import { ProjectService } from '../../services/project/project.service';
 export class ControlsComponent implements OnInit {
     public isAddBlockDisabled = false;
 
-    constructor(public projectService: ProjectService) {}
+    constructor(public projectService: ProjectService, private coreComponentService: CoreComponentService) {}
 
     ngOnInit() {}
 
@@ -18,7 +19,7 @@ export class ControlsComponent implements OnInit {
     }
 
     public addNewBlock(metadata: ComponentType, label?: string, name?: string) {
-        const newBlock = createBlockConfig(metadata, label, name);
+        const newBlock = this.coreComponentService.createBlockConfig(metadata, label, name);
 
         this.projectService.addProjectBlock(newBlock);
     }

@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { BlockConfig, ComponentMode, ComponentSettings, FileUploader, Link } from '@stepflow/interfaces';
 import { AngularResizeElementDirection, AngularResizeElementEvent } from 'angular-resize-element';
 import * as mime from 'mime';
 import { MenuItem, MessageService } from 'primeng/api';
@@ -7,15 +8,7 @@ import { FileUpload } from 'primeng/fileupload';
 import { map, switchMap } from 'rxjs/operators';
 import { ProjectService } from '../../../services/project/project.service';
 import { StorageService } from '../../../services/storage/storage.service';
-import {
-    BlockConfig,
-    ComponentMode,
-    ComponentSettings,
-    createBlockConfig,
-    FileUploader,
-    Link,
-} from '../../interfaces/core-component';
-
+import { CoreComponentService } from '../../core-component.service';
 @Component({
     selector: 'app-file-uploader',
     templateUrl: './file-uploader.component.html',
@@ -27,7 +20,7 @@ export class FileUploaderComponent implements OnInit {
     @Input() group!: FormGroup;
     @Input() componentMode?: ComponentMode;
     @Input() index = 0;
-    @Input() field: BlockConfig = createBlockConfig('textInput');
+    @Input() field: BlockConfig = this.coreComponentService.createBlockConfig('textInput');
     @Input() resizable?: boolean;
 
     public cols = [
@@ -46,7 +39,8 @@ export class FileUploaderComponent implements OnInit {
     constructor(
         private storageService: StorageService,
         private messageService: MessageService,
-        private projectService: ProjectService
+        private projectService: ProjectService,
+        private coreComponentService: CoreComponentService
     ) {}
 
     ngOnInit() {

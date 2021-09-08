@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { ComponentType } from '../../core/interfaces/core-component';
+import { ComponentType } from '@stepflow/interfaces';
 @Component({
     selector: 'project-block-overlay',
     templateUrl: './block-overlay.component.html',

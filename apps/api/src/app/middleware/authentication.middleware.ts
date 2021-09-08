@@ -8,7 +8,6 @@ export class AuthenticationMiddleware implements NestMiddleware {
 
     use(req: Request, res: Response, next: NextFunction) {
         const authHeader = req.headers.authorization;
-
         if (!authHeader) {
             res.status(401).send({ error: 'Unauthorized' });
             return;
