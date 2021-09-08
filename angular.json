@@ -167,7 +167,8 @@
                     "builder": "@nrwl/node:execute",
                     "options": {
                         "buildTarget": "api:build",
-                        "inspect": true
+                        "inspect": true,
+                        "port": 7777
                     }
                 },
                 "lint": {

@@ -1,9 +1,9 @@
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Project, Status, Step, StepConfig } from '@stepflow/interfaces';
 import * as _ from 'lodash';
 import { MenuItem } from 'primeng/api';
 import { Subscription } from 'rxjs';
-import { Project, Status, Step, StepConfig } from '../../models/interfaces/project';
 import { ProjectService } from '../../services/project/project.service';
 @Component({
     selector: 'project-steps',

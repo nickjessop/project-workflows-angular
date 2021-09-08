@@ -1,15 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { BlockConfig, ComponentMode, ComponentSettings, Table } from '@stepflow/interfaces';
 import { AngularResizeElementDirection, AngularResizeElementEvent } from 'angular-resize-element';
 import { MenuItem } from 'primeng/api';
 import { ProjectService } from '../../../services/project/project.service';
-import {
-    BlockConfig,
-    ComponentMode,
-    ComponentSettings,
-    createBlockConfig,
-    Table,
-} from '../../interfaces/core-component';
+import { CoreComponentService } from '../../core-component.service';
 
 @Component({
     selector: 'app-table',
@@ -19,7 +14,7 @@ import {
 export class TableComponent implements OnInit {
     @Input() group!: FormGroup;
     @Input() index = 0;
-    @Input() field: BlockConfig = createBlockConfig('textInput');
+    @Input() field: BlockConfig = this.coreComponentService.createBlockConfig('textInput');
     @Input() resizable?: boolean;
     @Input() componentMode?: ComponentMode;
 
@@ -83,7 +78,7 @@ export class TableComponent implements OnInit {
         ],
     };
 
-    constructor(private projectService: ProjectService) {}
+    constructor(private projectService: ProjectService, private coreComponentService: CoreComponentService) {}
 
     public height?: number;
     public settings?: ComponentSettings;

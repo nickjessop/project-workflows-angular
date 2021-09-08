@@ -1,10 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { UserPlan } from '@stepflow/interfaces';
 import * as admin from 'firebase-admin';
 
 @Injectable()
 export class FirebaseService {
     private serviceAccount = require('../../secrets/stepflow-d6a02-firebase-adminsdk-bdo05-40361fcfec.json');
+
+    public USER_COLLECTION = 'users';
+    public PROJECTS_COLLECTION = 'projects';
+    public INVITATION_COLLECTION = 'invitations';
 
     constructor() {
         admin.initializeApp({
@@ -27,17 +30,46 @@ export class FirebaseService {
         }
     }
 
-    public async updateUser(user: { id: string; email: string; firstName: string; lastName: string; plan?: UserPlan }) {
-        // const updatedUser = await admin
-        //     .auth()
-        //     .updateUser(user.id, { email: user.email, displayName: `${user.firstName} ${user.lastName}` });
+    public test() {
+        /*
+ const firebaseAuth = this.firebaseService.getAuthInstance();
+        return firebaseAuth.setPersistence('local').then(() => {
+            firebaseAuth
+                .createUserWithEmailAndPassword(email, password)
+                .then(userCredential => {
+                    const { user } = userCredential;
+                    const parsedUser = {
+                        id: user!.uid,
+                        email: user!.email || undefined,
+                        emailVerified: user!.emailVerified,
+                    };
+                    this.user = parsedUser;
+                    this.checkForExistingProjects(this.user.id || '');
+                    const updateUserMetadata = this.firebaseService
+                        .getFunctionsInstance()
+                        .httpsCallable('updateUserMetadata');
+                    // .httpsCallable('updateUserMetadata', {});
 
-        const _updatedUser = await admin
-            .firestore()
-            .collection('users')
-            .doc(user.id)
-            .update({ firstName: user.firstName, lastName: user.lastName, email: user.email, plan: user.plan });
+                    return from(updateUserMetadata({ firstName, lastName, plan, email }));
+                })
+                .then(() => {
+                    this.getCurrentUser()!.updateProfile({
+                        displayName: firstName + ' ' + lastName,
+                    });
+                });
+        });
+    */
+    }
 
-        return _updatedUser;
+    public async createUser(firstName: string, lastName: string, password: string, email: string) {
+        const user = await admin
+            .auth()
+            .createUser({ email, emailVerified: false, password, displayName: `${firstName} ${lastName}` });
+
+        return user;
+    }
+
+    private checkForExistingInvites() {
+        // admin.firestore().collection(this.INVITATION_COLLECTION).where('email', '==').get()
     }
 }

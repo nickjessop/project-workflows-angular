@@ -1,17 +1,11 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { BlockConfig, ComponentMode, ComponentSettings, Embed } from '@stepflow/interfaces';
 import { AngularResizeElementDirection } from 'angular-resize-element';
 import { MenuItem, MessageService } from 'primeng/api';
 import { ProjectService } from '../../../services/project/project.service';
-import {
-    BlockConfig,
-    ComponentMode,
-    ComponentSettings,
-    createBlockConfig,
-    createComponentMetadataTemplate,
-    Embed,
-} from '../../interfaces/core-component';
+import { CoreComponentService } from '../../core-component.service';
 
 @Component({
     selector: 'app-embed',
@@ -21,13 +15,13 @@ import {
 export class EmbedComponent implements OnInit {
     @Input() group!: FormGroup;
     @Input() index = 0;
-    @Input() field: BlockConfig = createBlockConfig('textInput');
+    @Input() field: BlockConfig = this.coreComponentService.createBlockConfig('textInput');
     @Input() resizable = true;
     @Input() componentMode?: ComponentMode;
 
     @ViewChild('iframe') iframe!: ElementRef;
 
-    public embedData = createComponentMetadataTemplate('embed') as Embed;
+    public embedData = this.coreComponentService.createComponentMetadataTemplate('embed') as Embed;
     public cleanUrl: SafeResourceUrl = '';
     public href = '';
     public domain: { hostname: string } = { hostname: '' };
@@ -47,7 +41,8 @@ export class EmbedComponent implements OnInit {
     constructor(
         public projectService: ProjectService,
         private domSantizer: DomSanitizer,
-        private messageService: MessageService
+        private messageService: MessageService,
+        private coreComponentService: CoreComponentService
     ) {}
 
     ngOnInit(): void {
