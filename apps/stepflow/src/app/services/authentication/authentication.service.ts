@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { User, UserPlan } from '@stepflow/interfaces';
+import { Project, Role, User, UserPlan } from '@stepflow/interfaces';
 import * as _ from 'lodash';
 import { MessageService } from 'primeng/api';
 import { BehaviorSubject, from, Subscription } from 'rxjs';
-import { Project, Role } from '../../models/interfaces/project';
 import { FirebaseService } from '../firebase/firebase.service';
 
 export enum AuthStatus {
@@ -396,7 +395,7 @@ export class AuthenticationService {
                     let members = _.union(_members, [userId]);
                     let memberRoles = _.union(_memberRoles, newMember);
                     
-                    const _pendingMembers = _project?.pendingMembers?.filter(pendingMember => {
+                    const _pendingMembers = _project?.pendingMembers?.filter((pendingMember) => {
                         return pendingMember !== email;
                     });
 

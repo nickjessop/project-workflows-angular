@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import * as _ from 'lodash';
 import { MessageService } from 'primeng/api';
-import { Project, ProjectUsers, Role } from '../../models/interfaces/project';
+import { Project, ProjectUsers, Role } from '@stepflow/interfaces';
 import { AuthenticationService } from '../../services/authentication/authentication.service';
 import { ProjectService } from '../../services/project/project.service';
 
