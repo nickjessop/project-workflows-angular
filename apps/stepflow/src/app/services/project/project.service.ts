@@ -7,6 +7,8 @@ import {
     Project,
     ProjectUsers,
     Role,
+    ShareLink,
+    SharePermission,
     Status,
     Step,
     StepConfig,
@@ -22,7 +24,9 @@ import { FirebaseService } from '../firebase/firebase.service';
     providedIn: 'root',
 })
 export class ProjectService {
-    private readonly PROJECT_COLLECTION_NAME = 'projects';
+    private readonly PROJECT_COLLECTION = 'projects';
+    private readonly INVITATION_COLLECTION = 'projects';
+    private readonly SHARE_COLLECTION = 'shareLinks';
     private _projectConfig: BehaviorSubject<Project> = new BehaviorSubject<Project>(this.createBaseProject('', '', ''));
     public readonly projectConfig$ = this._projectConfig.asObservable();
     public isDragging: EventEmitter<boolean> = new EventEmitter();
@@ -238,7 +242,7 @@ export class ProjectService {
 
         return this.firebaseService
             .getDbInstance()!
-            .collection(this.PROJECT_COLLECTION_NAME)
+            .collection(this.PROJECT_COLLECTION)
             .add(baseProject)
             .then(
                 documentRef => {
@@ -257,7 +261,7 @@ export class ProjectService {
     public updateProject(projectConfig: Project) {
         return this.firebaseService
             .getDbInstance()!
-            .collection(this.PROJECT_COLLECTION_NAME)
+            .collection(this.PROJECT_COLLECTION)
             .doc(projectConfig.id)
             .set(projectConfig, { merge: true })
             .then(
@@ -275,7 +279,7 @@ export class ProjectService {
     public deleteProject(projectId: string) {
         return this.firebaseService
             .getDbInstance()!
-            .collection(this.PROJECT_COLLECTION_NAME)
+            .collection(this.PROJECT_COLLECTION)
             .doc(projectId)
             .delete()
             .then(
@@ -292,7 +296,7 @@ export class ProjectService {
         return from(
             this.firebaseService
                 .getDbInstance()
-                .collection(`${this.PROJECT_COLLECTION_NAME}`)
+                .collection(`${this.PROJECT_COLLECTION}`)
                 .get()
         );
     }
@@ -402,7 +406,7 @@ export class ProjectService {
     public getProjects() {
         const userId = this.authenticationService.user?.id || '';
 
-        const ref = this.firebaseService.getDbInstance().collection(this.PROJECT_COLLECTION_NAME);
+        const ref = this.firebaseService.getDbInstance().collection(this.PROJECT_COLLECTION);
 
         return from(ref.where('members', 'array-contains', userId).get()).pipe(
             // return from(ref.where('members', 'array-contains', { userId: userId, role: 'owner' }).get()).pipe(
@@ -425,10 +429,10 @@ export class ProjectService {
     }
 
     public subscribeAndSetProject(projectId: string) {
-        // this.firebaseService.getDbInstance()!.collection(this.PROJECT_COLLECTION_NAME).doc(projectId).onSnapshot()
+        // this.firebaseService.getDbInstance()!.collection(this.PROJECT_COLLECTION).doc(projectId).onSnapshot()
         this.unsubscribeToProjectListener = this.firebaseService
             .getDbInstance()!
-            .collection(this.PROJECT_COLLECTION_NAME)
+            .collection(this.PROJECT_COLLECTION)
             .doc(projectId)
             .onSnapshot(
                 document => {
@@ -547,10 +551,10 @@ export class ProjectService {
         }
         const db = this.firebaseService.getDbInstance()!;
         const batch = db.batch();
-        const projectRef = db.collection('projects').doc(projectId);
+        const projectRef = db.collection(this.PROJECT_COLLECTION).doc(projectId);
 
         pendingMembers.map(member => {
-            let invitationRef = db.collection('invitations').doc();
+            let invitationRef = db.collection(this.INVITATION_COLLECTION).doc();
             batch.set(invitationRef, { email: member.email, role: member.role, project: projectRef });
         });
 
@@ -565,9 +569,59 @@ export class ProjectService {
             });
     }
 
+    public async regenerateOrGenerateShareLink(permission: SharePermission) {
+        const db = this.firebaseService.getDbInstance();
+        const currentUserId = this.authenticationService.user?.id;
+        const currentProjectId = this._projectConfig.getValue().id;
+
+        if (!db || !currentUserId || !currentProjectId) {
+            console.log('Cannot generate share link when db/userid/projectid is missing');
+
+            return;
+        }
+
+        const shareLink: ShareLink = {
+            userId: currentUserId,
+            projectId: currentProjectId,
+            permission,
+        };
+
+        // If share link already exists, update it otherwise create a new one
+
+        const existingShareLinks = await db
+            .collection(this.SHARE_COLLECTION)
+            .where('projectId', '==', currentProjectId)
+            .get();
+
+        const existingShareLink = existingShareLinks.docs[0];
+
+        if (existingShareLink) {
+            await db
+                .collection(this.SHARE_COLLECTION)
+                .doc(existingShareLink.id)
+                .update(shareLink);
+        } else {
+            await db.collection(this.SHARE_COLLECTION).add(shareLink);
+        }
+
+        return shareLink;
+    }
+
+    public async getShareLink(): Promise<ShareLink | undefined> {
+        const db = this.firebaseService.getDbInstance();
+        const currentProjectId = this._projectConfig.getValue().id;
+
+        const existingShareLink = await db
+            .collection(this.SHARE_COLLECTION)
+            .where('projectId', '==', currentProjectId)
+            .get();
+
+        return ((existingShareLink.docs[0].data() as unknown) as ShareLink) || undefined;
+    }
+
     public checkNewUserProjects() {
         const db = this.firebaseService.getDbInstance()!;
-        const invitationRef = db.collection('invitations').doc();
+        const invitationRef = db.collection(this.INVITATION_COLLECTION).doc();
     }
 
     public resetProject() {

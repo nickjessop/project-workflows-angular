@@ -81,6 +81,43 @@
         </ng-template>
     </p-table>
 
+    <div class="ms-01 p-mt-3 p-text-uppercase p-text-bold">Shareable link</div>
+    <div class="p-inputgroup p-mt-2">
+        <input type="text" pInputText [value]="shareLink ? shareLink : 'No Link Generated'" readonly #linkInput />
+        <button
+            type="button"
+            pButton
+            pRipple
+            label="Copy Link"
+            icon="pi pi-link"
+            iconPos="left"
+            class="p-button-secondary"
+            (click)="copyInputMessage(linkInput)"
+        ></button>
+        <button
+            type="button"
+            pButton
+            pRipple
+            [label]="shareLink ? 'Regenerate Link' : 'Generate Link'"
+            icon="pi pi-undo"
+            iconPos="left"
+            class="p-button-secondary"
+            (click)="generateSharingLink()"
+        ></button>
+    </div>
+    <div class="p-px-2 p-py-4">
+        <i class="pi pi-users"></i>
+        <p-dropdown
+            [options]="sharePermissions"
+            [(ngModel)]="selectedSharePermission"
+            optionLabel="permission"
+            class="p-mx-2"
+            appendTo="body"
+            optionLabel="value"
+            optionValue="value"
+        ></p-dropdown>
+        <i>This is a public link that can be shared with anyone</i>
+    </div>
     <div class="p-d-flex p-jc-end p-ai-center p-mt-4">
         <ng-container *ngIf="displayDialogSave; else dialogDone"
             ><i class="p-mr-2">Pending changes</i>
@@ -97,33 +134,4 @@
             <button type="button" pButton pRipple label="Done" class="p-button" (click)="hideShareDialog()"></button>
         </ng-template>
     </div>
-
-    <!-- <div class="ms-01 p-mt-3 p-text-uppercase p-text-bold">Shareable link</div>
-                <div class="p-inputgroup p-mt-2">
-                    <input type="text" pInputText value="{{ href }}" readonly #linkInput />
-                    <button
-                        type="button"
-                        pButton
-                        pRipple
-                        label="Copy Link"
-                        icon="pi pi-link"
-                        iconPos="left"
-                        class="p-button-secondary"
-                        (click)="copyInputMessage(linkInput)"
-                    ></button>
-                </div>
-                <div class="p-px-2 p-py-4">
-                    <i class="pi pi-users"></i>
-                    <p-dropdown
-                        [options]="permissions"
-                        [(ngModel)]="selectedPermission"
-                        optionLabel="permission"
-                        class="p-mx-2"
-                        appendTo="body"
-                    ></p-dropdown>
-                    <i>Only people added can open this link</i>
-                </div> -->
-    <!-- <p-footer>
-                    <button type="button" pButton label="Done" (click)="hideShareDialog()"></button>
-                </p-footer> -->
 </p-dialog>
