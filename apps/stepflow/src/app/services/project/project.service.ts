@@ -69,9 +69,11 @@ export class ProjectService {
         if (persistChange) {
             const didProjectChange = this.areProjectsDifferent(projectCopy1, projectCopy2);
             if (didProjectChange) {
+                console.log('projectChanged');
                 const updateResult = await this.updateProject(project);
                 return updateResult;
             } else {
+                console.log('projectDidNotChange');
                 return true;
             }
         } else {
@@ -485,6 +487,7 @@ export class ProjectService {
 
     public async sendProjectInvitations(emails: string[], role: Role) {
         const addMemberResult = await this.addNewProjectMembers(emails, role);
+        console.log(addMemberResult);
         if (addMemberResult === false) {
             return undefined;
         }
@@ -515,6 +518,7 @@ export class ProjectService {
         return this.authenticationService
             .findUsersMatchingEmail(emails)
             .then(async users => {
+                console.log('add members');
                 const _projectConfig = _.cloneDeep(this.projectConfig);
                 const newMembers: { userId: string; role: Role }[] = [];
                 const pendingMembers: { email: string; role: Role }[] = [];
@@ -527,25 +531,32 @@ export class ProjectService {
                     _projectConfig.members = _.union(_projectConfig.members, users.newMembers);
                     _projectConfig.memberRoles = _.union(_projectConfig.memberRoles, newMembers);
                 }
+                console.log(users?.pendingMembers);
                 if (users?.pendingMembers) {
                     users?.pendingMembers.map(member => {
                         return pendingMembers.push({ email: member, role: role || 'viewer' });
                     });
                     _projectConfig.pendingMembers = _.union(_projectConfig.pendingMembers, users.pendingMembers);
-                    const addInvitations = await this.addInvitations(pendingMembers, this.projectConfig?.id);
-                    return addInvitations;
+                    console.log(_projectConfig.pendingMembers);
                 }
-                const setResult = await this.setProject(_projectConfig);
-                return setResult;
+                console.log(this.projectConfig?.id);
+                const addInvitations = await this.addInvitations(pendingMembers, this.projectConfig?.id);
+                console.log(addInvitations, 'addInvitations');
+                if (addInvitations === true) {
+                    const setResult = await this.setProject(_projectConfig);
+                    return setResult;
+                } else {
+                    return false;
+                }
             })
             .catch(function(error: Error) {
+                console.log(error, 'add members error');
                 // TODO handle error
                 return false;
             });
     }
 
-    // make private
-    public addInvitations(pendingMembers: { email: string; role: Role }[], projectId: string | undefined) {
+    private async addInvitations(pendingMembers: { email: string; role: Role }[], projectId: string | undefined) {
         if (!projectId) {
             return;
         }
@@ -559,7 +570,7 @@ export class ProjectService {
         });
 
         // Commit the batch
-        batch
+        return batch
             .commit()
             .then(() => {
                 return true;
