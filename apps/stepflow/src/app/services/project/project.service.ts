@@ -618,7 +618,7 @@ export class ProjectService {
         return shareLink;
     }
 
-    public async getShareLink(): Promise<ShareLink | undefined> {
+    public async getShareLink() {
         const db = this.firebaseService.getDbInstance();
         const currentProjectId = this._projectConfig.getValue().id;
 
@@ -627,7 +627,11 @@ export class ProjectService {
             .where('projectId', '==', currentProjectId)
             .get();
 
-        return ((existingShareLink.docs[0].data() as unknown) as ShareLink) || undefined;
+        if (existingShareLink.docs.length) {
+            return (existingShareLink.docs[0].data() as unknown) as ShareLink;
+        } else {
+            return undefined;
+        }
     }
 
     public checkNewUserProjects() {
