@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { User, UserPlan } from '@stepflow/interfaces';
+import { Project, Role, User, UserPlan } from '@stepflow/interfaces';
+import * as _ from 'lodash';
 import { MessageService } from 'primeng/api';
 import { BehaviorSubject, from, Subscription } from 'rxjs';
 import { FirebaseService } from '../firebase/firebase.service';
@@ -22,6 +23,8 @@ export class AuthenticationService {
 
     private subscriptions = new Subscription();
     public redirectUrl = '/project';
+    private readonly PROJECT_COLLECTION_NAME = 'projects';
+    private readonly INVITATIONS_COLLECTION_NAME = 'invitations';
 
     public allowedUserIds = [
         '06T4lgj7x1emjUEMCmPnJYPFjum2',
@@ -35,7 +38,7 @@ export class AuthenticationService {
     constructor(
         private firebaseService: FirebaseService,
         private router: Router,
-        private messageService: MessageService
+        private messageService: MessageService,
     ) {
         this.setAuthStatus(this.user);
         this.initFirebaseUserListener();
@@ -104,6 +107,7 @@ export class AuthenticationService {
     public register(email: string, password: string, firstName: string, lastName: string, plan: UserPlan) {
         from(this.createUserAndAttachMetadata(email, password, firstName, lastName, plan)).subscribe(
             success => {
+                this.checkNewUserProjects(email);
                 if (plan !== 'Essential') {
                     this.router.navigate(['/auth/confirmation?plan=' + plan]);
                 } else {
@@ -148,7 +152,6 @@ export class AuthenticationService {
                         emailVerified: user!.emailVerified,
                     };
                     this.user = parsedUser;
-                    this.checkForExistingProjects(this.user.id || '');
                     const updateUserMetadata = this.firebaseService
                         .getFunctionsInstance()
                         .httpsCallable('updateUserMetadata');
@@ -332,7 +335,6 @@ export class AuthenticationService {
             .get()
             .then(querySnapshot => {
                 querySnapshot.forEach(doc => {
-                    console.log('doc', doc);
                     if (doc.id != '' || doc.id != undefined) {
                         newMembers.push(doc.id);
                         const data = doc.data() as User;
@@ -349,8 +351,63 @@ export class AuthenticationService {
             });
     }
 
-    private checkForExistingProjects(userId: string) {
-        if (userId != '') {
+    public checkNewUserProjects(email: string) {
+        const db = this.firebaseService.getDbInstance()!;
+        const invitationRef = db.collection(this.INVITATIONS_COLLECTION_NAME);
+        const projects: {id: string, projectId: string, role: Role}[] = [];
+        invitationRef.where("email", "==", email).get().then( async querySnapshot => {
+            querySnapshot.forEach(doc => {
+                projects.push({
+                    id: doc.id,
+                    projectId: doc.data().project.id,
+                    role: doc.data().role
+                });
+                doc.ref.delete();
+            })
+            const addNewUsersToProjects = await this.addNewUserToProjects(email, projects);
+            return addNewUsersToProjects;
+        });
+        
+    }
+
+    private async addNewUserToProjects(email: string, projects: { projectId: string; role: Role }[]) {
+        const userId = this.getCurrentUser()!.uid;
+        if (!projects || !email || !userId) {
+            return;
         }
+        const db = this.firebaseService.getDbInstance()!;
+
+        projects.forEach(async (project, index) => {
+            try {
+                await db.runTransaction(async transaction => {
+                    let projectRef = db.collection(this.PROJECT_COLLECTION_NAME).doc(project.projectId);
+                    const doc = await transaction.get(projectRef);
+
+                    if (!doc.exists) {
+                        return;
+                    }
+                    const _project = doc.data() as Project;
+                    let newMember: { userId: string; role: Role }[] = [{ userId: userId, role: project.role }];
+                    let _memberRoles: { userId: string; role: Role }[];
+                    let _members: string[];
+                    _members = _project.members;
+                    _memberRoles = _project.memberRoles;
+                    let members = _.union(_members, [userId]);
+                    let memberRoles = _.union(_memberRoles, newMember);
+                    
+                    const _pendingMembers = _project?.pendingMembers?.filter((pendingMember) => {
+                        return pendingMember !== email;
+                    });
+
+                    transaction.update(projectRef, {
+                        memberRoles: memberRoles,
+                        members: members,
+                        pendingMembers: _pendingMembers,
+                    });
+                });
+            } catch (e) {
+                console.log(`error running transaction ${e}`);
+            }
+        });
     }
 }

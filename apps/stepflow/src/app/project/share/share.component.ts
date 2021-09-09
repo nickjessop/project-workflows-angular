@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Project, ProjectUsers, Role, SharePermission } from '@stepflow/interfaces';
 import * as _ from 'lodash';
 import { MessageService } from 'primeng/api';
+import { AuthenticationService } from '../../services/authentication/authentication.service';
 import { ProjectService } from '../../services/project/project.service';
 
 @Component({
@@ -36,7 +37,11 @@ export class ShareComponent implements OnInit {
 
     public pendingEmails?: { email: string; role: Role }[];
 
-    constructor(public projectService: ProjectService, private messageService: MessageService) {}
+    constructor(
+        public projectService: ProjectService,
+        private messageService: MessageService,
+        public authenticationService: AuthenticationService
+    ) {}
 
     ngOnInit(): void {
         if (this.project) {
@@ -52,14 +57,6 @@ export class ShareComponent implements OnInit {
 
     public showShareDialog() {
         this.displayShareDialog = true;
-        // test code
-        // this.pendingEmails = [
-        //     { email: 'nick+pending1@stepflow.co', role: 'editor' },
-        //     { email: 'nick+pending2@stepflow.co', role: 'viewer' },
-        // ];
-        // const projectId = '4U9YahqU4Kwvj5rYu5Lm';
-        // console.log('showShareDialog');
-        // this.projectService.addInvitations(this.pendingEmails, projectId);
     }
 
     public hideShareDialog() {
