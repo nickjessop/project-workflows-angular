@@ -4,6 +4,7 @@ import { MessageService } from 'primeng/api';
 import { Project, ProjectUsers, Role } from '@stepflow/interfaces';
 import { AuthenticationService } from '../../services/authentication/authentication.service';
 import { ProjectService } from '../../services/project/project.service';
+import { MenuItem } from 'primeng/api';
 
 @Component({
     selector: 'project-share',
@@ -66,7 +67,7 @@ export class ShareComponent implements OnInit {
             this.allowEmailSubmission = false;
             this.emailValidationMsg = 'Please enter valid emails.';
         } else if (emails.length > 10) {
-            // emails.length > 10 required for a firebase limitation
+            // emails.length < 10 required for a firebase limitation
             this.allowEmailSubmission = false;
             this.emailValidationMsg = 'Please enter no more than 10 emails to invite.';
         } else if (duplicateEmails.length > 0) {
@@ -153,6 +154,37 @@ export class ShareComponent implements OnInit {
                 severity: 'error',
                 summary: "Can't send invitation emails.",
                 detail: 'Please make sure you have entered valid emails. The number of emails must be 10 or less.',
+            });
+        }
+    }
+
+    public getUserMenuItems(userId: string, email: string): MenuItem[] {
+        return [
+            {
+                label: 'Remove user',
+                icon: 'pi pi-times',
+                command: () => {
+                    this.onRemoveUser(userId, email);
+                },
+            },
+        ];
+    }
+
+    public async onRemoveUser(userId: string, email: string) {
+        const removeMemberResult = await this.projectService.removeProjectMember(userId);
+        if (removeMemberResult == true) {
+            this.messageService.add({
+                key: 'global-toast',
+                severity: 'success',
+                detail: `Successfully removed ${email} from the project.`,
+            });
+            this.hideShareDialog();
+        } else {
+            this.messageService.add({
+                key: 'global-toast',
+                severity: 'error',
+                summary: `Can't remove ${email} from the project.`,
+                detail: 'Please try again.',
             });
         }
     }
