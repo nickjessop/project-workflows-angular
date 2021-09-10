@@ -515,7 +515,6 @@ export class ProjectService {
         return this.authenticationService
             .findUsersMatchingEmail(emails)
             .then(async users => {
-                console.log('add members')
                 const _projectConfig = _.cloneDeep(this.projectConfig);
                 const newMembers: { userId: string; role: Role }[] = [];
                 const pendingMembers: { email: string; role: Role }[] = [];
@@ -534,12 +533,9 @@ export class ProjectService {
                         return pendingMembers.push({ email: member, role: role || 'viewer' });
                     });
                     _projectConfig.pendingMembers = _.union(_projectConfig.pendingMembers, users.pendingMembers);
-                    console.log(_projectConfig.pendingMembers)
   
                 }
-                console.log(this.projectConfig?.id)
                 const addInvitations = await this.addInvitations(pendingMembers, this.projectConfig?.id);
-                console.log(addInvitations, 'addInvitations')
                 if (addInvitations === true) {
                     const setResult = await this.setProject(_projectConfig);
                     return setResult;
@@ -553,6 +549,18 @@ export class ProjectService {
                 // TODO handle error
                 return false;
             });
+    }
+
+    public async removeProjectMember(userId: string) {
+        const _projectConfig = _.cloneDeep(this.projectConfig);
+        _projectConfig.members = _projectConfig?.members?.filter((member) => {
+            return member !== userId;
+        });
+        _projectConfig.memberRoles = _projectConfig?.memberRoles?.filter((member) => {
+            return member.userId !== userId;
+        });
+        const setResult = await this.setProject(_projectConfig);
+        return setResult;
     }
 
     private async addInvitations(pendingMembers: { email: string; role: Role }[], projectId: string | undefined) {
