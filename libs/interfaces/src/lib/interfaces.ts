@@ -143,6 +143,9 @@ export interface Step {
 // viewer: read-only access to entire project
 // (future) commenter: read-only + ability to leave comments
 export type Role = 'owner' | 'creator' | 'editor' | 'viewer';
+export const SharePermissions = ['view', 'edit'] as const;
+export type SharePermissions = ['view', 'edit'];
+export type SharePermission = typeof SharePermissions[number];
 
 export type Status = typeof NoStatus | typeof InProgress | typeof NeedsReview | typeof Upcoming | typeof Complete;
 
@@ -151,3 +154,9 @@ export const InProgress = { label: 'In progress', value: 'in-progress', icon: 'p
 export const NeedsReview = { label: 'Needs review', value: 'needs-review', icon: 'pi-exclamation' } as const;
 export const Upcoming = { label: 'Upcoming', value: 'upcoming', icon: 'pi-clock-hands' } as const;
 export const Complete = { label: 'Completed', value: 'completed', icon: 'pi-check' } as const;
+
+export interface ShareLink {
+    userId: string;
+    projectId: string;
+    permission: SharePermission;
+}

@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Project, ProjectUsers, Role, SharePermission } from '@stepflow/interfaces';
 import * as _ from 'lodash';
 import { MessageService } from 'primeng/api';
-import { Project, ProjectUsers, Role } from '@stepflow/interfaces';
 import { AuthenticationService } from '../../services/authentication/authentication.service';
 import { ProjectService } from '../../services/project/project.service';
 import { MenuItem } from 'primeng/api';
@@ -26,6 +26,10 @@ export class ShareComponent implements OnInit {
     public displayShareDialog: boolean = false;
     public displayDialogSave: boolean = false;
 
+    public sharePermissions = [{ value: 'view' }, { value: 'edit' }];
+    public selectedSharePermission: SharePermission = 'edit';
+    public shareLink?: string;
+
     public roles: { value: Role; label: string }[] = [
         { value: 'creator', label: 'Can configure' },
         { value: 'editor', label: 'Can edit' },
@@ -34,7 +38,11 @@ export class ShareComponent implements OnInit {
 
     public pendingEmails?: { email: string; role: Role }[];
 
-    constructor(public projectService: ProjectService, private messageService: MessageService, public authenticationService: AuthenticationService) {}
+    constructor(
+        public projectService: ProjectService,
+        private messageService: MessageService,
+        public authenticationService: AuthenticationService
+    ) {}
 
     ngOnInit(): void {
         if (this.project) {
@@ -43,6 +51,8 @@ export class ShareComponent implements OnInit {
                 //TODO users can add new owners and owners can change each other's roles (this is how G docs goes about it but would need to think about it some more)
                 this.projectOwners = result?.filter(user => user.role === 'owner');
             });
+
+            this.fetchExistingShareLink();
         }
     }
 
@@ -52,6 +62,14 @@ export class ShareComponent implements OnInit {
 
     public hideShareDialog() {
         this.displayShareDialog = false;
+    }
+
+    private async fetchExistingShareLink() {
+        const shareLink = await this.projectService.getShareLink();
+
+        if (shareLink) {
+            this.shareLink = `/project/${shareLink.userId}/${shareLink.projectId}/${shareLink.permission}`;
+        }
     }
 
     public validateEmails() {
@@ -203,4 +221,22 @@ export class ShareComponent implements OnInit {
     // hideLinkCopiedMsg() {
     //     this.linkCopiedMsg = [];
     // }
+    public async generateSharingLink() {
+        const shareLink = await this.projectService.regenerateOrGenerateShareLink(this.selectedSharePermission);
+
+        if (shareLink) {
+            this.shareLink = `/project/${shareLink.userId}/${shareLink.projectId}/${shareLink.permission}`;
+        }
+    }
+
+    copyInputMessage(linkInput: any) {
+        linkInput.select();
+        document.execCommand('copy');
+        linkInput.setSelectionRange(0, 0);
+        this.messageService.add({
+            key: 'global-toast',
+            severity: 'success',
+            detail: 'Link copied',
+        });
+    }
 }
