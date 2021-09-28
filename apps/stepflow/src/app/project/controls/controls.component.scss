@@ -5,7 +5,8 @@
     right: 0;
     &__button {
         width: auto;
-        margin-left: auto;
+        // margin-left: auto;
+        margin-top: 65px;
         .control-label {
             color: var(--clr-greytext);
         }

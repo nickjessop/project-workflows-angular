@@ -1,4 +1,4 @@
-<div class="steps-container p-pt-5 p-pl-3 p-pr-5 custom-scroll">
+<div class="steps-container p-mt-5 p-mx-3">
     <div class="p-d-flex p-ai-center p-jc-between p-pb-2">
         <div class="p-text-uppercase ms-01">Steps</div>
         <button
@@ -15,48 +15,70 @@
             <div *ngFor="let stepConfig of steps; index as i" class="steps">
                 <div
                     cdkDrag
-                    class="step p-d-flex p-jc-between p-ai-center p-mb-3"
+                    class="step p-d-flex p-jc-between p-ai-center p-mb-3 p-p-2"
                     [class.step-selected]="stepConfig.step.isCurrentStep"
                     (click)="onStepPress(i)"
                 >
-                    <div class="step-line"></div>
-                    <div class="step__content p-d-flex p-jc-between p-px-3 p-py-3" style="flex-grow: 1;">
-                        <div class="p-d-flex p-flex-column w-full">
-                            <div class="ms-0">{{ stepConfig.step.title }}</div>
-                            <div class="step-status p-d-flex p-ai-center">
-                                <ng-container
-                                    *ngIf="stepConfig.step.status && stepConfig.step.status.value != 'no-status'"
+                    <div class="step-status p-d-flex p-ai-center p-jc-center">
+                        <ng-container
+                            *ngIf="stepConfig.step.status && stepConfig.step.status.value != 'no-status'; else nostatus"
+                        >
+                            <!-- <i
+                                    class="pi {{ stepConfig.step.status.icon }} ms-01"
+                                    pTooltip="{{ stepConfig.step.status.label }}"
+                                ></i> -->
+                            <ng-container [ngSwitch]="stepConfig.step.status.value">
+                                <div
+                                    *ngSwitchCase="'upcoming'"
+                                    class="step-status__icon p-d-flex p-jc-center p-ai-center"
+                                    style="background-color: var(--info-color);"
                                 >
-                                    <div class="p-d-flex p-jc-center p-ai-center p-mt-2 step-status__icon">
-                                        <ng-container [ngSwitch]="stepConfig.step.status.value">
-                                            <i
-                                                *ngSwitchCase="'upcoming'"
-                                                class="pi {{ stepConfig.step.status.icon }} ms-03"
-                                                pTooltip="{{ stepConfig.step.status.label }}"
-                                                style="background-color: #2196F3;"
-                                            ></i>
-                                            <i
-                                                *ngSwitchCase="'completed'"
-                                                class="pi {{ stepConfig.step.status.icon }} ms-03"
-                                                pTooltip="{{ stepConfig.step.status.label }}"
-                                                style="background-color: #689F38;"
-                                            ></i>
-                                            <i
-                                                *ngSwitchCase="'needs-review'"
-                                                class="pi {{ stepConfig.step.status.icon }} ms-03"
-                                                pTooltip="{{ stepConfig.step.status.label }}"
-                                                style="background-color: red;"
-                                            ></i>
-                                            <i
-                                                *ngSwitchCase="'in-progress'"
-                                                class="pi {{ stepConfig.step.status.icon }} ms-03"
-                                                pTooltip="{{ stepConfig.step.status.label }}"
-                                                style="background-color: #FBC02D;color: #212529"
-                                            ></i>
-                                        </ng-container>
-                                    </div>
-                                </ng-container>
-                            </div>
+                                    <i
+                                        class="pi {{ stepConfig.step.status.icon }} ms-01"
+                                        pTooltip="{{ stepConfig.step.status.label }}"
+                                    ></i>
+                                </div>
+                                <div
+                                    *ngSwitchCase="'completed'"
+                                    class="step-status__icon p-d-flex p-jc-center p-ai-center"
+                                    style="background-color: #759D53;"
+                                >
+                                    <i
+                                        class="pi {{ stepConfig.step.status.icon }} ms-01"
+                                        pTooltip="{{ stepConfig.step.status.label }}"
+                                    ></i>
+                                </div>
+                                <div
+                                    *ngSwitchCase="'needs-review'"
+                                    class="step-status__icon p-d-flex p-jc-center p-ai-center"
+                                    style="background-color: #c76c6c"
+                                >
+                                    <i
+                                        class="pi {{ stepConfig.step.status.icon }} ms-01"
+                                        pTooltip="{{ stepConfig.step.status.label }}"
+                                    ></i>
+                                </div>
+                                <div
+                                    *ngSwitchCase="'in-progress'"
+                                    class="step-status__icon p-d-flex p-jc-center p-ai-center"
+                                    style="background-color: #AD9048;"
+                                >
+                                    <i
+                                        class="pi {{ stepConfig.step.status.icon }} ms-01"
+                                        pTooltip="{{ stepConfig.step.status.label }}"
+                                    ></i>
+                                </div>
+                            </ng-container>
+                        </ng-container>
+                        <ng-template #nostatus>
+                            <div class="step-status__icon step-status__icon--default"></div>
+                        </ng-template>
+                        <div class="step-line"></div>
+                    </div>
+
+                    <div class="p-d-flex p-jc-between p-pl-3" style="flex-grow: 1;">
+                        <div class="p-d-flex p-flex-column">
+                            <div class="ms-0">{{ stepConfig.step.title }}</div>
                         </div>
                         <button
                             type="button"

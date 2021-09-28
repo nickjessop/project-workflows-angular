@@ -19,6 +19,13 @@
                 // min-height: calc(100vh - 130px);
                 height: auto;
             }
+            .step-status-label {
+                text-transform: uppercase;
+                font-weight: bold;
+                display: flex;
+                align-items: center;
+                color: var(--text-color-secondary);
+            }
         }
     }
     .powered-by {
