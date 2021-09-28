@@ -5,8 +5,7 @@
     // border: 0.065rem solid var(--surface-d);
     border-radius: 6px;
     background: white;
-    border-radius: 12px !important;
-    box-shadow: rgb(0 0 0 / 10%) 0px 6px 12px !important;
+    box-shadow: 0 1px 2px rgb(0 0 0 / 20%) !important;
     transition: box-shadow 0.2s ease 0s !important;
     .resize {
         position: absolute;
@@ -26,7 +25,7 @@
     }
     &:hover,
     &:focus-within {
-        box-shadow: rgb(0 0 0 / 15%) 0px 6px 16px !important;
+        box-shadow: 0 1px 2px rgb(0 0 0 / 30%) !important;
         .field__settings,
         .field__handle {
             visibility: visible;
