@@ -1,10 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Project, ProjectUsers, Role, SharePermission } from '@stepflow/interfaces';
 import * as _ from 'lodash';
-import { MessageService } from 'primeng/api';
+import { MenuItem, MessageService } from 'primeng/api';
 import { AuthenticationService } from '../../services/authentication/authentication.service';
 import { ProjectService } from '../../services/project/project.service';
-import { MenuItem } from 'primeng/api';
 
 @Component({
     selector: 'project-share',
@@ -47,7 +46,7 @@ export class ShareComponent implements OnInit {
     ngOnInit(): void {
         if (this.project) {
             this.projectService.getProjectUserDetails(this.project.memberRoles).then(result => {
-                this.projectUsers = result?.filter(user => !(user.id === this.loggedInUserId && user.role === 'owner'));
+                this.projectUsers = result?.filter(user => user.role != 'owner');
                 //TODO users can add new owners and owners can change each other's roles (this is how G docs goes about it but would need to think about it some more)
                 this.projectOwners = result?.filter(user => user.role === 'owner');
             });
