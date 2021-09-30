@@ -53,3 +53,31 @@ function isAuthenticated(context: functions.https.CallableContext) {
         throw new functions.https.HttpsError('unauthenticated', 'User not authenticated.');
     }
 }
+
+export const updateUserMetadata = functions.https.onCall(
+    (
+        data: {
+            firstName?: string;
+            lastName?: string;
+            plan?: 'Plus' | 'Growth' | 'Essential' | 'Free';
+            email?: string;
+        },
+        context
+    ) => {
+        isAuthenticated(context);
+
+        admin
+            .firestore()
+            .collection('/users')
+            .doc(context.auth!.uid)
+            .set({ firstName: data.firstName, lastName: data.lastName, plan: data.plan, email: data.email })
+            .then(
+                success => {
+                    return {};
+                },
+                err => {
+                    throw new functions.https.HttpsError('internal', 'An error occurred while updating user');
+                }
+            );
+    }
+);
