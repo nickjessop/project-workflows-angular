@@ -28,6 +28,8 @@ export class ShareComponent implements OnInit {
     public sharePermissions = [{ value: 'view' }, { value: 'edit' }];
     public selectedSharePermission: SharePermission = 'edit';
     public shareLink?: string;
+    public shareLinkChecked: boolean = false;
+    public shareLinkMsg: string = 'Enable a public link that can be shared with anyone.';
 
     public roles: { value: Role; label: string }[] = [
         { value: 'creator', label: 'Can configure' },
@@ -220,6 +222,14 @@ export class ShareComponent implements OnInit {
     // hideLinkCopiedMsg() {
     //     this.linkCopiedMsg = [];
     // }
+
+    public enableShareLink(event: any) {
+        if (event.checked === true) {
+            this.generateSharingLink();
+        } else {
+            // ungenerate sharing link
+        }
+    }
     public async generateSharingLink() {
         const shareLink = await this.projectService.regenerateOrGenerateShareLink(this.selectedSharePermission);
 
