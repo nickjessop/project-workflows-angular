@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.invitationEmail = void 0;
+exports.updateUserMetadata = exports.invitationEmail = void 0;
 // // Start writing Firebase Functions
 // // https://firebase.google.com/docs/functions/typescript
 //
@@ -49,4 +49,17 @@ function isAuthenticated(context) {
         throw new functions.https.HttpsError('unauthenticated', 'User not authenticated.');
     }
 }
+exports.updateUserMetadata = functions.https.onCall((data, context) => {
+    isAuthenticated(context);
+    admin
+        .firestore()
+        .collection('/users')
+        .doc(context.auth.uid)
+        .set({ firstName: data.firstName, lastName: data.lastName, plan: data.plan, email: data.email })
+        .then(success => {
+        return {};
+    }, err => {
+        throw new functions.https.HttpsError('internal', 'An error occurred while updating user');
+    });
+});
 //# sourceMappingURL=index.js.map
