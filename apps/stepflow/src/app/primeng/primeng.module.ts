@@ -16,6 +16,7 @@ import { EditorModule } from 'primeng/editor';
 import { FileUploadModule } from 'primeng/fileupload';
 import { GalleriaModule } from 'primeng/galleria';
 import { InplaceModule } from 'primeng/inplace';
+import { InputSwitchModule } from 'primeng/inputswitch';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { MenuModule } from 'primeng/menu';
@@ -62,6 +63,7 @@ import { TooltipModule } from 'primeng/tooltip';
         TooltipModule,
         ChipModule,
         ChipsModule,
+        InputSwitchModule,
     ],
     exports: [
         AccordionModule,
@@ -91,6 +93,7 @@ import { TooltipModule } from 'primeng/tooltip';
         TooltipModule,
         ChipModule,
         ChipsModule,
+        InputSwitchModule,
     ],
     providers: [ConfirmationService, MessageService],
 })
