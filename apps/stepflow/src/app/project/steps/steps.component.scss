@@ -21,13 +21,13 @@
         }
 
         .step-status {
-            min-width: 21px;
-            max-width: 21px;
-            height: 21px;
+            min-width: 16px;
+            max-width: 16px;
+            height: 16px;
             position: relative;
             &__icon {
-                width: 21px;
-                height: 21px;
+                width: 16px;
+                height: 16px;
                 border-radius: 5px;
                 background: var(--surface-e);
                 z-index: 2;
@@ -36,6 +36,7 @@
                     color: white;
                     min-height: 11px;
                     min-width: 11px;
+                    font-size: 10px;
                 }
                 &--default {
                     width: 16px;
@@ -45,11 +46,12 @@
             .step-line {
                 height: 50px;
                 position: absolute;
-                left: 10px;
+                left: 8px;
                 width: 2px;
                 top: 15px;
                 background: var(--surface-d);
                 z-index: 1;
+                opacity: 0;
             }
         }
     }
