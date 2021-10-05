@@ -69,11 +69,9 @@ export class ProjectService {
         if (persistChange) {
             const didProjectChange = this.areProjectsDifferent(projectCopy1, projectCopy2);
             if (didProjectChange) {
-                console.log('projectChanged');
                 const updateResult = await this.updateProject(project);
                 return updateResult;
             } else {
-                console.log('projectDidNotChange');
                 return true;
             }
         } else {
@@ -430,7 +428,21 @@ export class ProjectService {
         return setResult;
     }
 
-    public subscribeAndSetProject(projectId: string) {
+    public async isValidShareLink(projectId: string, userId: string) {
+        // Check if there is a share link record
+        // Check if there is an associate project
+
+        const shareLinkDoc = await this.firebaseService
+            .getDbInstance()
+            .collection(this.SHARE_COLLECTION)
+            .where('projectId', '==', projectId)
+            .where('userId', '==', userId)
+            .get();
+
+        return !shareLinkDoc.empty;
+    }
+
+    public subscribeAndSetProject(projectId: string, sharePermission?: SharePermission) {
         // this.firebaseService.getDbInstance()!.collection(this.PROJECT_COLLECTION).doc(projectId).onSnapshot()
         this.unsubscribeToProjectListener = this.firebaseService
             .getDbInstance()!
@@ -444,7 +456,9 @@ export class ProjectService {
                         this.router.navigate(['404']);
                     }
 
-                    if (
+                    if (sharePermission) {
+                        this._projectMode.next(sharePermission);
+                    } else if (
                         project.memberRoles.some(member => {
                             return (
                                 member.userId === this.authenticationService.user?.id &&
@@ -536,7 +550,6 @@ export class ProjectService {
                         return pendingMembers.push({ email: member, role: role || 'viewer' });
                     });
                     _projectConfig.pendingMembers = _.union(_projectConfig.pendingMembers, users.pendingMembers);
-  
                 }
                 const addInvitations = await this.addInvitations(pendingMembers, this.projectConfig?.id);
                 if (addInvitations === true) {
@@ -555,10 +568,10 @@ export class ProjectService {
 
     public async removeProjectMember(userId: string) {
         const _projectConfig = _.cloneDeep(this.projectConfig);
-        _projectConfig.members = _projectConfig?.members?.filter((member) => {
+        _projectConfig.members = _projectConfig?.members?.filter(member => {
             return member !== userId;
         });
-        _projectConfig.memberRoles = _projectConfig?.memberRoles?.filter((member) => {
+        _projectConfig.memberRoles = _projectConfig?.memberRoles?.filter(member => {
             return member.userId !== userId;
         });
         const setResult = await this.setProject(_projectConfig);

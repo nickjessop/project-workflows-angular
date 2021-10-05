@@ -69,7 +69,7 @@ export class ShareComponent implements OnInit {
         const shareLink = await this.projectService.getShareLink();
 
         if (shareLink) {
-            this.shareLink = `/project/${shareLink.userId}/${shareLink.projectId}/${shareLink.permission}`;
+            this.shareLink = `${location.host}/project/${shareLink.userId}/${shareLink.projectId}/${shareLink.permission}`;
         }
     }
 
@@ -234,7 +234,7 @@ export class ShareComponent implements OnInit {
         const shareLink = await this.projectService.regenerateOrGenerateShareLink(this.selectedSharePermission);
 
         if (shareLink) {
-            this.shareLink = `/project/${shareLink.userId}/${shareLink.projectId}/${shareLink.permission}`;
+            this.shareLink = `${location.host}/project/${shareLink.userId}/${shareLink.projectId}/${shareLink.permission}`;
         }
     }
 
