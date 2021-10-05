@@ -13,7 +13,7 @@ const guardedRoutes: Routes = [
         canActivate: [ProtectedGuard],
     },
     {
-        path: 'project/:id',
+        path: 'project/:projectId',
         component: ViewerComponent,
         canActivate: [ProtectedGuard],
         resolve: { data: ProjectResolverService },

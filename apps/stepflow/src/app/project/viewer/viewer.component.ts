@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ComponentMode, Project, StepConfig } from '@stepflow/interfaces';
+import { ComponentMode, Project, SharePermission, StepConfig } from '@stepflow/interfaces';
 import { combineLatest, Subscription } from 'rxjs';
 import { ProjectService } from '../../services/project/project.service';
 
@@ -21,16 +21,22 @@ export class ViewerComponent {
         this.initProject();
     }
 
-    private initProject() {
-        this.subscriptions.add(
-            this.route.data.subscribe(data => {
-                const projectId = data.data as string | undefined;
+    private async initProject() {
+        const routeParams = this.route.snapshot.params;
+        const projectId = routeParams.projectId as string | undefined;
+        const userId = routeParams.userId as string | undefined;
+        const sharePermission = routeParams.sharePermission as SharePermission | undefined;
 
-                if (projectId) {
-                    this.projectService.subscribeAndSetProject(projectId);
-                }
-            })
-        );
+        if (userId && projectId && sharePermission) {
+            const isValidShareLink = await this.projectService.isValidShareLink(projectId || '', userId || '');
+            if (!isValidShareLink) {
+                return;
+            }
+
+            this.projectService.subscribeAndSetProject(projectId, 'view');
+        } else if (projectId) {
+            this.projectService.subscribeAndSetProject(projectId);
+        }
 
         this.subscriptions.add(
             combineLatest([this.projectService.projectConfig$, this.projectService.projectMode$]).subscribe(result => {
