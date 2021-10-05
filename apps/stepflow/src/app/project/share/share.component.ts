@@ -1,10 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Project, ProjectUsers, Role, SharePermission } from '@stepflow/interfaces';
 import * as _ from 'lodash';
-import { MessageService } from 'primeng/api';
+import { MenuItem, MessageService } from 'primeng/api';
 import { AuthenticationService } from '../../services/authentication/authentication.service';
 import { ProjectService } from '../../services/project/project.service';
-import { MenuItem } from 'primeng/api';
 
 @Component({
     selector: 'project-share',
@@ -68,7 +67,7 @@ export class ShareComponent implements OnInit {
         const shareLink = await this.projectService.getShareLink();
 
         if (shareLink) {
-            this.shareLink = `/project/${shareLink.userId}/${shareLink.projectId}/${shareLink.permission}`;
+            this.shareLink = `${location.host}/project/${shareLink.userId}/${shareLink.projectId}/${shareLink.permission}`;
         }
     }
 
@@ -225,7 +224,7 @@ export class ShareComponent implements OnInit {
         const shareLink = await this.projectService.regenerateOrGenerateShareLink(this.selectedSharePermission);
 
         if (shareLink) {
-            this.shareLink = `/project/${shareLink.userId}/${shareLink.projectId}/${shareLink.permission}`;
+            this.shareLink = `${location.host}/project/${shareLink.userId}/${shareLink.projectId}/${shareLink.permission}`;
         }
     }
 

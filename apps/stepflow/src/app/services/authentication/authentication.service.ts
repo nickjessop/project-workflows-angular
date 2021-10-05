@@ -38,7 +38,7 @@ export class AuthenticationService {
     constructor(
         private firebaseService: FirebaseService,
         private router: Router,
-        private messageService: MessageService,
+        private messageService: MessageService
     ) {
         this.setAuthStatus(this.user);
         this.initFirebaseUserListener();
@@ -354,20 +354,22 @@ export class AuthenticationService {
     public checkNewUserProjects(email: string) {
         const db = this.firebaseService.getDbInstance()!;
         const invitationRef = db.collection(this.INVITATIONS_COLLECTION_NAME);
-        const projects: {id: string, projectId: string, role: Role}[] = [];
-        invitationRef.where("email", "==", email).get().then( async querySnapshot => {
-            querySnapshot.forEach(doc => {
-                projects.push({
-                    id: doc.id,
-                    projectId: doc.data().project.id,
-                    role: doc.data().role
+        const projects: { id: string; projectId: string; role: Role }[] = [];
+        invitationRef
+            .where('email', '==', email)
+            .get()
+            .then(async querySnapshot => {
+                querySnapshot.forEach(doc => {
+                    projects.push({
+                        id: doc.id,
+                        projectId: doc.data().project.id,
+                        role: doc.data().role,
+                    });
+                    doc.ref.delete();
                 });
-                doc.ref.delete();
-            })
-            const addNewUsersToProjects = await this.addNewUserToProjects(email, projects);
-            return addNewUsersToProjects;
-        });
-        
+                const addNewUsersToProjects = await this.addNewUserToProjects(email, projects);
+                return addNewUsersToProjects;
+            });
     }
 
     private async addNewUserToProjects(email: string, projects: { projectId: string; role: Role }[]) {
@@ -394,8 +396,8 @@ export class AuthenticationService {
                     _memberRoles = _project.memberRoles;
                     let members = _.union(_members, [userId]);
                     let memberRoles = _.union(_memberRoles, newMember);
-                    
-                    const _pendingMembers = _project?.pendingMembers?.filter((pendingMember) => {
+
+                    const _pendingMembers = _project?.pendingMembers?.filter(pendingMember => {
                         return pendingMember !== email;
                     });
 
