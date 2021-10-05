@@ -3,10 +3,12 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthenticationComponent } from './authentication/authentication.component';
 import { ConfirmationComponent } from './authentication/confirmation/confirmation.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { ViewerComponent } from './project/viewer/viewer.component';
 import { RedirectGuard } from './redirect.guard';
 
 const appRoutes: Routes = [
     { path: '', redirectTo: '/project', pathMatch: 'full' },
+    { path: 'project/:userId/:projectId/:sharePermission', data: { isSharedLink: true }, component: ViewerComponent },
     {
         path: 'auth/login',
         component: AuthenticationComponent,
