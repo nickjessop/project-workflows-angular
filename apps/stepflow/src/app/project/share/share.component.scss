@@ -1,3 +1,13 @@
 :host ::ng-deep .p-chips ul {
     min-width: 100%;
 }
+
+.share-switch {
+    flex-basis: 30%;
+}
+.share-label {
+    flex-basis: 70%;
+}
+.share-input {
+    flex-basis: 100%;
+}
