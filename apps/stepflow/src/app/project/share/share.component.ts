@@ -28,6 +28,8 @@ export class ShareComponent implements OnInit {
     public sharePermissions = [{ value: 'view' }, { value: 'edit' }];
     public selectedSharePermission: SharePermission = 'edit';
     public shareLink?: string;
+    public shareLinkChecked: boolean = false;
+    public shareLinkMsg: string = 'Enable a public link that can be shared with anyone.';
 
     public roles: { value: Role; label: string }[] = [
         { value: 'creator', label: 'Can configure' },
@@ -46,7 +48,7 @@ export class ShareComponent implements OnInit {
     ngOnInit(): void {
         if (this.project) {
             this.projectService.getProjectUserDetails(this.project.memberRoles).then(result => {
-                this.projectUsers = result?.filter(user => !(user.id === this.loggedInUserId && user.role === 'owner'));
+                this.projectUsers = result?.filter(user => user.role != 'owner');
                 //TODO users can add new owners and owners can change each other's roles (this is how G docs goes about it but would need to think about it some more)
                 this.projectOwners = result?.filter(user => user.role === 'owner');
             });
@@ -220,6 +222,14 @@ export class ShareComponent implements OnInit {
     // hideLinkCopiedMsg() {
     //     this.linkCopiedMsg = [];
     // }
+
+    public enableShareLink(event: any) {
+        if (event.checked === true) {
+            this.generateSharingLink();
+        } else {
+            // ungenerate sharing link
+        }
+    }
     public async generateSharingLink() {
         const shareLink = await this.projectService.regenerateOrGenerateShareLink(this.selectedSharePermission);
 
