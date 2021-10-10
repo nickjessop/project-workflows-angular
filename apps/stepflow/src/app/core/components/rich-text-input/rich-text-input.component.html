@@ -20,6 +20,9 @@
                 [style]="{ height: '100%', fontSize: '1rem' }"
                 formats="['Bold', 'Underline', 'Italic', 'Link']"
                 styleClass="editor"
+                (focusout)="onFocusOut($event)"
+                (keyup)="onKeyup($event)"
+                #textBlock
             >
                 <p-header>
                     <span class="ql-formats">
