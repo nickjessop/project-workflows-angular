@@ -17,6 +17,8 @@ export class RichTextInputComponent implements OnInit {
     @Input() field: BlockConfig = this.coreComponentService.createBlockConfig('textInput');
     @Input() resizable?: boolean;
     @Input() componentMode?: ComponentMode;
+    // @ViewChild('textBlock')
+    // textBlockElement!: ElementRef;
 
     constructor(private projectService: ProjectService, private coreComponentService: CoreComponentService) {}
 
@@ -25,6 +27,8 @@ export class RichTextInputComponent implements OnInit {
     public height?: number;
     public settings?: ComponentSettings;
     public readonly AngularResizeElementDirection = AngularResizeElementDirection;
+
+    public keyStrokeCount: number = 1;
 
     public items: MenuItem[] = [
         {
@@ -64,6 +68,18 @@ export class RichTextInputComponent implements OnInit {
     public onResizeEnd(evt: AngularResizeElementEvent): void {
         const height = evt.currentHeightValue;
         this.updateHeight(height);
+        this.projectService.syncProject();
+    }
+
+    public onKeyup(event: Event) {
+        // this.keyStrokeCount = this.keyStrokeCount + 1;
+        // if (this.keyStrokeCount % 3 == 1) {
+        //     this.projectService.syncProject();
+        // }
+        // this.textBlockElement.nativeElement.focus();
+    }
+
+    public onFocusOut(event: Event) {
         this.projectService.syncProject();
     }
 }
