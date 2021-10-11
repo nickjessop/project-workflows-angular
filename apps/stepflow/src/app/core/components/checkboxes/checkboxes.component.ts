@@ -80,9 +80,10 @@ export class CheckboxesComponent implements OnInit {
     ngOnInit() {}
 
     public onAddCheckboxPress() {
+        console.log('test');
         const newCheckbox = { item: '', checked: false };
-
         (this.field?.metadata as Checkboxes).data.value.splice(0, 0, newCheckbox);
+        this.projectService.syncProject();
     }
 
     public onCheckboxPress() {
@@ -97,12 +98,13 @@ export class CheckboxesComponent implements OnInit {
             }
             return 0;
         });
-
         this.field.metadata.data.value = sortedData;
+        this.projectService.syncProject();
     }
 
     public onCheckboxDeletePress(index: number) {
         (this.field.metadata as Checkboxes).data.value.splice(index, 1);
+        this.projectService.syncProject();
     }
 
     drop(event: CdkDragDrop<any>) {
@@ -114,5 +116,10 @@ export class CheckboxesComponent implements OnInit {
         const _checkboxes = _.cloneDeep(checkboxes);
         moveItemInArray(_checkboxes!, previousIndex, currentIndex);
         this.field.metadata.data.value = _checkboxes;
+        this.projectService.syncProject();
+    }
+
+    public saveContent() {
+        this.projectService.syncProject();
     }
 }

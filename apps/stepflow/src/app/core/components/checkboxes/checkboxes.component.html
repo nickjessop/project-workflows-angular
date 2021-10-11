@@ -26,7 +26,12 @@
                     [(ngModel)]="val.checked"
                     (onChange)="onCheckboxPress()"
                 ></p-checkbox>
-                <p-inplace closable="true" styleClass="p-pl-2 checkbox__editable" closeIcon="pi pi-check">
+                <p-inplace
+                    closable="true"
+                    styleClass="p-pl-2 checkbox__editable"
+                    closeIcon="pi pi-check"
+                    (onDeactivate)="saveContent()"
+                >
                     <ng-template pTemplate="display">
                         <label [for]="index" [ngClass]="{ checkbox__completed: val.checked }">{{
                             val.item ? val.item : 'New item'
