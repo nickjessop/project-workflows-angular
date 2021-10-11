@@ -25,6 +25,9 @@
                 display: flex;
                 align-items: center;
                 color: var(--text-color-secondary);
+                .step-status-text {
+                    line-height: normal;
+                }
             }
         }
     }
