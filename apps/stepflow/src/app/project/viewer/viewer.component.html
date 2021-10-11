@@ -9,10 +9,7 @@
         >
             <div class="p-grid p-nogutter" style="min-height: 100%">
                 <div class="p-col-11">
-                    <div
-                        class="step-container p-px-3 p-pb-5 p-mb-5
-                    "
-                    >
+                    <div class="step-container p-px-3 p-pb-5 p-mb-5">
                         <div class="p-mb-4 p-px-2">
                             <div class="p-d-flex p-ai-center p-jc-between">
                                 <div class="p-d-flex p-flex-column">
@@ -26,28 +23,28 @@
                                     [ngSwitch]="currentStep.step.status.value"
                                 >
                                     <div *ngSwitchCase="'in-progress'" class="step-status-label ms-02">
-                                        <span class="p-tag p-tag-rounded p-tag-warning p-mr-1">
-                                            <i class="pi {{ currentStep.step.status.icon }}"></i>
+                                        <span class="step-status-text">{{ currentStep.step.status.label }}</span>
+                                        <span class="p-tag p-tag-rounded p-tag-warning p-ml-1">
+                                            <i class="pi {{ currentStep.step.status.icon }} ms-02"></i>
                                         </span>
-                                        <span>{{ currentStep.step.status.label }}</span>
                                     </div>
                                     <div *ngSwitchCase="'upcoming'" class="step-status-label ms-02">
-                                        <span class="p-tag p-tag-rounded  p-mr-1">
-                                            <i class="pi {{ currentStep.step.status.icon }}"></i
+                                        <span class="step-status-text">{{ currentStep.step.status.label }}</span>
+                                        <span class="p-tag p-tag-rounded p-ml-1">
+                                            <i class="pi {{ currentStep.step.status.icon }} ms-02"></i
                                         ></span>
-                                        <span>{{ currentStep.step.status.label }}</span>
                                     </div>
                                     <div *ngSwitchCase="'completed'" class="step-status-label ms-02">
-                                        <span class="p-tag p-tag-rounded p-tag-success p-mr-1">
-                                            <i class="pi {{ currentStep.step.status.icon }}"></i
+                                        <span class="step-status-text">{{ currentStep.step.status.label }}</span>
+                                        <span class="p-tag p-tag-rounded p-tag-success p-ml-1">
+                                            <i class="pi {{ currentStep.step.status.icon }} ms-02"></i
                                         ></span>
-                                        <span>{{ currentStep.step.status.label }}</span>
                                     </div>
                                     <div *ngSwitchCase="'needs-review'" class="step-status-label ms-02">
-                                        <span class="p-tag p-tag-rounded p-tag-danger p-mr-1">
-                                            <i class="pi {{ currentStep.step.status.icon }}"></i
+                                        <span class="step-status-text">{{ currentStep.step.status.label }}</span>
+                                        <span class="p-tag p-tag-rounded p-tag-danger p-ml-1">
+                                            <i class="pi {{ currentStep.step.status.icon }} ms-02"></i
                                         ></span>
-                                        <span>{{ currentStep.step.status.label }}</span>
                                     </div>
                                 </ng-container>
                             </div>
