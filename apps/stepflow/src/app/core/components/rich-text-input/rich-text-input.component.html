@@ -13,15 +13,14 @@
         </div>
     </ng-container>
     <ng-container *ngIf="componentMode === 'edit' || componentMode === 'configure'">
-        <div class="rich-text edit">
+        <div class="rich-text edit" on-focusout="onFocusOut($event)">
             <p-editor
                 placeholder="Add content"
                 [(ngModel)]="field.metadata.data.value"
                 [style]="{ height: '100%', fontSize: '1rem' }"
                 formats="['Bold', 'Underline', 'Italic', 'Link']"
                 styleClass="editor"
-                (focusout)="onFocusOut($event)"
-                (keyup)="onKeyup($event)"
+                (onSelectionChange)="onFocusIn($event)"
                 #textBlock
             >
                 <p-header>
@@ -33,6 +32,10 @@
                     </span>
                 </p-header>
             </p-editor>
+            <div *ngIf="showSaveButton" class="p-d-flex p-align-center p-mt-2">
+                <button (click)="saveTextblock()" class="p-button p-mr-2">Save</button>
+                <i class="ms-01">Unsaved changes</i>
+            </div>
         </div>
     </ng-container>
 </project-drag-and-resize>
