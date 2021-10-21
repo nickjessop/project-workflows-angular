@@ -28,7 +28,8 @@ export class RichTextInputComponent implements OnInit {
     public settings?: ComponentSettings;
     public readonly AngularResizeElementDirection = AngularResizeElementDirection;
 
-    public keyStrokeCount: number = 1;
+    public showSaveButton: boolean = false;
+    // public keyStrokeCount: number = 1;
 
     public items: MenuItem[] = [
         {
@@ -79,7 +80,17 @@ export class RichTextInputComponent implements OnInit {
         // this.textBlockElement.nativeElement.focus();
     }
 
+    public onFocusIn(event: Event) {
+        this.showSaveButton = true;
+    }
+
     public onFocusOut(event: Event) {
+        this.projectService.syncProject();
+        this.showSaveButton = false;
+    }
+
+    public saveTextblock() {
+        this.showSaveButton = false;
         this.projectService.syncProject();
     }
 }
