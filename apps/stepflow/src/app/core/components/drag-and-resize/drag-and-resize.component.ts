@@ -62,4 +62,8 @@ export class DragAndResizeComponent {
         this.updateHeight(height);
         this.projectService.syncProject();
     }
+
+    public saveBlockData() {
+        this.projectService.syncProject();
+    }
 }
