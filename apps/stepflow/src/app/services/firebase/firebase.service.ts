@@ -85,4 +85,8 @@ export class FirebaseService {
     public getFieldPathId() {
         return this.fieldPathId;
     }
+
+    public getDeleteField() {
+        return firebase.firestore.FieldValue.delete();
+    }
 }
