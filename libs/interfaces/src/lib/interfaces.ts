@@ -111,6 +111,7 @@ export interface Project {
     name: string;
     description: string;
     configuration?: StepConfig[];
+    shareLink?: ShareLink;
     members: string[];
     memberRoles: Array<{ userId: string; role: Role }>;
     pendingMembers?: string[];
