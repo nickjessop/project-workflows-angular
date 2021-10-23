@@ -55,7 +55,7 @@ function isAuthenticated(context: functions.https.CallableContext) {
 }
 
 export const updateUserMetadata = functions.https.onCall(
-    (
+    async (
         data: {
             firstName?: string;
             lastName?: string;
@@ -66,18 +66,70 @@ export const updateUserMetadata = functions.https.onCall(
     ) => {
         isAuthenticated(context);
 
-        admin
-            .firestore()
-            .collection('/users')
-            .doc(context.auth!.uid)
-            .set({ firstName: data.firstName, lastName: data.lastName, plan: data.plan, email: data.email })
-            .then(
-                success => {
-                    return {};
-                },
-                err => {
-                    throw new functions.https.HttpsError('internal', 'An error occurred while updating user');
-                }
+        const res = await _updateUserMetadata(context.auth!.uid, data.firstName, data.lastName, data.plan, data.email);
+
+        if (!res) {
+            throw new functions.https.HttpsError('internal', 'An error occurred while updating user');
+        }
+
+        return {};
+    }
+);
+
+function _updateUserMetadata(
+    uid: string,
+    firstName?: string,
+    lastName?: string,
+    plan?: 'Plus' | 'Growth' | 'Essential' | 'Free',
+    email?: string
+) {
+    return admin
+        .firestore()
+        .collection('/users')
+        .doc(uid)
+        .set({ firstName, lastName, plan, email })
+        .then(
+            success => {
+                return success;
+            },
+            err => {
+                return undefined;
+            }
+        );
+}
+
+export const createUserAndAttachMetadata = functions.https.onCall(
+    async (data: {
+        firstName: string;
+        lastName: string;
+        password: string;
+        plan: 'Plus' | 'Growth' | 'Essential' | 'Free';
+        email: string;
+    }) => {
+        const { firstName, lastName, password, plan, email } = data;
+
+        const user = await admin.auth().createUser({
+            email,
+            emailVerified: false,
+            password,
+            displayName: `${firstName} ${lastName}`,
+        });
+
+        if (!user) {
+            throw new functions.https.HttpsError('internal', 'An error occurred while creating your user.');
+        }
+
+        const updatedUser = await _updateUserMetadata(user.uid, firstName, lastName, plan, email);
+
+        if (!updatedUser) {
+            await admin.auth().deleteUser(user.uid);
+
+            throw new functions.https.HttpsError(
+                'internal',
+                'An error occurred while creating your user with your details.'
             );
+        }
+
+        return {};
     }
 );

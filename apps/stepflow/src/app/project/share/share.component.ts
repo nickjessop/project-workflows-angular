@@ -26,7 +26,7 @@ export class ShareComponent implements OnInit {
     public displayDialogSave: boolean = false;
 
     public sharePermissions = [{ value: 'view' }, { value: 'edit' }];
-    public selectedSharePermission: SharePermission = 'edit';
+    public selectedSharePermission: SharePermission = 'view';
     public shareLink?: string;
     public shareLinkChecked: boolean = false;
     public shareLinkMsg: string = 'Enable a public link that can be shared with anyone.';
@@ -53,7 +53,7 @@ export class ShareComponent implements OnInit {
                 this.projectOwners = result?.filter(user => user.role === 'owner');
             });
 
-            this.fetchExistingShareLink();
+            this.initShareLink();
         }
     }
 
@@ -65,11 +65,12 @@ export class ShareComponent implements OnInit {
         this.displayShareDialog = false;
     }
 
-    private async fetchExistingShareLink() {
-        const shareLink = await this.projectService.getShareLink();
+    private async initShareLink() {
+        if (this.project?.shareLink) {
+            const { userId, projectId, permission } = this.project.shareLink;
 
-        if (shareLink) {
-            this.shareLink = `${location.host}/project/${shareLink.userId}/${shareLink.projectId}/${shareLink.permission}`;
+            this.shareLink = `${location.host}/project/${userId}/${projectId}/${permission}`;
+            this.shareLinkChecked = true;
         }
     }
 
@@ -231,7 +232,7 @@ export class ShareComponent implements OnInit {
         }
     }
     public async generateSharingLink() {
-        const shareLink = await this.projectService.regenerateOrGenerateShareLink(this.selectedSharePermission);
+        const shareLink = await this.projectService.generateShareLink(this.selectedSharePermission);
 
         if (shareLink) {
             this.shareLink = `${location.host}/project/${shareLink.userId}/${shareLink.projectId}/${shareLink.permission}`;

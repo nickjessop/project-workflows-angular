@@ -28,11 +28,6 @@ export class ViewerComponent {
         const sharePermission = routeParams.sharePermission as SharePermission | undefined;
 
         if (userId && projectId && sharePermission) {
-            const isValidShareLink = await this.projectService.isValidShareLink(projectId || '', userId || '');
-            if (!isValidShareLink) {
-                return;
-            }
-
             this.projectService.subscribeAndSetProject(projectId, 'view');
         } else if (projectId) {
             this.projectService.subscribeAndSetProject(projectId);

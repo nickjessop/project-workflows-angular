@@ -428,20 +428,6 @@ export class ProjectService {
         return setResult;
     }
 
-    public async isValidShareLink(projectId: string, userId: string) {
-        // Check if there is a share link record
-        // Check if there is an associate project
-
-        const shareLinkDoc = await this.firebaseService
-            .getDbInstance()
-            .collection(this.SHARE_COLLECTION)
-            .where('projectId', '==', projectId)
-            .where('userId', '==', userId)
-            .get();
-
-        return !shareLinkDoc.empty;
-    }
-
     public subscribeAndSetProject(projectId: string, sharePermission?: SharePermission) {
         // this.firebaseService.getDbInstance()!.collection(this.PROJECT_COLLECTION).doc(projectId).onSnapshot()
         this.unsubscribeToProjectListener = this.firebaseService
@@ -602,7 +588,7 @@ export class ProjectService {
             });
     }
 
-    public async regenerateOrGenerateShareLink(permission: SharePermission) {
+    public async generateShareLink(permission: SharePermission) {
         const db = this.firebaseService.getDbInstance();
         const currentUserId = this.authenticationService.user?.id;
         const currentProjectId = this._projectConfig.getValue().id;
@@ -618,26 +604,12 @@ export class ProjectService {
             projectId: currentProjectId,
             permission,
         };
+        const configUpdate = this._projectConfig.getValue();
+        configUpdate.shareLink = shareLink;
 
-        // If share link already exists, update it otherwise create a new one
+        const updatedConfig = await this.updateProject(configUpdate);
 
-        const existingShareLinks = await db
-            .collection(this.SHARE_COLLECTION)
-            .where('projectId', '==', currentProjectId)
-            .get();
-
-        const existingShareLink = existingShareLinks.docs[0];
-
-        if (existingShareLink) {
-            await db
-                .collection(this.SHARE_COLLECTION)
-                .doc(existingShareLink.id)
-                .update(shareLink);
-        } else {
-            await db.collection(this.SHARE_COLLECTION).add(shareLink);
-        }
-
-        return shareLink;
+        return updatedConfig ? shareLink : undefined;
     }
 
     public async getShareLink() {
