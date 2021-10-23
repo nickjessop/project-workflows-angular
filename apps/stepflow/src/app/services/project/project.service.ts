@@ -258,12 +258,12 @@ export class ProjectService {
     }
 
     //TODO: Add firebase rule to check that users are authorized to edit this project
-    public updateProject(projectConfig: Project) {
+    public updateProject(projectConfig: Project, shouldMerge = true) {
         return this.firebaseService
             .getDbInstance()!
             .collection(this.PROJECT_COLLECTION)
             .doc(projectConfig.id)
-            .set(projectConfig, { merge: true })
+            .set(projectConfig, { merge: shouldMerge })
             .then(
                 () => {
                     console.log(`Successfully updated project`);
@@ -612,6 +612,22 @@ export class ProjectService {
         const updatedConfig = await this.updateProject(configUpdate);
 
         return updatedConfig ? shareLink : undefined;
+    }
+    public async deleteShareLink() {
+        const db = this.firebaseService.getDbInstance();
+        const currentUserId = this.authenticationService.user?.id;
+        const currentProjectId = this._projectConfig.getValue().id;
+
+        if (!db || !currentUserId || !currentProjectId) {
+            console.log('Cannot generate share link when db/userid/projectid is missing');
+
+            return;
+        }
+
+        const configUpdate = this._projectConfig.getValue();
+        delete configUpdate.shareLink;
+
+        const updatedConfig = await this.updateProject(configUpdate, false);
     }
 
     public async getShareLink() {

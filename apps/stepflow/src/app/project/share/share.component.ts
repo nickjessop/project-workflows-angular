@@ -228,9 +228,14 @@ export class ShareComponent implements OnInit {
         if (event.checked === true) {
             this.generateSharingLink();
         } else {
-            // ungenerate sharing link
+            this.deleteShareLink();
         }
     }
+
+    private async deleteShareLink() {
+        const res = await this.projectService.deleteShareLink();
+    }
+
     public async generateSharingLink() {
         const shareLink = await this.projectService.generateShareLink(this.selectedSharePermission);
 
