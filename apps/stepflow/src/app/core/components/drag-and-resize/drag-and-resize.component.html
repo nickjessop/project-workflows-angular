@@ -21,12 +21,12 @@
         ></div>
         <div class="p-d-flex p-jc-between p-ai-center p-mb-2">
             <div class="field__label">
-                <p-inplace closable="true" closeIcon="pi pi-check">
+                <p-inplace closable="true" closeIcon="pi pi-check" (onDeactivate)="saveBlockData()">
                     <ng-template pTemplate="display">
-                        <span class="ms-2">{{ field.label ? field.label : '(Untitled block)' }}</span>
+                        <span class="ms-1">{{ field.label ? field.label : 'Untitled block' }}</span>
                     </ng-template>
                     <ng-template pTemplate="content">
-                        <input type="text" class="p-inputtext" [(ngModel)]="field.label" pInputText />
+                        <input type="text" class="p-inputtext ms-1" [(ngModel)]="field.label" pInputText />
                     </ng-template>
                 </p-inplace>
             </div>
@@ -48,8 +48,8 @@
 <ng-template #showView>
     <div class="field p-mb-3 p-py-4 p-px-2" #fieldContainer [style.height.px]="field.metadata.settings?.height">
         <div class="p-d-flex p-jc-between p-ai-center p-mb-2">
-            <div class="field__label p-ml-2 p-mb-2 ms-2">
-                {{ field.label ? field.label : '(Untitled block)' }}
+            <div class="field__label p-ml-2 p-mb-2 ms-1">
+                {{ field.label ? field.label : 'Untitled block' }}
             </div>
         </div>
         <div class="field__description mb-2 ms-01">Description</div>

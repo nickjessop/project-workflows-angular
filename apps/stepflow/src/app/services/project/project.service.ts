@@ -160,10 +160,10 @@ export class ProjectService {
             ? configuration
             : [
                   {
-                      components: [this.coreComponentService.createBlockConfig('textInput')],
+                      components: [this.coreComponentService.createBlockConfig('richTextInput')],
                       step: {
-                          title: 'Untitled Step',
-                          description: 'Untitled Step Description',
+                          title: 'Untitled step',
+                          description: 'Untitled step description',
                           status: { label: 'No status', value: 'no-status', icon: '' },
                           isCurrentStep: true,
                       },
@@ -213,11 +213,11 @@ export class ProjectService {
         label?: string,
         name?: string
     ) {
-        const fieldConfig = this.coreComponentService.createBlockConfig('textInput', label, name);
+        const fieldConfig = this.coreComponentService.createBlockConfig('richTextInput', label, name);
 
         const stepConfig: StepConfig = {
             step: {
-                title: stepTitle || 'Untitled Step',
+                title: stepTitle || 'Untitled step',
                 description: stepDescription || '',
                 status: status || { label: 'No status', value: 'no-status', icon: '' },
             },
@@ -344,6 +344,8 @@ export class ProjectService {
             _projectConfig.configuration ? _projectConfig.configuration.length - 1 : 0,
             _projectConfig
         );
+
+        this.setProject(_projectConfig);
     }
 
     public deleteProjectBlock(blockIndex: number) {
