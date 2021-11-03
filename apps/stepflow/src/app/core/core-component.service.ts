@@ -110,26 +110,20 @@ export class CoreComponentService {
                         row: [
                             {
                                 item: [
-                                    { text: 'header1', isHeader: true },
-                                    { text: 'header2', isHeader: true },
+                                    { text: 'New table', isHeader: true },
+                                    { text: '', isHeader: true },
                                 ],
                             },
                             {
                                 item: [
-                                    { text: 'item1', isHeader: false },
-                                    { text: 'item2', isHeader: false },
+                                    { text: '', isHeader: false },
+                                    { text: '', isHeader: false },
                                 ],
                             },
                             {
                                 item: [
-                                    { text: 'item3', isHeader: false },
-                                    { text: 'item4', isHeader: false },
-                                ],
-                            },
-                            {
-                                item: [
-                                    { text: 'item5', isHeader: false },
-                                    { text: 'item6', isHeader: false },
+                                    { text: '', isHeader: false },
+                                    { text: '', isHeader: false },
                                 ],
                             },
                         ],

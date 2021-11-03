@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { BlockConfig, ComponentMode, ComponentSettings, Table } from '@stepflow/interfaces';
 import { AngularResizeElementDirection, AngularResizeElementEvent } from 'angular-resize-element';
@@ -18,6 +18,7 @@ export class TableComponent implements OnInit {
     @Input() resizable?: boolean;
     @Input() componentMode?: ComponentMode;
 
+    @ViewChild('table') table!: any;
     selectedData: { rowIndex: number; colIndex: number } = { rowIndex: 0, colIndex: 0 };
     public menuItems: MenuItem[] = [
         {
@@ -70,10 +71,18 @@ export class TableComponent implements OnInit {
         },
     ];
 
-    public tableValues?: { row?: { item?: { text: string; isHeader?: boolean }[] }[] } = {
+    public tableValues?: {
+        row?: { item?: { text: string; isHeader?: boolean }[] }[];
+        column?: { item?: { size: number }[] }[];
+    } = {
         row: [
             {
-                item: [{ text: 'header1', isHeader: true }],
+                item: [{ text: 'New table', isHeader: true }],
+            },
+        ],
+        column: [
+            {
+                item: [{ size: 33.3 }],
             },
         ],
     };
@@ -140,6 +149,7 @@ export class TableComponent implements OnInit {
         if (!rows || rows.length === 0) {
             delete this.tableValues?.row;
         }
+        this.projectService.syncProject();
     }
 
     public removeTableColumn(removeAtIndex?: number) {
@@ -162,6 +172,7 @@ export class TableComponent implements OnInit {
         if (!rows[0].item || rows[0].item.length === 0) {
             delete this.tableValues?.row;
         }
+        this.projectService.syncProject();
     }
 
     public addTableColumn(addAtIndex?: number) {
@@ -187,6 +198,8 @@ export class TableComponent implements OnInit {
                 }
             }
         });
+
+        this.projectService.syncProject();
     }
 
     private addTableRow(addAtIndex?: number) {
@@ -203,6 +216,8 @@ export class TableComponent implements OnInit {
 
         const newRow = this.createRowElements(rows?.[0].item?.length || 1, false);
         rows.splice(addAtIndex || rows.length || 0, 0, { item: newRow });
+
+        this.projectService.syncProject();
     }
 
     private createRowElements(amount: number, isHeader: boolean) {
@@ -212,5 +227,23 @@ export class TableComponent implements OnInit {
             row.push({ text: isHeader ? '' : '', isHeader });
         }
         return row;
+    }
+
+    public columnsResized(event: Event) {
+        console.log('columns event', event);
+        this.table.getColumns();
+        // const rows = this.tableValues?.row;
+        // if (rows) {
+        //     rows.forEach(col => {
+        //         if (col.item) {
+        //             console.log(col);
+        //             console.log(col.item);
+        //         }
+        //     });
+        // }
+    }
+
+    public saveTableData() {
+        this.projectService.syncProject();
     }
 }

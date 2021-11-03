@@ -6,7 +6,7 @@
 >
     <ng-container *ngIf="componentMode === 'view'">
         <div class="table view">
-            <p-table [resizableColumns]="true" [value]="tableValues?.row" styleClass="p-datatable-gridlines">
+            <p-table [value]="tableValues?.row" styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="header">
                     <tr>
                         <ng-container *ngFor="let row of tableValues?.row">
@@ -30,8 +30,10 @@
             </p-table>
         </div>
     </ng-container>
+    <! -- add save button or autosave -->
     <ng-container *ngIf="componentMode === 'edit' || componentMode === 'configure'">
         <p-contextMenu #cm [model]="menuItems" appendTo="body"></p-contextMenu>
+
         <div class="table" aria-haspopup="true">
             <p-table
                 #table
@@ -39,8 +41,17 @@
                 [(contextMenuSelection)]="selectedData"
                 [contextMenu]="cm"
                 [resizableColumns]="true"
+                (onColResize)="columnsResized($event)"
+                (onEditComplete)="saveTableData()"
                 styleClass="p-datatable-gridlines"
             >
+                <!-- <ng-template pTemplate="colgroup">
+                    <colgroup>
+                        <col style="width:20%" />
+                        <col style="width:40%" />
+                        <col style="width:30%" />
+                    </colgroup>
+                </ng-template> -->
                 <ng-template pTemplate="header">
                     <tr pEditableRow>
                         <ng-container *ngFor="let row of tableValues?.row">
@@ -89,5 +100,26 @@
                 </ng-template>
             </p-table>
         </div>
+
+        <!--
+            using column definitions seems much easier
+            <p-table [columns]="columnDefinitions" [value]="dataSet" [resizableColumns]="true" columnResizeMode="expand" stateStorage="local" stateKey="statedemo-local">
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <th *ngFor="let col of columns" pResizableColumn>
+                        {{col.name}}
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                <tr>
+                    <td *ngFor="let col of columns" class="ui-resizable-column">
+                                      <span class="ui-column-title">{{col.name}}</span>
+
+                        {{rowData[col.field]}}
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table> -->
     </ng-container>
 </project-drag-and-resize>
