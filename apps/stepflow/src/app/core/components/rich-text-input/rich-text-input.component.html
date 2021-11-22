@@ -13,7 +13,7 @@
         </div>
     </ng-container>
     <ng-container *ngIf="componentMode === 'edit' || componentMode === 'configure'">
-        <div class="rich-text edit" on-focusout="onFocusOut($event)">
+        <div class="rich-text edit">
             <p-editor
                 placeholder="Add content"
                 [(ngModel)]="field.metadata.data.value"
