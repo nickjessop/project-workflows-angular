@@ -87,3 +87,13 @@
         </ng-container>
     </div>
 </div>
+<div class="navigation" *ngIf="navMode === 'project' && !authenticated">
+    <div class="navigation__content p-grid p-nogutter p-px-3">
+        <div class="navigation-logo p-col-6 p-d-flex p-ai-center">
+            <img src="/assets/stepflow-logo.svg" alt="Stepflow logo" height="26px" />
+        </div>
+        <div class="navigation-profile p-col-6 p-d-flex p-ai-center p-jc-end">
+            <button type="button" pButton label="Sign up" (click)="openRegistration()"></button>
+        </div>
+    </div>
+</div>
