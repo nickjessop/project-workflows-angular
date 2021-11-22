@@ -142,4 +142,7 @@ export class NavBarComponent implements OnInit {
     onBack() {
         this.projectService.resetProject();
     }
+    openRegistration() {
+        window.open(`${location.host}/auth/register`, '_blank');
+    }
 }
