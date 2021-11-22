@@ -85,6 +85,7 @@ export class RichTextInputComponent implements OnInit {
     }
 
     public onFocusOut(event: Event) {
+        // add in HTML: on-focusout="onFocusOut($event)"
         this.projectService.syncProject();
         this.showSaveButton = false;
     }
