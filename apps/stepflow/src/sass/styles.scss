@@ -105,7 +105,12 @@ body.noscroll {
 .bg-white {
     background: white;
 }
-
+.rich-text.view p {
+    margin-top: 0;
+}
+.rich-text.view p:last-child {
+    margin-bottom: 0;
+}
 .custom-scroll::-webkit-scrollbar-thumb {
     background: rgba(0, 0, 0, 0.15) transparent;
 }

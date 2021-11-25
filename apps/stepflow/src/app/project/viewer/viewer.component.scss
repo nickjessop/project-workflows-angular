@@ -18,6 +18,8 @@
             .step-container {
                 // min-height: calc(100vh - 130px);
                 height: auto;
+                max-width: 1200px;
+                margin: 0 auto;
             }
             .step-status-label {
                 text-transform: uppercase;

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ComponentType } from '@stepflow/interfaces';
 import { CoreComponentService } from '../../core/core-component.service';
 import { ProjectService } from '../../services/project/project.service';
@@ -9,6 +9,7 @@ import { ProjectService } from '../../services/project/project.service';
 })
 export class ControlsComponent implements OnInit {
     public isAddBlockDisabled = false;
+    @Input() isDisabled = false;
 
     constructor(public projectService: ProjectService, private coreComponentService: CoreComponentService) {}
 
