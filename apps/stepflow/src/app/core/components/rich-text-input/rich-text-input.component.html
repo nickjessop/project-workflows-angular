@@ -18,7 +18,7 @@
                 placeholder="Add content"
                 [(ngModel)]="field.metadata.data.value"
                 [style]="{ height: '100%', fontSize: '1rem' }"
-                formats="['Bold', 'Underline', 'Italic', 'Link']"
+                formats="['Bold', 'Underline', 'Italic', 'Link', 'List']"
                 styleClass="editor"
                 (onSelectionChange)="onFocusIn($event)"
                 #textBlock
@@ -29,6 +29,7 @@
                         <button class="ql-italic" aria-label="Italic"></button>
                         <button class="ql-underline" aria-label="Underline"></button>
                         <button class="ql-link" aria-label="Link"></button>
+                        <button class="ql-list" aria-label="Unordered List" value="bullet"></button>
                     </span>
                 </p-header>
             </p-editor>

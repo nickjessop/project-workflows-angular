@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { ComponentType } from '@stepflow/interfaces';
 @Component({
     selector: 'project-block-overlay',
@@ -7,7 +7,6 @@ import { ComponentType } from '@stepflow/interfaces';
 })
 export class BlockPanelOverlayComponent implements OnInit {
     @Output() onSelectNewBlock = new EventEmitter<ComponentType>();
-    @Input() isDisabled = false;
 
     public blockOptions = this.getBlockOptions();
 
