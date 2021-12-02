@@ -18,12 +18,48 @@ export class BlockPanelOverlayComponent implements OnInit {
 
     private getBlockOptions() {
         const options = [
-            { enabled: true, icon: 'pi-check-square', label: 'Checklist', component: 'checkboxes' },
-            { enabled: true, icon: 'pi-folder', label: 'Files', component: 'fileUploader' },
-            { enabled: true, icon: 'pi-images', label: 'Images', component: 'imageUploader' },
-            { enabled: true, icon: 'pi-large-text', label: 'Text', component: 'richTextInput' },
-            { enabled: true, icon: 'pi-table', label: 'Table', component: 'table' },
-            { enabled: true, icon: 'pi-embed', label: 'Embed', component: 'embed' },
+            {
+                enabled: true,
+                icon: 'pi-check-square',
+                label: 'Checklist',
+                description: 'Track a list of items.',
+                component: 'checkboxes',
+            },
+            {
+                enabled: true,
+                icon: 'pi-folder',
+                label: 'Files',
+                description: 'Upload files for users to browse and download.',
+                component: 'fileUploader',
+            },
+            {
+                enabled: true,
+                icon: 'pi-images',
+                label: 'Images',
+                description: 'Upload images and display them in a gallery.',
+                component: 'imageUploader',
+            },
+            {
+                enabled: true,
+                icon: 'pi-large-text',
+                label: 'Text',
+                description: 'Capture content with rich text editing tools.',
+                component: 'richTextInput',
+            },
+            {
+                enabled: true,
+                icon: 'pi-table',
+                label: 'Table',
+                description: 'Organize data in simple table.',
+                component: 'table',
+            },
+            {
+                enabled: true,
+                icon: 'pi-embed',
+                label: 'Embed',
+                description: 'Embed third-party apps directly into the workflow.',
+                component: 'embed',
+            },
         ];
 
         return options;

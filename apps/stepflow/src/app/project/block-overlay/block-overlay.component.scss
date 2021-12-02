@@ -4,27 +4,29 @@ button {
 .dialog {
     width: 50vw;
 }
-.block-overlayPanel {
-    &:after,
-    &:before {
-        left: 50%;
-    }
-    background: red !important;
-}
 
 .block-overlay {
     &__item {
-        text-align: center;
         &:hover {
-            background: var(--surface-c);
+            .block-item-content {
+                div:first-child {
+                    color: var(--primary-color);
+                    transition: all 0.2s ease-in-out;
+                }
+            }
+            .block-icon {
+                transition: all 0.3s ease-in-out;
+                transform: scale(1.05);
+            }
             cursor: pointer;
             border-radius: 6px;
         }
         .block-icon {
-            padding: 1rem 0 0.25rem 0;
+            background: var(--surface-c);
+            border-radius: 6px;
         }
-        .block-label {
-            padding: 0.25rem 0 1rem 0;
+        .block-item-content {
+            flex-grow: 1;
         }
     }
 }

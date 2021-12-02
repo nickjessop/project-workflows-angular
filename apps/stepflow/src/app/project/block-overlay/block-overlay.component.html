@@ -5,15 +5,18 @@
     appendTo="body"
     styleClass="block-sidebar"
 >
-    <div class="p-grid p-nogutter block-overlay">
+    <div class="block-overlay">
         <ng-container *ngIf="blockOptions?.length">
-            <div class="p-col-4" *ngFor="let blockOption of blockOptions">
+            <div *ngFor="let blockOption of blockOptions" class="p-mt-2">
                 <div
-                    class="p-d-flex p-flex-column p-jc-center p-my-2 p-mx-2 block-overlay__item"
+                    class="p-d-flex p-jc-between p-ai-center p-mb-4 block-overlay__item"
                     (click)="onAddNewBlockPress(blockOption.component)"
                 >
-                    <i class="pi {{ blockOption.icon }} ms-4 block-icon"></i>
-                    <div class="block-label ms-01">{{ blockOption.label }}</div>
+                    <i class="pi {{ blockOption.icon }} ms-4 p-p-3 p-mr-3 block-icon"></i>
+                    <div class="block-item-content">
+                        <div class="ms-01 p-pb-1 p-text-bold">{{ blockOption.label }}</div>
+                        <div class="ms-02">{{ blockOption.description }}</div>
+                    </div>
                 </div>
             </div>
         </ng-container>
