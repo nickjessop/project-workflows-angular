@@ -17,57 +17,65 @@
         </div>
     </ng-container>
     <ng-container *ngIf="componentMode === 'edit' || componentMode === 'configure'">
-        <div class="images view p-p-2">
-            <div *ngFor="let image of imageData; let index = index" class="images__item" key="index">
-                <img [src]="image.thumbnail" [alt]="image.description" (click)="imageClick(index)" />
-                <p-button
-                    label="Edit"
-                    icon="pi pi-pencil"
-                    styleClass="p-button-raised p-button-text p-button-sm"
-                    class="image-edit"
-                    (click)="imageEdit.toggle($event)"
-                ></p-button>
-                <p-checkbox
-                    name="deleteImage"
-                    [value]="index"
-                    (onChange)="onCheckboxPress($event, index)"
-                    class="image-checkbox"
-                ></p-checkbox>
-                <p-overlayPanel
-                    #imageEdit
-                    [showCloseIcon]="true"
-                    [style]="{ width: '450px' }"
-                    styleClass="image-dialog"
-                    appendTo="body"
-                >
-                    <ng-template pTemplate>
-                        <div class="p-field">
-                            <label for="title">Title</label>
-                            <input
-                                name="title"
-                                type="text"
-                                pInputText
-                                [(ngModel)]="image.title"
-                                placeholder="Enter a title"
-                                [style]="{ width: '100%' }"
-                            />
-                        </div>
-                        <div class="p-field">
-                            <label for="description">Description</label>
-                            <input
-                                name="description"
-                                type="text"
-                                pInputText
-                                [(ngModel)]="image.description"
-                                placeholder="Enter a description"
-                                [style]="{ width: '100%' }"
-                            />
-                        </div>
-                        <button type="button" label="Save" pButton (click)="updateImageMetadata(image)"></button>
-                    </ng-template>
-                </p-overlayPanel>
+        <ng-container *ngIf="imageData.length > 0; else noImages">
+            <div class="images p-p-2">
+                <div *ngFor="let image of imageData; let index = index" class="images__item" key="index">
+                    <img [src]="image.thumbnail" [alt]="image.description" (click)="imageClick(index)" />
+                    <p-button
+                        label="Edit"
+                        icon="pi pi-pencil"
+                        styleClass="p-button-raised p-button-text p-button-sm"
+                        class="image-edit"
+                        (click)="imageEdit.toggle($event)"
+                    ></p-button>
+                    <p-checkbox
+                        name="deleteImage"
+                        [value]="index"
+                        (onChange)="onCheckboxPress($event, index)"
+                        class="image-checkbox"
+                    ></p-checkbox>
+                    <p-overlayPanel
+                        #imageEdit
+                        [showCloseIcon]="true"
+                        [style]="{ width: '450px' }"
+                        styleClass="image-dialog"
+                        appendTo="body"
+                    >
+                        <ng-template pTemplate>
+                            <div class="p-field">
+                                <label for="title">Title</label>
+                                <input
+                                    name="title"
+                                    type="text"
+                                    pInputText
+                                    [(ngModel)]="image.title"
+                                    placeholder="Enter a title"
+                                    [style]="{ width: '100%' }"
+                                />
+                            </div>
+                            <div class="p-field">
+                                <label for="description">Description</label>
+                                <input
+                                    name="description"
+                                    type="text"
+                                    pInputText
+                                    [(ngModel)]="image.description"
+                                    placeholder="Enter a description"
+                                    [style]="{ width: '100%' }"
+                                />
+                            </div>
+                            <button type="button" label="Save" pButton (click)="updateImageMetadata(image)"></button>
+                        </ng-template>
+                    </p-overlayPanel>
+                </div>
             </div>
-        </div>
+        </ng-container>
+        <ng-template #noImages>
+            <div class="p-p-4 p-d-flex p-flex-column p-ai-center p-jc-center text-secondary">
+                <div><i class="pi pi-image" style="font-size: 48px"></i></div>
+                <div>Add an image</div>
+            </div>
+        </ng-template>
 
         <p-toolbar styleClass="p-p-2 p-mt-2">
             <div class="p-toolbar-group-left">

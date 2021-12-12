@@ -20,7 +20,7 @@ export class FileUploaderComponent implements OnInit {
     @Input() group!: FormGroup;
     @Input() componentMode?: ComponentMode;
     @Input() index = 0;
-    @Input() field: BlockConfig = this.coreComponentService.createBlockConfig('textInput');
+    @Input() field: BlockConfig = this.coreComponentService.createBlockConfig('fileUploader');
     @Input() resizable?: boolean;
 
     public cols = [
