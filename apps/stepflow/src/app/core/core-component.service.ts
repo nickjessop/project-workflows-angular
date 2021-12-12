@@ -66,12 +66,10 @@ export class CoreComponentService {
                 data: {
                     value: [
                         {
-                            href:
-                                'https://primefaces.org/primeng/showcase/assets/showcase/images/galleria/galleria1.jpg',
+                            href: '',
                             description: '',
                             title: '',
-                            thumbnail:
-                                'https://primefaces.org/primeng/showcase/assets/showcase/images/galleria/galleria1s.jpg',
+                            thumbnail: '',
                         },
                     ],
                 },
