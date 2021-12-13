@@ -4,20 +4,20 @@
     [componentMode]="componentMode"
     [index]="index"
 >
-    <ng-container *ngIf="componentMode === 'view'">
-        <div class="images">
-            <div *ngFor="let image of imageData; let index = index" class="images__item" key="index">
-                <img
-                    [src]="image.thumbnail"
-                    [alt]="image.description"
-                    style="cursor: pointer"
-                    (click)="imageClick(index)"
-                />
+    <ng-container *ngIf="imageData.length > 0; else noImages">
+        <ng-container *ngIf="componentMode === 'view'">
+            <div class="images">
+                <div *ngFor="let image of imageData; let index = index" class="images__item" key="index">
+                    <img
+                        [src]="image.thumbnail"
+                        [alt]="image.description"
+                        style="cursor: pointer"
+                        (click)="imageClick(index)"
+                    />
+                </div>
             </div>
-        </div>
-    </ng-container>
-    <ng-container *ngIf="componentMode === 'edit' || componentMode === 'configure'">
-        <ng-container *ngIf="imageData.length > 0; else noImages">
+        </ng-container>
+        <ng-container *ngIf="componentMode === 'edit' || componentMode === 'configure'">
             <div class="images p-p-2">
                 <div *ngFor="let image of imageData; let index = index" class="images__item" key="index">
                     <img [src]="image.thumbnail" [alt]="image.description" (click)="imageClick(index)" />
@@ -69,41 +69,42 @@
                     </p-overlayPanel>
                 </div>
             </div>
-        </ng-container>
-        <ng-template #noImages>
-            <div class="p-p-4 p-d-flex p-flex-column p-ai-center p-jc-center text-secondary">
-                <div><i class="pi pi-image" style="font-size: 48px"></i></div>
-                <div>Add an image</div>
-            </div>
-        </ng-template>
 
-        <p-toolbar styleClass="p-p-2 p-mt-2">
-            <div class="p-toolbar-group-left">
-                <p-fileUpload
-                    mode="basic"
-                    accept="image/*"
-                    maxFileSize="1000000"
-                    chooseLabel="Add an image"
-                    (onSelect)="onFileUploadSelected($event)"
-                    class="p-button-text p-mr-2"
-                    [auto]="true"
-                ></p-fileUpload>
-                <button
-                    pButton
-                    styleClass="p-button-sm"
-                    class="p-button-danger"
-                    type="button"
-                    label="Delete images"
-                    icon="pi pi-trash"
-                    (click)="onDeleteImagePress()"
-                    *ngIf="selectedImages.length > 0"
-                ></button>
-            </div>
-            <div class="p-toolbar-group-right p-pr-2">
-                <div>{{ imageData.length }} images</div>
-            </div>
-        </p-toolbar>
+            <p-toolbar styleClass="p-p-2 p-mt-2">
+                <div class="p-toolbar-group-left">
+                    <p-fileUpload
+                        mode="basic"
+                        accept="image/*"
+                        maxFileSize="1000000"
+                        chooseLabel="Add an image"
+                        (onSelect)="onFileUploadSelected($event)"
+                        class="p-button-text p-mr-2"
+                        [auto]="true"
+                    ></p-fileUpload>
+                    <button
+                        pButton
+                        styleClass="p-button-sm"
+                        class="p-button-danger"
+                        type="button"
+                        label="Delete images"
+                        icon="pi pi-trash"
+                        (click)="onDeleteImagePress()"
+                        *ngIf="selectedImages.length > 0"
+                    ></button>
+                </div>
+                <div class="p-toolbar-group-right p-pr-2">
+                    <div>{{ imageData.length }} images</div>
+                </div>
+            </p-toolbar>
+        </ng-container>
     </ng-container>
+
+    <ng-template #noImages>
+        <div class="p-p-4 p-d-flex p-flex-column p-ai-center p-jc-center text-secondary">
+            <div><i class="pi pi-image" style="font-size: 48px"></i></div>
+            <div>No images added</div>
+        </div>
+    </ng-template>
 
     <p-galleria
         [value]="imageData"
