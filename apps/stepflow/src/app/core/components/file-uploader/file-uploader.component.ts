@@ -44,7 +44,12 @@ export class FileUploaderComponent implements OnInit {
     ) {}
 
     ngOnInit() {
-        this.fileData = (this.field.metadata as FileUploader).data.value;
+        const _fileData = (this.field.metadata as FileUploader).data.value;
+        if (_fileData.length > 0 && _fileData[0].href === '') {
+            (this.field.metadata as FileUploader).data.value = [];
+            this.projectService.syncProject();
+        }
+        this.fileData = _fileData;
     }
     public height?: number;
     public settings?: ComponentSettings;

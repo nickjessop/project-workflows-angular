@@ -4,8 +4,8 @@
     [componentMode]="componentMode"
     [index]="index"
 >
-    <ng-container>
-        <ng-container *ngIf="componentMode === 'view'">
+    <ng-container *ngIf="fileData.length > 0; else noFiles">
+        <ng-container *ngIf="componentMode === 'view' && fileData.length > 0; else noFiles">
             <p-table
                 [scrollable]="true"
                 [rows]="20"
@@ -130,10 +130,11 @@
             </p-toolbar>
         </ng-container>
     </ng-container>
+
     <ng-template #noFiles>
         <div class="p-p-4 p-d-flex p-flex-column p-ai-center p-jc-center text-secondary">
-            <div><i class="pi pi-files" style="font-size: 48px"></i></div>
-            <div>Add a file</div>
+            <div><i class="pi pi-folder" style="font-size: 48px"></i></div>
+            <div>No files added</div>
         </div>
     </ng-template>
 
