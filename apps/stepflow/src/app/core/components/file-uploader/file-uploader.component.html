@@ -5,7 +5,7 @@
     [index]="index"
 >
     <ng-container *ngIf="fileData.length > 0; else noFiles">
-        <ng-container *ngIf="componentMode === 'view' && fileData.length > 0; else noFiles">
+        <ng-container *ngIf="componentMode === 'view' && fileData.length > 0">
             <p-table
                 [scrollable]="true"
                 [rows]="20"
@@ -114,20 +114,6 @@
                     </ng-container>
                 </ng-template>
             </p-table>
-            <p-toolbar styleClass="p-p-2">
-                <div class="p-toolbar-group-left">
-                    <button
-                        pButton
-                        type="button"
-                        icon="pi pi-plus"
-                        label="Add a file"
-                        pButton
-                        (click)="showFileUploaderDialog = true; fileDialogMode = 'upload'"
-                        class="p-button-text"
-                    ></button>
-                </div>
-                <div class="p-toolbar-group-right p-pr-2">{{ fileData.length }} files</div>
-            </p-toolbar>
         </ng-container>
     </ng-container>
 
@@ -137,6 +123,21 @@
             <div>No files added</div>
         </div>
     </ng-template>
+
+    <p-toolbar styleClass="p-p-2" *ngIf="componentMode === 'edit' || componentMode === 'configure'">
+        <div class="p-toolbar-group-left">
+            <button
+                pButton
+                type="button"
+                icon="pi pi-plus"
+                label="Add a file"
+                pButton
+                (click)="showFileUploaderDialog = true; fileDialogMode = 'upload'"
+                class="p-button-text"
+            ></button>
+        </div>
+        <div class="p-toolbar-group-right p-pr-2">{{ fileData.length }} files</div>
+    </p-toolbar>
 
     <p-dialog
         [(visible)]="showFileUploaderDialog"

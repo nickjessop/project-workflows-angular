@@ -69,33 +69,6 @@
                     </p-overlayPanel>
                 </div>
             </div>
-
-            <p-toolbar styleClass="p-p-2 p-mt-2">
-                <div class="p-toolbar-group-left">
-                    <p-fileUpload
-                        mode="basic"
-                        accept="image/*"
-                        maxFileSize="1000000"
-                        chooseLabel="Add an image"
-                        (onSelect)="onFileUploadSelected($event)"
-                        class="p-button-text p-mr-2"
-                        [auto]="true"
-                    ></p-fileUpload>
-                    <button
-                        pButton
-                        styleClass="p-button-sm"
-                        class="p-button-danger"
-                        type="button"
-                        label="Delete images"
-                        icon="pi pi-trash"
-                        (click)="onDeleteImagePress()"
-                        *ngIf="selectedImages.length > 0"
-                    ></button>
-                </div>
-                <div class="p-toolbar-group-right p-pr-2">
-                    <div>{{ imageData.length }} images</div>
-                </div>
-            </p-toolbar>
         </ng-container>
     </ng-container>
 
@@ -105,6 +78,33 @@
             <div>No images added</div>
         </div>
     </ng-template>
+
+    <p-toolbar styleClass="p-p-2 p-mt-2" *ngIf="componentMode === 'edit' || componentMode === 'configure'">
+        <div class="p-toolbar-group-left">
+            <p-fileUpload
+                mode="basic"
+                accept="image/*"
+                maxFileSize="1000000"
+                chooseLabel="Add an image"
+                (onSelect)="onFileUploadSelected($event)"
+                class="p-button-text p-mr-2"
+                [auto]="true"
+            ></p-fileUpload>
+            <button
+                pButton
+                styleClass="p-button-sm"
+                class="p-button-danger"
+                type="button"
+                label="Delete images"
+                icon="pi pi-trash"
+                (click)="onDeleteImagePress()"
+                *ngIf="selectedImages.length > 0"
+            ></button>
+        </div>
+        <div class="p-toolbar-group-right p-pr-2">
+            <div>{{ imageData.length }} images</div>
+        </div>
+    </p-toolbar>
 
     <p-galleria
         [value]="imageData"
