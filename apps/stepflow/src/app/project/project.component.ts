@@ -10,7 +10,9 @@ import { ProjectService } from '../services/project/project.service';
 })
 export class ProjectComponent implements OnInit {
     public isLoadingProjects = true;
-    public projects: { id: string; description: string; name: string }[] = [];
+    public allProjects: { id: string; description: string; name: string; isOwner: boolean }[] = [];
+    public myProjects: { id: string; description: string; name: string; isOwner: boolean }[] = [];
+    public sharedProjects: { id: string; description: string; name: string }[] = [];
 
     constructor(
         private projectService: ProjectService,
@@ -23,22 +25,27 @@ export class ProjectComponent implements OnInit {
         // this.apiService.testApi().subscribe();
     }
 
-    public getProjects() {
+    public async getProjects() {
         this.isLoadingProjects = true;
 
-        this.projectService.getProjects().subscribe(
-            projects => {
-                this.projects = projects.map(project => {
-                    return { id: project.id!, description: project.description, name: project.name };
-                });
-            },
-            err => {
-                console.log(err);
-            },
-            () => {
-                this.isLoadingProjects = false;
-            }
-        );
+        try {
+            const allProjects = await this.projectService.getProjects();
+            this.allProjects = allProjects.map(project => {
+                return {
+                    id: project.itemData.id!,
+                    description: project.itemData.description,
+                    name: project.itemData.name,
+                    memberRoles: project.itemData.memberRoles,
+                    isOwner: project.isOwner,
+                };
+            });
+            this.myProjects = this.allProjects.filter(project => project.isOwner === true);
+            this.sharedProjects = this.allProjects.filter(project => project.isOwner === false);
+        } catch (error) {
+            // TODO: handle error;
+        }
+
+        this.isLoadingProjects = false;
     }
 
     public onDeleteProject($event: { id: string }) {

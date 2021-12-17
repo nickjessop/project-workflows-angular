@@ -4,98 +4,107 @@
     [componentMode]="componentMode"
     [index]="index"
 >
-    <ng-container *ngIf="componentMode === 'view'">
-        <div class="images">
-            <div *ngFor="let image of imageData; let index = index" class="images__item" key="index">
-                <img
-                    [src]="image.thumbnail"
-                    [alt]="image.description"
-                    style="cursor: pointer"
-                    (click)="imageClick(index)"
-                />
+    <ng-container *ngIf="imageData.length > 0; else noImages">
+        <ng-container *ngIf="componentMode === 'view'">
+            <div class="images">
+                <div *ngFor="let image of imageData; let index = index" class="images__item" key="index">
+                    <img
+                        [src]="image.thumbnail"
+                        [alt]="image.description"
+                        style="cursor: pointer"
+                        (click)="imageClick(index)"
+                    />
+                </div>
             </div>
-        </div>
+        </ng-container>
+        <ng-container *ngIf="componentMode === 'edit' || componentMode === 'configure'">
+            <div class="images p-p-2">
+                <div *ngFor="let image of imageData; let index = index" class="images__item" key="index">
+                    <img [src]="image.thumbnail" [alt]="image.description" (click)="imageClick(index)" />
+                    <p-button
+                        label="Edit"
+                        icon="pi pi-pencil"
+                        styleClass="p-button-raised p-button-text p-button-sm"
+                        class="image-edit"
+                        (click)="imageEdit.toggle($event)"
+                    ></p-button>
+                    <p-checkbox
+                        name="deleteImage"
+                        [value]="index"
+                        (onChange)="onCheckboxPress($event, index)"
+                        class="image-checkbox"
+                    ></p-checkbox>
+                    <p-overlayPanel
+                        #imageEdit
+                        [showCloseIcon]="true"
+                        [style]="{ width: '450px' }"
+                        styleClass="image-dialog"
+                        appendTo="body"
+                    >
+                        <ng-template pTemplate>
+                            <div class="p-field">
+                                <label for="title">Title</label>
+                                <input
+                                    name="title"
+                                    type="text"
+                                    pInputText
+                                    [(ngModel)]="image.title"
+                                    placeholder="Enter a title"
+                                    [style]="{ width: '100%' }"
+                                />
+                            </div>
+                            <div class="p-field">
+                                <label for="description">Description</label>
+                                <input
+                                    name="description"
+                                    type="text"
+                                    pInputText
+                                    [(ngModel)]="image.description"
+                                    placeholder="Enter a description"
+                                    [style]="{ width: '100%' }"
+                                />
+                            </div>
+                            <button type="button" label="Save" pButton (click)="updateImageMetadata(image)"></button>
+                        </ng-template>
+                    </p-overlayPanel>
+                </div>
+            </div>
+        </ng-container>
     </ng-container>
-    <ng-container *ngIf="componentMode === 'edit' || componentMode === 'configure'">
-        <div class="images view p-p-2">
-            <div *ngFor="let image of imageData; let index = index" class="images__item" key="index">
-                <img [src]="image.thumbnail" [alt]="image.description" (click)="imageClick(index)" />
-                <p-button
-                    label="Edit"
-                    icon="pi pi-pencil"
-                    styleClass="p-button-raised p-button-text p-button-sm"
-                    class="image-edit"
-                    (click)="imageEdit.toggle($event)"
-                ></p-button>
-                <p-checkbox
-                    name="deleteImage"
-                    [value]="index"
-                    (onChange)="onCheckboxPress($event, index)"
-                    class="image-checkbox"
-                ></p-checkbox>
-                <p-overlayPanel
-                    #imageEdit
-                    [showCloseIcon]="true"
-                    [style]="{ width: '450px' }"
-                    styleClass="image-dialog"
-                    appendTo="body"
-                >
-                    <ng-template pTemplate>
-                        <div class="p-field">
-                            <label for="title">Title</label>
-                            <input
-                                name="title"
-                                type="text"
-                                pInputText
-                                [(ngModel)]="image.title"
-                                placeholder="Enter a title"
-                                [style]="{ width: '100%' }"
-                            />
-                        </div>
-                        <div class="p-field">
-                            <label for="description">Description</label>
-                            <input
-                                name="description"
-                                type="text"
-                                pInputText
-                                [(ngModel)]="image.description"
-                                placeholder="Enter a description"
-                                [style]="{ width: '100%' }"
-                            />
-                        </div>
-                        <button type="button" label="Save" pButton (click)="updateImageMetadata(image)"></button>
-                    </ng-template>
-                </p-overlayPanel>
-            </div>
-        </div>
 
-        <p-toolbar styleClass="p-p-2 p-mt-2">
-            <div class="p-toolbar-group-left">
-                <p-fileUpload
-                    mode="basic"
-                    accept="image/*"
-                    maxFileSize="1000000"
-                    chooseLabel="Add an image"
-                    (onSelect)="onFileUploadSelected($event)"
-                    class="p-button-text p-mr-2"
-                    [auto]="true"
-                ></p-fileUpload>
-                <button
-                    pButton
-                    styleClass="p-button-sm"
-                    class="p-button-danger"
-                    type="button"
-                    label="Delete images"
-                    icon="pi pi-trash"
-                    (click)="onDeleteImagePress()"
-                    *ngIf="selectedImages.length > 0"
-                ></button>
-            </div>
-            <div class="p-toolbar-group-right p-pr-2">
-                <div>{{ imageData.length }} images</div>
-            </div>
-        </p-toolbar>
-    </ng-container>
+    <ng-template #noImages>
+        <div class="p-p-4 p-d-flex p-flex-column p-ai-center p-jc-center text-secondary">
+            <div><i class="pi pi-image" style="font-size: 48px"></i></div>
+            <div>No images added</div>
+        </div>
+    </ng-template>
+
+    <p-toolbar styleClass="p-p-2 p-mt-2" *ngIf="componentMode === 'edit' || componentMode === 'configure'">
+        <div class="p-toolbar-group-left">
+            <p-fileUpload
+                mode="basic"
+                accept="image/*"
+                maxFileSize="1000000"
+                chooseLabel="Add an image"
+                (onSelect)="onFileUploadSelected($event)"
+                class="p-button-text p-mr-2"
+                [auto]="true"
+            ></p-fileUpload>
+            <button
+                pButton
+                styleClass="p-button-sm"
+                class="p-button-danger"
+                type="button"
+                label="Delete images"
+                icon="pi pi-trash"
+                (click)="onDeleteImagePress()"
+                *ngIf="selectedImages.length > 0"
+            ></button>
+        </div>
+        <div class="p-toolbar-group-right p-pr-2">
+            <div>{{ imageData.length }} images</div>
+        </div>
+    </p-toolbar>
 
     <p-galleria
         [value]="imageData"

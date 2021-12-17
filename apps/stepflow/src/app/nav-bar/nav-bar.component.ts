@@ -49,8 +49,9 @@ export class NavBarComponent implements OnInit {
 
     ngOnInit(): void {
         this.items = [
-            { label: 'Account settings', icon: 'pi pi-fw pi-user', routerLink: '/profile' },
-            // { label: 'Tell a friend', icon: 'pi pi-fw pi-thumbs-up', routerLink: '/share' },
+            { label: 'Account settings', icon: 'pi pi-fw pi-user', url: '/profile' },
+            // temporary fix above instead of using routerLink: issue #44
+            // { label: 'Tell a friend', icon: 'pi pi-fw pi-thumbs-up', routerLink: ['/share'] },
             {
                 label: 'Sign out',
                 icon: 'pi pi-fw pi-sign-out',

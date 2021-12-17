@@ -4,18 +4,33 @@
             <strong>{{ projectName | sliceEllipsis: 0:80 }}</strong>
             <div>
                 <span>{{ projectDescription | sliceEllipsis: 0:80 }}</span>
-                <span title="{{ openedDate }}">{{ openedDate | sliceEllipsis: 0:40 }}</span>
+                <!-- <span>{{ projectOwnerName }}</span> -->
             </div>
         </div>
-        <div *ngIf="projectId?.length > 0" class="project__menu p-m-auto">
-            <button
-                type="button"
-                class="p-button-text p-button-plain"
-                pButton
-                icon="pi pi-ellipsis-h"
-                (click)="menu.toggle($event)"
-            ></button>
-            <p-menu #menu [popup]="true" [model]="projectMenuOptions" appendTo="body"></p-menu>
+        <!-- <div class="p-p-3" (click)="navigate()">
+            <span title="{{ openedDate }}">date{{ openedDate | sliceEllipsis: 0:40 }}</span>
+        </div> -->
+        <div class="project__menu p-m-auto">
+            <ng-container *ngIf="projectId?.length > 0 && projectOwner; else placeholderButton">
+                <button
+                    type="button"
+                    class="p-button-text p-button-plain"
+                    pButton
+                    icon="pi pi-ellipsis-h"
+                    (click)="menu.toggle($event)"
+                ></button>
+                <p-menu #menu [popup]="true" [model]="projectMenuOptions" appendTo="body"></p-menu>
+            </ng-container>
+            <ng-template #placeholderButton>
+                <button
+                    type="button"
+                    class="p-button-text p-button-plain"
+                    pButton
+                    icon="pi pi-ellipsis-h"
+                    style="opacity: 0;"
+                    (click)="navigate()"
+                ></button>
+            </ng-template>
         </div>
     </div>
 </div>

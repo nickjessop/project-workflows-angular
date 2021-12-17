@@ -4,126 +4,140 @@
     [componentMode]="componentMode"
     [index]="index"
 >
-    <ng-container *ngIf="componentMode === 'view'">
-        <p-table
-            [scrollable]="true"
-            [rows]="20"
-            [columns]="cols"
-            [value]="fileData"
-            scrollHeight="250px"
-            [virtualScroll]="true"
-            [virtualRowHeight]="34"
-            styleClass="p-datatable-striped files"
-        >
-            <ng-template pTemplate="header">
-                <tr>
-                    <ng-container *ngFor="let col of cols">
-                        <th [ngStyle]="{ width: col.size + '%' }">{{ col.header }}</th>
-                    </ng-container>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
-                <ng-container>
-                    <tr style="height:34px" class="file">
-                        <td style="width: 30%;">
-                            <ng-container [ngSwitch]="rowData.type">
-                                <ng-container *ngSwitchCase="'image'"><i class="pi pi-image"></i></ng-container>
-                                <ng-container *ngSwitchCase="'video'"><i class="pi pi-video"></i></ng-container>
-                                <ng-container *ngSwitchCase="'audio'"><i class="pi pi-volume-off"></i></ng-container>
-                                <ng-container *ngSwitchDefault><i class="pi pi-file"></i></ng-container>
-                            </ng-container>
-                            {{ rowData.title }}
-                        </td>
-                        <td style="width: 50%;">{{ rowData.description }}</td>
-                        <td style="width: 10%;">{{ rowData.extension }}</td>
-                        <td style="width: 10%;text-align: right;">
-                            <button
-                                pButton
-                                type="button"
-                                icon="pi pi-download"
-                                class="p-button-text"
-                                (click)="
-                                    onDownloadFilePress(
-                                        rowData.href || '',
-                                        rowData.title || '',
-                                        rowData.extension || ''
-                                    )
-                                "
-                            ></button>
-                            <a href="#" id="fileBlockDownload-{{ rowIndex }}" style="display: none;">Download</a>
-                        </td>
+    <ng-container *ngIf="fileData.length > 0; else noFiles">
+        <ng-container *ngIf="componentMode === 'view' && fileData.length > 0">
+            <p-table
+                [scrollable]="true"
+                [rows]="20"
+                [columns]="cols"
+                [value]="fileData"
+                scrollHeight="250px"
+                [virtualScroll]="true"
+                [virtualRowHeight]="34"
+                styleClass="p-datatable-striped files"
+            >
+                <ng-template pTemplate="header">
+                    <tr>
+                        <ng-container *ngFor="let col of cols">
+                            <th [ngStyle]="{ width: col.size + '%' }">{{ col.header }}</th>
+                        </ng-container>
                     </tr>
-                </ng-container>
-            </ng-template>
-        </p-table>
-    </ng-container>
-    <ng-container *ngIf="componentMode === 'edit' || componentMode === 'configure'">
-        <p-table
-            [scrollable]="true"
-            [rows]="20"
-            [columns]="cols"
-            [value]="fileData"
-            scrollHeight="250px"
-            [virtualScroll]="true"
-            [virtualRowHeight]="34"
-            styleClass="p-datatable-striped files"
-        >
-            <ng-template pTemplate="header">
-                <tr>
-                    <ng-container *ngFor="let col of cols">
-                        <th [ngStyle]="{ width: col.size + '%' }">{{ col.header }}</th>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
+                    <ng-container>
+                        <tr style="height:34px" class="file">
+                            <td style="width: 30%;">
+                                <ng-container [ngSwitch]="rowData.type">
+                                    <ng-container *ngSwitchCase="'image'"><i class="pi pi-image"></i></ng-container>
+                                    <ng-container *ngSwitchCase="'video'"><i class="pi pi-video"></i></ng-container>
+                                    <ng-container *ngSwitchCase="'audio'"
+                                        ><i class="pi pi-volume-off"></i
+                                    ></ng-container>
+                                    <ng-container *ngSwitchDefault><i class="pi pi-file"></i></ng-container>
+                                </ng-container>
+                                {{ rowData.title }}
+                            </td>
+                            <td style="width: 50%;">{{ rowData.description }}</td>
+                            <td style="width: 10%;">{{ rowData.extension }}</td>
+                            <td style="width: 10%;text-align: right;">
+                                <button
+                                    pButton
+                                    type="button"
+                                    icon="pi pi-download"
+                                    class="p-button-text"
+                                    (click)="
+                                        onDownloadFilePress(
+                                            rowData.href || '',
+                                            rowData.title || '',
+                                            rowData.extension || ''
+                                        )
+                                    "
+                                ></button>
+                                <a href="#" id="fileBlockDownload-{{ rowIndex }}" style="display: none;">Download</a>
+                            </td>
+                        </tr>
                     </ng-container>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
-                <ng-container>
-                    <tr style="height:34px" class="file">
-                        <td style="width: 30%;">
-                            <ng-container [ngSwitch]="rowData.type">
-                                <ng-container *ngSwitchCase="'image'"><i class="pi pi-image"></i></ng-container>
-                                <ng-container *ngSwitchCase="'video'"><i class="pi pi-video"></i></ng-container>
-                                <ng-container *ngSwitchCase="'audio'"><i class="pi pi-volume-off"></i></ng-container>
-                                <ng-container *ngSwitchDefault><i class="pi pi-file"></i></ng-container>
-                            </ng-container>
-                            {{ rowData.title }}
-                        </td>
-                        <td style="width: 50%;">{{ rowData.description }}</td>
-                        <td style="width: 10%;">{{ rowData.extension }}</td>
-                        <td style="width: 10%;text-align: right;">
-                            <button
-                                pButton
-                                type="button"
-                                icon="pi pi-ellipsis-h"
-                                class="p-button-text file__menu"
-                                (click)="menu.toggle($event)"
-                            ></button>
-                            <a href="#" id="fileBlockDownload-{{ rowIndex }}" style="display: none;">Download</a>
-                            <p-menu
-                                #menu
-                                [popup]="true"
-                                [model]="getFileMenuItems(rowIndex, rowData)"
-                                appendTo="body"
-                            ></p-menu>
-                        </td>
+                </ng-template>
+            </p-table>
+        </ng-container>
+        <ng-container *ngIf="componentMode === 'edit' || componentMode === 'configure'">
+            <p-table
+                [scrollable]="true"
+                [rows]="20"
+                [columns]="cols"
+                [value]="fileData"
+                scrollHeight="250px"
+                [virtualScroll]="true"
+                [virtualRowHeight]="34"
+                styleClass="p-datatable-striped files"
+            >
+                <ng-template pTemplate="header">
+                    <tr>
+                        <ng-container *ngFor="let col of cols">
+                            <th [ngStyle]="{ width: col.size + '%' }">{{ col.header }}</th>
+                        </ng-container>
                     </tr>
-                </ng-container>
-            </ng-template>
-        </p-table>
-        <p-toolbar styleClass="p-p-2">
-            <div class="p-toolbar-group-left">
-                <button
-                    pButton
-                    type="button"
-                    icon="pi pi-plus"
-                    label="Add a file"
-                    pButton
-                    (click)="showFileUploaderDialog = true; fileDialogMode = 'upload'"
-                    class="p-button-text"
-                ></button>
-            </div>
-            <div class="p-toolbar-group-right p-pr-2">{{ fileData.length }} files</div>
-        </p-toolbar>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
+                    <ng-container>
+                        <tr style="height:34px" class="file">
+                            <td style="width: 30%;">
+                                <ng-container [ngSwitch]="rowData.type">
+                                    <ng-container *ngSwitchCase="'image'"><i class="pi pi-image"></i></ng-container>
+                                    <ng-container *ngSwitchCase="'video'"><i class="pi pi-video"></i></ng-container>
+                                    <ng-container *ngSwitchCase="'audio'"
+                                        ><i class="pi pi-volume-off"></i
+                                    ></ng-container>
+                                    <ng-container *ngSwitchDefault><i class="pi pi-file"></i></ng-container>
+                                </ng-container>
+                                {{ rowData.title }}
+                            </td>
+                            <td style="width: 50%;">{{ rowData.description }}</td>
+                            <td style="width: 10%;">{{ rowData.extension }}</td>
+                            <td style="width: 10%;text-align: right;">
+                                <button
+                                    pButton
+                                    type="button"
+                                    icon="pi pi-ellipsis-h"
+                                    class="p-button-text file__menu"
+                                    (click)="menu.toggle($event)"
+                                ></button>
+                                <a href="#" id="fileBlockDownload-{{ rowIndex }}" style="display: none;">Download</a>
+                                <p-menu
+                                    #menu
+                                    [popup]="true"
+                                    [model]="getFileMenuItems(rowIndex, rowData)"
+                                    appendTo="body"
+                                ></p-menu>
+                            </td>
+                        </tr>
+                    </ng-container>
+                </ng-template>
+            </p-table>
+        </ng-container>
     </ng-container>
+
+    <ng-template #noFiles>
+        <div class="p-p-4 p-d-flex p-flex-column p-ai-center p-jc-center text-secondary">
+            <div><i class="pi pi-folder" style="font-size: 48px"></i></div>
+            <div>No files added</div>
+        </div>
+    </ng-template>
+
+    <p-toolbar styleClass="p-p-2" *ngIf="componentMode === 'edit' || componentMode === 'configure'">
+        <div class="p-toolbar-group-left">
+            <button
+                pButton
+                type="button"
+                icon="pi pi-plus"
+                label="Add a file"
+                pButton
+                (click)="showFileUploaderDialog = true; fileDialogMode = 'upload'"
+                class="p-button-text"
+            ></button>
+        </div>
+        <div class="p-toolbar-group-right p-pr-2">{{ fileData.length }} files</div>
+    </p-toolbar>
 
     <p-dialog
         [(visible)]="showFileUploaderDialog"
