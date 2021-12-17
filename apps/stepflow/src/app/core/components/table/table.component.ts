@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { BlockConfig, ComponentMode, ComponentSettings, Table } from '@stepflow/interfaces';
+import { BlockConfig, ComponentMode, ComponentSettings, Table, TableColumn } from '@stepflow/interfaces';
 import { AngularResizeElementDirection, AngularResizeElementEvent } from 'angular-resize-element';
 import { MenuItem } from 'primeng/api';
 import { ProjectService } from '../../../services/project/project.service';
@@ -20,72 +20,61 @@ export class TableComponent implements OnInit {
 
     @ViewChild('table') table!: any;
     selectedData: { rowIndex: number; colIndex: number } = { rowIndex: 0, colIndex: 0 };
-    public menuItems: MenuItem[] = [
-        {
-            label: 'Insert',
-            icon: 'pi pi-fw pi-plus',
-            items: [
-                {
-                    label: 'Insert row above',
-                    command: () => {
-                        this.addTableRow(this.selectedData.rowIndex);
-                    },
-                },
-                {
-                    label: 'Insert row below',
-                    command: () => {
-                        this.addTableRow(this.selectedData.rowIndex + 1);
-                    },
-                },
-                {
-                    label: 'Insert column right',
-                    command: () => {
-                        this.addTableColumn(this.selectedData.colIndex + 1);
-                    },
-                },
-                {
-                    label: 'Insert column left',
-                    command: () => {
-                        this.addTableColumn(this.selectedData.colIndex);
-                    },
-                },
-            ],
-        },
-        {
-            label: 'Delete',
-            icon: 'pi pi-fw pi-minus',
-            items: [
-                {
-                    label: 'Delete row',
-                    command: () => {
-                        this.removeTableRow(this.selectedData.rowIndex);
-                    },
-                },
-                {
-                    label: 'Delete column',
-                    command: () => {
-                        this.removeTableColumn(this.selectedData.colIndex);
-                    },
-                },
-            ],
-        },
-    ];
+    // public menuItems: MenuItem[] = [
+    //     {
+    //         label: 'Insert',
+    //         icon: 'pi pi-fw pi-plus',
+    //         items: [
+    //             {
+    //                 label: 'Insert row above',
+    //                 command: () => {
+    //                     this.addTableRow(this.selectedData.rowIndex);
+    //                 },
+    //             },
+    //             {
+    //                 label: 'Insert row below',
+    //                 command: () => {
+    //                     this.addTableRow(this.selectedData.rowIndex + 1);
+    //                 },
+    //             },
+    //             {
+    //                 label: 'Insert column right',
+    //                 command: () => {
+    //                     this.addTableColumn(this.selectedData.colIndex + 1);
+    //                 },
+    //             },
+    //             {
+    //                 label: 'Insert column left',
+    //                 command: () => {
+    //                     this.addTableColumn(this.selectedData.colIndex);
+    //                 },
+    //             },
+    //         ],
+    //     },
+    //     {
+    //         label: 'Delete',
+    //         icon: 'pi pi-fw pi-minus',
+    //         items: [
+    //             {
+    //                 label: 'Delete row',
+    //                 command: () => {
+    //                     this.removeTableRow(this.selectedData.rowIndex);
+    //                 },
+    //             },
+    //             {
+    //                 label: 'Delete column',
+    //                 command: () => {
+    //                     this.removeTableColumn(this.selectedData.colIndex);
+    //                 },
+    //             },
+    //         ],
+    //     },
+    // ];
 
-    public tableValues?: {
-        row?: { item?: { text: string; isHeader?: boolean }[] }[];
-        column?: { item?: { size: number }[] }[];
-    } = {
-        row: [
-            {
-                item: [{ text: 'New table', isHeader: true }],
-            },
-        ],
-        column: [
-            {
-                item: [{ size: 33.3 }],
-            },
-        ],
-    };
+    // {
+    //     column?: { item: { size?: number; text: string }[] }[];
+    // }
+    public tableValues?: TableColumn;
 
     constructor(private projectService: ProjectService, private coreComponentService: CoreComponentService) {}
 
@@ -102,6 +91,10 @@ export class TableComponent implements OnInit {
             },
         },
     ];
+
+    printTable(item: any) {
+        console.log(item);
+    }
 
     public onDeleteBlock() {
         const index = this.index ? this.index : 0;
@@ -138,110 +131,109 @@ export class TableComponent implements OnInit {
         this.tableValues = (this.field.metadata as Table).data.value;
     }
 
-    public removeTableRow(removeAtIndex?: number) {
-        const rows = this.tableValues?.row;
+    // public removeTableRow(removeAtIndex?: number) {
+    //     const column = this.tableValues?.column;
 
-        if (!rows) {
-            return;
-        }
+    //     if (!column) {
+    //         return;
+    //     }
 
-        rows.splice(removeAtIndex || rows.length - 1, 1);
-        if (!rows || rows.length === 0) {
-            delete this.tableValues?.row;
-        }
-        this.projectService.syncProject();
-    }
+    //     column.splice(removeAtIndex || column.length - 1, 1);
+    //     if (!column || column.length === 0) {
+    //         delete this.tableValues?.column;
+    //     }
+    //     this.projectService.syncProject();
+    // }
 
-    public removeTableColumn(removeAtIndex?: number) {
-        const rows = this.tableValues?.row;
+    // public removeTableColumn(removeAtIndex?: number) {
+    //     const column = this.tableValues?.column;
 
-        if (!rows) {
-            return;
-        }
+    //     if (!column) {
+    //         return;
+    //     }
 
-        rows.forEach(col => {
-            if (col.item) {
-                if (removeAtIndex == 0) {
-                    col.item.shift();
-                } else {
-                    col.item.splice(removeAtIndex || col.item.length - 1 || 0, 1);
-                }
-            }
-        });
+    //     column.forEach(col => {
+    //         if (col.item) {
+    //             if (removeAtIndex == 0) {
+    //                 col.item.shift();
+    //             } else {
+    //                 col.item.splice(removeAtIndex || col.item.length - 1 || 0, 1);
+    //             }
+    //         }
+    //     });
 
-        if (!rows[0].item || rows[0].item.length === 0) {
-            delete this.tableValues?.row;
-        }
-        this.projectService.syncProject();
-    }
+    //     if (!column[0].item || column[0].item.length === 0) {
+    //         delete this.tableValues?.column;
+    //     }
+    //     this.projectService.syncProject();
+    // }
 
-    public addTableColumn(addAtIndex?: number) {
-        const rows = this.tableValues?.row;
+    // public addTableColumn(addAtIndex?: number) {
+    //     const column = this.tableValues?.column;
 
-        if (!rows) {
-            const newElement = this.createRowElements(1, true);
-            if (this.tableValues) {
-                this.tableValues.row = [{ item: newElement }];
-            }
+    //     if (!column) {
+    //         const newElement = this.createRowElements(1);
+    //         if (this.tableValues) {
+    //             this.tableValues.column = [{ item: newElement }];
+    //         }
 
-            return;
-        }
+    //         return;
+    //     }
 
-        rows.forEach(col => {
-            if (col.item) {
-                const isHeader = col.item[0].isHeader;
-                const newElement = this.createRowElements(1, !!isHeader);
-                if (addAtIndex == 0) {
-                    col.item.unshift(newElement[0]);
-                } else {
-                    col.item.splice(addAtIndex || col.item.length || 0, 0, newElement[0]);
-                }
-            }
-        });
+    //     column.forEach(column => {
+    //         if (column.item) {
+    //             const newElement = this.createRowElements(1);
+    //             if (addAtIndex == 0) {
+    //                 column.item.unshift(newElement[0]);
+    //             } else {
+    //                 column.item.splice(addAtIndex || column.item.length || 0, 0, newElement[0]);
+    //             }
+    //         }
+    //     });
 
-        this.projectService.syncProject();
-    }
+    //     this.projectService.syncProject();
+    // }
 
-    private addTableRow(addAtIndex?: number) {
-        const rows = this.tableValues?.row;
+    // private addTableRow(addAtIndex?: number) {
+    //     const columns = this.tableValues?.row;
 
-        if (!rows) {
-            const newElement = this.createRowElements(1, true);
-            if (this.tableValues) {
-                this.tableValues.row = [{ item: newElement }];
-            }
+    //     if (!columns) {
+    //         const newElement = this.createRowElements(1);
+    //         if (this.tableValues) {
+    //             this.tableValues = [{ item: newElement }];
+    //         }
 
-            return;
-        }
+    //         return;
+    //     }
 
-        const newRow = this.createRowElements(rows?.[0].item?.length || 1, false);
-        rows.splice(addAtIndex || rows.length || 0, 0, { item: newRow });
+    //     const newRow = this.createRowElements(columns?.[0].item?.length || 1);
+    //     columns.splice(addAtIndex || columns.length || 0, 0, { item: newRow });
 
-        this.projectService.syncProject();
-    }
+    //     this.projectService.syncProject();
+    // }
 
-    private createRowElements(amount: number, isHeader: boolean) {
-        let row: { text: string; isHeader?: boolean }[] = [];
+    // private createRowElements(amount: number) {
+    //     let column: { text: string; isHeader?: boolean }[] = [];
 
-        for (let i = 0; i < amount; i++) {
-            row.push({ text: isHeader ? '' : '', isHeader });
-        }
-        return row;
-    }
+    //     for (let i = 0; i < amount; i++) {
+    //         column.push({ text: '' });
+    //     }
+    //     return column;
+    // }
 
-    public columnsResized(event: Event) {
-        console.log('columns event', event);
-        this.table.getColumns();
-        // const rows = this.tableValues?.row;
-        // if (rows) {
-        //     rows.forEach(col => {
-        //         if (col.item) {
-        //             console.log(col);
-        //             console.log(col.item);
-        //         }
-        //     });
-        // }
-    }
+    // public columnsResized(event: Event) {
+    //     console.log('columns event', event);
+    //     this.table.getColumns();
+    //     // const rows = this.tableValues?.row;
+    //     // if (rows) {
+    //     //     rows.forEach(col => {
+    //     //         if (col.item) {
+    //     //             console.log(col);
+    //     //             console.log(col.item);
+    //     //         }
+    //     //     });
+    //     // }
+    // }
 
     public saveTableData() {
         this.projectService.syncProject();
