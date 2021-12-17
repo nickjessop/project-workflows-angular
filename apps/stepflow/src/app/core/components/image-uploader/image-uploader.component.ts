@@ -16,7 +16,7 @@ import { CoreComponentService } from '../../core-component.service';
 export class ImageUploaderComponent implements OnInit {
     @Input() group!: FormGroup;
     @Input() index = 0;
-    @Input() field: BlockConfig = this.coreComponentService.createBlockConfig('textInput');
+    @Input() field: BlockConfig = this.coreComponentService.createBlockConfig('imageUploader');
     @Input() resizable?: boolean;
     @Input() componentMode?: ComponentMode;
 
@@ -39,7 +39,8 @@ export class ImageUploaderComponent implements OnInit {
     public showThumbnails: boolean = false;
     public showImageUploaderDialog = false;
 
-    public imageData: Link[] = [{ href: '', title: '', description: '', thumbnail: '', filePath: '' }];
+    // public imageData: Link[] = [{ href: '', title: '', description: '', thumbnail: '', filePath: '' }];
+    public imageData: Link[] = [];
     public selectedImages: number[] = [];
 
     constructor(
@@ -95,7 +96,12 @@ export class ImageUploaderComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.imageData = (this.field.metadata as ImageUploader).data.value;
+        const _imageData = (this.field.metadata as ImageUploader).data.value;
+        if (_imageData.length > 0 && _imageData[0].href === '') {
+            (this.field.metadata as ImageUploader).data.value = [];
+            this.projectService.syncProject();
+        }
+        this.imageData = _imageData;
     }
 
     public imageClick(index: number) {

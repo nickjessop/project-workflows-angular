@@ -13,6 +13,7 @@ export class ProjectCardComponent implements OnInit {
     @Input() projectDescription = '';
     @Input() link = '';
     @Input() projectId = '';
+    @Input() projectOwner: boolean = false;
 
     @Output() onDeleteProjectByIdEvent = new EventEmitter<{ id: string }>();
 

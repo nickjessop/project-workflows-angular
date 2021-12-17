@@ -405,13 +405,29 @@ export class ProjectService {
         this.setProject(_projectConfig, false);
     }
 
-    public getProjects() {
+    public async getProjects() {
         const userId = this.authenticationService.user?.id || '';
 
         const ref = this.firebaseService.getDbInstance().collection(this.PROJECT_COLLECTION);
 
-        return from(ref.where('members', 'array-contains', userId).get()).pipe(
-            // return from(ref.where('members', 'array-contains', { userId: userId, role: 'owner' }).get()).pipe(
+        const projects = await ref.where('members', 'array-contains', userId).get();
+        // return from(ref.where('members', 'array-contains', { userId: userId, role: 'owner' }).get()).pipe(
+        const _projects = projects.docs.map(items => {
+            const isOwner = this.isOwner(items.data().memberRoles);
+            const itemData = items.data();
+            const memberData = { isOwner, itemData };
+            return memberData;
+        });
+
+        return _projects;
+    }
+
+    public getMyProjects() {
+        const userId = this.authenticationService.user?.id || '';
+
+        const ref = this.firebaseService.getDbInstance().collection(this.PROJECT_COLLECTION);
+
+        return from(ref.where('members', 'array-contains', { userId: userId, role: 'owner' }).get()).pipe(
             map(data => {
                 const projects = data.docs.map(items => {
                     return items.data();
@@ -420,6 +436,34 @@ export class ProjectService {
                 return projects;
             })
         );
+    }
+
+    public isOwner(memberRoles: [{ userId: string; role: Role }]) {
+        return memberRoles.some(member => {
+            return member.userId === this.authenticationService.user?.id && ['owner'].includes(member.role);
+        });
+    }
+
+    public async ownerLookup(memberRoles: [{ userId: string; role: Role }]) {
+        const ownerId = memberRoles.filter(member => member.role.includes('owner'));
+        const userRef = this.firebaseService
+            .getDbInstance()
+            .collection('users')
+            .doc(ownerId[0].userId);
+        try {
+            const doc = await userRef.get();
+            if (doc.exists) {
+                const ownerFirstName = doc.data()?.firstName;
+                const ownerLastName = doc.data()?.lastName;
+                return ownerFirstName + ' ' + ownerLastName;
+            } else {
+                //undefined
+                return;
+            }
+        } catch (error) {
+            // TODO: handle error;
+            return;
+        }
     }
 
     public async updateProjectRoles(projectRoles: { userId: string; role: Role }[]) {
