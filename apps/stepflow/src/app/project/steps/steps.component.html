@@ -11,88 +11,39 @@
         ></button>
     </div>
     <ng-container *ngIf="steps?.length; else showEmptyState">
-        <div cdkDropList (cdkDropListDropped)="drop($event)">
-            <div *ngFor="let stepConfig of steps; index as i" class="steps">
-                <div
-                    cdkDrag
-                    class="step p-d-flex p-jc-between p-ai-center p-mb-3 p-p-2"
-                    [class.step-selected]="stepConfig.step.isCurrentStep"
-                    (click)="onStepPress(i)"
-                >
-                    <div class="step-status p-d-flex p-ai-center p-jc-center">
-                        <ng-container
-                            *ngIf="stepConfig.step.status && stepConfig.step.status.value != 'no-status'; else nostatus"
-                        >
-                            <!-- <i
-                                    class="pi {{ stepConfig.step.status.icon }} ms-01"
-                                    pTooltip="{{ stepConfig.step.status.label }}"
-                                ></i> -->
-                            <ng-container [ngSwitch]="stepConfig.step.status.value">
-                                <div
-                                    *ngSwitchCase="'upcoming'"
-                                    class="step-status__icon p-d-flex p-jc-center p-ai-center"
-                                    style="background-color: var(--info-color);"
-                                >
-                                    <i
-                                        class="pi {{ stepConfig.step.status.icon }} ms-01"
-                                        pTooltip="{{ stepConfig.step.status.label }}"
-                                    ></i>
-                                </div>
-                                <div
-                                    *ngSwitchCase="'completed'"
-                                    class="step-status__icon p-d-flex p-jc-center p-ai-center"
-                                    style="background-color: #759D53;"
-                                >
-                                    <i
-                                        class="pi {{ stepConfig.step.status.icon }} ms-01"
-                                        pTooltip="{{ stepConfig.step.status.label }}"
-                                    ></i>
-                                </div>
-                                <div
-                                    *ngSwitchCase="'needs-review'"
-                                    class="step-status__icon p-d-flex p-jc-center p-ai-center"
-                                    style="background-color: #c76c6c"
-                                >
-                                    <i
-                                        class="pi {{ stepConfig.step.status.icon }} ms-01"
-                                        pTooltip="{{ stepConfig.step.status.label }}"
-                                    ></i>
-                                </div>
-                                <div
-                                    *ngSwitchCase="'in-progress'"
-                                    class="step-status__icon p-d-flex p-jc-center p-ai-center"
-                                    style="background-color: #AD9048;"
-                                >
-                                    <i
-                                        class="pi {{ stepConfig.step.status.icon }} ms-01"
-                                        pTooltip="{{ stepConfig.step.status.label }}"
-                                    ></i>
-                                </div>
-                            </ng-container>
-                        </ng-container>
-                        <ng-template #nostatus>
-                            <div class="step-status__icon step-status__icon--default"></div>
-                        </ng-template>
-                        <div class="step-line"></div>
-                    </div>
-
-                    <div class="p-d-flex p-jc-between p-pl-2" style="flex-grow: 1;">
-                        <div class="p-d-flex p-flex-column">
-                            <div class="ms-0">{{ stepConfig.step.title }}</div>
-                        </div>
+        <ng-container *ngIf="(projectService.projectMode$ | async) != 'view'; else showViewSteps">
+            <div cdkDropList (cdkDropListDropped)="drop($event)">
+                <ng-container *ngFor="let stepConfig of steps; index as i" class="steps">
+                    <div
+                        cdkDrag
+                        class="step p-d-flex p-ai-center p-jc-between p-mb-2"
+                        [class.step-selected]="stepConfig.step.isCurrentStep"
+                        (click)="onStepPress(i)"
+                    >
+                        <project-step [step]="stepConfig.step"></project-step>
                         <button
                             type="button"
-                            class="p-button-text p-button-plain step__edit-step p-p-0"
+                            class="p-button-text p-button-plain step__edit-step p-jc-center p-p-0 p-mr-1"
                             pButton
                             icon="pi pi-ellipsis-h"
                             (click)="menu.toggle($event)"
-                            *ngIf="(projectService.projectMode$ | async) != 'view'"
                         ></button>
                     </div>
-                </div>
+                </ng-container>
             </div>
-        </div>
-        <p-menu #menu [popup]="true" [model]="stepMenuOptions" appendTo="body"></p-menu>
+            <p-menu #menu [popup]="true" [model]="stepMenuOptions" appendTo="body"></p-menu>
+        </ng-container>
+        <ng-template #showViewSteps>
+            <ng-container *ngFor="let stepConfig of steps; index as i" class="steps">
+                <div
+                    class="step p-d-flex p-ai-center p-jc-between p-mb-2"
+                    [class.step-selected]="stepConfig.step.isCurrentStep"
+                    (click)="onStepPress(i)"
+                >
+                    <project-step [step]="stepConfig.step"></project-step>
+                </div>
+            </ng-container>
+        </ng-template>
     </ng-container>
     <ng-template #showEmptyState>
         <div class="p-col-6 p-d-flex p-ai-center">
