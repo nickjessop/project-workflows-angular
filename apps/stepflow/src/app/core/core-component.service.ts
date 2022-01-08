@@ -99,28 +99,22 @@ export class CoreComponentService {
             }
             return _component;
         } else if (componentType === 'table') {
-            //data: { value: { col:{ item :{text: string; isHeader?: boolean }[]}[] } };
+            // row?: { column: { size?: number; text: string }[] }[];
             const _component: Table = {
                 data: {
                     value: {
-                        row: [
+                        column: [
                             {
-                                item: [
-                                    { text: 'New table', isHeader: true },
-                                    { text: '', isHeader: true },
-                                ],
+                                row: [{ text: 'Heading 1' }, { text: 'Heading 2' }, { text: 'Heading 3' }],
                             },
                             {
-                                item: [
-                                    { text: '', isHeader: false },
-                                    { text: '', isHeader: false },
-                                ],
+                                row: [{ text: '' }, { text: '' }, { text: '' }],
                             },
                             {
-                                item: [
-                                    { text: '', isHeader: false },
-                                    { text: '', isHeader: false },
-                                ],
+                                row: [{ text: '' }, { text: '' }, { text: '' }],
+                            },
+                            {
+                                row: [{ text: '' }, { text: '' }, { text: '' }],
                             },
                         ],
                     },

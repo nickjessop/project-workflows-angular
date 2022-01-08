@@ -84,11 +84,12 @@ export interface TextInput extends BaseComponent {
 export interface Table extends BaseComponent {
     component: 'table';
     data: {
-        value: {
-            row?: { item: { text: string; isHeader?: boolean }[] }[];
-            column?: { item: { size: number }[] }[];
-        };
+        value: TableColumn;
     };
+}
+
+export interface TableColumn {
+    column?: { row: { size?: number; text: string }[] }[];
 }
 
 export interface Embed extends BaseComponent {
