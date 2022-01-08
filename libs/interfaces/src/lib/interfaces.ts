@@ -89,7 +89,7 @@ export interface Table extends BaseComponent {
 }
 
 export interface TableColumn {
-    column?: { row: { size?: number; text: string }[] }[];
+    row?: { item: { size?: number; text: string }[] }[];
 }
 
 export interface Embed extends BaseComponent {

@@ -103,18 +103,18 @@ export class CoreComponentService {
             const _component: Table = {
                 data: {
                     value: {
-                        column: [
+                        row: [
                             {
-                                row: [{ text: 'Heading 1' }, { text: 'Heading 2' }, { text: 'Heading 3' }],
+                                item: [{ text: 'Heading 1' }, { text: 'Heading 2' }, { text: 'Heading 3' }],
                             },
                             {
-                                row: [{ text: '' }, { text: '' }, { text: '' }],
+                                item: [{ text: '' }, { text: '' }, { text: '' }],
                             },
                             {
-                                row: [{ text: '' }, { text: '' }, { text: '' }],
+                                item: [{ text: '' }, { text: '' }, { text: '' }],
                             },
                             {
-                                row: [{ text: '' }, { text: '' }, { text: '' }],
+                                item: [{ text: '' }, { text: '' }, { text: '' }],
                             },
                         ],
                     },

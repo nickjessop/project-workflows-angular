@@ -20,60 +20,56 @@ export class TableComponent implements OnInit {
 
     @ViewChild('table') table!: any;
     selectedData: { rowIndex: number; colIndex: number } = { rowIndex: 0, colIndex: 0 };
-    // public menuItems: MenuItem[] = [
-    //     {
-    //         label: 'Insert',
-    //         icon: 'pi pi-fw pi-plus',
-    //         items: [
-    //             {
-    //                 label: 'Insert row above',
-    //                 command: () => {
-    //                     this.addTableRow(this.selectedData.rowIndex);
-    //                 },
-    //             },
-    //             {
-    //                 label: 'Insert row below',
-    //                 command: () => {
-    //                     this.addTableRow(this.selectedData.rowIndex + 1);
-    //                 },
-    //             },
-    //             {
-    //                 label: 'Insert column right',
-    //                 command: () => {
-    //                     this.addTableColumn(this.selectedData.colIndex + 1);
-    //                 },
-    //             },
-    //             {
-    //                 label: 'Insert column left',
-    //                 command: () => {
-    //                     this.addTableColumn(this.selectedData.colIndex);
-    //                 },
-    //             },
-    //         ],
-    //     },
-    //     {
-    //         label: 'Delete',
-    //         icon: 'pi pi-fw pi-minus',
-    //         items: [
-    //             {
-    //                 label: 'Delete row',
-    //                 command: () => {
-    //                     this.removeTableRow(this.selectedData.rowIndex);
-    //                 },
-    //             },
-    //             {
-    //                 label: 'Delete column',
-    //                 command: () => {
-    //                     this.removeTableColumn(this.selectedData.colIndex);
-    //                 },
-    //             },
-    //         ],
-    //     },
-    // ];
-
-    // {
-    //     column?: { item: { size?: number; text: string }[] }[];
-    // }
+    public menuItems: MenuItem[] = [
+        {
+            label: 'Insert',
+            icon: 'pi pi-fw pi-plus',
+            items: [
+                {
+                    label: 'Insert row above',
+                    command: () => {
+                        this.addTableRow(this.selectedData.rowIndex);
+                    },
+                },
+                {
+                    label: 'Insert row below',
+                    command: () => {
+                        this.addTableRow(this.selectedData.rowIndex + 1);
+                    },
+                },
+                {
+                    label: 'Insert column right',
+                    command: () => {
+                        this.addTableColumn(this.selectedData.colIndex + 1);
+                    },
+                },
+                {
+                    label: 'Insert column left',
+                    command: () => {
+                        this.addTableColumn(this.selectedData.colIndex);
+                    },
+                },
+            ],
+        },
+        {
+            label: 'Delete',
+            icon: 'pi pi-fw pi-minus',
+            items: [
+                {
+                    label: 'Delete row',
+                    command: () => {
+                        this.removeTableRow(this.selectedData.rowIndex);
+                    },
+                },
+                {
+                    label: 'Delete column',
+                    command: () => {
+                        this.removeTableColumn(this.selectedData.colIndex);
+                    },
+                },
+            ],
+        },
+    ];
     public tableValues?: TableColumn;
 
     constructor(private projectService: ProjectService, private coreComponentService: CoreComponentService) {}
@@ -91,10 +87,6 @@ export class TableComponent implements OnInit {
             },
         },
     ];
-
-    printTable(item: any) {
-        console.log(item);
-    }
 
     public onDeleteBlock() {
         const index = this.index ? this.index : 0;
@@ -129,111 +121,112 @@ export class TableComponent implements OnInit {
 
     ngOnInit() {
         this.tableValues = (this.field.metadata as Table).data.value;
+        console.log(this.tableValues);
     }
 
-    // public removeTableRow(removeAtIndex?: number) {
-    //     const column = this.tableValues?.column;
+    public removeTableRow(removeAtIndex?: number) {
+        const column = this.tableValues?.row;
 
-    //     if (!column) {
-    //         return;
-    //     }
+        if (!column) {
+            return;
+        }
 
-    //     column.splice(removeAtIndex || column.length - 1, 1);
-    //     if (!column || column.length === 0) {
-    //         delete this.tableValues?.column;
-    //     }
-    //     this.projectService.syncProject();
-    // }
+        column.splice(removeAtIndex || column.length - 1, 1);
+        if (!column || column.length === 0) {
+            delete this.tableValues?.row;
+        }
+        this.projectService.syncProject();
+    }
 
-    // public removeTableColumn(removeAtIndex?: number) {
-    //     const column = this.tableValues?.column;
+    public removeTableColumn(removeAtIndex?: number) {
+        const column = this.tableValues?.row;
 
-    //     if (!column) {
-    //         return;
-    //     }
+        if (!column) {
+            return;
+        }
 
-    //     column.forEach(col => {
-    //         if (col.item) {
-    //             if (removeAtIndex == 0) {
-    //                 col.item.shift();
-    //             } else {
-    //                 col.item.splice(removeAtIndex || col.item.length - 1 || 0, 1);
-    //             }
-    //         }
-    //     });
+        column.forEach(col => {
+            if (col.item) {
+                if (removeAtIndex == 0) {
+                    col.item.shift();
+                } else {
+                    col.item.splice(removeAtIndex || col.item.length - 1 || 0, 1);
+                }
+            }
+        });
 
-    //     if (!column[0].item || column[0].item.length === 0) {
-    //         delete this.tableValues?.column;
-    //     }
-    //     this.projectService.syncProject();
-    // }
+        if (!column[0].item || column[0].item.length === 0) {
+            delete this.tableValues?.row;
+        }
+        this.projectService.syncProject();
+    }
 
-    // public addTableColumn(addAtIndex?: number) {
-    //     const column = this.tableValues?.column;
+    public addTableColumn(addAtIndex?: number) {
+        const column = this.tableValues?.row;
 
-    //     if (!column) {
-    //         const newElement = this.createRowElements(1);
-    //         if (this.tableValues) {
-    //             this.tableValues.column = [{ item: newElement }];
-    //         }
+        if (!column) {
+            const newElement = this.createRowElements(1);
+            if (this.tableValues) {
+                this.tableValues.row = [{ item: newElement }];
+            }
 
-    //         return;
-    //     }
+            return;
+        }
 
-    //     column.forEach(column => {
-    //         if (column.item) {
-    //             const newElement = this.createRowElements(1);
-    //             if (addAtIndex == 0) {
-    //                 column.item.unshift(newElement[0]);
-    //             } else {
-    //                 column.item.splice(addAtIndex || column.item.length || 0, 0, newElement[0]);
-    //             }
-    //         }
-    //     });
+        column.forEach(column => {
+            if (column.item) {
+                const newElement = this.createRowElements(1);
+                if (addAtIndex == 0) {
+                    column.item.unshift(newElement[0]);
+                } else {
+                    column.item.splice(addAtIndex || column.item.length || 0, 0, newElement[0]);
+                }
+            }
+        });
 
-    //     this.projectService.syncProject();
-    // }
+        this.projectService.syncProject();
+    }
 
-    // private addTableRow(addAtIndex?: number) {
-    //     const columns = this.tableValues?.row;
+    private addTableRow(addAtIndex?: number) {
+        const columns = this.tableValues?.row;
 
-    //     if (!columns) {
-    //         const newElement = this.createRowElements(1);
-    //         if (this.tableValues) {
-    //             this.tableValues = [{ item: newElement }];
-    //         }
+        if (!columns) {
+            const newElement = this.createRowElements(1);
+            if (this.tableValues) {
+                this.tableValues.row = [{ item: newElement }];
+            }
 
-    //         return;
-    //     }
+            return;
+        }
 
-    //     const newRow = this.createRowElements(columns?.[0].item?.length || 1);
-    //     columns.splice(addAtIndex || columns.length || 0, 0, { item: newRow });
+        const newRow = this.createRowElements(columns?.[0].item?.length || 1);
+        columns.splice(addAtIndex || columns.length || 0, 0, { item: newRow });
 
-    //     this.projectService.syncProject();
-    // }
+        this.projectService.syncProject();
+    }
 
-    // private createRowElements(amount: number) {
-    //     let column: { text: string; isHeader?: boolean }[] = [];
+    private createRowElements(amount: number) {
+        let column: { text: string; isHeader?: boolean }[] = [];
 
-    //     for (let i = 0; i < amount; i++) {
-    //         column.push({ text: '' });
-    //     }
-    //     return column;
-    // }
+        for (let i = 0; i < amount; i++) {
+            column.push({ text: '' });
+        }
+        return column;
+    }
 
-    // public columnsResized(event: Event) {
-    //     console.log('columns event', event);
-    //     this.table.getColumns();
-    //     // const rows = this.tableValues?.row;
-    //     // if (rows) {
-    //     //     rows.forEach(col => {
-    //     //         if (col.item) {
-    //     //             console.log(col);
-    //     //             console.log(col.item);
-    //     //         }
-    //     //     });
-    //     // }
-    // }
+    public columnsResized(event: Event) {
+        console.log('columns event', event);
+        this.table.getColumns();
+        // const rows = this.tableValues?.row;
+        // if (rows) {
+        //     rows.forEach(col => {
+        //         if (col.item) {
+        //             console.log(col);
+        //             console.log(col.item);
+        //         }
+        //     });
+        // }
+    }
 
     public saveTableData() {
         this.projectService.syncProject();
