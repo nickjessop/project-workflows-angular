@@ -19,12 +19,13 @@ import { ControlsComponent } from './project/controls/controls.component';
 import { NewProjectDialogComponent } from './project/new-project-dialog/new-project-dialog.component';
 import { ProjectCardComponent } from './project/project-card/project-card.component';
 import { ProjectComponent } from './project/project.component';
+import { ShareComponent } from './project/share/share.component';
 import { StepDialogComponent } from './project/step-dialog/step-dialog.component';
+import { StepComponent } from './project/steps/step/step.component';
 import { StepsComponent } from './project/steps/steps.component';
 import { ViewerComponent } from './project/viewer/viewer.component';
 import { ProtectedRoutingModule } from './protected-routing.module';
 import { ApiService } from './services/api/api.service';
-import { ShareComponent } from './project/share/share.component';
 
 @NgModule({
     declarations: [
@@ -44,6 +45,7 @@ import { ShareComponent } from './project/share/share.component';
         AuthenticationComponent,
         ConfirmationComponent,
         ShareComponent,
+        StepComponent,
     ],
     imports: [
         ProtectedRoutingModule,
