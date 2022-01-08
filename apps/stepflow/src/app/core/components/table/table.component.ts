@@ -214,19 +214,19 @@ export class TableComponent implements OnInit {
         return column;
     }
 
-    public columnsResized(event: Event) {
-        console.log('columns event', event);
-        this.table.getColumns();
-        // const rows = this.tableValues?.row;
-        // if (rows) {
-        //     rows.forEach(col => {
-        //         if (col.item) {
-        //             console.log(col);
-        //             console.log(col.item);
-        //         }
-        //     });
-        // }
-    }
+    // public columnsResized(event: Event) {
+    //     console.log('columns event', event);
+    //     this.table.getColumns();
+    // const rows = this.tableValues?.row;
+    // if (rows) {
+    //     rows.forEach(col => {
+    //         if (col.item) {
+    //             console.log(col);
+    //             console.log(col.item);
+    //         }
+    //     });
+    // }
+    // }
 
     public saveTableData() {
         this.projectService.syncProject();
