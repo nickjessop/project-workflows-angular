@@ -121,7 +121,6 @@ export class TableComponent implements OnInit {
 
     ngOnInit() {
         this.tableValues = (this.field.metadata as Table).data.value;
-        console.log(this.tableValues);
     }
 
     public removeTableRow(removeAtIndex?: number) {
@@ -214,19 +213,15 @@ export class TableComponent implements OnInit {
         return column;
     }
 
-    // public columnsResized(event: Event) {
-    //     console.log('columns event', event);
-    //     this.table.getColumns();
-    // const rows = this.tableValues?.row;
-    // if (rows) {
-    //     rows.forEach(col => {
-    //         if (col.item) {
-    //             console.log(col);
-    //             console.log(col.item);
-    //         }
-    //     });
-    // }
-    // }
+    public columnsResized(event: Event & { delta: number; element: { clientWidth: number; cellIndex: number } }) {
+        const sizeChangeDelta = event.delta;
+        const newWidth = event.element.clientWidth;
+        const cellIndex = event.element.cellIndex;
+    }
+
+    // TODO:
+    // Add save and restoring of column resizes
+    // Remove requirement to double click to save and edit another cell
 
     public saveTableData() {
         this.projectService.syncProject();
