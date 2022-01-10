@@ -53,6 +53,7 @@ export type ComponentSettings = {
     };
     tableComponent?: {
         disableTableHeaderStyle?: boolean;
+        columnSizes?: number[];
     };
 };
 
@@ -89,7 +90,7 @@ export interface Table extends BaseComponent {
 }
 
 export interface TableColumn {
-    row?: { item: { size?: number; text: string }[] }[];
+    row?: { item: { text: string }[] }[];
 }
 
 export interface Embed extends BaseComponent {
