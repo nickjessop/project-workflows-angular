@@ -7,7 +7,7 @@
             icon="pi pi-plus"
             class="p-button-rounded p-button-text"
             (click)="onAddNewStepPress()"
-            *ngIf="(projectService.projectMode$ | async) != 'view'"
+            *ngIf="(projectService.projectMode$ | async) !== 'view' || (projectService.projectMode$ | async) !== 'edit'"
         ></button>
     </div>
     <ng-container *ngIf="steps?.length; else showEmptyState">
