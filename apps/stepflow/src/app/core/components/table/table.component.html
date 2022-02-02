@@ -6,29 +6,31 @@
 >
     <ng-container *ngIf="componentMode === 'view'">
         <div class="table--container">
-            <ng-container *ngFor="let row of tableValues?.row; first as firstRow">
+            <div *ngFor="let row of tableValues?.row; first as firstRow">
                 <div class="table view p-col p-d-flex p-p-0">
                     <div class="p-row p-d-flex p-p-0" [ngClass]="{ header: firstRow }">
                         <!-- row?: { item: { text: string }[] }[]; -->
-                        <ng-container *ngFor="let rowItem of row.item">
+                        <div *ngFor="let rowItem of row.item">
                             <input type="text" pInputText disabled [(ngModel)]="rowItem.text" />
-                        </ng-container>
+                        </div>
                     </div>
                 </div>
-            </ng-container>
+            </div>
         </div>
     </ng-container>
     <ng-container *ngIf="componentMode === 'edit' || componentMode === 'configure'">
         <div class="table--container">
-            <ng-container *ngFor="let row of tableValues?.row; first as firstRow">
+            <div *ngFor="let row of tableValues?.row; first as firstRow">
                 <div class="table p-col p-d-flex p-p-0">
                     <div class="p-row p-d-flex p-p-0" [ngClass]="{ header: firstRow }">
-                        <ng-container *ngFor="let rowItem of row.item">
-                            <input type="text" pInputText [(ngModel)]="rowItem.text" />
-                        </ng-container>
+                        <div *ngFor="let rowItem of row.item; index as index">
+                            <div>
+                                <input type="text" pInputText [(ngModel)]="rowItem.text" />
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </ng-container>
+            </div>
         </div>
     </ng-container>
 </project-drag-and-resize>
