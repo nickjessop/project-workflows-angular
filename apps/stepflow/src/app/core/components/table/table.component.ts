@@ -20,6 +20,8 @@ export class TableComponent implements OnInit {
 
     @ViewChild('table') table!: any;
     selectedData: { rowIndex: number; colIndex: number } = { rowIndex: 0, colIndex: 0 };
+
+    @ViewChild('fieldContainer') fieldcontainer!: any;
     public menuItems: MenuItem[] = [
         {
             label: 'Insert',
@@ -77,7 +79,10 @@ export class TableComponent implements OnInit {
     public height?: number;
     public settings?: ComponentSettings;
     public readonly AngularResizeElementDirection = AngularResizeElementDirection;
-
+    public data = {
+        width: 200,
+        height: 300,
+    };
     public items: MenuItem[] = [
         {
             label: 'Delete Block',
@@ -111,6 +116,11 @@ export class TableComponent implements OnInit {
 
     public onResize(evt: AngularResizeElementEvent): void {
         this.height = evt.currentHeightValue;
+
+        // this.data.width = evt.currentWidthValue;
+        // this.data.height = evt.currentHeightValue;
+        // this.data.top = evt.currentTopValue;
+        // this.data.left = evt.currentLeftValue;
     }
 
     public onResizeEnd(evt: AngularResizeElementEvent): void {
