@@ -1,17 +1,25 @@
+import { animate, style, transition, trigger } from '@angular/animations';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { Project, Status, Step, StepConfig } from '@stepflow/interfaces';
 import * as _ from 'lodash';
 import { MenuItem } from 'primeng/api';
-import { Subscription } from 'rxjs';
+import { fromEvent, Subject, Subscription } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { ProjectService } from '../../services/project/project.service';
 @Component({
     selector: 'project-steps',
     templateUrl: './steps.component.html',
     styleUrls: ['./steps.component.scss'],
+    animations: [
+        trigger('fade', [transition('void => *', [style({ opacity: 0 }), animate(1200, style({ opacity: 1 }))])]),
+    ],
 })
 export class StepsComponent implements OnInit {
     private subscriptions = new Subscription();
+
+    @ViewChild('scrollable', { static: true }) _scrollable!: ElementRef;
+    @ViewChildren('stepLoop') _stepLoop!: QueryList<Step>;
 
     public project?: Project;
     public steps: StepConfig[] = [];
@@ -22,6 +30,9 @@ export class StepsComponent implements OnInit {
         currentIndex: number;
     }> = new EventEmitter();
 
+    scrollSubject = new Subject();
+    scrollSubject$ = this.scrollSubject.asObservable();
+
     public showDialog = false;
     public stepMode: 'edit' | 'new' | 'delete' = 'edit';
     public focusStep: Step = {
@@ -29,8 +40,10 @@ export class StepsComponent implements OnInit {
         description: '',
         status: { label: 'No status', value: 'no-status', icon: '' },
     };
-
     statusOptions: Status[];
+
+    public scrollPosition: number = 0;
+    public hasHorizontalScroll: boolean = false;
 
     constructor(public projectService: ProjectService) {
         this.statusOptions = [
@@ -44,10 +57,33 @@ export class StepsComponent implements OnInit {
 
     ngOnInit() {
         this.initializeProject();
+        fromEvent(this._scrollable.nativeElement, 'scroll')
+            .pipe(takeUntil(this.scrollSubject$))
+            .subscribe((e: any) => this.scrollSteps(e));
+    }
+
+    scrollSteps(e: { target: Element }) {
+        this.scrollPosition = (e.target as Element).scrollLeft;
+    }
+
+    scrollStepsRight() {
+        this._scrollable.nativeElement.scrollLeft = this.scrollPosition + 60;
+    }
+
+    scrollStepsLeft() {
+        this._scrollable.nativeElement.scrollLeft = this.scrollPosition - 60;
     }
 
     ngOnDestroy() {
         this.subscriptions.unsubscribe();
+        this.scrollSubject.next();
+    }
+
+    ngAfterViewInit() {
+        this._stepLoop.changes.subscribe(() => {
+            this.hasHorizontalScroll =
+                this._scrollable.nativeElement.scrollWidth > this._scrollable.nativeElement.clientWidth;
+        });
     }
 
     private initializeProject() {
