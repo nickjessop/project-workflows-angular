@@ -1,50 +1,77 @@
-<div class="steps-container p-mt-5 p-mx-3">
-    <div class="p-d-flex p-ai-center p-jc-between p-pb-2">
-        <div class="p-text-uppercase ms-01">Steps</div>
+<div class="steps-container p-d-flex p-mt-4 p-mb-3 p-mx-5">
+    <div class="p-d-flex p-jc-between p-ai-center steps-container__options">
+        <div class="ms-0 steps-title">STEPS</div>
+    </div>
+    <div class="steps" @fade>
+        <div class="steps__fade-right"></div>
+        <div class="steps__fade-left"></div>
         <button
             pButton
             type="button"
-            icon="pi pi-plus"
-            class="p-button-rounded p-button-text"
-            (click)="onAddNewStepPress()"
-            *ngIf="(projectService.projectMode$ | async) != 'view'"
+            class="p-button-secondary p-button-raised p-button-rounded steps__arrow-left"
+            icon="pi pi-chevron-left"
+            *ngIf="scrollPosition > 20"
+            (click)="scrollStepsLeft()"
         ></button>
-    </div>
-    <ng-container *ngIf="steps?.length; else showEmptyState">
-        <ng-container *ngIf="(projectService.projectMode$ | async) != 'view'; else showViewSteps">
-            <div cdkDropList (cdkDropListDropped)="drop($event)">
-                <ng-container *ngFor="let stepConfig of steps; index as i" class="steps">
+        <button
+            pButton
+            type="button"
+            class="p-button-secondary p-button-raised p-button-rounded steps__arrow-right"
+            icon="pi pi-chevron-right"
+            *ngIf="hasHorizontalScroll"
+            (click)="scrollStepsRight()"
+        ></button>
+        <div class="steps__list" #scrollable>
+            <ng-container *ngIf="steps?.length; else showEmptyState">
+                <ng-container *ngIf="(projectService.projectMode$ | async) != 'view'; else showViewSteps">
                     <div
-                        cdkDrag
-                        class="step p-d-flex p-ai-center p-jc-between p-mb-2"
-                        [class.step-selected]="stepConfig.step.isCurrentStep"
-                        (click)="onStepPress(i)"
+                        cdkDropList
+                        cdkDropListOrientation="horizontal"
+                        (cdkDropListDropped)="drop($event)"
+                        class="p-d-flex p-ai-center"
                     >
-                        <project-step [step]="stepConfig.step"></project-step>
-                        <button
-                            type="button"
-                            class="p-button-text p-button-plain step__edit-step p-jc-center p-p-0 p-mr-1"
-                            pButton
-                            icon="pi pi-ellipsis-h"
-                            (click)="menu.toggle($event)"
-                        ></button>
+                        <ng-container *ngFor="let stepConfig of steps; index as i" #stepLoop>
+                            <div
+                                cdkDrag
+                                class="step p-d-flex p-ai-center p-jc-between p-mr-2"
+                                [class.step-selected]="stepConfig.step.isCurrentStep"
+                                (click)="onStepPress(i)"
+                            >
+                                <project-step [step]="stepConfig.step"></project-step>
+                                <button
+                                    type="button"
+                                    class="p-button-text p-button-plain step__edit p-jc-center p-p-0 p-mr-1"
+                                    pButton
+                                    icon="pi pi-ellipsis-h"
+                                    (click)="menu.toggle($event)"
+                                ></button>
+                            </div>
+                        </ng-container>
                     </div>
+                    <p-menu #menu [popup]="true" [model]="stepMenuOptions" appendTo="body"></p-menu>
                 </ng-container>
-            </div>
-            <p-menu #menu [popup]="true" [model]="stepMenuOptions" appendTo="body"></p-menu>
-        </ng-container>
-        <ng-template #showViewSteps>
-            <ng-container *ngFor="let stepConfig of steps; index as i" class="steps">
-                <div
-                    class="step p-d-flex p-ai-center p-jc-between p-mb-2"
-                    [class.step-selected]="stepConfig.step.isCurrentStep"
-                    (click)="onStepPress(i)"
-                >
-                    <project-step [step]="stepConfig.step"></project-step>
-                </div>
+                <ng-template #showViewSteps>
+                    <ng-container *ngFor="let stepConfig of steps; index as i">
+                        <div
+                            class="step p-d-flex p-ai-center p-jc-between p-mr-2"
+                            [class.step-selected]="stepConfig.step.isCurrentStep"
+                            (click)="onStepPress(i)"
+                        >
+                            <project-step [step]="stepConfig.step"></project-step>
+                        </div>
+                    </ng-container>
+                </ng-template>
             </ng-container>
-        </ng-template>
-    </ng-container>
+        </div>
+    </div>
+    <button
+        pButton
+        type="button"
+        icon="pi pi-plus"
+        class="p-button-text p-button-rounded p-ml-1"
+        (click)="onAddNewStepPress()"
+        *ngIf="(projectService.projectMode$ | async) !== 'view' || (projectService.projectMode$ | async) !== 'edit'"
+    ></button>
     <ng-template #showEmptyState>
         <div class="p-col-6 p-d-flex p-ai-center">
             Press the plus button to create your first step

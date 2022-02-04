@@ -1,15 +1,70 @@
 .steps-container {
-    margin: 35px 20px;
-    max-height: calc(100vh - 9rem);
-    .step {
-        margin-left: -0.5rem;
+    // margin: 35px 20px;
+    // max-height: calc(100vh - 9rem);
+    &__options {
+        .steps-title {
+            color: var(--text-color-secondary);
+            font-weight: bold;
+        }
+    }
+    .steps {
         position: relative;
+        overflow: hidden;
+        width: 100%;
+        &__list {
+            padding-left: 15px;
+            overflow-x: scroll;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+            &::-webkit-scrollbar {
+                display: none;
+            }
+        }
+        &__fade-right,
+        &__fade-left {
+            height: 100%;
+            width: 20px;
+            position: absolute;
+            z-index: 99;
+            top: 0;
+        }
+        &__fade-right {
+            right: 0;
+            background: linear-gradient(270deg, #ffffff 0%, rgba(255, 255, 255, 0) 100%);
+        }
+        &__fade-left {
+            left: 0;
+            width: 15px;
+            background: linear-gradient(90deg, #ffffff 0%, rgba(255, 255, 255, 0) 100%);
+        }
+        &__arrow-left,
+        &__arrow-right {
+            position: absolute;
+            z-index: 999;
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
+        &__arrow-left {
+            left: 10px;
+        }
+        &__arrow-right {
+            right: 10px;
+        }
+    }
+
+    .step {
+        position: relative;
+        border: 1px solid var(--surface-d);
+        border-radius: 4px;
+        white-space: nowrap;
         &:hover {
             cursor: pointer;
             background: var(--surface-c);
             border-radius: 6px;
         }
-        &__edit-step {
+        &__edit {
             display: none;
             transition: 0.1s;
             pointer-events: none;
@@ -23,11 +78,14 @@
         border-radius: 6px;
         color: var(--primary-color);
         font-weight: bold;
+        .step__edit {
+            display: block;
+        }
         &:hover,
         &:focus,
         &:focus-within {
             background: var(--primary-color-light);
-            .step__edit-step {
+            .step__edit {
                 display: block;
                 pointer-events: initial;
             }
