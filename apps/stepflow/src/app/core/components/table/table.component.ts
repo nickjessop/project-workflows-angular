@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { BlockConfig, ComponentMode, ComponentSettings, Table, TableColumn } from '@stepflow/interfaces';
-import { AngularResizeElementDirection, AngularResizeElementEvent } from 'angular-resize-element';
+// import { AngularResizeElementDirection, AngularResizeElementEvent } from 'angular-resize-element';
 import { MenuItem } from 'primeng/api';
 import { ProjectService } from '../../../services/project/project.service';
 import { CoreComponentService } from '../../core-component.service';
@@ -78,7 +78,7 @@ export class TableComponent implements OnInit {
 
     public height?: number;
     public settings?: ComponentSettings;
-    public readonly AngularResizeElementDirection = AngularResizeElementDirection;
+    // public readonly AngularResizeElementDirection = AngularResizeElementDirection;
     public data = {
         width: 200,
         height: 300,
@@ -114,20 +114,20 @@ export class TableComponent implements OnInit {
         this.field.metadata.settings = { ...this.field.metadata.settings, height: height };
     }
 
-    public onResize(evt: AngularResizeElementEvent): void {
-        this.height = evt.currentHeightValue;
+    // public onResize(evt: AngularResizeElementEvent): void {
+    //     this.height = evt.currentHeightValue;
 
-        // this.data.width = evt.currentWidthValue;
-        // this.data.height = evt.currentHeightValue;
-        // this.data.top = evt.currentTopValue;
-        // this.data.left = evt.currentLeftValue;
-    }
+    // this.data.width = evt.currentWidthValue;
+    // this.data.height = evt.currentHeightValue;
+    // this.data.top = evt.currentTopValue;
+    // this.data.left = evt.currentLeftValue;
+    // }
 
-    public onResizeEnd(evt: AngularResizeElementEvent): void {
-        const height = evt.currentHeightValue;
-        this.updateHeight(height);
-        this.projectService.syncProject();
-    }
+    // public onResizeEnd(evt: AngularResizeElementEvent): void {
+    //     const height = evt.currentHeightValue;
+    //     this.updateHeight(height);
+    //     this.projectService.syncProject();
+    // }
 
     ngOnInit() {
         this.tableValues = (this.field.metadata as Table).data.value;

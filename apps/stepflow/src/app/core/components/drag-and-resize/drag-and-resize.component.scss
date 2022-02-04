@@ -1,5 +1,9 @@
 @import 'variables.scss';
 
+mwlResizable {
+    box-sizing: border-box; // required for the enableGhostResize option to work
+}
+
 .field {
     position: relative;
     // border: 0.065rem solid var(--surface-d);

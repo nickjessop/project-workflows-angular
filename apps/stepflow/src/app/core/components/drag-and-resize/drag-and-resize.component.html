@@ -15,10 +15,19 @@
             class="resize resize__bottom--right"
             (resize)="onResize($event)"
             (resizeEnd)="onResizeEnd($event)"
+            mwlResizable
+            [enableGhostResize]="resizable"
+            (resizeEnd)="onResizeEnd($event)"
+            *ngIf="resizable"
+        ></div>
+        <!-- <div
+            class="resize resize__bottom--right"
+            (resize)="onResize($event)"
+            (resizeEnd)="onResizeEnd($event)"
             [targetElement]="fieldContainer"
             [direction]="AngularResizeElementDirection.BOTTOM_RIGHT"
             *ngIf="resizable"
-        ></div>
+        ></div> -->
         <div class="p-d-flex p-jc-between p-ai-center p-mb-2">
             <div class="field__label">
                 <p-inplace closable="true" closeIcon="pi pi-check" (onDeactivate)="saveBlockData()">

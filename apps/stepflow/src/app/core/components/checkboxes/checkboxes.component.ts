@@ -1,7 +1,7 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, Input, OnInit } from '@angular/core';
 import { BlockConfig, Checkboxes, ComponentMode, ComponentSettings } from '@stepflow/interfaces';
-import { AngularResizeElementDirection, AngularResizeElementEvent } from 'angular-resize-element';
+// import { AngularResizeElementDirection, AngularResizeElementEvent } from 'angular-resize-element';
 import * as _ from 'lodash';
 import { MenuItem } from 'primeng/api';
 import { ProjectService } from '../../../services/project/project.service';
@@ -22,7 +22,7 @@ export class CheckboxesComponent implements OnInit {
 
     constructor(private projectService: ProjectService, private coreComponentService: CoreComponentService) {}
 
-    public readonly AngularResizeElementDirection = AngularResizeElementDirection;
+    // public readonly AngularResizeElementDirection = AngularResizeElementDirection;
 
     public items: MenuItem[] = [
         {
@@ -55,15 +55,15 @@ export class CheckboxesComponent implements OnInit {
         this.field.metadata.settings = { ...this.field.metadata.settings, height: height };
     }
 
-    public onResize(evt: AngularResizeElementEvent): void {
-        this.height = evt.currentHeightValue;
-    }
+    // public onResize(evt: AngularResizeElementEvent): void {
+    //     this.height = evt.currentHeightValue;
+    // }
 
-    public onResizeEnd(evt: AngularResizeElementEvent): void {
-        const height = evt.currentHeightValue;
-        this.updateHeight(height);
-        this.projectService.syncProject();
-    }
+    // public onResizeEnd(evt: AngularResizeElementEvent): void {
+    //     const height = evt.currentHeightValue;
+    //     this.updateHeight(height);
+    //     this.projectService.syncProject();
+    // }
 
     public getCheckboxMenuItems(index: number): MenuItem[] {
         return [

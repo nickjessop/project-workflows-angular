@@ -6,19 +6,5 @@
         "tsconfig.json": "*",
         "tslint.json": "*",
         "nx.json": "*"
-    },
-    "projects": {
-        "stepflow": {
-            "tags": []
-        },
-        "stepflow-e2e": {
-            "tags": []
-        },
-        "api": {
-            "tags": []
-        },
-        "interfaces": {
-            "tags": []
-        }
     }
 }
