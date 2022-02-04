@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { BlockConfig, ComponentMode, ComponentSettings } from '@stepflow/interfaces';
-import { AngularResizeElementDirection, AngularResizeElementEvent } from 'angular-resize-element';
+// import { AngularResizeElementDirection, AngularResizeElementEvent } from 'angular-resize-element';
+import { ResizeEvent } from 'angular-resizable-element';
 import { MenuItem } from 'primeng/api';
 import { ProjectService } from '../../../services/project/project.service';
 import { CoreComponentService } from '../../core-component.service';
@@ -18,7 +19,7 @@ export class DragAndResizeComponent {
     @Input() resizable?: boolean;
     @Input() settings?: ComponentSettings;
 
-    public readonly AngularResizeElementDirection = AngularResizeElementDirection;
+    // public readonly AngularResizeElementDirection = AngularResizeElementDirection;
 
     public items: MenuItem[] = [
         {
@@ -51,16 +52,18 @@ export class DragAndResizeComponent {
         this.field.metadata.settings = { ...this.field.metadata.settings, height };
     }
 
-    public onResize(evt: AngularResizeElementEvent): void {
-        const height = evt.currentHeightValue as number;
+    public onResize(event: ResizeEvent): void {
+        console.log('Element was resized', event);
+        // const height = evt.currentHeightValue as number;
 
-        this.field.metadata.settings = { ...this.field.metadata.settings, height };
+        // this.field.metadata.settings = { ...this.field.metadata.settings, height };
     }
 
-    public onResizeEnd(evt: AngularResizeElementEvent): void {
-        const height = evt.currentHeightValue as number;
-        this.updateHeight(height);
-        this.projectService.syncProject();
+    public onResizeEnd(event: ResizeEvent): void {
+        console.log('Element was resized', event);
+        // const height = evt.currentHeightValue as number;
+        // this.updateHeight(height);
+        // this.projectService.syncProject();
     }
 
     public saveBlockData() {

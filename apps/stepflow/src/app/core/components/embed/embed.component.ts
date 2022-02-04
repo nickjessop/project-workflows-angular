@@ -2,7 +2,7 @@ import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { BlockConfig, ComponentMode, ComponentSettings, Embed } from '@stepflow/interfaces';
-import { AngularResizeElementDirection } from 'angular-resize-element';
+// import { AngularResizeElementDirection } from 'angular-resize-element';
 import { MenuItem, MessageService } from 'primeng/api';
 import { ProjectService } from '../../../services/project/project.service';
 import { CoreComponentService } from '../../core-component.service';
@@ -26,7 +26,7 @@ export class EmbedComponent implements OnInit {
     public href = '';
     public domain: { hostname: string } = { hostname: '' };
     public settings?: ComponentSettings;
-    public readonly AngularResizeElementDirection = AngularResizeElementDirection;
+    // public readonly AngularResizeElementDirection = AngularResizeElementDirection;
 
     public items: MenuItem[] = [
         {

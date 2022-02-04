@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { BlockConfig, ComponentMode, ComponentSettings, ImageUploader, Link } from '@stepflow/interfaces';
-import { AngularResizeElementDirection, AngularResizeElementEvent } from 'angular-resize-element';
+// import { AngularResizeElementDirection, AngularResizeElementEvent } from 'angular-resize-element';
 import { MenuItem, MessageService } from 'primeng/api';
 import { map, switchMap } from 'rxjs/operators';
 import { ProjectService } from '../../../services/project/project.service';
@@ -52,7 +52,7 @@ export class ImageUploaderComponent implements OnInit {
 
     public height?: number;
     public settings?: ComponentSettings;
-    public readonly AngularResizeElementDirection = AngularResizeElementDirection;
+    // public readonly AngularResizeElementDirection = AngularResizeElementDirection;
 
     public items: MenuItem[] = [
         {
@@ -85,15 +85,15 @@ export class ImageUploaderComponent implements OnInit {
         this.field.metadata.settings = { ...this.field.metadata.settings, height: height };
     }
 
-    public onResize(evt: AngularResizeElementEvent): void {
-        this.height = evt.currentHeightValue;
-    }
+    // public onResize(evt: AngularResizeElementEvent): void {
+    //     this.height = evt.currentHeightValue;
+    // }
 
-    public onResizeEnd(evt: AngularResizeElementEvent): void {
-        const height = evt.currentHeightValue;
-        this.updateHeight(height);
-        this.projectService.syncProject();
-    }
+    // public onResizeEnd(evt: AngularResizeElementEvent): void {
+    //     const height = evt.currentHeightValue;
+    //     this.updateHeight(height);
+    //     this.projectService.syncProject();
+    // }
 
     ngOnInit() {
         const _imageData = (this.field.metadata as ImageUploader).data.value;
