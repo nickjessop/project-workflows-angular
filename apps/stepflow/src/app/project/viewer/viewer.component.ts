@@ -19,6 +19,11 @@ export class ViewerComponent {
 
     constructor(private projectService: ProjectService, private route: ActivatedRoute) {
         this.initProject();
+        this.canConfigureProject();
+    }
+
+    private canConfigureProject() {
+        // set a boolean variable
     }
 
     private async initProject() {

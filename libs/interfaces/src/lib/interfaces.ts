@@ -147,8 +147,8 @@ export interface Step {
 
 // owner: creator of the project
 // creator: can configure project details, steps, and blocks
-// editor: can edit the content within blocks
-// viewer: read-only access to entire project
+// editor: can edit the content within blocks, can comment
+// viewer: read-only access to entire project, can not comment
 // (future) commenter: read-only + ability to leave comments
 export type Role = 'owner' | 'creator' | 'editor' | 'viewer';
 export const SharePermissions = ['view', 'edit'] as const;
