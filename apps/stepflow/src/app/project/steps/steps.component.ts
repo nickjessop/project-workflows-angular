@@ -1,6 +1,16 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
-import { Component, ElementRef, EventEmitter, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import {
+    Component,
+    ElementRef,
+    EventEmitter,
+    Input,
+    OnInit,
+    Output,
+    QueryList,
+    ViewChild,
+    ViewChildren,
+} from '@angular/core';
 import { Project, Status, Step, StepConfig } from '@stepflow/interfaces';
 import * as _ from 'lodash';
 import { MenuItem } from 'primeng/api';
@@ -29,6 +39,9 @@ export class StepsComponent implements OnInit {
         previousIndex: number;
         currentIndex: number;
     }> = new EventEmitter();
+
+    @Input()
+    canConfigureProject: boolean = false;
 
     scrollSubject = new Subject();
     scrollSubject$ = this.scrollSubject.asObservable();

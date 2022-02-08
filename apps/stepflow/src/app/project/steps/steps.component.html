@@ -23,7 +23,7 @@
         ></button>
         <div class="steps__list" #scrollable>
             <ng-container *ngIf="steps?.length; else showEmptyState">
-                <ng-container *ngIf="(projectService.projectMode$ | async) != 'view'; else showViewSteps">
+                <ng-container *ngIf="canConfigureProject; else showViewSteps">
                     <div
                         cdkDropList
                         cdkDropListOrientation="horizontal"
@@ -71,7 +71,7 @@
         icon="pi pi-plus"
         class="p-button-text p-button-rounded p-ml-1"
         (click)="onAddNewStepPress()"
-        *ngIf="(projectService.projectMode$ | async) !== 'view' || (projectService.projectMode$ | async) !== 'edit'"
+        *ngIf="canConfigureProject"
     ></button>
     <ng-template #showEmptyState>
         <div class="p-col-6 p-d-flex p-ai-center">

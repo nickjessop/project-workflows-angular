@@ -16,14 +16,10 @@ export class ViewerComponent {
     public currentStep?: StepConfig;
     public componentMode?: ComponentMode;
     public isNewProject = false;
+    public canConfigureProject = false;
 
     constructor(private projectService: ProjectService, private route: ActivatedRoute) {
         this.initProject();
-        this.canConfigureProject();
-    }
-
-    private canConfigureProject() {
-        // set a boolean variable
     }
 
     private async initProject() {
@@ -46,6 +42,10 @@ export class ViewerComponent {
 
                 this.project = result[0];
                 this.componentMode = result[1];
+                if (this.componentMode == 'configure') {
+                    this.canConfigureProject = true;
+                }
+                console.log(this.canConfigureProject);
             })
         );
     }

@@ -1,7 +1,10 @@
 <div class="viewer" #viewer>
     <div class="viewer-container">
         <div class="viewer-container__steps overflow-hidden bg-white">
-            <project-steps (dragAndDropStepEvent)="onDragAndDropStepEvent($event)"></project-steps>
+            <project-steps
+                (dragAndDropStepEvent)="onDragAndDropStepEvent($event)"
+                [canConfigureProject]="canConfigureProject"
+            ></project-steps>
         </div>
         <div class="p-px-6 p-pt-5 viewer-container__step" *ngIf="currentStep; else showErrorState">
             <div class="p-grid p-nogutter" style="min-height: 100%">
@@ -57,7 +60,7 @@
                     <div class="p-pb-4 powered-by ms-01">Powered by Stepflow</div>
                 </div>
                 <div class="p-col-1" style="position: relative">
-                    <step-controls></step-controls>
+                    <step-controls [canConfigureProject]="canConfigureProject"></step-controls>
                 </div>
             </div>
         </div>
