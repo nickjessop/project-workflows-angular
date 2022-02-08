@@ -10,6 +10,8 @@ import { ProjectService } from '../../services/project/project.service';
 export class ControlsComponent implements OnInit {
     public isAddBlockDisabled = false;
     @Input() isDisabled = false;
+    @Input()
+    canConfigureProject: boolean = false;
 
     constructor(public projectService: ProjectService, private coreComponentService: CoreComponentService) {}
 
