@@ -45,7 +45,6 @@ export class ViewerComponent {
                 if (this.componentMode == 'configure') {
                     this.canConfigureProject = true;
                 }
-                console.log(this.canConfigureProject);
             })
         );
     }
