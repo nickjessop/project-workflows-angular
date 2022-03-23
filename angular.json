@@ -160,6 +160,22 @@
                                     "maximumError": "5mb"
                                 }
                             ]
+                        },
+                        "dev": {
+                            "optimization": false,
+                            "aot": false,
+                            "buildOptimizer": false,
+                            "budgets": [
+                                {
+                                    "type": "initial",
+                                    "maximumWarning": "2mb",
+                                    "maximumError": "5mb"
+                                }
+                            ],
+                            "sourceMap": true,
+                            "namedChunks": true,
+                            "extractLicenses": true,
+                            "vendorChunk": true
                         }
                     }
                 },
@@ -173,6 +189,9 @@
                     "configurations": {
                         "production": {
                             "browserTarget": "stepflow:build:production"
+                        },
+                        "dev": {
+                            "browserTarget": "stepflow:build:dev"
                         }
                     }
                 },
