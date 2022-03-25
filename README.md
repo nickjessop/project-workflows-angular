@@ -2,9 +2,21 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.1.0.
 
-Install npm version 6.10.2 and node 12.9.1.
+Install npm version 6.14.16 and node 12.22.10. It is recommended to use nvm with ohmyzsh, and to add a script that allows your terminals to automatically change your node/npm versions based on .nvmrc file contexts.
+
+See https://github.com/nvm-sh/nvm#calling-nvm-use-automatically-in-a-directory-with-a-nvmrc-file
+and
+https://github.com/ohmyzsh/ohmyzsh
 
 ## Development server
+
+1. Install packages and dependencies,
+   Run `npm i`
+
+2. For quick start of Stepflow use:
+   `npm run stepflow`
+
+Here are a few other useful commands:
 
 For Angular CLI
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
@@ -16,7 +28,7 @@ For running NX CLI without it install globally
 
 Run `npm run stepflow` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 OR
-Run `npm run stepflow-api` for a API dev server. API route at `http://localhost:3333/api/`.
+Run `npm run stepflow-api` for a API dev server, this currently isn't used much as we aren't fully migrated from Firebase functions. API route at `http://localhost:3333/api/`.
 OR
 Run `npm run nx serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
