@@ -1,5 +1,5 @@
-<div class="steps-container p-d-flex p-mt-4 p-mb-3 p-mx-5">
-    <div class="p-d-flex p-jc-between p-ai-center steps-container__options">
+<div class="steps-container p-d-flex p-my-3">
+    <div class="p-d-flex hidden p-jc-between p-ai-center steps-container__options">
         <div class="ms-0 steps-title">STEPS</div>
     </div>
     <div class="steps" @fade>
@@ -40,7 +40,7 @@
                                 <project-step [step]="stepConfig.step"></project-step>
                                 <button
                                     type="button"
-                                    class="p-button-text p-button-plain step__edit p-jc-center p-p-0 p-mr-1"
+                                    class="p-button-text p-button-plain step__edit p-jc-center p-p-0 p-mr-2"
                                     pButton
                                     icon="pi pi-ellipsis-h"
                                     (click)="menu.toggle($event)"
@@ -52,15 +52,17 @@
                     <p-menu #menu [popup]="true" [model]="stepMenuOptions" appendTo="body"></p-menu>
                 </ng-container>
                 <ng-template #showViewSteps>
-                    <ng-container *ngFor="let stepConfig of steps; index as i">
-                        <div
-                            class="step p-d-flex p-ai-center p-jc-between p-mr-2"
-                            [class.step-selected]="stepConfig.step.isCurrentStep"
-                            (click)="onStepPress(i)"
-                        >
-                            <project-step [step]="stepConfig.step"></project-step>
-                        </div>
-                    </ng-container>
+                    <div class="p-d-flex p-ai-center">
+                        <ng-container *ngFor="let stepConfig of steps; index as i">
+                            <div
+                                class="step p-d-flex p-ai-center p-jc-between p-mr-2"
+                                [class.step-selected]="stepConfig.step.isCurrentStep"
+                                (click)="onStepPress(i)"
+                            >
+                                <project-step [step]="stepConfig.step"></project-step>
+                            </div>
+                        </ng-container>
+                    </div>
                 </ng-template>
             </ng-container>
         </div>
@@ -69,7 +71,7 @@
         pButton
         type="button"
         icon="pi pi-plus"
-        class="p-button-text p-button-rounded p-ml-1"
+        class="add-icon p-button-text p-button-rounded p-ml-1"
         (click)="onAddNewStepPress()"
         *ngIf="canConfigureProject"
     ></button>

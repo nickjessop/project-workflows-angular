@@ -1,22 +1,18 @@
-<div class="control p-pt-2 p-d-flex p-dir-col">
-    <div class="control__button p-mb-2 p-d-flex p-dir-col p-ai-center">
+<div class="control p-pt-2 p-pr-3 p-d-flex p-dir-col">
+    <div class="control__button p-mb-2 p-d-flex p-dir-col p-ai-end">
         <ng-container *ngIf="canConfigureProject">
             <project-block-overlay (onSelectNewBlock)="onSelectNewBlock($event)"> </project-block-overlay>
-            <div class="control-label ms-02 p-mt-2 p-text-center">Blocks</div>
         </ng-container>
     </div>
-    <div class="control__button control__button--bottom p-mb-2 p-d-flex p-dir-col p-ai-center">
+    <div class="control__button control__button--bottom p-mb-2 p-d-flex p-dir-col p-ai-end">
         <!-- TODO: rig this up with a menu and some items -->
         <a
             pButton
-            type="button"
-            class="p-button-raised p-button-text p-button-rounded feedback-link"
+            class="p-button-raised p-button-text p-button-rounded p-button-white feedback-link"
             icon="pi pi-info"
             href="https://forms.gle/rPCm7CRZdHDKZBV9A"
             target="_blank"
+            pTooltip="Send us feedback"
         ></a>
-        <div class="control-label ms-02 p-mt-2 p-text-center">
-            Feedback
-        </div>
     </div>
 </div>
