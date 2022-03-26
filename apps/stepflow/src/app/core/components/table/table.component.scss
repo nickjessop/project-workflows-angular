@@ -7,7 +7,7 @@
 .container-test {
     width: 200px;
     height: 100px;
-    border: 1px solid #495057;
+    border: 1px solid var(--surface-d);
     position: relative;
 }
 
@@ -22,7 +22,6 @@
     input {
         background: transparent;
         border-radius: 0px;
-        border-width: 1px solid #e9ecef;
         padding: 1rem;
         max-width: 100%;
     }
@@ -38,10 +37,18 @@
     }
     .header {
         input {
-            color: #495057;
+            color: var(--text-color);
         }
-        background: #f8f9fa;
+        background: var(--surface-d);
     }
+    .table--add-col-container {
+        margin: auto;
+        background: transparent;
+    }
+}
+
+.table--add-row-container {
+    border-bottom: solid 1px var(--surface-d);
 }
 
 .table.view {

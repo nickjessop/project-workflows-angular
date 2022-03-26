@@ -20,16 +20,39 @@
     </ng-container>
     <ng-container *ngIf="componentMode === 'edit' || componentMode === 'configure'">
         <div class="table--container">
-            <div *ngFor="let row of tableValues?.row; first as firstRow">
+            <div *ngFor="let row of tableValues?.row; first as firstRow; last as lastRow">
                 <div class="table p-col p-d-flex p-p-0">
                     <div class="p-row p-d-flex p-p-0" [ngClass]="{ header: firstRow }">
-                        <div *ngFor="let rowItem of row.item; index as index">
+                        <ng-container
+                            *ngFor="let rowItem of row.item; index as index; first as firstItem; last as lastItem"
+                        >
                             <div>
-                                <input type="text" pInputText [(ngModel)]="rowItem.text" />
+                                <div>
+                                    <input type="text" pInputText [(ngModel)]="rowItem.text" />
+                                </div>
                             </div>
-                        </div>
+                            <div class="table--add-col-container" *ngIf="lastItem && firstRow">
+                                <button
+                                    pButton
+                                    type="button"
+                                    class="p-button-text"
+                                    icon="pi pi-plus"
+                                    (click)="addCol()"
+                                ></button>
+                            </div>
+                        </ng-container>
                     </div>
                 </div>
+            </div>
+            <div class="table--add-row-container">
+                <button
+                    pButton
+                    type="button"
+                    class="p-button-text"
+                    icon="pi pi-plus"
+                    label="New Row"
+                    (click)="addRow()"
+                ></button>
             </div>
         </div>
     </ng-container>
