@@ -1,71 +1,66 @@
 <div class="viewer" #viewer>
     <div class="viewer-container">
-        <div class="viewer-container__steps overflow-hidden bg-white">
+        <div class="viewer-container__steps">
             <project-steps
                 (dragAndDropStepEvent)="onDragAndDropStepEvent($event)"
                 [canConfigureProject]="canConfigureProject"
             ></project-steps>
         </div>
-        <div class="p-px-6 p-pt-5 viewer-container__step" *ngIf="currentStep; else showErrorState">
-            <div class="p-grid p-nogutter" style="min-height: 100%">
-                <div class="p-col-11">
-                    <div class="step-container p-pb-5 p-mb-5">
-                        <div class="p-mb-4 p-px-2">
-                            <div class="p-d-flex p-ai-center p-jc-between">
-                                <div class="p-d-flex p-flex-column">
-                                    <h2 class="ms-4 p-my-0 p-pr-2">{{ currentStep.step.title }}</h2>
-                                    <span *ngIf="currentStep.step.description" class="p-pt-1">{{
-                                        currentStep.step.description
-                                    }}</span>
-                                </div>
-                                <ng-container
-                                    *ngIf="currentStep.step.status"
-                                    [ngSwitch]="currentStep.step.status.value"
-                                >
-                                    <div *ngSwitchCase="'in-progress'" class="step-status-label ms-02">
-                                        <span class="step-status-text">{{ currentStep.step.status.label }}</span>
-                                        <span class="p-tag p-tag-rounded p-tag-warning p-ml-1">
-                                            <i class="pi {{ currentStep.step.status.icon }} ms-02"></i>
-                                        </span>
-                                    </div>
-                                    <div *ngSwitchCase="'upcoming'" class="step-status-label ms-02">
-                                        <span class="step-status-text">{{ currentStep.step.status.label }}</span>
-                                        <span class="p-tag p-tag-rounded p-ml-1">
-                                            <i class="pi {{ currentStep.step.status.icon }} ms-02"></i
-                                        ></span>
-                                    </div>
-                                    <div *ngSwitchCase="'completed'" class="step-status-label ms-02">
-                                        <span class="step-status-text">{{ currentStep.step.status.label }}</span>
-                                        <span class="p-tag p-tag-rounded p-tag-success p-ml-1">
-                                            <i class="pi {{ currentStep.step.status.icon }} ms-02"></i
-                                        ></span>
-                                    </div>
-                                    <div *ngSwitchCase="'needs-review'" class="step-status-label ms-02">
-                                        <span class="step-status-text">{{ currentStep.step.status.label }}</span>
-                                        <span class="p-tag p-tag-rounded p-tag-danger p-ml-1">
-                                            <i class="pi {{ currentStep.step.status.icon }} ms-02"></i
-                                        ></span>
-                                    </div>
-                                </ng-container>
+        <div class="viewer-container__step p-my-6" *ngIf="currentStep; else showErrorState">
+            <div class="step-container p-px-2 p-pb-4">
+                <div class="p-p-4">
+                    <div class="p-d-flex p-ai-center p-jc-between">
+                        <div class="p-d-flex p-flex-column">
+                            <h2 class="ms-4 p-my-0 p-pr-2">{{ currentStep.step.title }}</h2>
+                            <span *ngIf="currentStep.step.description" class="p-pt-1">{{
+                                currentStep.step.description
+                            }}</span>
+                        </div>
+                        <ng-container *ngIf="currentStep.step.status" [ngSwitch]="currentStep.step.status.value">
+                            <div *ngSwitchCase="'in-progress'" class="step-status-label ms-02">
+                                <span class="step-status-text">{{ currentStep.step.status.label }}</span>
+                                <span class="p-tag p-tag-rounded p-tag-warning p-ml-1">
+                                    <i class="pi {{ currentStep.step.status.icon }} ms-02"></i>
+                                </span>
                             </div>
-                        </div>
-                        <div class="p-px-2">
-                            <project-dynamic-form
-                                [fields]="currentStep.components"
-                                (dragAndDropEvent)="onDragAndDropEvent($event)"
-                                [componentMode]="componentMode"
-                            ></project-dynamic-form>
-                        </div>
+                            <div *ngSwitchCase="'upcoming'" class="step-status-label ms-02">
+                                <span class="step-status-text">{{ currentStep.step.status.label }}</span>
+                                <span class="p-tag p-tag-rounded p-ml-1">
+                                    <i class="pi {{ currentStep.step.status.icon }} ms-02"></i
+                                ></span>
+                            </div>
+                            <div *ngSwitchCase="'completed'" class="step-status-label ms-02">
+                                <span class="step-status-text">{{ currentStep.step.status.label }}</span>
+                                <span class="p-tag p-tag-rounded p-tag-success p-ml-1">
+                                    <i class="pi {{ currentStep.step.status.icon }} ms-02"></i
+                                ></span>
+                            </div>
+                            <div *ngSwitchCase="'needs-review'" class="step-status-label ms-02">
+                                <span class="step-status-text">{{ currentStep.step.status.label }}</span>
+                                <span class="p-tag p-tag-rounded p-tag-danger p-ml-1">
+                                    <i class="pi {{ currentStep.step.status.icon }} ms-02"></i
+                                ></span>
+                            </div>
+                        </ng-container>
                     </div>
-                    <div class="p-pb-4 powered-by ms-01">Powered by Stepflow</div>
                 </div>
-                <div class="p-col-1" style="position: relative">
-                    <step-controls [canConfigureProject]="canConfigureProject"></step-controls>
+                <div class="p-px-2">
+                    <project-dynamic-form
+                        [fields]="currentStep.components"
+                        (dragAndDropEvent)="onDragAndDropEvent($event)"
+                        [componentMode]="componentMode"
+                    ></project-dynamic-form>
                 </div>
             </div>
+        </div>
+        <div class="viewer-container__controls" style="position: relative">
+            <step-controls [canConfigureProject]="canConfigureProject"></step-controls>
         </div>
         <ng-template #showErrorState>
             <div class="p-col-9 p-d-flex p-ai-center"></div>
         </ng-template>
     </div>
+    <!-- <div class="p-pb-4 powered-by ms-01">
+        Powered by Stepflow <p-chip label="Beta" styleClass="p-ml-1 custom-chip"></p-chip>
+    </div> -->
 </div>

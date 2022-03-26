@@ -4,10 +4,7 @@
             <div class="ms-0 p-mr-1">{{ step.title }}</div>
         </div>
     </div>
-    <div
-        class="step-status p-d-flex p-ai-center p-jc-center"
-        *ngIf="step.status && step.status.value != 'no-status'"
-    >
+    <div class="step-status p-d-flex p-ai-center p-jc-center" *ngIf="step.status && step.status.value != 'no-status'">
         <ng-container [ngSwitch]="step.status.value">
             <div
                 *ngSwitchCase="'upcoming'"
