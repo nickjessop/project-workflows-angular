@@ -45,6 +45,10 @@
 .powered-by {
     text-align: center;
     color: var(--text-color-secondary);
+    a {
+        color: var(--text-color-secondary);
+        text-decoration: none;
+    }
 }
 
 @media screen and (min-width: 700px) {
