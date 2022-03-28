@@ -6,12 +6,11 @@
     .step-icon {
         width: 16px;
         height: 16px;
-        border-radius: 50%;
-        background: var(--surface-e);
         z-index: 2;
         position: relative;
+        padding-right: 6px;
+        border-right: 2px solid var(--text-color);
         i {
-            color: white;
             font-size: 10px;
         }
         &--default {
