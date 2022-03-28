@@ -8,10 +8,11 @@
         height: 16px;
         z-index: 2;
         position: relative;
-        padding-right: 6px;
-        border-right: 2px solid var(--text-color);
+        padding-right: 8px;
+        border-right: 3px solid var(--text-color-secondary);
         i {
-            font-size: 10px;
+            font-size: 12px;
+            color: var(--text-color-secondary);
         }
         &--default {
             width: 16px;

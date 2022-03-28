@@ -18,28 +18,20 @@
                         </div>
                         <ng-container *ngIf="currentStep.step.status" [ngSwitch]="currentStep.step.status.value">
                             <div *ngSwitchCase="'in-progress'" class="step-status-label ms-02">
-                                <span class="step-status-text">{{ currentStep.step.status.label }}</span>
-                                <span class="p-tag p-tag-rounded p-tag-warning p-ml-1">
-                                    <i class="pi {{ currentStep.step.status.icon }} ms-02"></i>
-                                </span>
+                                <span class="step-status-text p-pr-1">{{ currentStep.step.status.label }}</span>
+                                <i class="pi {{ currentStep.step.status.icon }} ms-02"></i>
                             </div>
                             <div *ngSwitchCase="'upcoming'" class="step-status-label ms-02">
-                                <span class="step-status-text">{{ currentStep.step.status.label }}</span>
-                                <span class="p-tag p-tag-rounded p-ml-1">
-                                    <i class="pi {{ currentStep.step.status.icon }} ms-02"></i
-                                ></span>
+                                <span class="step-status-text p-pr-1">{{ currentStep.step.status.label }}</span>
+                                <i class="pi {{ currentStep.step.status.icon }} ms-02"></i>
                             </div>
                             <div *ngSwitchCase="'completed'" class="step-status-label ms-02">
-                                <span class="step-status-text">{{ currentStep.step.status.label }}</span>
-                                <span class="p-tag p-tag-rounded p-tag-success p-ml-1">
-                                    <i class="pi {{ currentStep.step.status.icon }} ms-02"></i
-                                ></span>
+                                <span class="step-status-text p-pr-1">{{ currentStep.step.status.label }}</span>
+                                <i class="pi {{ currentStep.step.status.icon }} ms-02"></i>
                             </div>
                             <div *ngSwitchCase="'needs-review'" class="step-status-label ms-02">
-                                <span class="step-status-text">{{ currentStep.step.status.label }}</span>
-                                <span class="p-tag p-tag-rounded p-tag-danger p-ml-1">
-                                    <i class="pi {{ currentStep.step.status.icon }} ms-02"></i
-                                ></span>
+                                <span class="step-status-text p-pr-1">{{ currentStep.step.status.label }}</span>
+                                <i class="pi {{ currentStep.step.status.icon }} ms-02"></i>
                             </div>
                         </ng-container>
                     </div>

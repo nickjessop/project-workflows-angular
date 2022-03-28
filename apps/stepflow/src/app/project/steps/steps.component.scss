@@ -141,6 +141,9 @@
         }
         .step-selected {
             border-radius: 20px;
+            div {
+                padding-right: 4px;
+            }
         }
     }
 }

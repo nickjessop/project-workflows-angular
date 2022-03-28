@@ -1,5 +1,5 @@
-<div class="p-d-flex p-jc-between p-ai-center p-p-2">
-    <div class="step-status p-d-flex p-ai-center p-jc-center" *ngIf="step.status && step.status.value != 'no-status'">
+<div class="p-d-flex p-jc-between p-ai-center p-px-3 p-py-2">
+    <div class="step-status p-d-flex p-ai-center p-jc-center" *ngIf="step.status">
         <ng-container [ngSwitch]="step.status.value">
             <div *ngSwitchCase="'upcoming'" class="step-icon p-d-flex p-jc-center p-ai-center">
                 <i class="pi {{ step.status.icon }} ms-01" pTooltip="{{ step.status.label }}"></i>
@@ -12,6 +12,9 @@
             </div>
             <div *ngSwitchCase="'in-progress'" class="step-icon p-d-flex p-jc-center p-ai-center">
                 <i class="pi {{ step.status.icon }} ms-01" pTooltip="{{ step.status.label }}"></i>
+            </div>
+            <div *ngSwitchCase="'no-status'" class="step-icon p-d-flex p-jc-center p-ai-center">
+                <i class="pi {{ step.status.icon }} ms-01"></i>
             </div>
         </ng-container>
     </div>
