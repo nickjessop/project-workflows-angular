@@ -66,6 +66,15 @@
                 </ng-template>
             </ng-container>
         </div>
+        <button
+            pButton
+            type="button"
+            icon="pi pi-plus"
+            class="add-button p-button-text p-button-rounded p-ml-4 p-px-2"
+            label="Add new step"
+            (click)="onAddNewStepPress()"
+            *ngIf="canConfigureProject"
+        ></button>
     </div>
     <button
         pButton
@@ -75,6 +84,7 @@
         (click)="onAddNewStepPress()"
         *ngIf="canConfigureProject"
     ></button>
+
     <ng-template #showEmptyState>
         <div class="p-col-6 p-d-flex p-ai-center">
             Press the plus button to create your first step
