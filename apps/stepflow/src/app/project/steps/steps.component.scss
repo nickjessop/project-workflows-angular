@@ -59,6 +59,7 @@
         border: 1px solid var(--surface-d);
         border-radius: 20px;
         white-space: nowrap;
+        font-weight: 500;
         &:hover {
             cursor: pointer;
             background: var(--surface-c);
@@ -76,8 +77,7 @@
     .step-selected {
         background: var(--primary-color-light);
         border-radius: 20px;
-        color: var(--primary-color);
-        font-weight: bold;
+        font-weight: 700;
         .step__edit {
             display: inline-flex;
         }
@@ -90,6 +90,9 @@
                 pointer-events: initial;
             }
         }
+    }
+    .add-button {
+        display: none;
     }
 }
 
@@ -139,11 +142,11 @@
         .add-icon {
             display: none;
         }
+        .add-button {
+            display: block;
+        }
         .step-selected {
             border-radius: 20px;
-            div {
-                padding-right: 4px;
-            }
         }
     }
 }

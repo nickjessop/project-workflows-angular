@@ -19,19 +19,27 @@
                         <ng-container *ngIf="currentStep.step.status" [ngSwitch]="currentStep.step.status.value">
                             <div *ngSwitchCase="'in-progress'" class="step-status-label ms-02">
                                 <span class="step-status-text p-pr-1">{{ currentStep.step.status.label }}</span>
-                                <i class="pi {{ currentStep.step.status.icon }} ms-02"></i>
+                                <span class="p-tag p-tag-rounded p-ml-1" style="background-color: var(--progress);">
+                                    <i class="pi {{ currentStep.step.status.icon }} ms-02"></i
+                                ></span>
                             </div>
                             <div *ngSwitchCase="'upcoming'" class="step-status-label ms-02">
                                 <span class="step-status-text p-pr-1">{{ currentStep.step.status.label }}</span>
-                                <i class="pi {{ currentStep.step.status.icon }} ms-02"></i>
+                                <span class="p-tag p-tag-rounded p-ml-1" style="background-color: var(--upcoming);">
+                                    <i class="pi {{ currentStep.step.status.icon }} ms-02"></i>
+                                </span>
                             </div>
                             <div *ngSwitchCase="'completed'" class="step-status-label ms-02">
                                 <span class="step-status-text p-pr-1">{{ currentStep.step.status.label }}</span>
-                                <i class="pi {{ currentStep.step.status.icon }} ms-02"></i>
+                                <span class="p-tag p-tag-rounded p-ml-1" style="background-color: var(--completed);">
+                                    <i class="pi {{ currentStep.step.status.icon }} ms-02"></i>
+                                </span>
                             </div>
                             <div *ngSwitchCase="'needs-review'" class="step-status-label ms-02">
                                 <span class="step-status-text p-pr-1">{{ currentStep.step.status.label }}</span>
-                                <i class="pi {{ currentStep.step.status.icon }} ms-02"></i>
+                                <span class="p-tag p-tag-rounded p-ml-1" style="background-color: var(--review);">
+                                    <i class="pi {{ currentStep.step.status.icon }} ms-02"></i
+                                ></span>
                             </div>
                         </ng-container>
                     </div>
