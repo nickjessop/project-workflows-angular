@@ -9,6 +9,7 @@ mwlResizable {
     border-radius: 6px;
     background: white;
     .resize {
+        visibility: hidden;
         position: absolute;
         bottom: 0;
         right: 0;
@@ -20,7 +21,7 @@ mwlResizable {
         &:hover,
         &:focus,
         &:focus-within {
-            cursor: s-resize;
+            cursor: row-resize;
             border-color: var(--surface-f);
         }
     }
@@ -28,7 +29,8 @@ mwlResizable {
     &:focus-within {
         background: var(--surface-b);
         .field__settings,
-        .field__handle {
+        .field__handle,
+        .resize {
             visibility: visible;
         }
     }
