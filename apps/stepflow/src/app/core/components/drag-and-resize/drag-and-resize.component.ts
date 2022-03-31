@@ -19,8 +19,6 @@ export class DragAndResizeComponent {
     @Input() resizable?: boolean;
     @Input() settings?: ComponentSettings;
 
-    // public readonly AngularResizeElementDirection = AngularResizeElementDirection;
-
     public items: MenuItem[] = [
         {
             label: 'Delete Block',
@@ -52,18 +50,11 @@ export class DragAndResizeComponent {
         this.field.metadata.settings = { ...this.field.metadata.settings, height };
     }
 
-    public onResize(event: ResizeEvent): void {
-        console.log('Element was resized', event);
-        // const height = evt.currentHeightValue as number;
-
-        // this.field.metadata.settings = { ...this.field.metadata.settings, height };
-    }
-
     public onResizeEnd(event: ResizeEvent): void {
         console.log('Element was resized', event);
-        // const height = evt.currentHeightValue as number;
-        // this.updateHeight(height);
-        // this.projectService.syncProject();
+        const height = event.rectangle.height as number;
+        this.updateHeight(height);
+        this.projectService.syncProject();
     }
 
     public saveBlockData() {
