@@ -46,6 +46,41 @@
         background: transparent;
     }
 }
+.col--drag-handle {
+    text-align: center;
+    &:hover,
+    &:focus-within {
+        border: 0.065rem solid var(--primary-color-medium);
+        .field__settings,
+        .field__handle {
+            visibility: visible;
+        }
+    }
+}
+.field__settings {
+    visibility: hidden;
+}
+
+// .field__handle {
+//     visibility: hidden;
+//     position: absolute;
+//     top: 0px;
+//     left: calc(50% - 8px);
+//     opacity: 0.3;
+//     &:hover,
+//     button.button:hover {
+//         cursor: grab !important;
+//     }
+//     &:hover,
+//     &:focus-within {
+//         background: var(--surface-b);
+//         .field__settings,
+//         .field__handle,
+//         .resize {
+//             visibility: visible;
+//         }
+//     }
+// }
 
 .table--add-row-container {
     border-bottom: solid 1px var(--surface-d);
