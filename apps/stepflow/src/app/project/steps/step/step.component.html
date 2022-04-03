@@ -1,42 +1,38 @@
-<div class="p-d-flex p-jc-between p-ai-center p-p-2">
-    <div class="p-d-flex p-jc-between p-pl-2" style="flex-grow: 1;">
-        <div class="p-d-flex p-flex-column">
-            <div class="ms-0 p-mr-1">{{ step.title }}</div>
-        </div>
-    </div>
-    <div
-        class="step-status p-d-flex p-ai-center p-jc-center"
-        *ngIf="step.status && step.status.value != 'no-status'"
-    >
+<div class="p-d-flex p-jc-between p-ai-center p-px-2 p-py-2">
+    <div class="step-status p-d-flex p-ai-center p-jc-center" *ngIf="step.status">
         <ng-container [ngSwitch]="step.status.value">
             <div
                 *ngSwitchCase="'upcoming'"
                 class="step-icon p-d-flex p-jc-center p-ai-center"
-                style="background-color: var(--info-color);"
-            >
-                <i class="pi {{ step.status.icon }} ms-01" pTooltip="{{ step.status.label }}"></i>
-            </div>
+                style="border-color: var(--upcoming);"
+                pTooltip="{{ step.status.label }}"
+            ></div>
             <div
                 *ngSwitchCase="'completed'"
                 class="step-icon p-d-flex p-jc-center p-ai-center"
-                style="background-color: #759D53;"
-            >
-                <i class="pi {{ step.status.icon }} ms-01" pTooltip="{{ step.status.label }}"></i>
-            </div>
+                style="border-color: var(--completed);"
+                pTooltip="{{ step.status.label }}"
+            ></div>
             <div
                 *ngSwitchCase="'needs-review'"
                 class="step-icon p-d-flex p-jc-center p-ai-center"
-                style="background-color: #c76c6c"
-            >
-                <i class="pi {{ step.status.icon }} ms-01" pTooltip="{{ step.status.label }}"></i>
-            </div>
+                style="border-color: var(--review);"
+                pTooltip="{{ step.status.label }}"
+            ></div>
             <div
                 *ngSwitchCase="'in-progress'"
                 class="step-icon p-d-flex p-jc-center p-ai-center"
-                style="background-color: #AD9048;"
+                style="border-color: var(--progress);"
+                pTooltip="{{ step.status.label }}"
             >
-                <i class="pi {{ step.status.icon }} ms-01" pTooltip="{{ step.status.label }}"></i>
+                <!-- <i class="pi {{ step.status.icon }} ms-01" pTooltip="{{ step.status.label }}"></i> -->
             </div>
+            <div *ngSwitchCase="'no-status'" class="step-icon p-d-flex p-jc-center p-ai-center"></div>
         </ng-container>
+    </div>
+    <div class="p-d-flex p-jc-between" style="flex-grow: 1;">
+        <div class="p-d-flex p-flex-column">
+            <div class="ms-0 p-mr-1">{{ step.title }}</div>
+        </div>
     </div>
 </div>

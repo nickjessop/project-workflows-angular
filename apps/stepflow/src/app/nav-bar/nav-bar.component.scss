@@ -1,10 +1,6 @@
 .navigation {
     width: 100% !important;
     height: 70px !important;
-    background: white;
-    border-bottom: 1px solid var(--surface-c);
-    box-shadow: 0 1px 1px rgb(25 25 25 / 10%);
-    box-shadow: rgb(25 25 25 / 8%) 0px 1px 4px !important;
     position: relative;
     &__content {
         width: 100%;
@@ -20,15 +16,10 @@
         height: 26px;
         background: var(--surface-d);
     }
-    &__back-link:hover {
+    &__back:hover {
         cursor: pointer;
     }
     &__settings:hover {
         cursor: pointer;
     }
-}
-
-:host ::ng-deep .p-chip.custom-chip {
-    font-size: 10px;
-    text-transform: uppercase;
 }

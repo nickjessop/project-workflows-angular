@@ -6,12 +6,10 @@ mwlResizable {
 
 .field {
     position: relative;
-    // border: 0.065rem solid var(--surface-d);
     border-radius: 6px;
     background: white;
-    box-shadow: 0 1px 2px rgb(0 0 0 / 20%) !important;
-    transition: box-shadow 0.2s ease 0s !important;
     .resize {
+        visibility: hidden;
         position: absolute;
         bottom: 0;
         right: 0;
@@ -23,15 +21,16 @@ mwlResizable {
         &:hover,
         &:focus,
         &:focus-within {
-            cursor: s-resize;
+            cursor: row-resize;
             border-color: var(--surface-f);
         }
     }
     &:hover,
     &:focus-within {
-        box-shadow: 0 1px 2px rgb(0 0 0 / 30%) !important;
+        background: var(--surface-b);
         .field__settings,
-        .field__handle {
+        .field__handle,
+        .resize {
             visibility: visible;
         }
     }
