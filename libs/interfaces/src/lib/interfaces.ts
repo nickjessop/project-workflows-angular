@@ -159,9 +159,9 @@ export type Status = typeof NoStatus | typeof InProgress | typeof NeedsReview | 
 
 export const NoStatus = { label: 'No status', value: 'no-status', icon: '' } as const;
 export const InProgress = { label: 'In progress', value: 'in-progress', icon: 'pi-progress' } as const;
-export const NeedsReview = { label: 'Needs review', value: 'needs-review', icon: 'pi-exclamation' } as const;
-export const Upcoming = { label: 'Upcoming', value: 'upcoming', icon: 'pi-clock-hands' } as const;
-export const Complete = { label: 'Completed', value: 'completed', icon: 'pi-check' } as const;
+export const NeedsReview = { label: 'Needs review', value: 'needs-review', icon: 'pi-exclamation-circle' } as const;
+export const Upcoming = { label: 'Upcoming', value: 'upcoming', icon: 'pi-clock' } as const;
+export const Complete = { label: 'Completed', value: 'completed', icon: 'pi-check-circle' } as const;
 
 export interface ShareLink {
     userId: string;
