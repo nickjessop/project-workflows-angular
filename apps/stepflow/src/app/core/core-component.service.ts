@@ -108,13 +108,13 @@ export class CoreComponentService {
                                 item: [{ text: 'Heading 1' }, { text: 'Heading 2' }, { text: 'Heading 3' }],
                             },
                             {
-                                item: [{ text: '' }, { text: '' }, { text: '' }],
+                                item: [{ text: 'item1' }, { text: 'item2' }, { text: 'item3' }],
                             },
                             {
-                                item: [{ text: '' }, { text: '' }, { text: '' }],
+                                item: [{ text: 'item4' }, { text: 'item5' }, { text: 'item6' }],
                             },
                             {
-                                item: [{ text: '' }, { text: '' }, { text: '' }],
+                                item: [{ text: 'item7' }, { text: 'item8' }, { text: 'item9' }],
                             },
                         ],
                     },
