@@ -14,7 +14,7 @@ import { CoreComponentService } from '../../core-component.service';
 export class TableComponent implements OnInit {
     @Input() group!: FormGroup;
     @Input() index = 0;
-    @Input() field: BlockConfig = this.coreComponentService.createBlockConfig('textInput');
+    @Input() field: BlockConfig = this.coreComponentService.createBlockConfig('table');
     @Input() resizable?: boolean;
     @Input() componentMode?: ComponentMode;
 
@@ -93,6 +93,12 @@ export class TableComponent implements OnInit {
         },
     ];
 
+    public cars = [
+        { vin: 'asdf', year: '123', brand: 'gm', colour: 'red' },
+        { vin: 'asdf', year: '456', brand: 'tesla', colour: 'blue' },
+        { vin: 'asdf', year: '789', brand: 'honda', colour: 'green' },
+    ];
+
     public onDeleteBlock() {
         const index = this.index ? this.index : 0;
         this.projectService.deleteProjectBlock(index);
@@ -114,7 +120,7 @@ export class TableComponent implements OnInit {
         this.field.metadata.settings = { ...this.field.metadata.settings, height: height };
     }
 
-    // public onResize(evt: AngularResizeElementEvent): void {
+    // public onResize(evt: AngularResizeElementEvent): void {t
     //     this.height = evt.currentHeightValue;
 
     // this.data.width = evt.currentWidthValue;
@@ -131,6 +137,11 @@ export class TableComponent implements OnInit {
 
     ngOnInit() {
         this.tableValues = (this.field.metadata as Table).data.value;
+        console.log(this.tableValues);
+    }
+
+    public logAny(item: any) {
+        console.log(item);
     }
 
     public removeTableRow(removeAtIndex?: number) {
