@@ -19,59 +19,59 @@ export class TableComponent implements OnInit {
     @Input() componentMode?: ComponentMode;
 
     @ViewChild('table') table!: any;
-    // selectedData: { rowIndex: number; colIndex: number } = { rowIndex: 0, colIndex: 0 };
+    selectedData: { rowIndex: number; colIndex: number } = { rowIndex: 0, colIndex: 0 };
 
     @ViewChild('fieldContainer') fieldcontainer!: any;
-    // public menuItems: MenuItem[] = [
-    //     {
-    //         label: 'Insert',
-    //         icon: 'pi pi-fw pi-plus',
-    //         items: [
-    //             {
-    //                 label: 'Insert row above',
-    //                 command: () => {
-    //                     this.addTableRow(this.selectedData.rowIndex);
-    //                 },
-    //             },
-    //             {
-    //                 label: 'Insert row below',
-    //                 command: () => {
-    //                     this.addTableRow(this.selectedData.rowIndex + 1);
-    //                 },
-    //             },
-    //             {
-    //                 label: 'Insert column right',
-    //                 command: () => {
-    //                     this.addTableColumn(this.selectedData.colIndex + 1);
-    //                 },
-    //             },
-    //             {
-    //                 label: 'Insert column left',
-    //                 command: () => {
-    //                     this.addTableColumn(this.selectedData.colIndex);
-    //                 },
-    //             },
-    //         ],
-    //     },
-    //     {
-    //         label: 'Delete',
-    //         icon: 'pi pi-fw pi-minus',
-    //         items: [
-    //             {
-    //                 label: 'Delete row',
-    //                 command: () => {
-    //                     this.removeTableRow(this.selectedData.rowIndex);
-    //                 },
-    //             },
-    //             {
-    //                 label: 'Delete column',
-    //                 command: () => {
-    //                     this.removeTableColumn(this.selectedData.colIndex);
-    //                 },
-    //             },
-    //         ],
-    //     },
-    // ];
+    public menuItems: MenuItem[] = [
+        {
+            label: 'Insert',
+            icon: 'pi pi-fw pi-plus',
+            items: [
+                {
+                    label: 'Insert row above',
+                    command: () => {
+                        this.addRow(this.selectedData.rowIndex);
+                    },
+                },
+                {
+                    label: 'Insert row below',
+                    command: () => {
+                        this.addRow(this.selectedData.rowIndex + 1);
+                    },
+                },
+                {
+                    label: 'Insert column right',
+                    command: () => {
+                        this.addCol(this.selectedData.colIndex + 1);
+                    },
+                },
+                {
+                    label: 'Insert column left',
+                    command: () => {
+                        this.addCol(this.selectedData.colIndex);
+                    },
+                },
+            ],
+        },
+        {
+            label: 'Delete',
+            icon: 'pi pi-fw pi-minus',
+            items: [
+                {
+                    label: 'Delete row',
+                    command: () => {
+                        this.removeTableRow(this.selectedData.rowIndex);
+                    },
+                },
+                {
+                    label: 'Delete column',
+                    command: () => {
+                        this.removeTableColumn(this.selectedData.colIndex);
+                    },
+                },
+            ],
+        },
+    ];
     public tableValues?: TableColumn;
 
     constructor(private projectService: ProjectService, private coreComponentService: CoreComponentService) {}

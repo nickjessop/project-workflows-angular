@@ -1,5 +1,46 @@
 @import 'variables.scss';
 
+.table {
+    p-celleditor {
+        display: flex;
+        flex-direction: column;
+    }
+    td,
+    th {
+        white-space: normal;
+        vertical-align: text-top;
+        padding: 0;
+        &:focus,
+        &:focus-within {
+            outline: none !important;
+        }
+        input {
+            background: transparent;
+            border-radius: 0px;
+            padding: 1rem;
+        }
+        .cell-display {
+            border-color: transparent;
+        }
+    }
+    textarea {
+        max-width: 100%;
+        box-sizing: border-box;
+        height: 100%;
+        min-height: 150px;
+    }
+    input {
+        max-width: 100%;
+    }
+}
+
+.table.view {
+    td,
+    th {
+        padding: 1rem;
+    }
+}
+
 // .table--container {
 //     overflow-y: scroll;
 // }
