@@ -19,10 +19,10 @@
                 icon="pi pi-share-alt"
             ></button>
         </a>
-        <a href="https://stepflow.co" *ngIf="authPlan === 'Essential'">
+        <a href="https://stepflow.co" *ngIf="authPlan === 'Starter'">
             <button pButton type="button" class="p-button-secondary" label="Back to Stepflow.co"></button>
         </a>
-        <ng-container *ngIf="authPlan != 'Essential'">
+        <!-- <ng-container *ngIf="authPlan != 'Essential'">
             <div class="p-pt-4">
                 <h2>Next, complete your pre-order below to lock in your discount:</h2>
             </div>
@@ -140,6 +140,6 @@
                     window.attachEvent('onmessage', handleIFrameMessage);
                 }
             </script>
-        </ng-container>
+        </ng-container> -->
     </div>
 </div>
