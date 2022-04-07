@@ -1,4 +1,6 @@
 .application {
-    height: 100%;
+    height: auto;
+    min-height: 100%;
+    overflow: auto;
     background: var(--surface-b);
 }
