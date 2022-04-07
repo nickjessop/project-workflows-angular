@@ -10,10 +10,11 @@
     }
 }
 .info {
-    background: linear-gradient(94.76deg, #fbf8f7 46.16%, #e4d9d5 288.04%);
+    background: linear-gradient(94.76deg, #d7e7f3 46.16%, #eaf2f8 288.04%);
+    border-radius: 4px;
 }
 .login {
-    height: calc(100% - 60px);
+    height: calc(100vh - 60px);
 }
 
 @media (max-width: 768px) {
