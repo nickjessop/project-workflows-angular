@@ -92,7 +92,6 @@ export interface Table extends BaseComponent {
 export interface TableColumn {
     row?: { item: { text: string }[] }[];
 }
-
 export interface Embed extends BaseComponent {
     component: 'embed';
     data: { value: Link[] };

@@ -1,33 +1,27 @@
 @import 'variables.scss';
 
-.table--container {
-    overflow-y: scroll;
-}
-
-.container-test {
-    width: 200px;
-    height: 100px;
-    border: 1px solid var(--surface-d);
-    position: relative;
-}
-
 .table {
-    white-space: normal;
-    vertical-align: text-top;
-    padding: 0.1em;
-    &:focus,
-    &:focus-within {
-        outline: none !important;
-    }
-    input {
-        background: transparent;
-        border-radius: 0px;
-        padding: 1rem;
-        max-width: 100%;
-    }
     p-celleditor {
         display: flex;
         flex-direction: column;
+    }
+    td,
+    th {
+        white-space: normal;
+        vertical-align: text-top;
+        padding: 0;
+        &:focus,
+        &:focus-within {
+            outline: none !important;
+        }
+        input {
+            background: transparent;
+            border-radius: 0px;
+            padding: 1rem;
+        }
+        .cell-display {
+            border-color: transparent;
+        }
     }
     textarea {
         max-width: 100%;
@@ -35,27 +29,109 @@
         height: 100%;
         min-height: 150px;
     }
-    .header {
-        input {
-            color: var(--text-color);
-        }
-        background: var(--surface-d);
+    input {
+        max-width: 100%;
     }
-    .table--add-col-container {
-        margin: auto;
-        background: transparent;
-    }
-}
-
-.table--add-row-container {
-    border-bottom: solid 1px var(--surface-d);
 }
 
 .table.view {
-    padding: 1rem;
-
-    .p-disabled,
-    .p-component:disabled {
-        opacity: 0.9;
+    td,
+    th {
+        padding: 1rem;
     }
 }
+
+// .table--container {
+//     overflow-y: scroll;
+// }
+
+// .container-test {
+//     width: 200px;
+//     height: 100px;
+//     border: 1px solid var(--surface-d);
+//     position: relative;
+// }
+
+// .table {
+//     white-space: normal;
+//     vertical-align: text-top;
+//     padding: 0.1em;
+//     &:focus,
+//     &:focus-within {
+//         outline: none !important;
+//     }
+//     input {
+//         background: transparent;
+//         border-radius: 0px;
+//         padding: 1rem;
+//         max-width: 100%;
+//     }
+//     p-celleditor {
+//         display: flex;
+//         flex-direction: column;
+//     }
+//     textarea {
+//         max-width: 100%;
+//         box-sizing: border-box;
+//         height: 100%;
+//         min-height: 150px;
+//     }
+//     .header {
+//         input {
+//             color: var(--text-color);
+//         }
+//         background: var(--surface-d);
+//     }
+//     .table--add-col-container {
+//         margin: auto;
+//         background: transparent;
+//     }
+// }
+// .col--drag-handle {
+//     text-align: center;
+//     &:hover,
+//     &:focus-within {
+//         border: 0.065rem solid var(--primary-color-medium);
+//         .field__settings,
+//         .field__handle {
+//             visibility: visible;
+//         }
+//     }
+// }
+// .field__settings {
+//     visibility: hidden;
+// }
+
+// // .field__handle {
+// //     visibility: hidden;
+// //     position: absolute;
+// //     top: 0px;
+// //     left: calc(50% - 8px);
+// //     opacity: 0.3;
+// //     &:hover,
+// //     button.button:hover {
+// //         cursor: grab !important;
+// //     }
+// //     &:hover,
+// //     &:focus-within {
+// //         background: var(--surface-b);
+// //         .field__settings,
+// //         .field__handle,
+// //         .resize {
+// //             visibility: visible;
+// //         }
+// //     }
+// // }
+
+// .table--add-row-container {
+//     border-bottom: solid 1px var(--surface-d);
+// }
+
+// .table.view {
+//     padding: 1rem;
+
+//     .p-disabled,
+//     .p-component:disabled {
+//         opacity: 0.9;
+//     }
+// }
