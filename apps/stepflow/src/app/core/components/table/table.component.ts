@@ -14,64 +14,64 @@ import { CoreComponentService } from '../../core-component.service';
 export class TableComponent implements OnInit {
     @Input() group!: FormGroup;
     @Input() index = 0;
-    @Input() field: BlockConfig = this.coreComponentService.createBlockConfig('textInput');
+    @Input() field: BlockConfig = this.coreComponentService.createBlockConfig('table');
     @Input() resizable?: boolean;
     @Input() componentMode?: ComponentMode;
 
     @ViewChild('table') table!: any;
-    // selectedData: { rowIndex: number; colIndex: number } = { rowIndex: 0, colIndex: 0 };
+    selectedData: { rowIndex: number; colIndex: number } = { rowIndex: 0, colIndex: 0 };
 
     @ViewChild('fieldContainer') fieldcontainer!: any;
-    // public menuItems: MenuItem[] = [
-    //     {
-    //         label: 'Insert',
-    //         icon: 'pi pi-fw pi-plus',
-    //         items: [
-    //             {
-    //                 label: 'Insert row above',
-    //                 command: () => {
-    //                     this.addTableRow(this.selectedData.rowIndex);
-    //                 },
-    //             },
-    //             {
-    //                 label: 'Insert row below',
-    //                 command: () => {
-    //                     this.addTableRow(this.selectedData.rowIndex + 1);
-    //                 },
-    //             },
-    //             {
-    //                 label: 'Insert column right',
-    //                 command: () => {
-    //                     this.addTableColumn(this.selectedData.colIndex + 1);
-    //                 },
-    //             },
-    //             {
-    //                 label: 'Insert column left',
-    //                 command: () => {
-    //                     this.addTableColumn(this.selectedData.colIndex);
-    //                 },
-    //             },
-    //         ],
-    //     },
-    //     {
-    //         label: 'Delete',
-    //         icon: 'pi pi-fw pi-minus',
-    //         items: [
-    //             {
-    //                 label: 'Delete row',
-    //                 command: () => {
-    //                     this.removeTableRow(this.selectedData.rowIndex);
-    //                 },
-    //             },
-    //             {
-    //                 label: 'Delete column',
-    //                 command: () => {
-    //                     this.removeTableColumn(this.selectedData.colIndex);
-    //                 },
-    //             },
-    //         ],
-    //     },
-    // ];
+    public menuItems: MenuItem[] = [
+        {
+            label: 'Insert',
+            icon: 'pi pi-fw pi-plus',
+            items: [
+                {
+                    label: 'Insert row above',
+                    command: () => {
+                        this.addRow(this.selectedData.rowIndex);
+                    },
+                },
+                {
+                    label: 'Insert row below',
+                    command: () => {
+                        this.addRow(this.selectedData.rowIndex + 1);
+                    },
+                },
+                {
+                    label: 'Insert column right',
+                    command: () => {
+                        this.addCol(this.selectedData.colIndex + 1);
+                    },
+                },
+                {
+                    label: 'Insert column left',
+                    command: () => {
+                        this.addCol(this.selectedData.colIndex);
+                    },
+                },
+            ],
+        },
+        {
+            label: 'Delete',
+            icon: 'pi pi-fw pi-minus',
+            items: [
+                {
+                    label: 'Delete row',
+                    command: () => {
+                        this.removeTableRow(this.selectedData.rowIndex);
+                    },
+                },
+                {
+                    label: 'Delete column',
+                    command: () => {
+                        this.removeTableColumn(this.selectedData.colIndex);
+                    },
+                },
+            ],
+        },
+    ];
     public tableValues?: TableColumn;
 
     constructor(private projectService: ProjectService, private coreComponentService: CoreComponentService) {}
@@ -91,6 +91,12 @@ export class TableComponent implements OnInit {
                 this.onDeleteBlock();
             },
         },
+    ];
+
+    public cars = [
+        { vin: 'asdf', year: '123', brand: 'gm', colour: 'red' },
+        { vin: 'asdf', year: '456', brand: 'tesla', colour: 'blue' },
+        { vin: 'asdf', year: '789', brand: 'honda', colour: 'green' },
     ];
 
     public onDeleteBlock() {
@@ -114,7 +120,7 @@ export class TableComponent implements OnInit {
         this.field.metadata.settings = { ...this.field.metadata.settings, height: height };
     }
 
-    // public onResize(evt: AngularResizeElementEvent): void {
+    // public onResize(evt: AngularResizeElementEvent): void {t
     //     this.height = evt.currentHeightValue;
 
     // this.data.width = evt.currentWidthValue;
@@ -131,6 +137,11 @@ export class TableComponent implements OnInit {
 
     ngOnInit() {
         this.tableValues = (this.field.metadata as Table).data.value;
+        console.log(this.tableValues);
+    }
+
+    public logAny(item: any) {
+        console.log(item);
     }
 
     public removeTableRow(removeAtIndex?: number) {
