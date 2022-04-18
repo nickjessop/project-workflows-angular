@@ -61,10 +61,10 @@ export class StepsComponent implements OnInit {
     constructor(public projectService: ProjectService) {
         this.statusOptions = [
             { label: 'No status', value: 'no-status', icon: '' },
-            { label: 'In progress', value: 'in-progress', icon: 'pi-progress' },
-            { label: 'Needs review', value: 'needs-review', icon: 'pi-exclamation-circle' },
-            { label: 'Upcoming', value: 'upcoming', icon: 'pi-clock' },
-            { label: 'Completed', value: 'completed', icon: 'pi-check-circle' },
+            { label: 'In progress', value: 'in-progress', icon: 'pi-step-inprogress' },
+            { label: 'Needs review', value: 'needs-review', icon: 'pi-step-important' },
+            { label: 'Upcoming', value: 'upcoming', icon: 'pi-step-upcoming' },
+            { label: 'Completed', value: 'completed', icon: 'pi-step-completed' },
         ];
     }
 

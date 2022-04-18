@@ -1,12 +1,9 @@
+$step-border-radius: 6px;
 .steps-container {
     // margin: 35px 20px;
     // max-height: calc(100vh - 9rem);
-    &__options {
-        .steps-title {
-            color: var(--text-color-secondary);
-            font-weight: bold;
-        }
-    }
+    min-width: 300px;
+    max-width: 400px;
     .steps {
         position: relative;
         overflow: hidden;
@@ -57,13 +54,13 @@
     .step {
         position: relative;
         border: 1px solid var(--surface-d);
-        border-radius: 20px;
+        border-radius: 6px;
         white-space: nowrap;
         font-weight: 500;
         &:hover {
             cursor: pointer;
             background: var(--surface-c);
-            border-radius: 20px;
+            border-radius: 6px;
         }
         &__edit {
             display: none;
@@ -76,7 +73,7 @@
     }
     .step-selected {
         background: var(--primary-color-light);
-        border-radius: 20px;
+        border-radius: 6px;
         font-weight: 700;
         .step__edit {
             display: inline-flex;
@@ -122,7 +119,7 @@
             align-items: flex-start;
         }
         .cdk-drag {
-            margin-right: 0;
+            margin-right: 0 !important;
             margin-bottom: 1rem;
         }
         .steps {
@@ -136,17 +133,13 @@
             }
         }
         .step {
-            border: none;
-            border-radius: 0px;
+            width: 100%;
         }
         .add-icon {
             display: none;
         }
         .add-button {
             display: block;
-        }
-        .step-selected {
-            border-radius: 20px;
         }
     }
 }
