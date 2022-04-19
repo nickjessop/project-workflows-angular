@@ -1,7 +1,7 @@
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Project } from '@stepflow/interfaces';
+import { ComponentMode, Project } from '@stepflow/interfaces';
 import { MenuItem, MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import { AuthenticationService } from '../services/authentication/authentication.service';
@@ -27,7 +27,11 @@ export class NavBarComponent implements OnInit {
     baseUrl = this.parsedUrl.origin;
     linkCopiedMsg: any[] = [];
 
-    displaySettingsDialog: boolean = false;
+    public componentMode?: ComponentMode;
+    public isNewProject = false;
+    public canConfigureProject = false;
+
+    public displaySettingsDialog: boolean = false;
 
     public navMode: 'default' | 'project' = 'default';
     public project?: Project;
@@ -62,12 +66,24 @@ export class NavBarComponent implements OnInit {
         ];
 
         this.subscriptions.add(
-            this.projectService.projectConfig$.subscribe(projectData => {
+            this.projectService.projectConfig$.subscribe((projectData) => {
                 this.project = projectData;
                 if (projectData?.id) {
                     this.navMode = 'project';
                 } else {
                     this.navMode = 'default';
+                }
+            })
+        );
+
+        this.subscriptions.add(
+            this.projectService.projectMode$.subscribe((result) => {
+                console.log(result);
+                this.componentMode = result;
+                if (this.componentMode == 'configure') {
+                    this.canConfigureProject = true;
+                } else {
+                    this.canConfigureProject = false;
                 }
             })
         );
@@ -123,7 +139,7 @@ export class NavBarComponent implements OnInit {
     }
 
     onSaveSettingsSelected() {
-        this.projectService.updateProjectSettings(this.projectSettings).then(value => {
+        this.projectService.updateProjectSettings(this.projectSettings).then((value) => {
             if (value === true) {
                 this.messageService.add({
                     key: 'global-toast',
