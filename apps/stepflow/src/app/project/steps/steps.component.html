@@ -1,7 +1,4 @@
 <div class="steps-container p-d-flex p-my-3">
-    <div class="p-d-flex hidden p-jc-between p-ai-center steps-container__options">
-        <div class="ms-0 steps-title">STEPS</div>
-    </div>
     <div class="steps" @fade>
         <div class="steps__fade-right"></div>
         <div class="steps__fade-left"></div>
@@ -26,14 +23,14 @@
                 <ng-container *ngIf="canConfigureProject; else showViewSteps">
                     <div
                         cdkDropList
-                        cdkDropListOrientation="horizontal"
+                        cdkDropListOrientation="vertical"
                         (cdkDropListDropped)="drop($event)"
                         class="p-d-flex p-ai-center"
                     >
                         <ng-container *ngFor="let stepConfig of steps; index as i" #stepLoop>
                             <div
                                 cdkDrag
-                                class="step p-d-flex p-ai-center p-jc-between p-mr-2"
+                                class="step p-mr-2"
                                 [class.step-selected]="stepConfig.step.isCurrentStep"
                                 (click)="onStepPress(i)"
                             >
@@ -47,15 +44,15 @@
                                 ></button>
                             </div>
                         </ng-container>
-                        <div style="padding: 0 25px; height: 1px;"></div>
+                        <div style="padding: 0 25px; height: 1px"></div>
                     </div>
                     <p-menu #menu [popup]="true" [model]="stepMenuOptions" appendTo="body"></p-menu>
                 </ng-container>
                 <ng-template #showViewSteps>
-                    <div class="p-d-flex p-ai-center">
+                    <div class="p-d-flex p-ai-center cdk-drop-list">
                         <ng-container *ngFor="let stepConfig of steps; index as i">
                             <div
-                                class="step p-d-flex p-ai-center p-jc-between p-mr-2"
+                                class="step p-mr-2 cdk-drag"
                                 [class.step-selected]="stepConfig.step.isCurrentStep"
                                 (click)="onStepPress(i)"
                             >
@@ -86,9 +83,7 @@
     ></button>
 
     <ng-template #showEmptyState>
-        <div class="p-col-6 p-d-flex p-ai-center">
-            Press the plus button to create your first step
-        </div>
+        <div class="p-col-6 p-d-flex p-ai-center">Press the plus button to create your first step</div>
     </ng-template>
 </div>
 

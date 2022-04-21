@@ -62,8 +62,9 @@
                 background: transparent;
                 // align-items: center; won't play nicely with position sticky :(
                 display: flex;
-                width: 300px;
-                min-width: 300px;
+                // width: 300px;
+                // min-width: 300px;
+                padding-right: 20px;
             }
             &__step {
                 max-width: auto;
@@ -72,8 +73,9 @@
                 // }
             }
             &__controls {
-                width: 300px;
-                min-width: 300px;
+                // width: 300px;
+                // min-width: 300px;
+                padding-left: 20px;
             }
         }
     }

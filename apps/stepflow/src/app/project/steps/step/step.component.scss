@@ -9,17 +9,22 @@
         position: relative;
         padding-right: 2px;
         padding-left: 6px;
-        border-left: 3px solid var(--text-color-secondary);
-        // i {
-        //     font-size: 12px;
-        //     color: var(--text-color-secondary);
-        // }
-        // &--default {
-        //     width: 16px;
-        //     height: 16px;
-        // }
+        i {
+            // font-size: 12px;
+            color: var(--text-color-secondary);
+        }
+        &--default {
+            width: 16px;
+            height: 16px;
+        }
     }
 }
 .step-label {
     font-weight: 500;
+}
+@media screen and (min-width: 700px) {
+    .step-inner {
+        padding-top: 0.75rem !important;
+        padding-bottom: 0.75rem !important;
+    }
 }
