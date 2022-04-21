@@ -41,14 +41,21 @@
                 [contextMenu]="cm"
                 [resizableColumns]="true"
                 (onColResize)="columnsResized($event)"
-                (onEditComplete)="saveTableData()"
+                columnResizeMode="expand"
+                scrollDirection="both"
                 styleClass="p-datatable-gridlines"
             >
                 <ng-template pTemplate="header">
                     <tr pEditableRow>
                         <ng-container *ngFor="let row of tableValues?.row; index as rowIndex">
-                            <ng-container *ngFor="let col of row.item">
-                                <th pEditableColumn pResizableColumn *ngIf="rowIndex === 0">
+                            <ng-container *ngFor="let col of row.item; index as hIndex">
+                                <th
+                                    pEditableColumn
+                                    pResizableColumn
+                                    *ngIf="rowIndex === 0"
+                                    id="{{ hIndex }}"
+                                    [ngStyle]="{ 'width.px': col.width }"
+                                >
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
                                             <input pInputText type="text" [(ngModel)]="col.text" />
@@ -71,7 +78,12 @@
                 <ng-template pTemplate="body" let-value let-r="rowIndex">
                     <tr>
                         <ng-container *ngFor="let col of value.item; index as colIndex">
-                            <td pEditableColumn *ngIf="r !== 0" [pContextMenuRow]="{ rowIndex: r, colIndex: colIndex }">
+                            <td
+                                pEditableColumn
+                                *ngIf="r !== 0"
+                                [pContextMenuRow]="{ rowIndex: r, colIndex: colIndex }"
+                                [ngStyle]="{ 'width.px': col.width }"
+                            >
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
                                         <input pInputText type="text" [(ngModel)]="col.text" />

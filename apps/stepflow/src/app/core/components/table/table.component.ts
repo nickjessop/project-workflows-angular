@@ -93,12 +93,6 @@ export class TableComponent implements OnInit {
         },
     ];
 
-    public cars = [
-        { vin: 'asdf', year: '123', brand: 'gm', colour: 'red' },
-        { vin: 'asdf', year: '456', brand: 'tesla', colour: 'blue' },
-        { vin: 'asdf', year: '789', brand: 'honda', colour: 'green' },
-    ];
-
     public onDeleteBlock() {
         const index = this.index ? this.index : 0;
         this.projectService.deleteProjectBlock(index);
@@ -112,36 +106,8 @@ export class TableComponent implements OnInit {
         this.projectService.setBlockDrag(false);
     }
 
-    private updateHeight(height: number = 400) {
-        if (!this.resizable) {
-            return;
-        }
-        this.height = height;
-        this.field.metadata.settings = { ...this.field.metadata.settings, height: height };
-    }
-
-    // public onResize(evt: AngularResizeElementEvent): void {t
-    //     this.height = evt.currentHeightValue;
-
-    // this.data.width = evt.currentWidthValue;
-    // this.data.height = evt.currentHeightValue;
-    // this.data.top = evt.currentTopValue;
-    // this.data.left = evt.currentLeftValue;
-    // }
-
-    // public onResizeEnd(evt: AngularResizeElementEvent): void {
-    //     const height = evt.currentHeightValue;
-    //     this.updateHeight(height);
-    //     this.projectService.syncProject();
-    // }
-
     ngOnInit() {
         this.tableValues = (this.field.metadata as Table).data.value;
-        console.log(this.tableValues);
-    }
-
-    public logAny(item: any) {
-        console.log(item);
     }
 
     public removeTableRow(removeAtIndex?: number) {
@@ -234,15 +200,22 @@ export class TableComponent implements OnInit {
         return column;
     }
 
-    public columnsResized(event: Event & { delta: number; element: { clientWidth: number; cellIndex: number } }) {
-        const sizeChangeDelta = event.delta;
-        const newWidth = event.element.clientWidth;
-        const cellIndex = event.element.cellIndex;
-    }
+    public columnsResized(event: Event & { delta: number; element: { clientWidth: number; id: number } }) {
+        const newWidth = String(event.element.clientWidth);
+        const colIndex = Number(event.element.id);
 
-    // TODO:
-    // Add save and restoring of column resizes
-    // Remove requirement to double click to save and edit another cell
+        const totalRows = this.tableValues?.row?.length || 0;
+
+        for (var i = 0; i < totalRows; i++) {
+            if (this.tableValues?.row?.[i].item?.[colIndex]) {
+                this.tableValues.row[i].item[colIndex].width = newWidth;
+            }
+        }
+
+        console.log(this.tableValues);
+
+        this.projectService.syncProject();
+    }
 
     public saveTableData() {
         this.projectService.syncProject();
