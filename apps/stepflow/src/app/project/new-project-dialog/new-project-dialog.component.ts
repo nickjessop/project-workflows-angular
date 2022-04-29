@@ -16,7 +16,7 @@ export class NewProjectDialogComponent implements OnInit {
     ngOnInit(): void {}
 
     public createNewProjectPress() {
-        if(!this.projectName || !this.description) {
+        if (!this.projectName) {
             return;
         }
 

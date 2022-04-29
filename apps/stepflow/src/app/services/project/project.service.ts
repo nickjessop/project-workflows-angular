@@ -155,7 +155,7 @@ export class ProjectService {
         this.updateProject(this.projectConfig);
     }
 
-    public createBaseProject(userId: string, projectName: string, description: string, configuration?: StepConfig[]) {
+    public createBaseProject(userId: string, projectName: string, description?: string, configuration?: StepConfig[]) {
         const config: StepConfig[] = configuration
             ? configuration
             : [
@@ -235,7 +235,7 @@ export class ProjectService {
         this.setProject(_projectConfig);
     }
 
-    public createNewProject(projectName: string, projectDescription: string) {
+    public createNewProject(projectName: string, projectDescription?: string) {
         const userId = this.authenticationService.user?.id;
 
         const baseProject = this.createBaseProject(userId || '', projectName, projectDescription);
