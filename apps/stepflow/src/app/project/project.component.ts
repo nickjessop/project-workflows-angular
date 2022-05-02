@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { ConfirmationService } from 'primeng/api';
-import { ApiService } from '../services/api/api.service';
 import { ProjectService } from '../services/project/project.service';
 
 @Component({
@@ -17,7 +17,7 @@ export class ProjectComponent implements OnInit {
     constructor(
         private projectService: ProjectService,
         private confirmationService: ConfirmationService,
-        private apiService: ApiService
+        private router: Router
     ) {}
 
     ngOnInit() {
@@ -64,14 +64,19 @@ export class ProjectComponent implements OnInit {
         });
     }
 
-    public onCreateNewProjectEvent($event: { projectName: string; description: string }) {
-        this.projectService.createNewProject($event.projectName, $event.description).then(
-            success => {
-                this.getProjects();
-            },
-            error => {
-                console.log('Error creating new project');
-            }
-        );
+    public async onCreateNewProjectEvent($event: { projectName: string; description: string }) {
+        const newProject = await this.projectService.createNewProject($event.projectName, $event.description);
+
+        if (newProject) {
+            this.router.navigateByUrl(`/project/${newProject.id}`);
+        }
+        // this.projectService.createNewProject($event.projectName, $event.description).then(
+        //     success => {
+        //         this.getProjects();
+        //     },
+        //     error => {
+        //         console.log('Error creating new project');
+        //     }
+        // );
     }
 }
