@@ -22,6 +22,7 @@ export interface BlockConfig {
     label: string;
     name: string;
     metadata: ComponentMetadata;
+    id?: string;
 }
 
 export type ComponentType =
