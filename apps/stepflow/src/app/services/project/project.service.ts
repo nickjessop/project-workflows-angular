@@ -155,7 +155,7 @@ export class ProjectService {
         this.updateProject(this.projectConfig);
     }
 
-    public createBaseProject(userId: string, projectName: string, description: string, configuration?: StepConfig[]) {
+    public createBaseProject(userId: string, projectName: string, description?: string, configuration?: StepConfig[]) {
         const config: StepConfig[] = configuration
             ? configuration
             : [
@@ -235,19 +235,19 @@ export class ProjectService {
         this.setProject(_projectConfig);
     }
 
-    public createNewProject(projectName: string, projectDescription: string) {
+    public async createNewProject(projectName: string, projectDescription?: string) {
         const userId = this.authenticationService.user?.id;
 
         const baseProject = this.createBaseProject(userId || '', projectName, projectDescription);
 
-        return this.firebaseService
+        const proj = await this.firebaseService
             .getDbInstance()!
             .collection(this.PROJECT_COLLECTION)
             .add(baseProject)
             .then(
-                documentRef => {
+                async documentRef => {
                     baseProject.id = documentRef.id;
-                    documentRef.update({ id: documentRef.id });
+                    await documentRef.update({ id: documentRef.id });
                     // this.projectConfig = baseProject;
                     return baseProject;
                 },
@@ -255,6 +255,8 @@ export class ProjectService {
                     console.log(`Error occurred while creating a new project: ${error}`);
                 }
             );
+
+        return proj;
     }
 
     //TODO: Add firebase rule to check that users are authorized to edit this project

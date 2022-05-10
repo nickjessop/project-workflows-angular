@@ -1,18 +1,29 @@
 <p-dialog header="Create a New Project" [(visible)]="showDialog" styleClass="dialog" focusTrap="true" modal="true">
     <div class="p-field">
         <label for="title" aria-describedby="Name your step" styleClass="labelBlock">Name</label>
-        <input id="title" type="text" pInputText [(ngModel)]='projectName'>
+        <input id="title" type="text" pInputText [(ngModel)]="projectName" />
     </div>
     <div class="p-field p-pt-2">
         <label for="description" aria-describedby="Add a description" styleClass="labelBlock">Description</label>
-        <input id="description" type="text" pInputText [(ngModel)]='description'>
+        <input id="description" type="text" pInputText [(ngModel)]="description" />
     </div>
 
     <p-footer>
-        <button type="button" pButton label="Create New Project" (click)="createNewProjectPress()" [disabled]="!projectName || !description"></button>
+        <button
+            type="button"
+            pButton
+            label="Create New Project"
+            (click)="createNewProjectPress()"
+            [disabled]="!projectName"
+        ></button>
     </p-footer>
 </p-dialog>
 
-
-<button pButton type="button" icon="pi pi-plus" iconPos="left" label="New Project"
-    (click)="showNewProjectDialog()"></button>
+<button
+    pButton
+    type="button"
+    icon="pi pi-plus"
+    iconPos="left"
+    label="New Project"
+    (click)="showNewProjectDialog()"
+></button>
