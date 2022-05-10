@@ -115,7 +115,7 @@ export interface IProjectInvitation {
 
 export interface Project {
     name: string;
-    description: string;
+    description?: string;
     configuration?: StepConfig[];
     shareLink?: ShareLink;
     members: string[];
