@@ -169,3 +169,19 @@ export interface ShareLink {
     projectId: string;
     permission: SharePermission;
 }
+
+
+/**
+ * Comment Types
+ */
+
+export interface Comment {
+  commentId: string;
+  createdAt: number;
+  updatedAt: number;
+  parentCommentId: string;
+  authorId: string;
+  blockId: string;
+  body: string;
+  deleted: boolean;
+}
