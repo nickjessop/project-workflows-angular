@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { User } from '@stepflow/interfaces';
 import { MessageService } from 'primeng/api';
 import { AuthenticationService } from '../services/authentication/authentication.service';
-import { UserService } from '../services/user/user.service';
 
 @Component({
     selector: 'app-profile',
@@ -16,11 +15,7 @@ export class ProfileComponent implements OnInit {
     public displayPasswordModal: boolean = false;
     public passwordVerification: string = '';
 
-    constructor(
-        private authService: AuthenticationService,
-        private userService: UserService,
-        private messageService: MessageService
-    ) {}
+    constructor(private authService: AuthenticationService, private messageService: MessageService) {}
 
     ngOnInit() {
         this.userDetails = this.authService.user!;
@@ -37,18 +32,18 @@ export class ProfileComponent implements OnInit {
     }
 
     public onSaveProfileSelected() {
-        this.userService.updateProfileDetails(this.userDetails);
+        this.authService.updateProfileDetails(this.userDetails);
         this.displayProfileModal = false;
     }
 
     public onProfileImageUploadSelected($event: { originalEvent: Event; files: FileList; currentFiles: File[] }) {
-        this.userService.changeProfilePhoto($event.currentFiles[0]);
+        this.authService.changeProfilePhoto($event.currentFiles[0]);
     }
 
     public onChangeEmailSelected(password: string) {
         const currentEmail = this.authService.getCurrentUser()?.email;
         if (this.userDetails.email && this.userDetails.email != currentEmail) {
-            this.userService
+            this.authService
                 .updateEmail(this.userDetails.email, password)
                 .then(() => {
                     this.passwordVerification = '';
@@ -75,7 +70,7 @@ export class ProfileComponent implements OnInit {
     }
 
     public onChangePasswordSelected(password: string) {
-        this.userService
+        this.authService
             .updatePassword(password)
             .then(() => {
                 this.passwordVerification = '';
