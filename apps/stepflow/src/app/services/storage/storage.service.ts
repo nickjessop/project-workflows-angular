@@ -1,14 +1,13 @@
 import { Injectable } from '@angular/core';
 import { from } from 'rxjs';
 import { v4 as uuid } from 'uuid';
-import { AuthenticationService } from '../authentication/authentication.service';
 import { FirebaseService } from '../firebase/firebase.service';
 
 @Injectable({
     providedIn: 'root',
 })
 export class StorageService {
-    constructor(private firebaseService: FirebaseService, private authenticationService: AuthenticationService) {}
+    constructor(private firebaseService: FirebaseService) {}
 
     public uploadProjectFile(file: File, projectId: string) {
         const fileId: string = uuid();
@@ -18,9 +17,9 @@ export class StorageService {
         return from(storageRef.put(file));
     }
 
-    public uploadProfileImage(file: File) {
+    public uploadProfileImage(file: File, userId: string) {
         const fileId: string = uuid();
-        const pathId = this.authenticationService.user?.id;
+        const pathId = userId;
         const folder = 'users';
         const storageRef = this.firebaseService.getStorageInstance().ref(`${folder}/${pathId}/${fileId}`);
         return from(storageRef.put(file));
