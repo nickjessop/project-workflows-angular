@@ -18,17 +18,6 @@ export class CommentsService {
 
   // API Methods
 
-<<<<<<< HEAD
-  // public getComment(id: string): Promise<Comment> {
-
-  // }
-
-  // public listComments(blockId: string): Promise<Array<Comment>> {
-
-  // }
-
-  public addComment(comment: Partial<Comment>): Promise<boolean> {
-=======
   public async listComments(blockId: string): Promise<Array<Comment>> {
     return this.firebaseService
       .getDbInstance()!
@@ -74,7 +63,6 @@ export class CommentsService {
   }
 
   public async addComment(comment: Partial<Comment>): Promise<boolean> {
->>>>>>> d486f90 (Add remaining method bodies in comments service.)
     
     const authorId: string | undefined = this.authenticationService.getCurrentUser()?.uid
     if (!authorId) {
@@ -82,11 +70,7 @@ export class CommentsService {
       return Promise.resolve(false)
     }
 
-<<<<<<< HEAD
-    const rightNow: number = this.timeStampForRightNow();
-=======
     const rightNow: number = Date.now();
->>>>>>> d486f90 (Add remaining method bodies in comments service.)
     const additionalFields: Partial<Comment> = {
       commentId: uuid(),
       createdAt: rightNow,
@@ -114,26 +98,6 @@ export class CommentsService {
       );
   }
 
-<<<<<<< HEAD
-  // private putComment(comment: Comment): Promise<Comment> {
-
-  // }
-
-  // Other public Methods
-  
-  // public updateCommentBody(comment: Comment, newBody: string): Promise<Comment> {
-
-  // }
-
-  // public deleteComment(comment: Comment): Promise<Comment> {
-
-  // }
-
-  // Helpers
-
-  private timeStampForRightNow(): number {
-    return Date.now()
-=======
   private async putComment(comment: Comment): Promise<Comment | null> {
     return this.firebaseService
       .getDbInstance()!
@@ -163,7 +127,6 @@ export class CommentsService {
     comment.deleted = true
     comment.updatedAt = Date.now()
     return this.putComment(comment)
->>>>>>> d486f90 (Add remaining method bodies in comments service.)
   }
 
 }
