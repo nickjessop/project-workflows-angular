@@ -8,6 +8,7 @@ mwlResizable {
     position: relative;
     border-radius: 6px;
     background: white;
+    border: 1px solid transparent;
     .resize {
         visibility: hidden;
         position: absolute;
@@ -27,7 +28,7 @@ mwlResizable {
     }
     &:hover,
     &:focus-within {
-        background: var(--surface-b);
+        border: 1px solid var(--primary-color-light);
         .field__settings,
         .field__handle,
         .resize {
