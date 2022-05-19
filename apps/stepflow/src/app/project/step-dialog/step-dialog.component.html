@@ -52,6 +52,23 @@
     </ng-template>
 
     <p-footer>
-        <button type="button" pButton [label]="getButtonLabel()" (click)="onDialogSubmit($event)"></button>
+        <div class="p-d-flex p-jc-between">
+            <button
+                *ngIf="this.mode === 'edit'"
+                type="button"
+                class="p-button-secondary"
+                icon="pi pi-trash"
+                pButton
+                label="Delete"
+                (click)="this.mode = 'delete'"
+            ></button>
+            <button
+                type="button"
+                pButton
+                [ngClass]="{ 'p-button-danger': this.mode === 'delete' }"
+                [label]="getButtonLabel()"
+                (click)="onDialogSubmit($event)"
+            ></button>
+        </div>
     </p-footer>
 </p-dialog>

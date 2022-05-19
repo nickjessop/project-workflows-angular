@@ -5,10 +5,15 @@
                 (dragAndDropStepEvent)="onDragAndDropStepEvent($event)"
                 [canConfigureProject]="canConfigureProject"
             ></project-steps>
+            <div class="p-pb-4 p-d-flex p-jc-center p-ai-center powered-by ms-01">
+                <a href="https://stepflow.co" target="_blank">
+                    <p-chip label="Powered by Stepflow" styleClass="p-ml-1 p-px-3 custom-chip"></p-chip
+                ></a>
+            </div>
         </div>
         <div class="viewer-container__step p-my-6" *ngIf="currentStep; else showErrorState">
-            <div class="step-container p-px-2 p-pb-4">
-                <div class="p-p-4">
+            <div class="step-container p-px-4 p-pb-4">
+                <div class="p-pb-4 p-px-2">
                     <div class="p-d-flex p-ai-center p-jc-between">
                         <div class="p-d-flex p-flex-column">
                             <h2 class="ms-4 p-my-0 p-pr-2">{{ currentStep.step.title }}</h2>
@@ -36,7 +41,7 @@
                         </ng-container>
                     </div>
                 </div>
-                <div class="p-px-2">
+                <div>
                     <project-dynamic-form
                         [fields]="currentStep.components"
                         (dragAndDropEvent)="onDragAndDropEvent($event)"
@@ -52,8 +57,4 @@
             <div class="p-col-9 p-d-flex p-ai-center"></div>
         </ng-template>
     </div>
-</div>
-<div class="p-pb-4 p-d-flex p-jc-center p-ai-center powered-by ms-01">
-    <a href="https://stepflow.co" target="_blank">Powered by Stepflow</a>
-    <p-chip label="Beta" styleClass="p-ml-1 custom-chip"></p-chip>
 </div>
