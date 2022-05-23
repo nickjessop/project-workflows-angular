@@ -233,34 +233,38 @@ export class AuthenticationService {
         lastName?: string;
         email?: string;
     }) {
-        if (this.user) {
-            const update = {
-                ...(photoFilePath ? { photoFilePath } : {}),
-                ...(plan ? { plan } : {}),
-                ...(firstName ? { firstName } : {}),
-                ...(lastName ? { lastName } : {}),
-                ...(email ? { email } : {}),
-            };
-
-            const userRef = this.firebaseService
-                .getDbInstance()
-                .collection('users')
-                .doc(this.user.id);
-            userRef
-                .update(update)
-                .then(() => {
-                    return true;
-                })
-                .catch((error: Error) => {
-                    this.messageService.add({
-                        severity: 'error',
-                        key: 'global-toast',
-                        life: 5000,
-                        closable: true,
-                        detail: 'Error updating user info.',
-                    });
-                });
+        if (!this.user) {
+            return;
         }
+        const update = {
+            ...(photoFilePath ? { photoFilePath } : {}),
+            ...(plan ? { plan } : {}),
+            ...(firstName ? { firstName } : {}),
+            ...(lastName ? { lastName } : {}),
+            ...(email ? { email } : {}),
+        };
+
+        const userRef = this.firebaseService
+            .getDbInstance()
+            .collection('users')
+            .doc(this.user.id);
+
+        return userRef
+            .update(update)
+            .then(() => {
+                return true;
+            })
+            .catch((error: Error) => {
+                this.messageService.add({
+                    severity: 'error',
+                    key: 'global-toast',
+                    life: 5000,
+                    closable: true,
+                    detail: 'Error updating user info.',
+                });
+
+                return false;
+            });
     }
 
     public login(email: string, password: string) {
@@ -498,7 +502,9 @@ export class AuthenticationService {
             const firebaseUser = this.getCurrentUser();
             await firebaseUser!.updateProfile({ photoURL: downloadUrl });
 
-            await this.setUserMetaData({ photoFilePath: filePath });
+            const success = await this.setUserMetaData({ photoFilePath: filePath });
+
+            return success;
         } catch (e) {
             this.messageService.add({
                 severity: 'error',
@@ -507,6 +513,8 @@ export class AuthenticationService {
                 closable: true,
                 detail: 'Failed to upload profile image',
             });
+
+            return false;
         }
     }
 
