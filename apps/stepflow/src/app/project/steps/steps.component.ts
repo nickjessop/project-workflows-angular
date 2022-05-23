@@ -42,7 +42,7 @@ export class StepsComponent implements OnInit {
     @Input()
     canConfigureProject: boolean = false;
 
-    scrollSubject = new Subject();
+    scrollSubject = new Subject<void>();
     scrollSubject$ = this.scrollSubject.asObservable();
 
     public showDialog = false;
