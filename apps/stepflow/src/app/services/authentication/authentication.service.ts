@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Project, Role, User, UserPlan } from '@stepflow/interfaces';
+import { Profile, Project, Role, User, UserPlan } from '@stepflow/interfaces';
+import { AuthChangeEvent, Session } from '@supabase/supabase-js';
 import * as _ from 'lodash';
 import { MessageService } from 'primeng/api';
-import { BehaviorSubject, from, Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { FirebaseService } from '../firebase/firebase.service';
-import { StorageService } from '../storage/storage.service';
+import { SupabaseService } from '../supabase/supabase.service';
 
 export enum AuthStatus {
     AUTHENTICATED,
@@ -27,23 +28,24 @@ export class AuthenticationService {
     private readonly PROJECT_COLLECTION_NAME = 'projects';
     private readonly INVITATIONS_COLLECTION_NAME = 'invitations';
 
-    public allowedUserIds = [
-        '06T4lgj7x1emjUEMCmPnJYPFjum2',
-        'iIeZlcLjmebZSoEMuquh4F2htN92',
-        'LkkX7f9yheRFHNwZkoCHhMb6AmC2',
-        'S09Ert0pOpRKdb7pnc4rXFfyeWe2',
-        'o24opqInUhbxnC9MFywy3YLLBE03',
-        '0ZLQk9ekq3RJXMc2RMpCE8NEkJ73',
-        'tpXpbNAPKpX1evoxSeRJs0O0pB02',
-        'IoTwZeoPiSemew2z5IBbQcHPaNi2',
-        'DxOw25Q8XigIlZMfnfN7vaCaVPo1',
-    ];
+    public allowedUserIds = ['1de27b7a-f338-4b84-b4c1-36363580a1b1'];
+    // public allowedUserIds = [
+    //     '06T4lgj7x1emjUEMCmPnJYPFjum2',
+    //     'iIeZlcLjmebZSoEMuquh4F2htN92',
+    //     'LkkX7f9yheRFHNwZkoCHhMb6AmC2',
+    //     'S09Ert0pOpRKdb7pnc4rXFfyeWe2',
+    //     'o24opqInUhbxnC9MFywy3YLLBE03',
+    //     '0ZLQk9ekq3RJXMc2RMpCE8NEkJ73',
+    //     'tpXpbNAPKpX1evoxSeRJs0O0pB02',
+    //     'IoTwZeoPiSemew2z5IBbQcHPaNi2',
+    //     'DxOw25Q8XigIlZMfnfN7vaCaVPo1',
+    // ];
 
     constructor(
         private firebaseService: FirebaseService,
+        private readonly supabaseService: SupabaseService,
         private router: Router,
-        private messageService: MessageService,
-        private storageService: StorageService
+        private messageService: MessageService
     ) {
         this.setAuthStatus(this.user);
         this.initFirebaseUserListener();
@@ -69,28 +71,53 @@ export class AuthenticationService {
         // a `null` user is not authenticated OR if firebase hasn't finished initializing (pulling from WEB sql & making API call).
         // This makes it extremely difficult to rely on it for checking for unauthenticated state for app initialization.
 
-        this.subscriptions.add(
-            this.firebaseService.getAuthInstance().onAuthStateChanged(
-                user => {
-                    if (user) {
-                        this.user = {
-                            id: user.uid,
-                            email: user.email || '',
-                            emailVerified: user.emailVerified,
-                            displayName: user.displayName || '',
-                            photoURL: user.photoURL || '',
-                        };
-                        this.getUserMetaData();
-                        this.setAuthStatus(this.user);
-                    } else {
-                        this.setAuthStatus(null);
-                    }
+        this.supabaseService.authChanges((event: AuthChangeEvent, session: Session | null) => {
+            if (!session || session === null || session.user === null) {
+                this.setAuthStatus(null);
+
+                return;
+            }
+
+            const user = session.user;
+            const userProfileData: Profile = user.user_metadata;
+            this.user = {
+                id: user.id,
+                email: user.email,
+                profile: {
+                    displayName: userProfileData.displayName,
+                    firstName: userProfileData.firstName,
+                    lastName: userProfileData.lastName,
+                    photoURL: userProfileData.photoURL,
+                    plan: userProfileData.plan,
                 },
-                error => {
-                    this.setAuthStatus(null);
-                }
-            )
-        );
+            };
+
+            this.setAuthStatus(this.user);
+        });
+
+        // this.subscriptions.add(
+        //     this.firebaseService.getAuthInstance().onAuthStateChanged(
+        //         user => {
+        //             if (user) {
+        //                 this.user = {
+        //                     id: user.uid,
+        //                     email: user.email || '',
+        //                     profile: {
+        //                         displayName: user.displayName || '',
+        //                         photoURL: user.photoURL || '',
+        //                     },
+        //                 };
+        //                 // this.getUserMetaData();
+        //                 this.setAuthStatus(this.user);
+        //             } else {
+        //                 this.setAuthStatus(null);
+        //             }
+        //         },
+        //         error => {
+        //             this.setAuthStatus(null);
+        //         }
+        //     )
+        // );
     }
 
     ngOnDestroy() {
@@ -109,96 +136,105 @@ export class AuthenticationService {
         return this.firebaseService.getAuthInstance().currentUser;
     }
 
-    public register(email: string, password: string, firstName: string, lastName: string, plan: UserPlan) {
-        from(this.createUserAndAttachMetadata(email, password, firstName, lastName, plan)).subscribe(
-            success => {
-                this.checkNewUserProjects(email);
-                if (plan !== 'Essential') {
-                    this.router.navigate(['/auth/confirmation?plan=' + plan]);
-                } else {
-                    this.router.navigate(['/auth/confirmation']);
-                }
-                if (!this.allowedUserIds.includes(this.user?.id || '')) {
-                    this.logout(false);
-                }
-            },
-            error => {
-                const msg = {
-                    severity: 'error',
-                    key: 'global-toast',
-                    life: 5000,
-                    closable: true,
-                    detail: '',
-                };
-
-                msg.detail = error?.message ? error.message : error;
-
-                this.messageService.add(msg);
-            }
-        );
-    }
-
-    private createUserAndAttachMetadata(
-        email: string,
-        password: string,
-        firstName: string,
-        lastName: string,
-        plan: UserPlan
-    ) {
-        const firebaseAuth = this.firebaseService.getAuthInstance();
-        return firebaseAuth.setPersistence('local').then(() => {
-            firebaseAuth
-                .createUserWithEmailAndPassword(email, password)
-                .then(userCredential => {
-                    const { user } = userCredential;
-                    const parsedUser = {
-                        id: user!.uid,
-                        email: user!.email || undefined,
-                        emailVerified: user!.emailVerified,
-                    };
-                    this.user = parsedUser;
-                    const updateUserMetadata = this.firebaseService
-                        .getFunctionsInstance()
-                        .httpsCallable('updateUserMetadata');
-                    // .httpsCallable('updateUserMetadata', {});
-
-                    return from(updateUserMetadata({ firstName, lastName, plan, email }));
-                })
-                .then(() => {
-                    this.getCurrentUser()!.updateProfile({
-                        displayName: firstName + ' ' + lastName,
-                    });
-                });
-        });
-    }
-
-    async getUserMetaData() {
-        if (this.user) {
-            const userRef = this.firebaseService
-                .getDbInstance()
-                .collection('users')
-                .doc(this.user.id);
-            try {
-                const doc = await userRef.get();
-                if (doc.exists) {
-                    this.user.plan = doc.data()?.plan || '';
-                    this.user.photoFilePath = doc.data()?.photoFilePath || '';
-                    this.user.firstName = doc.data()?.firstName || '';
-                    this.user.lastName = doc.data()?.lastName || '';
-                } else {
-                    console.log('User does not exist.');
-                }
-            } catch (error) {
-                // this.messageService.add({
-                //     severity: 'error',
-                //     key: 'global-toast',
-                //     life: 5000,
-                //     closable: true,
-                //     detail: 'Error fetching user details.',
-                // });
-            }
+    public async register(email: string, password: string, firstName: string, lastName: string, plan: UserPlan) {
+        const { user } = await this.supabaseService.signUp(email, password, { firstName, lastName, plan });
+        if (!user || user === null) {
+            return;
         }
+
+        const allowedUserId = this.allowedUserIds.includes(user.id);
+        if (!allowedUserId) {
+            this.logout(false);
+        }
+
+        this.router.navigate(['/auth/confirmation']);
+
+        // from(this.createUserAndAttachMetadata(email, password, firstName, lastName, plan)).subscribe(
+        //     success => {
+        //         this.checkNewUserProjects(email);
+        //         if (plan !== 'Essential') {
+        //             this.router.navigate(['/auth/confirmation?plan=' + plan]);
+        //         } else {
+        //             this.router.navigate(['/auth/confirmation']);
+        //         }
+        //         if (!this.allowedUserIds.includes(this.user?.id || '')) {
+        //             this.logout(false);
+        //         }
+        //     },
+        //     error => {
+        //         const msg = {
+        //             severity: 'error',
+        //             key: 'global-toast',
+        //             life: 5000,
+        //             closable: true,
+        //             detail: '',
+        //         };
+        //         msg.detail = error?.message ? error.message : error;
+        //         this.messageService.add(msg);
+        //     }
+        // );
     }
+
+    // private createUserAndAttachMetadata(
+    //     email: string,
+    //     password: string,
+    //     firstName: string,
+    //     lastName: string,
+    //     plan: UserPlan
+    // ) {
+    //     const firebaseAuth = this.firebaseService.getAuthInstance();
+    //     return firebaseAuth.setPersistence('local').then(() => {
+    //         firebaseAuth
+    //             .createUserWithEmailAndPassword(email, password)
+    //             .then(userCredential => {
+    //                 const { user } = userCredential;
+    //                 const parsedUser = {
+    //                     id: user!.uid,
+    //                     email: user!.email || undefined,
+    //                     emailVerified: user!.emailVerified,
+    //                 };
+    //                 this.user = parsedUser;
+    //                 const updateUserMetadata = this.firebaseService
+    //                     .getFunctionsInstance()
+    //                     .httpsCallable('updateUserMetadata');
+    //                 // .httpsCallable('updateUserMetadata', {});
+
+    //                 return from(updateUserMetadata({ firstName, lastName, plan, email }));
+    //             })
+    //             .then(() => {
+    //                 this.getCurrentUser()!.updateProfile({
+    //                     displayName: firstName + ' ' + lastName,
+    //                 });
+    //             });
+    //     });
+    // }
+
+    // async getUserMetaData() {
+    //     if (this.user) {
+    //         const userRef = this.firebaseService
+    //             .getDbInstance()
+    //             .collection('users')
+    //             .doc(this.user.id);
+    //         try {
+    //             const doc = await userRef.get();
+    //             if (doc.exists) {
+    //                 this.user.profile.plan = doc.data()?.plan || '';
+    //                 this.user.profile.firstName = doc.data()?.firstName || '';
+    //                 this.user.profile.lastName = doc.data()?.lastName || '';
+    //             } else {
+    //                 console.log('User does not exist.');
+    //             }
+    //         } catch (error) {
+    //             // this.messageService.add({
+    //             //     severity: 'error',
+    //             //     key: 'global-toast',
+    //             //     life: 5000,
+    //             //     closable: true,
+    //             //     detail: 'Error fetching user details.',
+    //             // });
+    //         }
+    //     }
+    // }
 
     public getUserGroupMetaData(projectMembers: string[]) {
         const members: User[] = [];
@@ -220,100 +256,125 @@ export class AuthenticationService {
             });
     }
 
-    public setUserMetaData({
-        photoFilePath,
-        plan,
-        firstName,
-        lastName,
-        email,
-    }: {
-        photoFilePath?: string;
-        plan?: string;
-        firstName?: string;
-        lastName?: string;
-        email?: string;
-    }) {
-        if (!this.user) {
+    // public setUserMetaData({
+    //     photoFilePath,
+    //     plan,
+    //     firstName,
+    //     lastName,
+    //     email,
+    // }: {
+    //     photoFilePath?: string;
+    //     plan?: string;
+    //     firstName?: string;
+    //     lastName?: string;
+    //     email?: string;
+    // }) {
+    //     if (!this.user) {
+    //         return;
+    //     }
+    //     const update = {
+    //         ...(photoFilePath ? { photoFilePath } : {}),
+    //         ...(plan ? { plan } : {}),
+    //         ...(firstName ? { firstName } : {}),
+    //         ...(lastName ? { lastName } : {}),
+    //         ...(email ? { email } : {}),
+    //     };
+
+    //     const userRef = this.firebaseService
+    //         .getDbInstance()
+    //         .collection('users')
+    //         .doc(this.user.id);
+
+    //     return userRef
+    //         .update(update)
+    //         .then(() => {
+    //             return true;
+    //         })
+    //         .catch((error: Error) => {
+    //             this.messageService.add({
+    //                 severity: 'error',
+    //                 key: 'global-toast',
+    //                 life: 5000,
+    //                 closable: true,
+    //                 detail: 'Error updating user info.',
+    //             });
+
+    //             return false;
+    //         });
+    // }
+
+    public async login(email: string, password: string) {
+        const { user } = await this.supabaseService.signIn(email, password);
+
+        if (!user || user === null) {
+            this.messageService.add({
+                severity: 'error',
+                key: 'global-toast',
+                life: 5000,
+                closable: true,
+                detail: 'Invalid email or password.',
+            });
             return;
         }
-        const update = {
-            ...(photoFilePath ? { photoFilePath } : {}),
-            ...(plan ? { plan } : {}),
-            ...(firstName ? { firstName } : {}),
-            ...(lastName ? { lastName } : {}),
-            ...(email ? { email } : {}),
-        };
+        const allowedUserId = this.allowedUserIds.includes(user?.id);
 
-        const userRef = this.firebaseService
-            .getDbInstance()
-            .collection('users')
-            .doc(this.user.id);
-
-        return userRef
-            .update(update)
-            .then(() => {
-                return true;
-            })
-            .catch((error: Error) => {
-                this.messageService.add({
-                    severity: 'error',
-                    key: 'global-toast',
-                    life: 5000,
-                    closable: true,
-                    detail: 'Error updating user info.',
-                });
-
-                return false;
+        if (!allowedUserId) {
+            this.messageService.add({
+                severity: 'error',
+                key: 'global-toast',
+                life: 5000,
+                closable: true,
+                detail: 'You may not login at this time.',
             });
-    }
 
-    public login(email: string, password: string) {
-        // this.messageService.add({
-        //     severity: 'error',
-        //     key: 'global-toast',
-        //     life: 5000,
-        //     closable: true,
-        //     detail: 'You may not login at this time.',
-        // });
+            await this.supabaseService.signOut();
+            return;
+        }
 
-        // return;
+        const parsedUser = {
+            id: user.id,
+            email: user.email,
+            profile: user.user_metadata as Profile,
+        };
+        this.user = parsedUser;
+        this.router.navigate([this.redirectUrl]);
 
-        from(this.firebaseService.getAuthInstance()!.signInWithEmailAndPassword(email, password)).subscribe(
-            firebaseUser => {
-                const { user } = firebaseUser;
+        // from(this.firebaseService.getAuthInstance()!.signInWithEmailAndPassword(email, password)).subscribe(
+        //     firebaseUser => {
+        //         const { user } = firebaseUser;
 
-                if (user && !this.allowedUserIds.includes(user?.uid)) {
-                    this.firebaseService.getAuthInstance()!.signOut();
+        //         if (user && !this.allowedUserIds.includes(user?.uid)) {
+        //             this.firebaseService.getAuthInstance()!.signOut();
 
-                    this.messageService.add({
-                        severity: 'error',
-                        key: 'global-toast',
-                        life: 5000,
-                        closable: true,
-                        detail: 'You may not login at this time.',
-                    });
+        //             this.messageService.add({
+        //                 severity: 'error',
+        //                 key: 'global-toast',
+        //                 life: 5000,
+        //                 closable: true,
+        //                 detail: 'You may not login at this time.',
+        //             });
 
-                    return;
-                }
+        //             return;
+        //         }
 
-                const parsedUser = {
-                    id: user!.uid,
-                    email: user!.email || undefined,
-                    emailVerified: user!.emailVerified,
-                };
-                this.user = parsedUser;
-                this.router.navigate([this.redirectUrl]);
-            },
-            err => {
-                this.messageService.add({
-                    severity: 'error',
-                    key: 'global-toast',
-                    life: 5000,
-                    closable: true,
-                    detail: 'Invalid email or password.',
-                });
-            }
-        );
+        // const parsedUser = {
+        //     id: user!.uid,
+        //     email: user!.email || undefined,
+        //     emailVerified: user!.emailVerified,
+        // };
+        // this.user = parsedUser;
+        // this.router.navigate([this.redirectUrl]);
+        //     },
+        //     err => {
+        //         this.messageService.add({
+        //             severity: 'error',
+        //             key: 'global-toast',
+        //             life: 5000,
+        //             closable: true,
+        //             detail: 'Invalid email or password.',
+        //         });
+        //     }
+        // );
     }
 
     public logout(redirect?: boolean) {
@@ -436,87 +497,87 @@ export class AuthenticationService {
         });
     }
 
-    public updateProfileDetails(userDetails: User) {
-        const photoURL = userDetails.photoURL || '/assets/placeholder/placeholder-profile.png';
-        const plan = userDetails.plan || '';
-        const photoFilePath = userDetails.photoFilePath || '';
-        const firstName = userDetails.firstName || '';
-        const lastName = userDetails.lastName || '';
-        const email = userDetails.email || '';
+    // public updateProfileDetails(userDetails: User) {
+    //     const photoURL = userDetails.photoURL || '/assets/placeholder/placeholder-profile.png';
+    //     const plan = userDetails.plan || '';
+    //     const photoFilePath = userDetails.photoFilePath || '';
+    //     const firstName = userDetails.firstName || '';
+    //     const lastName = userDetails.lastName || '';
+    //     const email = userDetails.email || '';
 
-        const currentUser = this.getCurrentUser();
+    //     const currentUser = this.getCurrentUser();
 
-        if (!currentUser || currentUser === null) {
-            return;
-        }
+    //     if (!currentUser || currentUser === null) {
+    //         return;
+    //     }
 
-        currentUser
-            .updateProfile({
-                displayName: `${firstName} ${lastName}`,
-                photoURL,
-            })
-            .then(
-                () => {
-                    this.setUserMetaData({ photoFilePath, plan, firstName, lastName, email });
-                    this.messageService.add({
-                        severity: 'success',
-                        key: 'global-toast',
-                        life: 5000,
-                        closable: true,
-                        detail: 'Profile updated',
-                    });
-                },
-                (error: Error) => {
-                    this.messageService.add({
-                        severity: 'error',
-                        key: 'global-toast',
-                        life: 5000,
-                        closable: true,
-                        detail: 'Failed to update profile',
-                    });
-                }
-            );
-    }
+    //     currentUser
+    //         .updateProfile({
+    //             displayName: `${firstName} ${lastName}`,
+    //             photoURL,
+    //         })
+    //         .then(
+    //             () => {
+    //                 this.setUserMetaData({ photoFilePath, plan, firstName, lastName, email });
+    //                 this.messageService.add({
+    //                     severity: 'success',
+    //                     key: 'global-toast',
+    //                     life: 5000,
+    //                     closable: true,
+    //                     detail: 'Profile updated',
+    //                 });
+    //             },
+    //             (error: Error) => {
+    //                 this.messageService.add({
+    //                     severity: 'error',
+    //                     key: 'global-toast',
+    //                     life: 5000,
+    //                     closable: true,
+    //                     detail: 'Failed to update profile',
+    //                 });
+    //             }
+    //         );
+    // }
 
-    public async changeProfilePhoto(file?: File) {
-        if (!file) {
-            return;
-        }
+    // public async changeProfilePhoto(file?: File) {
+    //     if (!file) {
+    //         return;
+    //     }
 
-        // const currentUser = this.getCurrentUser();
-        const currentUser = this.user;
-        if (!currentUser) {
-            return;
-        }
+    //     // const currentUser = this.getCurrentUser();
+    //     const currentUser = this.user;
+    //     if (!currentUser) {
+    //         return;
+    //     }
 
-        try {
-            const currentFilePath = currentUser.photoFilePath;
-            if (currentFilePath) {
-                await this.storageService.deleteFile(currentFilePath);
-            }
+    //     try {
+    //         const currentFilePath = currentUser.photoFilePath;
+    //         if (currentFilePath) {
+    //             await this.storageService.deleteFile(currentFilePath);
+    //         }
 
-            const filesnapshot = await this.storageService.uploadProfileImage(file, currentUser.id!).toPromise();
-            const downloadUrl = await this.storageService.getDownloadUrl(filesnapshot.metadata.fullPath).toPromise();
-            const filePath = filesnapshot.metadata.fullPath;
+    //         const filesnapshot = await this.storageService.uploadProfileImage(file, currentUser.id!).toPromise();
+    //         const downloadUrl = await this.storageService.getDownloadUrl(filesnapshot.metadata.fullPath).toPromise();
+    //         const filePath = filesnapshot.metadata.fullPath;
 
-            const firebaseUser = this.getCurrentUser();
-            await firebaseUser!.updateProfile({ photoURL: downloadUrl });
+    //         const firebaseUser = this.getCurrentUser();
+    //         await firebaseUser!.updateProfile({ photoURL: downloadUrl });
 
-            const success = await this.setUserMetaData({ photoFilePath: filePath });
+    //         const success = await this.setUserMetaData({ photoFilePath: filePath });
 
-            return success;
-        } catch (e) {
-            this.messageService.add({
-                severity: 'error',
-                key: 'global-toast',
-                life: 5000,
-                closable: true,
-                detail: 'Failed to upload profile image',
-            });
+    //         return success;
+    //     } catch (e) {
+    //         this.messageService.add({
+    //             severity: 'error',
+    //             key: 'global-toast',
+    //             life: 5000,
+    //             closable: true,
+    //             detail: 'Failed to upload profile image',
+    //         });
 
-            return false;
-        }
-    }
+    //         return false;
+    //     }
+    // }
 
     public updateEmail(email: string, userProvidedPassword: string): Promise<any> {
         // TODO: update email in user collection as well.. or switch to a different Auth provider?

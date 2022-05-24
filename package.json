@@ -53,6 +53,7 @@
         "@nestjs/core": "7.6.18",
         "@nestjs/platform-express": "7.6.18",
         "@nrwl/angular": "13.7.2",
+        "@supabase/supabase-js": "^1.35.3",
         "angular-resizable-element": "^5.0.0",
         "firebase": "^8.2.1",
         "firebase-admin": "9.8.0",

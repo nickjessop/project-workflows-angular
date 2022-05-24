@@ -83,7 +83,6 @@ export class NavBarComponent implements OnInit {
 
         this.subscriptions.add(
             this.projectService.projectMode$.subscribe(result => {
-                console.log(result);
                 this.componentMode = result;
                 if (this.componentMode === 'configure') {
                     this.canConfigureProject = true;
@@ -96,8 +95,10 @@ export class NavBarComponent implements OnInit {
         this.subscriptions.add(
             this.authService.$user.subscribe({
                 next: () => {
-                    this.displayName = this.authService.user?.displayName || this.authService.user?.email || '';
-                    this.photoURL = this.authService.user?.photoURL || '/assets/placeholder/placeholder-profile.png';
+                    this.displayName =
+                        this.authService.user?.profile?.displayName || this.authService.user?.email || '';
+                    this.photoURL =
+                        this.authService.user?.profile?.photoURL || '/assets/placeholder/placeholder-profile.png';
                     this.loggedInUserId = this.authService.user?.id || '';
                 },
                 error: (err: any) => {

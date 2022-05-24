@@ -17,7 +17,6 @@ export class AuthenticationComponent implements OnInit {
         plan?: UserPlan;
         password: string;
         password2?: string;
-        planPrice?: string;
         email: string;
     } = {
         email: '',
@@ -25,8 +24,7 @@ export class AuthenticationComponent implements OnInit {
         password2: '',
         firstName: '',
         lastName: '',
-        plan: 'Essential',
-        planPrice: '9',
+        plan: 'Starter',
     };
 
     public authMode: 'register' | 'login' = 'login';
@@ -51,7 +49,6 @@ export class AuthenticationComponent implements OnInit {
             this.activatedRoute.queryParams.subscribe(params => {
                 this.authInfo.email = params['email'] || '';
                 this.authInfo.plan = params['plan'] || 'Essential';
-                this.authInfo.planPrice = params['planPrice'] || '9';
             })
         );
     }

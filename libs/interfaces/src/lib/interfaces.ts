@@ -2,16 +2,19 @@ import { ValidatorFn } from '@angular/forms';
 export interface User {
     id?: string;
     email?: string;
-    emailVerified?: boolean;
+    profile?: Profile;
+}
+
+export interface Profile {
+    plan?: UserPlan;
     displayName?: string;
     firstName?: string;
     lastName?: string;
     photoURL?: string;
-    photoFilePath?: string;
-    plan?: UserPlan;
 }
 
-export type UserPlan = 'Plus' | 'Growth' | 'Essential' | 'Free';
+// Starter is free
+export type UserPlan = 'Plus' | 'Growth' | 'Starter';
 
 export interface Validator {
     name: string;
