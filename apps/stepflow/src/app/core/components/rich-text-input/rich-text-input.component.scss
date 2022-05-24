@@ -1,5 +1,41 @@
-.rich-text {
+:host ::ng-deep .rich-text {
     width: 100%;
+    p br {
+        display: none;
+    }
+    p,
+    ul,
+    ol {
+        margin: 0;
+        padding-bottom: 1rem;
+    }
+    ul,
+    ol {
+        padding-top: 0.5rem;
+    }
+    li > ul,
+    li > ol {
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+    blockquote {
+        padding: 1rem 0.5rem;
+        border-left: 3px solid var(--surface-d);
+        margin: 0;
+        margin-bottom: 1rem;
+        margin-left: 0.5rem;
+        display: flex;
+        align-items: center;
+        p {
+            padding: 0 !important;
+        }
+    }
+    code {
+        display: block;
+        background: var(--surface-b);
+        padding: 1rem;
+        border-radius: 2px;
+    }
 }
 
 .editor .p-editor-container .p-editor-content .ql-editor {

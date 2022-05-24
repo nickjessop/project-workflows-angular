@@ -14,25 +14,21 @@
     </ng-container>
     <ng-container *ngIf="componentMode === 'edit' || componentMode === 'configure'">
         <div class="rich-text edit">
-            <p-editor
-                placeholder="Add content"
-                [(ngModel)]="field.metadata.data.value"
-                [style]="{ height: '100%', fontSize: '1rem' }"
-                formats="['Bold', 'Underline', 'Italic', 'Link', 'List']"
-                styleClass="editor"
-                (onSelectionChange)="onFocusIn($event)"
-                #textBlock
-            >
-                <p-header>
-                    <span class="ql-formats">
-                        <button class="ql-bold" aria-label="Bold"></button>
-                        <button class="ql-italic" aria-label="Italic"></button>
-                        <button class="ql-underline" aria-label="Underline"></button>
-                        <button class="ql-link" aria-label="Link"></button>
-                        <button class="ql-list" aria-label="Unordered List" value="bullet"></button>
-                    </span>
-                </p-header>
-            </p-editor>
+            <form [formGroup]="form" on-focusin="onFocusIn($event)" #textBlock>
+                <ngx-editor-menu [editor]="editor" [toolbar]="toolbar"> </ngx-editor-menu>
+                <ngx-editor-floating-menu [editor]="editor">
+                    <ngx-editor-menu [editor]="editor" [toolbar]="toolbar"></ngx-editor-menu>
+                </ngx-editor-floating-menu>
+                <ngx-editor
+                    [editor]="editor"
+                    [(ngModel)]="field.metadata.data.value"
+                    (onSelectionChange)="onFocusIn($event)"
+                    formControlName="editorContent"
+                    [placeholder]="'Start typing to add content...'"
+                >
+                </ngx-editor>
+            </form>
+
             <div *ngIf="showSaveButton" class="p-d-flex p-align-center p-mt-2">
                 <button (click)="saveTextblock()" class="p-button p-mr-2">Save</button>
                 <i class="ms-01">Unsaved changes</i>

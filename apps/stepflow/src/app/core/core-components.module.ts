@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { ResizableModule } from 'angular-resizable-element';
+import { NgxEditorModule } from 'ngx-editor';
 import { PrimengModule } from '../primeng/primeng.module';
 import { BaseFieldComponent } from './components/base-field/base-field.component';
 import { CheckboxesComponent } from './components/checkboxes/checkboxes.component';
@@ -41,7 +42,24 @@ import { CoreComponentResolverDirective } from './core-component-resolver.direct
         DragDropModule,
         BrowserModule,
         ResizableModule,
-        // AngularResizeElementModule,
+        NgxEditorModule.forRoot({
+            locals: {
+                // menu
+                bold: 'Bold',
+                italic: 'Italic',
+                code: 'Code',
+                blockquote: 'Blockquote',
+                underline: 'Underline',
+                strike: 'Strike',
+                bullet_list: 'Bullet List',
+                ordered_list: 'Ordered List',
+                // popups, forms, others...
+                url: 'URL',
+                text: 'Text',
+                openInNewTab: 'Open in new tab',
+                remove: 'Remove',
+            },
+        }),
     ],
     exports: [
         RichTextInputComponent,
