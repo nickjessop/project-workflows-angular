@@ -60,6 +60,16 @@
             <div class="p-col-9 p-d-flex p-ai-center"></div>
         </ng-template>
     </div>
+
+    <!-- 
+        I'll leave adding a slide-over to the tailwind experts, that stuff is hierglyphics to me.
+        You should be able to just place the comments-container in a slide over, add the styling you want
+        and Bob's your uncle (hehe).
+        * Tailwind CSS for slide overs: https://tailwindui.com/components/application-ui/overlays/slide-overs
+    -->
+    <div class="p-px-2">
+        <comments-container [blocks]="currentStep?.components"></comments-container>
+    </div>
     <!-- <div class="p-pb-4 powered-by ms-01">
         Powered by Stepflow <p-chip label="Beta" styleClass="p-ml-1 custom-chip"></p-chip>
     </div> -->

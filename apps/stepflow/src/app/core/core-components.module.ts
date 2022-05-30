@@ -17,6 +17,7 @@ import { RichTextInputComponent } from './components/rich-text-input/rich-text-i
 import { TableComponent } from './components/table/table.component';
 import { TextInputComponent } from './components/text-input/text-input.component';
 import { CoreComponentResolverDirective } from './core-component-resolver.directive';
+import { CommentsModule } from '../comments/comments.module';
 
 @NgModule({
     declarations: [
@@ -42,6 +43,7 @@ import { CoreComponentResolverDirective } from './core-component-resolver.direct
         BrowserModule,
         ResizableModule,
         // AngularResizeElementModule,
+        CommentsModule,
     ],
     exports: [
         RichTextInputComponent,

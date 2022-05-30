@@ -1,0 +1,12 @@
+<div>
+    <h2>{{threadHeader || 'Untitled Block Thread'}}</h2>
+    <div *ngFor="let comment of comments">
+        <comment-view
+            [comment]="comment"
+            (onCommentEdit)="editComment($event)"
+            (onResolve)="resolveComment($event)"
+            (onDelete)="deleteComment($event)">
+        </comment-view>
+    </div>
+    <comment-edit (onCommentEdit)="editComment($event)" (onCancel)="cancelEdit"></comment-edit>
+</div>

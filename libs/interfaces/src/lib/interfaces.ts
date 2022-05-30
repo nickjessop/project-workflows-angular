@@ -176,12 +176,13 @@ export interface ShareLink {
  */
 
 export interface Comment {
-  commentId: string;
-  createdAt: number;
-  updatedAt: number;
-  parentCommentId: string;
-  authorId: string;
-  blockId: string;
+  commentId?: string;
+  createdAt?: number;
+  updatedAt?: number;
+  parentCommentId?: string;
+  authorId?: string;
+  blockId?: string;
   body: string;
-  deleted: boolean;
+  deleted?: boolean;
+  resolved?: boolean;
 }
