@@ -18,23 +18,25 @@ export class CommentsService {
 
   // API Methods
 
-  public async listComments(blockId: string): Promise<Array<Comment>> {
+  public async listComments(blockIds: string[]): Promise<Comment[]> {
+    console.log(`listComments called with blockIds: ${JSON.stringify(blockIds)}`)
     return this.firebaseService
       .getDbInstance()!
       .collection(this.COMMENTS_COLLECTION)
-      .where('blockId', '==', blockId)
+      .where('blockId', 'in', blockIds)
       .where('deleted', '==', false)
       .get()
       .then(
         querySnapshot => {
-          const comments: Array<Comment> = []
+          const comments: Comment[] = []
           querySnapshot.forEach(doc => {
             comments.push(doc.data() as Comment)
           })
+          console.log(`listComments found ${comments.length} comments.`);
           return comments
         },
         error => {
-          console.error(`Error occurred while listing comments for blockId: ${blockId}`)
+          console.error(`Error occurred while listing comments for blockIds: ${JSON.stringify(blockIds)}`)
           return []
         }
       )
@@ -62,7 +64,7 @@ export class CommentsService {
       )
   }
 
-  public async addComment(comment: Partial<Comment>): Promise<boolean> {
+  public async addComment(comment: Comment): Promise<boolean> {
     
     const authorId: string | undefined = this.authenticationService.getCurrentUser()?.uid
     if (!authorId) {
@@ -86,9 +88,7 @@ export class CommentsService {
       .add(commentToSave)
       .then(
           documentRef => {
-              // baseProject.id = documentRef.id;
-              // documentRef.update({ id: documentRef.id });
-              console.log(`addComment returned the documentRef: ${documentRef}`)
+              console.log('addComment returned the documentRef:', documentRef);
               return true;
           },
           error => {
@@ -123,10 +123,31 @@ export class CommentsService {
     return this.putComment(comment)
   }
 
-  public async deleteComment(comment: Comment): Promise<Comment | null> {
-    comment.deleted = true
+  public async setResolvedStatusOfComment(comment: Comment, resolve: boolean): Promise<boolean> {
+    comment.resolved = resolve
     comment.updatedAt = Date.now()
-    return this.putComment(comment)
+    return this.putComment(comment).then(
+      () => {
+        return true
+      },
+      error => {
+        console.error(`Error occurred while setting resolved status of comment: ${error}`)
+        return false
+      }
+    )
   }
 
+  public async deleteComment(comment: Comment): Promise<boolean> {
+    comment.deleted = true
+    comment.updatedAt = Date.now()
+    return this.putComment(comment).then(
+      () => {
+        return true
+      },
+      error => {
+        console.error(`Error occurred while deleting comment: ${error}`)
+        return false
+      }
+    )
+  }
 }
