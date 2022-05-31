@@ -2,14 +2,14 @@ import { ValidatorFn } from '@angular/forms';
 export interface User {
     id?: string;
     email?: string;
-    profile?: Profile;
+    profile: Profile;
 }
 
 export interface Profile {
-    plan?: UserPlan;
-    displayName?: string;
-    firstName?: string;
-    lastName?: string;
+    plan: UserPlan;
+    displayName: string;
+    firstName: string;
+    lastName: string;
     photoURL?: string;
 }
 

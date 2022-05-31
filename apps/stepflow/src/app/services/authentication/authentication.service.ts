@@ -48,7 +48,7 @@ export class AuthenticationService {
         private messageService: MessageService
     ) {
         this.setAuthStatus(this.user);
-        this.initFirebaseUserListener();
+        this.initUserListener();
     }
 
     private setAuthStatus(user?: User | null) {
@@ -61,16 +61,7 @@ export class AuthenticationService {
         }
     }
 
-    initFirebaseUserListener() {
-        // this.firebaseService.getAuthInstance().currentUser gets a snapshot of who the current user is.
-        // Because Firebase has async calls to pull user info from Web SQL and then has to make an API call to fetch user info on initialization,
-        // It doesn't make sense to use this synchronous user fetch method
-
-        // this.firebaseService.getAuthInstance().onAuthStateChanged() gives us the opportunity to receive events on when
-        // the user status changes (authenticated vs unauthenticated).  The problem is that onAuthStateChanged() sends us
-        // a `null` user is not authenticated OR if firebase hasn't finished initializing (pulling from WEB sql & making API call).
-        // This makes it extremely difficult to rely on it for checking for unauthenticated state for app initialization.
-
+    initUserListener() {
         this.supabaseService.authChanges((event: AuthChangeEvent, session: Session | null) => {
             if (!session || session === null || session.user === null) {
                 this.setAuthStatus(null);
@@ -79,7 +70,7 @@ export class AuthenticationService {
             }
 
             const user = session.user;
-            const userProfileData: Profile = user.user_metadata;
+            const userProfileData = user.user_metadata;
             this.user = {
                 id: user.id,
                 email: user.email,
@@ -94,30 +85,6 @@ export class AuthenticationService {
 
             this.setAuthStatus(this.user);
         });
-
-        // this.subscriptions.add(
-        //     this.firebaseService.getAuthInstance().onAuthStateChanged(
-        //         user => {
-        //             if (user) {
-        //                 this.user = {
-        //                     id: user.uid,
-        //                     email: user.email || '',
-        //                     profile: {
-        //                         displayName: user.displayName || '',
-        //                         photoURL: user.photoURL || '',
-        //                     },
-        //                 };
-        //                 // this.getUserMetaData();
-        //                 this.setAuthStatus(this.user);
-        //             } else {
-        //                 this.setAuthStatus(null);
-        //             }
-        //         },
-        //         error => {
-        //             this.setAuthStatus(null);
-        //         }
-        //     )
-        // );
     }
 
     ngOnDestroy() {
@@ -137,7 +104,12 @@ export class AuthenticationService {
     }
 
     public async register(email: string, password: string, firstName: string, lastName: string, plan: UserPlan) {
-        const { user } = await this.supabaseService.signUp(email, password, { firstName, lastName, plan });
+        const { user } = await this.supabaseService.signUp(email, password, {
+            firstName,
+            lastName,
+            plan,
+            displayName: `${firstName} ${lastName}`,
+        });
         if (!user || user === null) {
             return;
         }
@@ -148,93 +120,7 @@ export class AuthenticationService {
         }
 
         this.router.navigate(['/auth/confirmation']);
-
-        // from(this.createUserAndAttachMetadata(email, password, firstName, lastName, plan)).subscribe(
-        //     success => {
-        //         this.checkNewUserProjects(email);
-        //         if (plan !== 'Essential') {
-        //             this.router.navigate(['/auth/confirmation?plan=' + plan]);
-        //         } else {
-        //             this.router.navigate(['/auth/confirmation']);
-        //         }
-        //         if (!this.allowedUserIds.includes(this.user?.id || '')) {
-        //             this.logout(false);
-        //         }
-        //     },
-        //     error => {
-        //         const msg = {
-        //             severity: 'error',
-        //             key: 'global-toast',
-        //             life: 5000,
-        //             closable: true,
-        //             detail: '',
-        //         };
-        //         msg.detail = error?.message ? error.message : error;
-        //         this.messageService.add(msg);
-        //     }
-        // );
     }
-
-    // private createUserAndAttachMetadata(
-    //     email: string,
-    //     password: string,
-    //     firstName: string,
-    //     lastName: string,
-    //     plan: UserPlan
-    // ) {
-    //     const firebaseAuth = this.firebaseService.getAuthInstance();
-    //     return firebaseAuth.setPersistence('local').then(() => {
-    //         firebaseAuth
-    //             .createUserWithEmailAndPassword(email, password)
-    //             .then(userCredential => {
-    //                 const { user } = userCredential;
-    //                 const parsedUser = {
-    //                     id: user!.uid,
-    //                     email: user!.email || undefined,
-    //                     emailVerified: user!.emailVerified,
-    //                 };
-    //                 this.user = parsedUser;
-    //                 const updateUserMetadata = this.firebaseService
-    //                     .getFunctionsInstance()
-    //                     .httpsCallable('updateUserMetadata');
-    //                 // .httpsCallable('updateUserMetadata', {});
-
-    //                 return from(updateUserMetadata({ firstName, lastName, plan, email }));
-    //             })
-    //             .then(() => {
-    //                 this.getCurrentUser()!.updateProfile({
-    //                     displayName: firstName + ' ' + lastName,
-    //                 });
-    //             });
-    //     });
-    // }
-
-    // async getUserMetaData() {
-    //     if (this.user) {
-    //         const userRef = this.firebaseService
-    //             .getDbInstance()
-    //             .collection('users')
-    //             .doc(this.user.id);
-    //         try {
-    //             const doc = await userRef.get();
-    //             if (doc.exists) {
-    //                 this.user.profile.plan = doc.data()?.plan || '';
-    //                 this.user.profile.firstName = doc.data()?.firstName || '';
-    //                 this.user.profile.lastName = doc.data()?.lastName || '';
-    //             } else {
-    //                 console.log('User does not exist.');
-    //             }
-    //         } catch (error) {
-    //             // this.messageService.add({
-    //             //     severity: 'error',
-    //             //     key: 'global-toast',
-    //             //     life: 5000,
-    //             //     closable: true,
-    //             //     detail: 'Error fetching user details.',
-    //             // });
-    //         }
-    //     }
-    // }
 
     public getUserGroupMetaData(projectMembers: string[]) {
         const members: User[] = [];
@@ -338,43 +224,6 @@ export class AuthenticationService {
         };
         this.user = parsedUser;
         this.router.navigate([this.redirectUrl]);
-
-        // from(this.firebaseService.getAuthInstance()!.signInWithEmailAndPassword(email, password)).subscribe(
-        //     firebaseUser => {
-        //         const { user } = firebaseUser;
-
-        //         if (user && !this.allowedUserIds.includes(user?.uid)) {
-        //             this.firebaseService.getAuthInstance()!.signOut();
-
-        //             this.messageService.add({
-        //                 severity: 'error',
-        //                 key: 'global-toast',
-        //                 life: 5000,
-        //                 closable: true,
-        //                 detail: 'You may not login at this time.',
-        //             });
-
-        //             return;
-        //         }
-
-        // const parsedUser = {
-        //     id: user!.uid,
-        //     email: user!.email || undefined,
-        //     emailVerified: user!.emailVerified,
-        // };
-        // this.user = parsedUser;
-        // this.router.navigate([this.redirectUrl]);
-        //     },
-        //     err => {
-        //         this.messageService.add({
-        //             severity: 'error',
-        //             key: 'global-toast',
-        //             life: 5000,
-        //             closable: true,
-        //             detail: 'Invalid email or password.',
-        //         });
-        //     }
-        // );
     }
 
     public logout(redirect?: boolean) {
@@ -497,133 +346,69 @@ export class AuthenticationService {
         });
     }
 
-    // public updateProfileDetails(userDetails: User) {
-    //     const photoURL = userDetails.photoURL || '/assets/placeholder/placeholder-profile.png';
-    //     const plan = userDetails.plan || '';
-    //     const photoFilePath = userDetails.photoFilePath || '';
-    //     const firstName = userDetails.firstName || '';
-    //     const lastName = userDetails.lastName || '';
-    //     const email = userDetails.email || '';
+    public updateProfileDetails(profile: Profile) {
+        const updated = this.supabaseService.updateProfile(profile);
+    }
 
-    //     const currentUser = this.getCurrentUser();
+    public async updateEmail(email: string): Promise<any> {
+        const { user, error } = await this.supabaseService.auth.update({ email });
 
-    //     if (!currentUser || currentUser === null) {
-    //         return;
-    //     }
+        if (error || user === null) {
+            this.messageService.add({
+                severity: 'error',
+                key: 'global-toast',
+                life: 5000,
+                closable: true,
+                detail: 'Failed to update email address.',
+            });
 
-    //     currentUser
-    //         .updateProfile({
-    //             displayName: `${firstName} ${lastName}`,
-    //             photoURL,
-    //         })
-    //         .then(
-    //             () => {
-    //                 this.setUserMetaData({ photoFilePath, plan, firstName, lastName, email });
-    //                 this.messageService.add({
-    //                     severity: 'success',
-    //                     key: 'global-toast',
-    //                     life: 5000,
-    //                     closable: true,
-    //                     detail: 'Profile updated',
-    //                 });
-    //             },
-    //             (error: Error) => {
-    //                 this.messageService.add({
-    //                     severity: 'error',
-    //                     key: 'global-toast',
-    //                     life: 5000,
-    //                     closable: true,
-    //                     detail: 'Failed to update profile',
-    //                 });
-    //             }
-    //         );
-    // }
+            return;
+        }
 
-    // public async changeProfilePhoto(file?: File) {
-    //     if (!file) {
-    //         return;
-    //     }
+        // TODO: update email in user collection as well.. or switch to a different Auth provider?d
+        // return new Promise((resolve, reject) => {
+        //     const actionCodeSettings = {
+        //         url: 'https://app.stepflow.co/profile',
+        //     };
 
-    //     // const currentUser = this.getCurrentUser();
-    //     const currentUser = this.user;
-    //     if (!currentUser) {
-    //         return;
-    //     }
-
-    //     try {
-    //         const currentFilePath = currentUser.photoFilePath;
-    //         if (currentFilePath) {
-    //             await this.storageService.deleteFile(currentFilePath);
-    //         }
-
-    //         const filesnapshot = await this.storageService.uploadProfileImage(file, currentUser.id!).toPromise();
-    //         const downloadUrl = await this.storageService.getDownloadUrl(filesnapshot.metadata.fullPath).toPromise();
-    //         const filePath = filesnapshot.metadata.fullPath;
-
-    //         const firebaseUser = this.getCurrentUser();
-    //         await firebaseUser!.updateProfile({ photoURL: downloadUrl });
-
-    //         const success = await this.setUserMetaData({ photoFilePath: filePath });
-
-    //         return success;
-    //     } catch (e) {
-    //         this.messageService.add({
-    //             severity: 'error',
-    //             key: 'global-toast',
-    //             life: 5000,
-    //             closable: true,
-    //             detail: 'Failed to upload profile image',
-    //         });
-
-    //         return false;
-    //     }
-    // }
-
-    public updateEmail(email: string, userProvidedPassword: string): Promise<any> {
-        // TODO: update email in user collection as well.. or switch to a different Auth provider?
-        return new Promise((resolve, reject) => {
-            const actionCodeSettings = {
-                url: 'https://app.stepflow.co/profile',
-            };
-
-            const currentUser = this.getCurrentUser();
-            if (currentUser) {
-                this.reAuthenticateUser(userProvidedPassword)
-                    .then(() => {
-                        currentUser
-                            .verifyBeforeUpdateEmail(email, actionCodeSettings)
-                            .then(() => {
-                                this.messageService.add({
-                                    severity: 'success',
-                                    key: 'global-toast',
-                                    life: 5000,
-                                    closable: true,
-                                    detail: 'Verification email sent.',
-                                });
-                                resolve({ success: true });
-                            })
-                            .catch((error: Error) => {
-                                this.messageService.add({
-                                    severity: 'error',
-                                    key: 'global-toast',
-                                    life: 5000,
-                                    closable: true,
-                                    detail: 'Failed to update email address.',
-                                });
-                                reject(error);
-                            });
-                    })
-                    .catch((error: Error) => {
-                        this.messageService.add({
-                            severity: 'error',
-                            key: 'global-toast',
-                            life: 5000,
-                            closable: true,
-                            detail: 'Incorrect password. Please try again.',
-                        });
-                    });
-            }
-        });
+        //     const currentUser = this.getCurrentUser();
+        //     if (currentUser) {
+        //         this.reAuthenticateUser(userProvidedPassword)
+        //             .then(() => {
+        //                 currentUser
+        //                     .verifyBeforeUpdateEmail(email, actionCodeSettings)
+        //                     .then(() => {
+        //                         this.messageService.add({
+        //                             severity: 'success',
+        //                             key: 'global-toast',
+        //                             life: 5000,
+        //                             closable: true,
+        //                             detail: 'Verification email sent.',
+        //                         });
+        //                         resolve({ success: true });
+        //                     })
+        //                     .catch((error: Error) => {
+        //                         this.messageService.add({
+        //                             severity: 'error',
+        //                             key: 'global-toast',
+        //                             life: 5000,
+        //                             closable: true,
+        //                             detail: 'Failed to update email address.',
+        //                         });
+        //                         reject(error);
+        //                     });
+        //             })
+        //             .catch((error: Error) => {
+        //                 this.messageService.add({
+        //                     severity: 'error',
+        //                     key: 'global-toast',
+        //                     life: 5000,
+        //                     closable: true,
+        //                     detail: 'Incorrect password. Please try again.',
+        //                 });
+        //             });
+        //     }
+        // });
     }
 
     public updatePassword(userProvidedPassword: string): Promise<any> {

@@ -47,41 +47,32 @@ export class ProfileComponent implements OnInit, OnDestroy {
     }
 
     public onSaveProfileSelected() {
-        // this.authService.updateProfileDetails(this.userDetails);
-        // this.displayProfileModal = false;
+        if (!this.userDetails.profile) {
+            return;
+        }
+
+        this.authService.updateProfileDetails(this.userDetails?.profile);
+        this.displayProfileModal = false;
     }
 
     public async onProfileImageUploadSelected($event: { originalEvent: Event; files: FileList; currentFiles: File[] }) {
         // const success = await this.authService.changeProfilePhoto($event.currentFiles[0]);
     }
 
-    public onChangeEmailSelected(password: string) {
-        const currentEmail = this.authService.getCurrentUser()?.email;
-        if (this.userDetails.email && this.userDetails.email != currentEmail) {
-            this.authService
-                .updateEmail(this.userDetails.email, password)
-                .then(() => {
-                    this.passwordVerification = '';
-                    this.displayEmailModal = false;
-                })
-                .catch((error: Error) => {
-                    this.messageService.add({
-                        severity: 'error',
-                        key: 'global-toast',
-                        life: 5000,
-                        closable: true,
-                        detail: 'Unable to send email reset. Please check your email and password and try again.',
-                    });
-                });
-        } else {
+    public onChangeEmailSelected(email?: string) {
+        if (!email || this.authService.getCurrentUser()?.email === email) {
             this.messageService.add({
                 severity: 'error',
                 key: 'global-toast',
                 life: 5000,
                 closable: true,
-                detail: 'Incorrect password or email. Please try again.',
+                detail: 'Unable to send email reset. Please check your entered email.',
             });
+
+            return;
         }
+
+        this.authService.updateEmail(email);
     }
 
     public onChangePasswordSelected(password: string) {

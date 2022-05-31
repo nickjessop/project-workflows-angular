@@ -80,7 +80,7 @@
                     pInputText
                     aria-describedby="Your first name"
                     placeholder="Enter your first name"
-                    [(ngModel)]="userDetails.firstName"
+                    [(ngModel)]="userDetails.profile.firstName"
                 />
             </div>
             <div class="p-field">
@@ -91,15 +91,15 @@
                     pInputText
                     aria-describedby="Your last name"
                     placeholder="Enter your last name"
-                    [(ngModel)]="userDetails.lastName"
+                    [(ngModel)]="userDetails.profile.lastName"
                 />
             </div>
             <div class="p-field">
                 <label for="profileImageUpload">Profile Image</label>
                 <div class="p-d-flex p-ai-center">
-                    <ng-container *ngIf="userDetails.photoURL; else placeholder"
+                    <ng-container *ngIf="userDetails.profile.photoURL; else placeholder"
                         ><img
-                            src="{{ userDetails.photoURL }}"
+                            src="{{ userDetails.profile.photoURL }}"
                             height="100px"
                             class="img-responsive rounded-image"
                             alt="Your profile picture"
@@ -170,7 +170,7 @@
                 pButton
                 type="button"
                 label="Update email"
-                (click)="onChangeEmailSelected(passwordVerification)"
+                (click)="onChangeEmailSelected(userDetails?.email)"
             ></button
         ></p-footer>
     </p-dialog>

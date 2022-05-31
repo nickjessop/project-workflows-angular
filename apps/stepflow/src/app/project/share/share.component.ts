@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Project, ProjectUsers, Role, SharePermission } from '@stepflow/interfaces';
-import * as _ from 'lodash';
 import { MenuItem, MessageService } from 'primeng/api';
 import { AuthenticationService } from '../../services/authentication/authentication.service';
 import { ProjectService } from '../../services/project/project.service';
@@ -100,21 +99,27 @@ export class ShareComponent implements OnInit {
     }
 
     public updatePermissions(event: { value: Role }, userId: string) {
-        let _projectUsers = _.cloneDeep(this.projectUsers);
-        let _projectOwners = _.cloneDeep(this.projectOwners);
-        _projectUsers = this.projectUsers?.map(projectMember => {
-            if (userId === projectMember.userId) {
-                projectMember.role = event.value;
-            }
-            return { role: projectMember.role, userId: projectMember.userId };
+        this.messageService.add({
+            key: 'global-toast',
+            severity: 'error',
+            detail: 'Not implemented',
         });
-        _projectOwners = this.projectOwners?.map(projectOwner => {
-            return { role: projectOwner.role, userId: projectOwner.userId };
-        });
-        if (_projectUsers && _projectOwners) {
-            this.updatedMemberRoles = _projectUsers.concat(_projectOwners);
-            this.displayDialogSave = true;
-        }
+
+        // let _projectUsers = _.cloneDeep(this.projectUsers);
+        // let _projectOwners = _.cloneDeep(this.projectOwners);
+        // _projectUsers = this.projectUsers?.map(projectMember => {
+        //     if (userId === projectMember.userId) {
+        //         projectMember.role = event.value;
+        //     }
+        //     return { role: projectMember.role, userId: projectMember.userId };
+        // });
+        // _projectOwners = this.projectOwners?.map(projectOwner => {
+        //     return { role: projectOwner.role, userId: projectOwner.userId };
+        // });
+        // if (_projectUsers && _projectOwners) {
+        //     this.updatedMemberRoles = _projectUsers.concat(_projectOwners);
+        //     this.displayDialogSave = true;
+        // }
     }
 
     public onSavePermissionsSelected() {

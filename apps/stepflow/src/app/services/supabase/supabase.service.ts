@@ -13,6 +13,10 @@ export class SupabaseService {
         this.supabase = createClient(environment.supabaseUrl, environment.supabaseKey);
     }
 
+    get auth() {
+        return this.supabase.auth;
+    }
+
     get user() {
         return this.supabase.auth.user();
     }
