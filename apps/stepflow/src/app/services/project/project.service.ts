@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import {
     BlockConfig,
     ComponentMode,
+    MemberRole,
     Project,
     ProjectUsers,
     Role,
@@ -14,11 +15,10 @@ import {
     StepConfig,
 } from '@stepflow/interfaces';
 import * as _ from 'lodash';
-import { BehaviorSubject, from } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
 import { CoreComponentService } from '../../core/core-component.service';
 import { AuthenticationService } from '../authentication/authentication.service';
-import { FirebaseService } from '../firebase/firebase.service';
+import { SupabaseService } from '../supabase/supabase.service';
 
 @Injectable({
     providedIn: 'root',
@@ -42,7 +42,8 @@ export class ProjectService {
     public unsubscribeToProjectListener?: () => void;
 
     constructor(
-        private firebaseService: FirebaseService,
+        // private firebaseService: FirebaseService,
+        private supabaseService: SupabaseService,
         private authenticationService: AuthenticationService,
         private coreComponentService: CoreComponentService,
         private router: Router
@@ -240,67 +241,52 @@ export class ProjectService {
 
         const baseProject = this.createBaseProject(userId || '', projectName, projectDescription);
 
-        const proj = await this.firebaseService
-            .getDbInstance()!
-            .collection(this.PROJECT_COLLECTION)
-            .add(baseProject)
-            .then(
-                async documentRef => {
-                    baseProject.id = documentRef.id;
-                    await documentRef.update({ id: documentRef.id });
-                    // this.projectConfig = baseProject;
-                    return baseProject;
-                },
-                error => {
-                    console.log(`Error occurred while creating a new project: ${error}`);
-                }
-            );
+        const proj = (await this.supabaseService.supabase.from<Project>(this.PROJECT_COLLECTION).insert(baseProject))
+            .data;
+        return proj?.[0];
+        // const proj = await this.firebaseService
+        //     .getDbInstance()!
+        //     .collection(this.PROJECT_COLLECTION)
+        //     .add(baseProject)
+        //     .then(
+        //         async documentRef => {
+        //             baseProject.id = documentRef.id;
+        //             await documentRef.update({ id: documentRef.id });
+        //             // this.projectConfig = baseProject;
+        //             return baseProject;
+        //         },
+        //         error => {
+        //             console.log(`Error occurred while creating a new project: ${error}`);
+        //         }
+        //     );
 
-        return proj;
+        // return proj;
     }
 
     //TODO: Add firebase rule to check that users are authorized to edit this project
-    public updateProject(projectConfig: Project, shouldMerge = true) {
-        return this.firebaseService
-            .getDbInstance()!
-            .collection(this.PROJECT_COLLECTION)
-            .doc(projectConfig.id)
-            .set(projectConfig, { merge: shouldMerge })
-            .then(
-                () => {
-                    console.log(`Successfully updated project`);
-                    return true;
-                },
-                error => {
-                    console.log(`An error occurred while updating project: ${error}`);
-                    return false;
-                }
-            );
+    public async updateProject(projectConfig: Project) {
+        const updatedProject = await this.supabaseService.supabase
+            .from<Project>(this.PROJECT_COLLECTION)
+            .update(projectConfig);
+
+        if (!updatedProject.data || updatedProject.data?.[0] === null) {
+            return false;
+        }
+
+        return true;
     }
 
-    public deleteProject(projectId: string) {
-        return this.firebaseService
-            .getDbInstance()!
-            .collection(this.PROJECT_COLLECTION)
-            .doc(projectId)
+    public async deleteProject(projectId: string) {
+        const response = await this.supabaseService.supabase
+            .from(this.PROJECT_COLLECTION)
             .delete()
-            .then(
-                success => {
-                    return true;
-                },
-                error => {
-                    return false;
-                }
-            );
-    }
+            .match({ id: projectId });
 
-    public getAllProjectIds() {
-        return from(
-            this.firebaseService
-                .getDbInstance()
-                .collection(`${this.PROJECT_COLLECTION}`)
-                .get()
-        );
+        if (!response.data || response.data?.[0] === null) {
+            return false;
+        }
+
+        return true;
     }
 
     public async getProjectUserDetails(projectMemberRoles: Project['memberRoles']) {
@@ -409,14 +395,18 @@ export class ProjectService {
 
     public async getProjects() {
         const userId = this.authenticationService.user?.id || '';
+        const projects = await this.supabaseService.supabase
+            .from<Project>(this.PROJECT_COLLECTION)
+            .select()
+            .contains('members', [userId]);
 
-        const ref = this.firebaseService.getDbInstance().collection(this.PROJECT_COLLECTION);
+        if (!projects.data || projects.data?.[0] === null) {
+            return;
+        }
 
-        const projects = await ref.where('members', 'array-contains', userId).get();
-        // return from(ref.where('members', 'array-contains', { userId: userId, role: 'owner' }).get()).pipe(
-        const _projects = projects.docs.map(items => {
-            const isOwner = this.isOwner(items.data().memberRoles);
-            const itemData = items.data();
+        const _projects = projects.data.map(projs => {
+            const isOwner = this.isOwner(projs.memberRoles);
+            const itemData = projs;
             const memberData = { isOwner, itemData };
             return memberData;
         });
@@ -424,48 +414,10 @@ export class ProjectService {
         return _projects;
     }
 
-    public getMyProjects() {
-        const userId = this.authenticationService.user?.id || '';
-
-        const ref = this.firebaseService.getDbInstance().collection(this.PROJECT_COLLECTION);
-
-        return from(ref.where('members', 'array-contains', { userId: userId, role: 'owner' }).get()).pipe(
-            map(data => {
-                const projects = data.docs.map(items => {
-                    return items.data();
-                });
-
-                return projects;
-            })
-        );
-    }
-
-    public isOwner(memberRoles: [{ userId: string; role: Role }]) {
+    public isOwner(memberRoles: MemberRole[]) {
         return memberRoles.some(member => {
             return member.userId === this.authenticationService.user?.id && ['owner'].includes(member.role);
         });
-    }
-
-    public async ownerLookup(memberRoles: [{ userId: string; role: Role }]) {
-        const ownerId = memberRoles.filter(member => member.role.includes('owner'));
-        const userRef = this.firebaseService
-            .getDbInstance()
-            .collection('users')
-            .doc(ownerId[0].userId);
-        try {
-            const doc = await userRef.get();
-            if (doc.exists) {
-                const ownerFirstName = doc.data()?.firstName;
-                const ownerLastName = doc.data()?.lastName;
-                return ownerFirstName + ' ' + ownerLastName;
-            } else {
-                //undefined
-                return;
-            }
-        } catch (error) {
-            // TODO: handle error;
-            return;
-        }
     }
 
     public async updateProjectRoles(projectRoles: { userId: string; role: Role }[]) {
@@ -477,60 +429,47 @@ export class ProjectService {
     }
 
     public subscribeAndSetProject(projectId: string, sharePermission?: SharePermission) {
-        // this.firebaseService.getDbInstance()!.collection(this.PROJECT_COLLECTION).doc(projectId).onSnapshot()
-        this.unsubscribeToProjectListener = this.firebaseService
-            .getDbInstance()!
-            .collection(this.PROJECT_COLLECTION)
-            .doc(projectId)
-            .onSnapshot(
-                document => {
-                    const project = document.data() as Project;
+        this.supabaseService.supabase.from<Project>(this.PROJECT_COLLECTION).on('*', projectUpdate => {
+            // const oldProject = projectUpdate.old; // old pre-updated project
+            const project = projectUpdate.new; // new updated project
 
-                    if (!project) {
-                        this.router.navigate(['404']);
-                    }
+            if (projectUpdate.eventType === 'DELETE') {
+                this.router.navigate(['404']);
 
-                    if (sharePermission) {
-                        this._projectMode.next(sharePermission);
-                    } else if (
-                        project.memberRoles.some(member => {
-                            return (
-                                member.userId === this.authenticationService.user?.id &&
-                                ['viewer'].includes(member.role)
-                            );
-                        })
-                    ) {
-                        this._projectMode.next('view');
-                    } else if (
-                        project.memberRoles.some(member => {
-                            return (
-                                member.userId === this.authenticationService.user?.id && ['owner'].includes(member.role)
-                            );
-                        })
-                    ) {
-                        this._projectMode.next('configure');
-                        // this._projectMode.next('edit');
-                    } else {
-                        this._projectMode.next('edit');
-                    }
+                return;
+            }
 
-                    const currentStepSet = project.configuration?.some(stepConfig => {
-                        return stepConfig.step.isCurrentStep;
-                    });
+            if (sharePermission) {
+                this._projectMode.next(sharePermission);
+            } else if (
+                project.memberRoles.some(member => {
+                    return member.userId === this.authenticationService.user?.id && ['viewer'].includes(member.role);
+                })
+            ) {
+                this._projectMode.next('view');
+            } else if (
+                project.memberRoles.some(member => {
+                    return member.userId === this.authenticationService.user?.id && ['owner'].includes(member.role);
+                })
+            ) {
+                this._projectMode.next('configure');
+                // this._projectMode.next('edit');
+            } else {
+                this._projectMode.next('edit');
+            }
 
-                    if (!currentStepSet) {
-                        if (project.configuration?.[0]?.step) {
-                            project.configuration[0].step.isCurrentStep = true;
-                        }
-                    }
+            const currentStepSet = project.configuration?.some(stepConfig => {
+                return stepConfig.step.isCurrentStep;
+            });
 
-                    this.projectConfig = project;
-                },
-                error => {
-                    console.log(error);
-                    this.router.navigate(['404']);
+            if (!currentStepSet) {
+                if (project.configuration?.[0]?.step) {
+                    project.configuration[0].step.isCurrentStep = true;
                 }
-            );
+            }
+
+            this.projectConfig = project;
+        });
     }
 
     public async sendProjectInvitations(emails: string[], role: Role) {
@@ -674,27 +613,6 @@ export class ProjectService {
         delete configUpdate.shareLink;
 
         const updatedConfig = await this.updateProject(configUpdate, false);
-    }
-
-    public async getShareLink() {
-        const db = this.firebaseService.getDbInstance();
-        const currentProjectId = this._projectConfig.getValue().id;
-
-        const existingShareLink = await db
-            .collection(this.SHARE_COLLECTION)
-            .where('projectId', '==', currentProjectId)
-            .get();
-
-        if (existingShareLink.docs.length) {
-            return (existingShareLink.docs[0].data() as unknown) as ShareLink;
-        } else {
-            return undefined;
-        }
-    }
-
-    public checkNewUserProjects() {
-        const db = this.firebaseService.getDbInstance()!;
-        const invitationRef = db.collection(this.INVITATION_COLLECTION).doc();
     }
 
     public resetProject() {

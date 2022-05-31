@@ -7,27 +7,35 @@ import { environment } from 'apps/stepflow/src/environments/environment';
     providedIn: 'root',
 })
 export class SupabaseService {
-    private supabase: SupabaseClient;
+    private readonly _supabase: SupabaseClient;
+
+    public get supabase(): SupabaseClient {
+        return this._supabase;
+    }
 
     constructor() {
-        this.supabase = createClient(environment.supabaseUrl, environment.supabaseKey);
+        this._supabase = createClient(environment.supabaseUrl, environment.supabaseKey);
     }
 
     get auth() {
-        return this.supabase.auth;
+        return this._supabase.auth;
     }
 
     get user() {
-        return this.supabase.auth.user();
+        return this._supabase.auth.user();
     }
 
     get session() {
-        return this.supabase.auth.session();
+        return this._supabase.auth.session();
+    }
+
+    get storage() {
+        return this._supabase.storage;
     }
 
     get profile(): PromiseLike<PostgrestSingleResponse<Profile>> {
         return (
-            this.supabase
+            this._supabase
                 .from('profiles')
                 .select('*')
                 // .select(`username, website, avatar_url`)
@@ -37,7 +45,7 @@ export class SupabaseService {
     }
 
     authChanges(callback: (event: AuthChangeEvent, session: Session | null) => void) {
-        return this.supabase.auth.onAuthStateChange(callback);
+        return this._supabase.auth.onAuthStateChange(callback);
     }
 
     // signIn(email: string) {
@@ -45,18 +53,18 @@ export class SupabaseService {
     // }
 
     signOut() {
-        return this.supabase.auth.signOut();
+        return this._supabase.auth.signOut();
     }
 
     signIn(email: string, password: string) {
-        return this.supabase.auth.signIn({
+        return this._supabase.auth.signIn({
             email,
             password,
         });
     }
 
     signUp(email: string, password: string, profile?: Profile, phoneNumber?: string) {
-        return this.supabase.auth.signUp(
+        return this._supabase.auth.signUp(
             {
                 email,
                 password,
@@ -76,7 +84,7 @@ export class SupabaseService {
             updated_at: new Date(),
         };
 
-        return this.supabase.from('profiles').upsert(update, {
+        return this._supabase.from('profiles').upsert(update, {
             returning: 'minimal', // Don't return the value after inserting
         });
     }

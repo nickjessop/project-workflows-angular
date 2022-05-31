@@ -122,11 +122,15 @@ export interface Project {
     configuration?: StepConfig[];
     shareLink?: ShareLink;
     members: string[];
-    memberRoles: Array<{ userId: string; role: Role }>;
+    memberRoles: Array<MemberRole>;
     pendingMembers?: string[];
     id?: string;
 }
 
+export type MemberRole = {
+    userId: string;
+    role: Role;
+};
 export interface ProjectUsers extends User {
     userId?: string;
     role?: Role;
