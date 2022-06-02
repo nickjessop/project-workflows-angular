@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { ResizableModule } from 'angular-resizable-element';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { NgxEditorModule } from 'ngx-editor';
 import { PrimengModule } from '../primeng/primeng.module';
 import { BaseFieldComponent } from './components/base-field/base-field.component';
@@ -14,6 +15,7 @@ import { DynamicFormComponent } from './components/dynamic-form/dynamic-form.com
 import { EmbedComponent } from './components/embed/embed.component';
 import { FileUploaderComponent } from './components/file-uploader/file-uploader.component';
 import { ImageUploaderComponent } from './components/image-uploader/image-uploader.component';
+import { PdfComponent } from './components/pdf/pdf.component';
 import { RichTextInputComponent } from './components/rich-text-input/rich-text-input.component';
 import { TableComponent } from './components/table/table.component';
 import { TextInputComponent } from './components/text-input/text-input.component';
@@ -32,6 +34,7 @@ import { CoreComponentResolverDirective } from './core-component-resolver.direct
         BaseFieldComponent,
         EmbedComponent,
         DragAndResizeComponent,
+        PdfComponent,
     ],
     imports: [
         CommonModule,
@@ -42,6 +45,7 @@ import { CoreComponentResolverDirective } from './core-component-resolver.direct
         DragDropModule,
         BrowserModule,
         ResizableModule,
+        PdfViewerModule,
         NgxEditorModule.forRoot({
             locals: {
                 // menu
@@ -71,6 +75,7 @@ import { CoreComponentResolverDirective } from './core-component-resolver.direct
         CheckboxesComponent,
         EmbedComponent,
         DragAndResizeComponent,
+        PdfComponent,
     ],
     entryComponents: [
         RichTextInputComponent,
@@ -82,6 +87,7 @@ import { CoreComponentResolverDirective } from './core-component-resolver.direct
         CheckboxesComponent,
         EmbedComponent,
         DragAndResizeComponent,
+        PdfComponent,
     ],
 })
 export class CoreComponentsModule {}

@@ -43,14 +43,14 @@ export class BlockPanelOverlayComponent implements OnInit {
                 enabled: true,
                 icon: 'pi-large-text',
                 label: 'Text',
-                description: 'Capture content with simple editing tools.',
+                description: 'Capture notes and ideas with simple editing tools.',
                 component: 'richTextInput',
             },
             {
                 enabled: true,
                 icon: 'pi-table',
                 label: 'Table',
-                description: 'Organize data in a simple table.',
+                description: 'Organize data inside a simple table.',
                 component: 'table',
             },
             {
@@ -59,6 +59,13 @@ export class BlockPanelOverlayComponent implements OnInit {
                 label: 'Embed',
                 description: 'Embed third-party apps directly into a step.',
                 component: 'embed',
+            },
+            {
+                enabled: true,
+                icon: 'pi-file-pdf',
+                label: 'PDF',
+                description: 'Display a PDF with convenient controls.',
+                component: 'pdf',
             },
         ];
 

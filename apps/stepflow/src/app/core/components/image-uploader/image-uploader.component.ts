@@ -39,7 +39,6 @@ export class ImageUploaderComponent implements OnInit {
     public showThumbnails: boolean = false;
     public showImageUploaderDialog = false;
 
-    // public imageData: Link[] = [{ href: '', title: '', description: '', thumbnail: '', filePath: '' }];
     public imageData: Link[] = [];
     public selectedImages: number[] = [];
 
@@ -52,7 +51,6 @@ export class ImageUploaderComponent implements OnInit {
 
     public height?: number;
     public settings?: ComponentSettings;
-    // public readonly AngularResizeElementDirection = AngularResizeElementDirection;
 
     public items: MenuItem[] = [
         {
@@ -76,24 +74,6 @@ export class ImageUploaderComponent implements OnInit {
     public dragFinished() {
         this.projectService.setBlockDrag(false);
     }
-
-    private updateHeight(height: number = 400) {
-        if (!this.resizable) {
-            return;
-        }
-        this.height = height;
-        this.field.metadata.settings = { ...this.field.metadata.settings, height: height };
-    }
-
-    // public onResize(evt: AngularResizeElementEvent): void {
-    //     this.height = evt.currentHeightValue;
-    // }
-
-    // public onResizeEnd(evt: AngularResizeElementEvent): void {
-    //     const height = evt.currentHeightValue;
-    //     this.updateHeight(height);
-    //     this.projectService.syncProject();
-    // }
 
     ngOnInit() {
         const _imageData = (this.field.metadata as ImageUploader).data.value;
@@ -142,7 +122,7 @@ export class ImageUploaderComponent implements OnInit {
                         //Successfully removed file
                         this.projectService.syncProject();
                     },
-                    error => {
+                    (error) => {
                         console.log(error);
                     }
                 );
@@ -165,9 +145,9 @@ export class ImageUploaderComponent implements OnInit {
         this.storageService
             .uploadProjectFile(file, projectId)
             .pipe(
-                switchMap(file => {
+                switchMap((file) => {
                     return this.storageService.getDownloadUrl(file.metadata.fullPath).pipe(
-                        map(downloadUrl => {
+                        map((downloadUrl) => {
                             return {
                                 fileMetadata: file.metadata,
                                 downloadUrl: downloadUrl as string,
@@ -178,7 +158,7 @@ export class ImageUploaderComponent implements OnInit {
                 })
             )
             .subscribe(
-                filedata => {
+                (filedata) => {
                     const size = filedata.fileMetadata.size;
                     const name = file.name;
                     const downloadUrl = filedata.downloadUrl;
@@ -192,7 +172,7 @@ export class ImageUploaderComponent implements OnInit {
                     });
                     this.projectService.syncProject();
                 },
-                err => {
+                (err) => {
                     this.messageService.add({
                         severity: 'error',
                         key: 'global-toast',
