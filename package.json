@@ -58,6 +58,7 @@
         "firebase-admin": "9.8.0",
         "lodash": "^4.17.20",
         "mime": "^2.5.2",
+        "ng2-pdf-viewer": "^9.0.0",
         "ngx-editor": "^12.4.1",
         "normalize.css": "^8.0.1",
         "prettier": "^1.19.1",

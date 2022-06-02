@@ -2,7 +2,6 @@ import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { BlockConfig, ComponentMode, ComponentSettings, Embed } from '@stepflow/interfaces';
-// import { AngularResizeElementDirection } from 'angular-resize-element';
 import { MenuItem, MessageService } from 'primeng/api';
 import { ProjectService } from '../../../services/project/project.service';
 import { CoreComponentService } from '../../core-component.service';
@@ -26,7 +25,6 @@ export class EmbedComponent implements OnInit {
     public href = '';
     public domain: { hostname: string } = { hostname: '' };
     public settings?: ComponentSettings;
-    // public readonly AngularResizeElementDirection = AngularResizeElementDirection;
 
     public items: MenuItem[] = [
         {
@@ -117,7 +115,8 @@ export class EmbedComponent implements OnInit {
     }
 
     public isValidUrl(url: string) {
-        const regexp = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
+        const regexp =
+            /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
 
         if (regexp.test(url)) {
             return true;

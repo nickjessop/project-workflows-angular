@@ -84,6 +84,7 @@ export class RichTextInputComponent implements OnInit {
 
     public onFocusOut(event: Event) {
         // this was almost working, but focusing on the url button forced a onFocusOut event
+        // on-focusout on dom element
         this.projectService.syncProject();
         this.showSaveButton = false;
     }
