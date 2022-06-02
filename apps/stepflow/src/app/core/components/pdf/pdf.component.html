@@ -5,6 +5,29 @@
     [index]="index"
     [resizable]="componentMode === 'configure'"
 >
+    <div class="pdf-progress p-d-flex p-ai-center p-jc-center" *ngIf="displaySpinner != false">
+        <p-progressSpinner
+            [style]="{ width: '25px', height: '25px' }"
+            styleClass="file-spinner"
+            strokeWidth="4"
+        ></p-progressSpinner>
+    </div>
+    <div class="pdf-options" *ngIf="pdfData.href != ''">
+        <button
+            pButton
+            type="button"
+            icon="pi pi-search-plus"
+            class="p-mr-2 p-button-secondary"
+            (click)="onZoomInPDF(0.1)"
+        ></button>
+        <button
+            pButton
+            type="button"
+            icon="pi pi-search-minus"
+            class="p-mr-2 p-button-secondary"
+            (click)="onZoomOutPDF(0.1)"
+        ></button>
+    </div>
     <ng-container *ngIf="componentMode === 'view'">
         <div class="view">
             <pdf-viewer
@@ -18,13 +41,6 @@
     <ng-container *ngIf="componentMode === 'edit' || componentMode === 'configure'">
         <div class="edit">
             <ng-container *ngIf="pdfData.href != ''; else uploadPDF">
-                <div class="pdf-progress p-d-flex p-ai-center p-jc-center" *ngIf="displaySpinner != false">
-                    <p-progressSpinner
-                        [style]="{ width: '25px', height: '25px' }"
-                        styleClass="file-spinner"
-                        strokeWidth="4"
-                    ></p-progressSpinner>
-                </div>
                 <div class="toolbar">
                     <span>{{ pdfData.title }}, {{ pdfSize }}</span
                     ><button
@@ -35,22 +51,7 @@
                         (click)="showDeleteDialog = true"
                     ></button>
                 </div>
-                <div class="pdf-options">
-                    <button
-                        pButton
-                        type="button"
-                        icon="pi pi-search-plus"
-                        class="p-mr-2 p-button-secondary"
-                        (click)="onZoomInPDF(0.1)"
-                    ></button>
-                    <button
-                        pButton
-                        type="button"
-                        icon="pi pi-search-minus"
-                        class="p-mr-2 p-button-secondary"
-                        (click)="onZoomOutPDF(0.1)"
-                    ></button>
-                </div>
+
                 <pdf-viewer
                     [src]="pdfData.href"
                     [render-text]="true"

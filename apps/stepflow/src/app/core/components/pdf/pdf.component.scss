@@ -7,15 +7,15 @@
         flex: 1 0 100%;
         width: 100%;
     }
-    .pdf-options {
-        position: absolute;
-        bottom: 1rem;
-        left: 1rem;
-        z-index: 999;
-    }
-    .pdf-progress {
-        height: 100%;
-    }
+}
+.pdf-progress {
+    height: 100%;
+}
+.pdf-options {
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+    z-index: 999;
 }
 .fade {
     width: 100%;
