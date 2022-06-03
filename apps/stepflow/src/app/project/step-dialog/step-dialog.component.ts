@@ -16,9 +16,10 @@ export class StepDialogComponent implements OnInit {
     @Input() showDialog = false;
     @Output() dialogSubmitEvent = new EventEmitter<{ step?: Step; mode: 'edit' | 'new' | 'delete' }>();
     @Output() onHideEvent = new EventEmitter<true>();
+    public showError: boolean = false;
 
-    statusOptions: Status[];
-    selectedStatus: Status = { label: 'No status', value: 'no-status', icon: '' };
+    public statusOptions: Status[];
+    public selectedStatus: Status = { label: 'No status', value: 'no-status', icon: '' };
 
     constructor() {
         this.statusOptions = [
@@ -50,7 +51,8 @@ export class StepDialogComponent implements OnInit {
     }
 
     public onDialogSubmit($event: Event) {
-        if (this.mode !== 'delete' && (!this.step.title || !this.step.description)) {
+        if (this.mode !== 'delete' && !this.step.title) {
+            this.showError = true;
             return;
         }
         this.step.status = this.selectedStatus;
