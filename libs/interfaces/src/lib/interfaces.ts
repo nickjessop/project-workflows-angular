@@ -150,7 +150,7 @@ export interface StepConfig {
 export interface Step {
     title: string;
     icon?: string;
-    description: string;
+    description?: string;
     visibility?: 'show' | 'hide';
     interaction?: 'document' | 'form';
     isCurrentStep?: boolean;
