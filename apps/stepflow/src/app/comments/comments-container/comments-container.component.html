@@ -1,7 +1,7 @@
 <div>
     <ng-container *ngIf="isLoading">loading comments...</ng-container>
     <ng-container *ngIf="!isLoading">
-        <button pButton type="button" class="btn btn-primary" (click)="refreshComments()" [disabled]="isLoading">Submit</button>
+        <button pButton type="button" class="btn btn-primary" (click)="refreshComments()" [disabled]="isLoading">Refresh Comments</button>
         <div *ngFor="let block of blocks">
             <comment-thread-view
                 [blockId]="block.id"
@@ -9,7 +9,6 @@
                 [comments]="threadedComments[block.id] || []"
                 (onAdd)="onAdd($event)"
                 (onUpdate)="onUpdate($event)"
-                (onResolve)="onResolve($event)"
                 (onDelete)="onDelete($event)"
                 (onRefresh)="refreshComments()">
             </comment-thread-view>

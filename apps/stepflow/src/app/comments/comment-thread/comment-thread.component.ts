@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { Comment } from '@stepflow/interfaces';
 
@@ -7,7 +7,7 @@ import { Comment } from '@stepflow/interfaces';
   templateUrl: './comment-thread.component.html',
   styleUrls: ['./comment-thread.component.scss']
 })
-export class CommentThreadComponent implements OnInit {
+export class CommentThreadComponent {
 
   @Input() blockId!: string;
   @Input() threadHeader!: string;
@@ -15,23 +15,28 @@ export class CommentThreadComponent implements OnInit {
 
   @Output() onAdd: EventEmitter<Comment> = new EventEmitter<Comment>();
   @Output() onUpdate: EventEmitter<Comment> = new EventEmitter<Comment>();
-  @Output() onResolve: EventEmitter<Comment> = new EventEmitter<Comment>();
   @Output() onDelete: EventEmitter<Comment> = new EventEmitter<Comment>();
 
-  constructor() { }
-
-  ngOnInit(): void {
-    
+  _commentBeingEdited: Comment | null = null;
+  set commentBeingEdited(comment: Comment | null) {
+    this._commentBeingEdited = comment;
+    if (comment != null) this.composingNewComment = false;
+  }
+  get commentBeingEdited(): Comment | null {
+    return this._commentBeingEdited;
   }
 
-  editPressed(commentId: string): void {
-    
+  composingNewComment: boolean = false;
+
+  editPressed(comment: Comment): void {
+    this.commentBeingEdited = comment;
   }
 
-  editComment(comment: Comment): void {
+  updateComment(comment: Comment): void {
     if (comment.commentId) {
       // Comment is an existing comment.
       this.onUpdate.emit(comment);
+      this.commentBeingEdited = null;
     } else {
       // Comment is a new comment, needs a blockId.
       // If/when moving to multiple threads per block, add threadId here (maybe 
@@ -41,15 +46,16 @@ export class CommentThreadComponent implements OnInit {
     }
   }
 
-  resolveComment(comment: Comment): void {
-    this.onResolve.emit(comment);
-  }
-
   deleteComment(comment: Comment): void {
     this.onDelete.emit(comment);
   }
 
   cancelEdit(): void {
-    console.log("usually, we'd hide the new comment edit form here.")
+    this.commentBeingEdited = null;
+    this.composingNewComment = false;
+  }
+
+  toggleComposingNewComment(): void {
+    this.composingNewComment = !this.composingNewComment;
   }
 }

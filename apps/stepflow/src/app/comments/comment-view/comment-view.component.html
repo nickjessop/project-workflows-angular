@@ -1,4 +1,15 @@
-// Comments section container component
 <div>
     <i>{{comment.authorId}} says: </i><strong>{{comment.body}}</strong>
+    <p>
+        Resolved: {{comment.resolved ? 'YUP' : 'NOPE'}} - 
+        <button type="button" class="btn btn-primary" (click)="toggleResolvedPressed()">
+            {{comment.resolved ? 'Unresolve' : 'Resolve'}}
+        </button>
+        <button type="button" class="btn btn-primary" (click)="editPressed()">
+            Edit
+        </button>
+        <button type="button" class="btn btn-warning" (click)="deletePressed()">
+            Delete
+        </button>
+    </p>
 </div>

@@ -19,7 +19,6 @@ export class CommentsService {
   // API Methods
 
   public async listComments(blockIds: string[]): Promise<Comment[]> {
-    console.log(`listComments called with blockIds: ${JSON.stringify(blockIds)}`)
     return this.firebaseService
       .getDbInstance()!
       .collection(this.COMMENTS_COLLECTION)
@@ -32,7 +31,6 @@ export class CommentsService {
           querySnapshot.forEach(doc => {
             comments.push(doc.data() as Comment)
           })
-          console.log(`listComments found ${comments.length} comments.`);
           return comments
         },
         error => {
@@ -73,22 +71,27 @@ export class CommentsService {
     }
 
     const rightNow: number = Date.now();
+    const commentId = uuid();
     const additionalFields: Partial<Comment> = {
-      commentId: uuid(),
+      commentId,
       createdAt: rightNow,
       updatedAt: rightNow,
       authorId,
-      deleted: false
+      deleted: false,
+      resolved: false,
     }
-    const commentToSave: Comment = { ...comment, ...additionalFields } as Comment
+    const commentToSave: Comment = { 
+      ...comment, 
+      ...additionalFields
+    } as Comment
 
     return this.firebaseService
       .getDbInstance()!
       .collection(this.COMMENTS_COLLECTION)
-      .add(commentToSave)
+      .doc(commentId)
+      .set(commentToSave)
       .then(
           documentRef => {
-              console.log('addComment returned the documentRef:', documentRef);
               return true;
           },
           error => {
@@ -98,7 +101,8 @@ export class CommentsService {
       );
   }
 
-  private async putComment(comment: Comment): Promise<Comment | null> {
+  public async putComment(comment: Comment): Promise<Comment | null> {
+    comment.updatedAt = Date.now()
     return this.firebaseService
       .getDbInstance()!
       .collection(this.COMMENTS_COLLECTION)
@@ -113,28 +117,6 @@ export class CommentsService {
           return null
         }
       )
-  }
-
-  // Other public Methods
-  
-  public async updateCommentBody(comment: Comment, newBody: string): Promise<Comment | null> {
-    comment.body = newBody
-    comment.updatedAt = Date.now()
-    return this.putComment(comment)
-  }
-
-  public async setResolvedStatusOfComment(comment: Comment, resolve: boolean): Promise<boolean> {
-    comment.resolved = resolve
-    comment.updatedAt = Date.now()
-    return this.putComment(comment).then(
-      () => {
-        return true
-      },
-      error => {
-        console.error(`Error occurred while setting resolved status of comment: ${error}`)
-        return false
-      }
-    )
   }
 
   public async deleteComment(comment: Comment): Promise<boolean> {

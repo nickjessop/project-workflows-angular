@@ -10,14 +10,10 @@ import { Comment } from '@stepflow/interfaces';
 })
 export class CommentEditComponent implements OnInit {  
   
-  @Input()
-  comment?: Comment;
+  @Input() comment?: Comment;
 
-  @Output()
-  onCommentEdit = new EventEmitter<Comment>();
-
-  @Output()
-  onCancel = new EventEmitter<void>();
+  @Output() onCommentEdit = new EventEmitter<Comment>();
+  @Output() onCancel = new EventEmitter<void>();
 
   formGroup: FormGroup = new FormGroup({
     body: new FormControl(this.comment?.body || '', Validators.required),
@@ -26,19 +22,23 @@ export class CommentEditComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    this.formGroup.get('body')?.setValue(this.comment?.body || '');
   }
 
   onSubmitPressed(): void {
     const newCommentBody = this.formGroup.get('body')?.value || '';
 
-    console.log(`submit pressed with body: ${newCommentBody}`);
     // TODO: Validate and throw an error if the comment body is not valid.
-    const newComment: Comment = { body: newCommentBody };
-    this.onCommentEdit.emit(newComment);
+    if (this.comment) {
+      this.comment.body = newCommentBody;
+      this.onCommentEdit.emit(this.comment);
+    } else {
+      const newComment: Comment = { body: newCommentBody };
+      this.onCommentEdit.emit(newComment);
+    }
   }
 
-  // onCancelPressed(): void {
-  //   this.onCancel.emit();
-  // }
-
+  onCancelPressed(): void {
+    this.onCancel.emit();
+  }
 }
