@@ -18,7 +18,7 @@ export class CommentViewComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    console.log(`CommentViewComponent: comment.body=${this.comment.body}`);
+
   }
 
   editPressed(): void {
@@ -27,5 +27,10 @@ export class CommentViewComponent implements OnInit {
 
   deletePressed(): void {
     this.onCommentDelete.emit(this.comment);
+  }
+
+  toggleResolvedPressed(): void {
+    this.comment.resolved = !this.comment.resolved;
+    this.onCommentResolve.emit(this.comment);
   }
 }

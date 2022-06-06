@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { BlockConfig, Comment } from '@stepflow/interfaces';
 import { CommentsService } from '../../services/comments/comments.service';
 
@@ -7,7 +7,7 @@ import { CommentsService } from '../../services/comments/comments.service';
   templateUrl: './comments-container.component.html',
   styleUrls: ['./comments-container.component.scss']
 })
-export class CommentsContainerComponent implements OnInit {
+export class CommentsContainerComponent {
 
   private _blocks: BlockConfig[] = [];
   @Input() set blocks(blocks: BlockConfig[]) {
@@ -22,10 +22,6 @@ export class CommentsContainerComponent implements OnInit {
   threadedComments: { [blockId: string]: Comment[]} = {};
 
   constructor(private commentsService: CommentsService) { }
-
-  ngOnInit(): void {
-    console.log(`CommentsContainerComponent: blocks.length=${this.blocks.length}`);
-  }
 
   refreshComments(): void {
     const blockIds = this.blocks.filter(block => !!block.id).map(block => block.id!);
@@ -45,12 +41,10 @@ export class CommentsContainerComponent implements OnInit {
         }
         this.threadedComments[comment.blockId].push(comment);
       }
-      console.log(`getComments returned ${comments.length} comments`);
     }).finally(() => this.isLoading = false );
   }
 
   async onAdd(comment: Comment): Promise<void> {
-    console.log('container onAdd called');
     const result = await this.commentsService.addComment(comment);
     if (result) {
       this.refreshComments();
@@ -59,15 +53,13 @@ export class CommentsContainerComponent implements OnInit {
     }
   }
 
-  onUpdate(comment: Comment): void {
-    
+  async onUpdate(comment: Comment): Promise<void> {
+    await this.commentsService.putComment(comment);
+    // this.refreshComments();
   }
 
-  onResolve(comment: Comment): void {
-
-  }
-
-  onDelete(comment: Comment): void {
-
+  async onDelete(comment: Comment): Promise<void> {
+    await this.commentsService.deleteComment(comment);
+    this.refreshComments();
   }
 }
