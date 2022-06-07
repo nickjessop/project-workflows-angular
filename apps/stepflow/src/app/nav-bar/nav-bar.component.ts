@@ -31,6 +31,7 @@ export class NavBarComponent implements OnInit {
     public canConfigureProject = false;
 
     public displaySettingsDialog: boolean = false;
+    public showSettingsError: boolean = false;
 
     public navMode: 'default' | 'project' = 'default';
     public project?: Project;
@@ -71,7 +72,7 @@ export class NavBarComponent implements OnInit {
         ];
 
         this.subscriptions.add(
-            this.projectService.projectConfig$.subscribe(projectData => {
+            this.projectService.projectConfig$.subscribe((projectData) => {
                 this.project = projectData;
                 if (projectData?.id) {
                     this.navMode = 'project';
@@ -82,7 +83,7 @@ export class NavBarComponent implements OnInit {
         );
 
         this.subscriptions.add(
-            this.projectService.projectMode$.subscribe(result => {
+            this.projectService.projectMode$.subscribe((result) => {
                 console.log(result);
                 this.componentMode = result;
                 if (this.componentMode === 'configure') {
@@ -141,10 +142,15 @@ export class NavBarComponent implements OnInit {
 
     hideSettingsDialog() {
         this.displaySettingsDialog = false;
+        this.showSettingsError = false;
     }
 
     onSaveSettingsSelected() {
-        this.projectService.updateProjectSettings(this.projectSettings).then(value => {
+        if (!this.projectSettings.name) {
+            this.showSettingsError = true;
+            return;
+        }
+        this.projectService.updateProjectSettings(this.projectSettings).then((value) => {
             if (value === true) {
                 this.messageService.add({
                     key: 'global-toast',
