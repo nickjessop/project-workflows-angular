@@ -5,7 +5,11 @@
                 <i class="pi pi-chevron-left navigation__back" [routerLink]="['/project']"></i>
                 <div class="ms-1 p-text-bold p-ml-2">
                     {{ project.name }}
-                    <i class="pi pi-info-circle ms-02 text-secondary" pTooltip="{{ project.description }}"></i>
+                    <i
+                        class="pi pi-info-circle ms-02 text-secondary"
+                        *ngIf="project.description"
+                        pTooltip="{{ project.description }}"
+                    ></i>
                 </div>
             </div>
             <div class="navigation-profile p-col-6 p-d-flex p-ai-center p-jc-end">
@@ -32,6 +36,12 @@
                 focusTrap="true"
                 modal="true"
             >
+                <p-message
+                    *ngIf="showSettingsError"
+                    severity="error"
+                    text="Enter a title to save project settings"
+                    styleClass="p-mb-4"
+                ></p-message>
                 <div class="p-field">
                     <label for="settingsDialogTitle">Title</label>
                     <input
