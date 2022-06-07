@@ -34,11 +34,20 @@ export type ComponentType =
     | 'richTextInput'
     | 'textInput'
     | 'table'
-    | 'embed';
+    | 'embed'
+    | 'pdf';
 
 export type ComponentMode = 'edit' | 'view' | 'configure';
 
-export type ComponentMetadata = Checkboxes | FileUploader | ImageUploader | RichTextInput | TextInput | Table | Embed;
+export type ComponentMetadata =
+    | Checkboxes
+    | FileUploader
+    | ImageUploader
+    | RichTextInput
+    | TextInput
+    | Table
+    | Embed
+    | PDF;
 
 export type BaseComponent = {
     component: ComponentType;
@@ -99,6 +108,10 @@ export interface Embed extends BaseComponent {
     component: 'embed';
     data: { value: Link[] };
 }
+export interface PDF extends BaseComponent {
+    component: 'pdf';
+    data: { value: Link };
+}
 
 export type Link = {
     href?: string;
@@ -144,7 +157,7 @@ export interface StepConfig {
 export interface Step {
     title: string;
     icon?: string;
-    description: string;
+    description?: string;
     visibility?: 'show' | 'hide';
     interaction?: 'document' | 'form';
     isCurrentStep?: boolean;

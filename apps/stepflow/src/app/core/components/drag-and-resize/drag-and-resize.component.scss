@@ -8,7 +8,11 @@ mwlResizable {
     position: relative;
     border-radius: 6px;
     background: white;
-    border: 1px solid transparent;
+    border: 1px solid var(--primary-color-light);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 300px;
     .resize {
         visibility: hidden;
         position: absolute;
@@ -19,6 +23,7 @@ mwlResizable {
         border-right: 3px solid var(--surface-d);
         border-bottom: 3px solid var(--surface-d);
         border-radius: 1px;
+        z-index: 999999;
         &:hover,
         &:focus,
         &:focus-within {
@@ -28,7 +33,7 @@ mwlResizable {
     }
     &:hover,
     &:focus-within {
-        border: 1px solid var(--primary-color-light);
+        border: 1px solid var(--surface-d);
         .field__settings,
         .field__handle,
         .resize {
@@ -51,6 +56,10 @@ mwlResizable {
     }
     .field__label {
         font-weight: bold;
+        flex-shrink: 0;
+    }
+    .field__content {
+        height: 100%;
     }
     .field__description {
         color: $sub-text;

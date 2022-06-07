@@ -17,9 +17,15 @@
         </div>
     </ng-container>
     <ng-template #showDefault>
+        <p-message
+            *ngIf="showError"
+            severity="error"
+            text="Enter a title to add a new step"
+            styleClass="p-mb-4"
+        ></p-message>
+
         <div class="p-field">
             <label for="title" aria-describedby="Name your step" styleClass="labelBlock">Title</label>
-
             <input id="title" type="text" pInputText [(ngModel)]="step.title" style="width: 100%" />
         </div>
         <div class="p-field p-pt-2">
