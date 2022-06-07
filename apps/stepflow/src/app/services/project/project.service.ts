@@ -25,7 +25,7 @@ import { SupabaseService } from '../supabase/supabase.service';
 })
 export class ProjectService {
     private readonly PROJECT_COLLECTION = 'projects';
-    private readonly INVITATION_COLLECTION = 'projects';
+    private readonly INVITATION_COLLECTION = 'invitations';
     private readonly SHARE_COLLECTION = 'shareLinks';
     private _projectConfig: BehaviorSubject<Project> = new BehaviorSubject<Project>(this.createBaseProject('', '', ''));
     public readonly projectConfig$ = this._projectConfig.asObservable();
@@ -241,9 +241,11 @@ export class ProjectService {
 
         const baseProject = this.createBaseProject(userId || '', projectName, projectDescription);
 
-        const proj = (await this.supabaseService.supabase.from<Project>(this.PROJECT_COLLECTION).insert(baseProject))
-            .data;
-        return proj?.[0];
+        const { data, error } = await this.supabaseService.supabase
+            .from<Project>(this.PROJECT_COLLECTION)
+            .insert([baseProject]);
+
+        return error ? undefined : data?.[0];
         // const proj = await this.firebaseService
         //     .getDbInstance()!
         //     .collection(this.PROJECT_COLLECTION)
@@ -473,32 +475,29 @@ export class ProjectService {
     }
 
     public async sendProjectInvitations(emails: string[], role: Role) {
-        const addMemberResult = await this.addNewProjectMembers(emails, role);
-        console.log(addMemberResult);
-        if (addMemberResult === false) {
-            return undefined;
-        }
-        const callable = this.firebaseService.getFunctionsInstance().httpsCallable('invitationEmail');
-        return callable({
-            emails: emails,
-            subject: `${this.projectConfig?.name} - Invitation to collaborate`,
-            projectName: `${this.projectConfig?.name}`,
-            projectSender: `${this.authenticationService.getCurrentUser()?.displayName}`,
-            projectRole: `${role}`,
-            fromEmail:
-                this.authenticationService.getCurrentUser()?.email ||
-                this.authenticationService.getCurrentUser()?.displayName ||
-                '',
-            projectLink: `https://app.stepflow.co/project/${this.projectConfig.id}`,
-        }).then(
-            (response: { data: { success: boolean } }) => {
-                console.log(response);
-                return response;
-            },
-            (error: Error) => {
-                return undefined;
-            }
-        );
+        const success = await this.addNewProjectMembers(emails, role);
+        return success;
+        // const callable = this.firebaseService.getFunctionsInstance().httpsCallable('invitationEmail');
+        // return callable({
+        //     emails: emails,
+        //     subject: `${this.projectConfig?.name} - Invitation to collaborate`,
+        //     projectName: `${this.projectConfig?.name}`,
+        //     projectSender: `${this.authenticationService.getCurrentUser()?.displayName}`,
+        //     projectRole: `${role}`,
+        //     fromEmail:
+        //         this.authenticationService.getCurrentUser()?.email ||
+        //         this.authenticationService.getCurrentUser()?.displayName ||
+        //         '',
+        //     projectLink: `https://app.stepflow.co/project/${this.projectConfig.id}`,
+        // }).then(
+        //     (response: { data: { success: boolean } }) => {
+        //         console.log(response);
+        //         return response;
+        //     },
+        //     (error: Error) => {
+        //         return undefined;
+        //     }
+        // );
     }
 
     public async addNewProjectMembers(emails: string[], role: Role) {
@@ -551,36 +550,43 @@ export class ProjectService {
         return setResult;
     }
 
-    private async addInvitations(pendingMembers: { email: string; role: Role }[], projectId: string | undefined) {
-        if (!projectId) {
-            return;
-        }
-        const db = this.firebaseService.getDbInstance()!;
-        const batch = db.batch();
-        const projectRef = db.collection(this.PROJECT_COLLECTION).doc(projectId);
-
-        pendingMembers.map(member => {
-            let invitationRef = db.collection(this.INVITATION_COLLECTION).doc();
-            batch.set(invitationRef, { email: member.email, role: member.role, project: projectRef });
+    private async addInvitations(pendingMembers: { email: string; role: Role }[], projectId?: string) {
+        let { data, error } = await this.supabaseService.supabase.rpc('create_invite_link', {
+            input2: pendingMembers,
+            input1: projectId,
         });
 
-        // Commit the batch
-        return batch
-            .commit()
-            .then(() => {
-                return true;
-            })
-            .catch(() => {
-                return false;
-            });
+        if (error) return false;
+        else return true;
+
+        // if (!projectId) {
+        //     return;
+        // }
+        // const db = this.firebaseService.getDbInstance()!;
+        // const batch = db.batch();
+        // const projectRef = db.collection(this.PROJECT_COLLECTION).doc(projectId);
+
+        // pendingMembers.map(member => {
+        //     let invitationRef = db.collection(this.INVITATION_COLLECTION).doc();
+        //     batch.set(invitationRef, { email: member.email, role: member.role, project: projectRef });
+        // });
+
+        // // Commit the batch
+        // return batch
+        //     .commit()
+        //     .then(() => {
+        //         return true;
+        //     })
+        //     .catch(() => {
+        //         return false;
+        //     });
     }
 
     public async generateShareLink(permission: SharePermission) {
-        const db = this.firebaseService.getDbInstance();
         const currentUserId = this.authenticationService.user?.id;
         const currentProjectId = this._projectConfig.getValue().id;
 
-        if (!db || !currentUserId || !currentProjectId) {
+        if (!currentUserId || !currentProjectId) {
             console.log('Cannot generate share link when db/userid/projectid is missing');
 
             return;
@@ -598,12 +604,12 @@ export class ProjectService {
 
         return updatedConfig ? shareLink : undefined;
     }
+
     public async deleteShareLink() {
-        const db = this.firebaseService.getDbInstance();
         const currentUserId = this.authenticationService.user?.id;
         const currentProjectId = this._projectConfig.getValue().id;
 
-        if (!db || !currentUserId || !currentProjectId) {
+        if (!currentUserId || !currentProjectId) {
             console.log('Cannot generate share link when db/userid/projectid is missing');
 
             return;
@@ -612,7 +618,7 @@ export class ProjectService {
         const configUpdate = this._projectConfig.getValue();
         delete configUpdate.shareLink;
 
-        const updatedConfig = await this.updateProject(configUpdate, false);
+        await this.updateProject(configUpdate);
     }
 
     public resetProject() {

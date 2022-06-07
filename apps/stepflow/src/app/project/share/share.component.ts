@@ -47,7 +47,7 @@ export class ShareComponent implements OnInit {
     ngOnInit(): void {
         if (this.project) {
             this.projectService.getProjectUserDetails(this.project.memberRoles).then(result => {
-                this.projectUsers = result?.filter(user => user.role != 'owner');
+                this.projectUsers = result?.filter(user => user.role !== 'owner');
                 //TODO users can add new owners and owners can change each other's roles (this is how G docs goes about it but would need to think about it some more)
                 this.projectOwners = result?.filter(user => user.role === 'owner');
             });
@@ -149,31 +149,15 @@ export class ShareComponent implements OnInit {
         );
     }
 
-    public onSendInvitationsSelected() {
-        if (this.invitationEmails.length != 0 && this.allowEmailSubmission === true) {
-            this.isLoading = true;
-            this.projectService.sendProjectInvitations(this.invitationEmails, this.invitationRole).then(value => {
-                if (value?.data.success === true) {
-                    this.displayShareDialog = false;
-                    this.isLoading = false;
-                    this.invitationEmails = [];
-                    this.messageService.add({
-                        key: 'global-toast',
-                        severity: 'success',
-                        detail: 'Invitations sent.',
-                    });
-                } else {
-                    this.displayShareDialog = false;
-                    this.isLoading = false;
-                    this.invitationEmails = [];
-                    this.messageService.add({
-                        key: 'global-toast',
-                        severity: 'error',
-                        detail: "Can't send invitation emails. Please try again.",
-                    });
-                }
-            });
-        } else {
+    public async onSendInvitationsSelected() {
+        if (this.invitationEmails.length === 0 || !this.allowEmailSubmission) {
+            return;
+        }
+
+        this.isLoading = true;
+        const success = await this.projectService.sendProjectInvitations(this.invitationEmails, this.invitationRole);
+
+        if (!success) {
             this.messageService.add({
                 key: 'global-toast',
                 severity: 'error',
@@ -181,6 +165,16 @@ export class ShareComponent implements OnInit {
                 detail: 'Please make sure you have entered valid emails. The number of emails must be 10 or less.',
             });
         }
+
+        this.messageService.add({
+            key: 'global-toast',
+            severity: 'success',
+            detail: 'Invitations sent.',
+        });
+
+        this.isLoading = false;
+        this.displayShareDialog = false;
+        this.invitationEmails = [];
     }
 
     public getUserMenuItems(userId: string, email: string): MenuItem[] {

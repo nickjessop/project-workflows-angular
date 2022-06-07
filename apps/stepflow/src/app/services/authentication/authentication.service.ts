@@ -255,7 +255,6 @@ export class AuthenticationService {
             }
         });
     }
-
     public findUsersMatchingEmail(emails: string[]) {
         // Firebase SDK limitation: 'in' supports up to 10 comparison values
         const newMembers: string[] = [];
