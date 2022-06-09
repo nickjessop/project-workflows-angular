@@ -8,7 +8,6 @@ import { ResizableModule } from 'angular-resizable-element';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { NgxEditorModule } from 'ngx-editor';
 import { PrimengModule } from '../primeng/primeng.module';
-import { BaseFieldComponent } from './components/base-field/base-field.component';
 import { CheckboxesComponent } from './components/checkboxes/checkboxes.component';
 import { DragAndResizeComponent } from './components/drag-and-resize/drag-and-resize.component';
 import { DynamicFormComponent } from './components/dynamic-form/dynamic-form.component';
@@ -31,7 +30,6 @@ import { CoreComponentResolverDirective } from './core-component-resolver.direct
         CoreComponentResolverDirective,
         DynamicFormComponent,
         CheckboxesComponent,
-        BaseFieldComponent,
         EmbedComponent,
         DragAndResizeComponent,
         PdfComponent,
