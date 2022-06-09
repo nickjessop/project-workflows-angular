@@ -10,13 +10,15 @@ export class NewProjectDialogComponent implements OnInit {
     @Input() description = '';
     @Output() onCreateNewProject = new EventEmitter<{ projectName: string; description: string }>();
 
-    public showDialog = false;
+    public showDialog: boolean = false;
+    public showProjectError: boolean = false;
     constructor() {}
 
     ngOnInit(): void {}
 
     public createNewProjectPress() {
         if (!this.projectName) {
+            this.showProjectError = true;
             return;
         }
 
@@ -30,8 +32,9 @@ export class NewProjectDialogComponent implements OnInit {
         this.showDialog = true;
     }
 
-    private resetDialog() {
+    public resetDialog() {
         this.projectName = '';
         this.description = '';
+        this.showProjectError = false;
     }
 }
