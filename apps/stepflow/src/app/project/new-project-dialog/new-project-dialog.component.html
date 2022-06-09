@@ -1,4 +1,17 @@
-<p-dialog header="Create a New Project" [(visible)]="showDialog" styleClass="dialog" focusTrap="true" modal="true">
+<p-dialog
+    header="Create a new project"
+    [(visible)]="showDialog"
+    styleClass="dialog"
+    focusTrap="true"
+    modal="true"
+    (onHide)="resetDialog()"
+>
+    <p-message
+        *ngIf="showProjectError"
+        severity="error"
+        text="Enter a title to create a new project"
+        styleClass="p-mb-4"
+    ></p-message>
     <div class="p-field">
         <label for="title" aria-describedby="Name your step" styleClass="labelBlock">Name</label>
         <input id="title" type="text" pInputText [(ngModel)]="projectName" />
@@ -9,13 +22,7 @@
     </div>
 
     <p-footer>
-        <button
-            type="button"
-            pButton
-            label="Create New Project"
-            (click)="createNewProjectPress()"
-            [disabled]="!projectName"
-        ></button>
+        <button type="button" pButton label="Create" (click)="createNewProjectPress()"></button>
     </p-footer>
 </p-dialog>
 
