@@ -13,6 +13,8 @@ export class UserService {
     public userDetails: User = {};
     public currentUser: any;
 
+    private readonly USERS_COLLECTION = 'users';
+
     constructor(
         private authService: AuthenticationService,
         private storageService: StorageService,
@@ -187,5 +189,36 @@ export class UserService {
                     });
             }
         });
+    }
+
+    public async getUsers(userIds: string[]): Promise<{ [key: string]: User }> {
+        userIds = userIds.filter((value, index, self) => self.indexOf(value) === index);
+
+        let users: { [key: string]: User } = {};
+        for await (const userId of userIds) {
+            const user = await this.getUser(userId);
+            if (user) users[userId] = user;
+        }
+
+        return users;
+    };
+
+    public async getUser(userId: string): Promise<User | null> {
+        return this.firebaseService
+            .getDbInstance()!
+            .collection(this.USERS_COLLECTION)
+            .doc(userId)
+            .get()
+            .then(
+                querySnapshot => {
+                    let user = querySnapshot.data() as User;
+                    user.id = querySnapshot.id;
+                    return user;
+                },
+                error => {
+                    console.log(error);
+                    return null;
+                }
+            );
     }
 }

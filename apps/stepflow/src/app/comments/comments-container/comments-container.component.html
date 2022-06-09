@@ -2,11 +2,16 @@
     <ng-container *ngIf="isLoading">loading comments...</ng-container>
     <ng-container *ngIf="!isLoading">
         <button pButton type="button" class="btn btn-primary" (click)="refreshComments()" [disabled]="isLoading">Refresh Comments</button>
+        <select [formControl]="filterSelect" (change)="threadComments()">
+            <option [value]="filterOptions.ALL">{{filterOptions.ALL}}</option>
+            <option [value]="filterOptions.RESOLVED">{{filterOptions.RESOLVED}}</option>
+            <option [value]="filterOptions.UNRESOLVED">{{filterOptions.UNRESOLVED}}</option>
+        </select>
         <div *ngFor="let block of blocks">
             <comment-thread-view
                 [blockId]="block.id"
                 [threadHeader]="block.label"
-                [comments]="threadedComments[block.id] || []"
+                [commentDetails]="threadedComments[block.id] || []"
                 (onAdd)="onAdd($event)"
                 (onUpdate)="onUpdate($event)"
                 (onDelete)="onDelete($event)"

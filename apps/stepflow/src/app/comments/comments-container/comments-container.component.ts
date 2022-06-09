@@ -1,6 +1,14 @@
 import { Component, Input } from '@angular/core';
-import { BlockConfig, Comment } from '@stepflow/interfaces';
+import { FormControl } from '@angular/forms';
+import { BlockConfig, Comment, CommentDetail, User } from '@stepflow/interfaces';
 import { CommentsService } from '../../services/comments/comments.service';
+import { UserService } from '../../services/user/user.service';
+
+enum commentFilters {
+  ALL = 'All',
+  RESOLVED = 'Resolved',
+  UNRESOLVED = 'Unresolved',
+}
 
 @Component({
   selector: 'comments-container',
@@ -18,30 +26,68 @@ export class CommentsContainerComponent {
     return this._blocks;
   }
 
+  filterOptions = commentFilters;
+  filterSelect = new FormControl('All')
+
   isLoading = false;
-  threadedComments: { [blockId: string]: Comment[]} = {};
+  comments: Comment[] = [];
+  threadedComments: { [blockId: string]: CommentDetail[]} = {};
+  users: { [key: string]: User } = {};
 
-  constructor(private commentsService: CommentsService) { }
+  // Logic to determine whether a comment is editable or deletable. Add custom logic here if needed.
+  isEditable = (comment: Comment, currentUserId: string): boolean => comment.authorId?.toString() === currentUserId;
+  isDeletable = (comment: Comment, currentUserId: string): boolean => comment.authorId?.toString() === currentUserId;
 
-  refreshComments(): void {
+  constructor(
+    private commentsService: CommentsService,
+    private userService: UserService,
+  ) { }
+
+  async refreshComments(): Promise<void> {
     const blockIds = this.blocks.filter(block => !!block.id).map(block => block.id!);
-    this.getComments(blockIds);
+    await this.getComments(blockIds);
+    await this.getUsers();
+    this.threadComments();
   }
 
   private async getComments(blockIds: string[]): Promise<void> {
     this.isLoading = true;
     const comments = await this.commentsService.listComments(blockIds).then(comments => {
-      // Clear the old comments.
-      this.threadedComments = {};
-      // Add the new comments.
-      for (const comment of comments) {
-        if (!comment.blockId) { continue; }
-        if (!this.threadedComments[comment.blockId]) {
-          this.threadedComments[comment.blockId] = [];
-        }
-        this.threadedComments[comment.blockId].push(comment);
-      }
+      this.comments = comments;
     }).finally(() => this.isLoading = false );
+  }
+
+  private async getUsers(): Promise<void> {
+    const userIds = this.comments.map((comment: Comment) => comment.authorId!);
+    if (!userIds || userIds.length == 0) { this.users = {}; return; }
+    const users = await this.userService.getUsers(userIds);
+    this.users = users;
+  }
+
+  threadComments(): void {
+    this.threadedComments = {};
+    
+    const currentFilter = this.filterSelect.value;
+    const currentUserId = this.userService.currentUser.uid;
+    const constructDisplayName = (user: User) => user.displayName || user.email || 'Unknown';
+    for (const comment of this.comments) {
+      if (currentFilter === commentFilters.RESOLVED && !comment.resolved) { continue; }
+      else if (currentFilter === commentFilters.UNRESOLVED && comment.resolved) { continue; }
+      if (!comment.blockId || !comment.authorId) { continue; }
+      if (!this.threadedComments[comment.blockId]) {
+        this.threadedComments[comment.blockId] = [];
+      }
+
+      const author = this.users[comment.authorId];
+      const commentDetail: CommentDetail = {
+        comment: comment,
+        isEditable: this.isEditable(comment, currentUserId),
+        isDeletable: this.isDeletable(comment, currentUserId),
+        authorDisplayName: author ? constructDisplayName(this.users[comment.authorId]) : 'Unknown',
+      };
+
+      this.threadedComments[comment.blockId].push(commentDetail);
+    }
   }
 
   async onAdd(comment: Comment): Promise<void> {

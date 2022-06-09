@@ -1,14 +1,14 @@
 <div>
-    <i>{{comment.authorId}} says: </i><strong>{{comment.body}}</strong>
+    <i>{{commentDetail.authorDisplayName}} says: </i><strong>{{commentDetail.comment.body}}</strong>
     <p>
-        Resolved: {{comment.resolved ? 'YUP' : 'NOPE'}} - 
+        Resolved: {{commentDetail.comment.resolved ? 'YUP' : 'NOPE'}} - 
         <button type="button" class="btn btn-primary" (click)="toggleResolvedPressed()">
-            {{comment.resolved ? 'Unresolve' : 'Resolve'}}
+            {{commentDetail.comment.resolved ? 'Unresolve' : 'Resolve'}}
         </button>
-        <button type="button" class="btn btn-primary" (click)="editPressed()">
+        <button type="button" class="btn btn-primary" (click)="editPressed()" [disabled]="!commentDetail.isEditable">
             Edit
         </button>
-        <button type="button" class="btn btn-warning" (click)="deletePressed()">
+        <button type="button" class="btn btn-warning" (click)="deletePressed()" [disabled]="!commentDetail.isDeletable">
             Delete
         </button>
     </p>

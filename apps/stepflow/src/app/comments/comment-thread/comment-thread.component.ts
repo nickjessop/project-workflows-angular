@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
-import { Comment } from '@stepflow/interfaces';
+import { Comment, CommentDetail } from '@stepflow/interfaces';
 
 @Component({
   selector: 'comment-thread-view',
@@ -11,25 +11,26 @@ export class CommentThreadComponent {
 
   @Input() blockId!: string;
   @Input() threadHeader!: string;
-  @Input() comments!: Comment[];
+  @Input() commentDetails!: CommentDetail[];
+  @Input() currentUserId: string | null = null;
 
   @Output() onAdd: EventEmitter<Comment> = new EventEmitter<Comment>();
   @Output() onUpdate: EventEmitter<Comment> = new EventEmitter<Comment>();
   @Output() onDelete: EventEmitter<Comment> = new EventEmitter<Comment>();
 
-  _commentBeingEdited: Comment | null = null;
-  set commentBeingEdited(comment: Comment | null) {
+  _commentBeingEdited: CommentDetail | null = null;
+  set commentBeingEdited(comment: CommentDetail | null) {
     this._commentBeingEdited = comment;
     if (comment != null) this.composingNewComment = false;
   }
-  get commentBeingEdited(): Comment | null {
+  get commentBeingEdited(): CommentDetail | null {
     return this._commentBeingEdited;
   }
 
   composingNewComment: boolean = false;
 
-  editPressed(comment: Comment): void {
-    this.commentBeingEdited = comment;
+  editPressed(commentDetail: CommentDetail): void {
+    this.commentBeingEdited = commentDetail;
   }
 
   updateComment(comment: Comment): void {
