@@ -109,13 +109,7 @@
         <ng-template #shareableLinkLabel>
             <div class="share-label">Anyone with the link can view it.</div>
             <div class="p-inputgroup p-mt-2 share-input">
-                <input
-                    type="text"
-                    pInputText
-                    [value]="shareLink ? shareLink : 'No Link Generated'"
-                    readonly
-                    #linkInput
-                />
+                <input type="text" pInputText [value]="shareLink ? shareLink : ''" readonly #linkInput />
                 <button
                     type="button"
                     pButton

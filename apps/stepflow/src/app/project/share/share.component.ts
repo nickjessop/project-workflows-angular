@@ -64,7 +64,7 @@ export class ShareComponent implements OnInit {
         this.displayShareDialog = false;
     }
 
-    private async initShareLink() {
+    private initShareLink() {
         if (this.project?.shareLink) {
             const { userId, projectId, permission } = this.project.shareLink;
 
@@ -223,9 +223,9 @@ export class ShareComponent implements OnInit {
     //     this.linkCopiedMsg = [];
     // }
 
-    public enableShareLink(event: any) {
+    public async enableShareLink(event: any) {
         if (event.checked === true) {
-            this.generateSharingLink();
+            await this.generateSharingLink();
         } else {
             this.deleteShareLink();
         }

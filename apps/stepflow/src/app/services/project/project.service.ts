@@ -42,7 +42,6 @@ export class ProjectService {
     public unsubscribeToProjectListener?: () => void;
 
     constructor(
-        // private firebaseService: FirebaseService,
         private supabaseService: SupabaseService,
         private authenticationService: AuthenticationService,
         private coreComponentService: CoreComponentService,
@@ -248,7 +247,6 @@ export class ProjectService {
         return error ? undefined : data?.[0];
     }
 
-    //TODO: Add firebase rule to check that users are authorized to edit this project
     private async updateProject(projectConfig: Project) {
         const { data, error } = await this.supabaseService.supabase
             .from<Project>(this.PROJECT_COLLECTION)
@@ -256,6 +254,7 @@ export class ProjectService {
 
         if (!error && data !== null) {
             this.projectConfig = data[0];
+            this.setProject(data[0], false);
             return false;
         }
 
@@ -626,13 +625,11 @@ export class ProjectService {
         const currentProjectId = this._projectConfig.getValue().id;
 
         if (!currentUserId || !currentProjectId) {
-            console.log('Cannot generate share link when db/userid/projectid is missing');
-
             return;
         }
 
         const configUpdate = this._projectConfig.getValue();
-        delete configUpdate.shareLink;
+        configUpdate.shareLink = null;
 
         await this.updateProject(configUpdate);
     }

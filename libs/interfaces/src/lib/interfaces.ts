@@ -133,7 +133,7 @@ export interface Project {
     name: string;
     description?: string;
     configuration?: StepConfig[];
-    shareLink?: ShareLink;
+    shareLink?: ShareLink | null;
     members: string[];
     memberRoles: Array<MemberRole>;
     pendingMembers?: string[];
