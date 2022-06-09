@@ -246,32 +246,16 @@ export class ProjectService {
             .insert([baseProject]);
 
         return error ? undefined : data?.[0];
-        // const proj = await this.firebaseService
-        //     .getDbInstance()!
-        //     .collection(this.PROJECT_COLLECTION)
-        //     .add(baseProject)
-        //     .then(
-        //         async documentRef => {
-        //             baseProject.id = documentRef.id;
-        //             await documentRef.update({ id: documentRef.id });
-        //             // this.projectConfig = baseProject;
-        //             return baseProject;
-        //         },
-        //         error => {
-        //             console.log(`Error occurred while creating a new project: ${error}`);
-        //         }
-        //     );
-
-        // return proj;
     }
 
     //TODO: Add firebase rule to check that users are authorized to edit this project
-    public async updateProject(projectConfig: Project) {
-        const updatedProject = await this.supabaseService.supabase
+    private async updateProject(projectConfig: Project) {
+        const { data, error } = await this.supabaseService.supabase
             .from<Project>(this.PROJECT_COLLECTION)
-            .update(projectConfig);
+            .upsert(projectConfig);
 
-        if (!updatedProject.data || updatedProject.data?.[0] === null) {
+        if (!error && data !== null) {
+            this.projectConfig = data[0];
             return false;
         }
 
@@ -430,48 +414,80 @@ export class ProjectService {
         return setResult;
     }
 
-    public subscribeAndSetProject(projectId: string, sharePermission?: SharePermission) {
-        this.supabaseService.supabase.from<Project>(this.PROJECT_COLLECTION).on('*', projectUpdate => {
-            // const oldProject = projectUpdate.old; // old pre-updated project
-            const project = projectUpdate.new; // new updated project
+    public async subscribeAndSetProject(projectId: string, sharePermission?: SharePermission) {
+        const { data, error } = await this.supabaseService.supabase
+            .from<Project>(this.PROJECT_COLLECTION)
+            .select('*')
+            .eq('id', projectId);
 
-            if (projectUpdate.eventType === 'DELETE') {
-                this.router.navigate(['404']);
+        if (error || !this.authenticationService.user?.id || data === null) {
+            this.router.navigate(['404']);
+            return;
+        }
+
+        const projectMode = this.getProjectMode(
+            data[0].memberRoles,
+            this.authenticationService.user.id,
+            sharePermission
+        );
+        this._projectMode.next(projectMode);
+        this.projectConfig = data[0];
+
+        this.supabaseService.supabase
+            .from<Project>(`${this.PROJECT_COLLECTION}:id=eq.${projectId}`)
+            .on('*', projectUpdate => {
+                // const oldProject = projectUpdate.old; // old pre-updated project
+                const project = projectUpdate.new; // new updated project
+
+                if (projectUpdate.eventType === 'DELETE' || !this.authenticationService.user?.id) {
+                    return this.router.navigate(['404']);
+                }
+
+                const projectMode = this.getProjectMode(
+                    project.memberRoles,
+                    this.authenticationService.user.id,
+                    sharePermission
+                );
+                this._projectMode.next(projectMode);
+
+                const currentStepSet = project.configuration?.some(stepConfig => {
+                    return stepConfig.step.isCurrentStep;
+                });
+
+                if (!currentStepSet) {
+                    if (project.configuration?.[0]?.step) {
+                        project.configuration[0].step.isCurrentStep = true;
+                    }
+                }
+
+                this.projectConfig = project;
 
                 return;
-            }
-
-            if (sharePermission) {
-                this._projectMode.next(sharePermission);
-            } else if (
-                project.memberRoles.some(member => {
-                    return member.userId === this.authenticationService.user?.id && ['viewer'].includes(member.role);
-                })
-            ) {
-                this._projectMode.next('view');
-            } else if (
-                project.memberRoles.some(member => {
-                    return member.userId === this.authenticationService.user?.id && ['owner'].includes(member.role);
-                })
-            ) {
-                this._projectMode.next('configure');
-                // this._projectMode.next('edit');
-            } else {
-                this._projectMode.next('edit');
-            }
-
-            const currentStepSet = project.configuration?.some(stepConfig => {
-                return stepConfig.step.isCurrentStep;
             });
+    }
 
-            if (!currentStepSet) {
-                if (project.configuration?.[0]?.step) {
-                    project.configuration[0].step.isCurrentStep = true;
-                }
-            }
-
-            this.projectConfig = project;
-        });
+    private getProjectMode(
+        members: MemberRole[],
+        currentAuthUserId: string,
+        sharePermission?: SharePermission
+    ): ComponentMode {
+        if (sharePermission) {
+            return sharePermission;
+        } else if (
+            members.some(member => {
+                return member.userId === currentAuthUserId && ['viewer'].includes(member.role);
+            })
+        ) {
+            return 'view';
+        } else if (
+            members.some(member => {
+                return member.userId === currentAuthUserId && ['owner'].includes(member.role);
+            })
+        ) {
+            return 'configure';
+        } else {
+            return 'edit';
+        }
     }
 
     public async sendProjectInvitations(emails: string[], role: Role) {
@@ -516,7 +532,7 @@ export class ProjectService {
                     _projectConfig.members = _.union(_projectConfig.members, users.newMembers);
                     _projectConfig.memberRoles = _.union(_projectConfig.memberRoles, newMembers);
                 }
-                console.log(users?.pendingMembers);
+
                 if (users?.pendingMembers) {
                     users?.pendingMembers.map(member => {
                         return pendingMembers.push({ email: member, role: role || 'viewer' });

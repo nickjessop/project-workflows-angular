@@ -142,6 +142,8 @@ export class AuthenticationService {
             });
     }
 
+    public getUserGroupMetaData2(projectMembers: string[]) {}
+
     // public setUserMetaData({
     //     photoFilePath,
     //     plan,
