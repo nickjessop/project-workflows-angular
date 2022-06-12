@@ -6,6 +6,7 @@ import {
     Embed,
     FileUploader,
     ImageUploader,
+    PDF,
     RichTextInput,
     Table,
     TextInput,
@@ -90,17 +91,6 @@ export class CoreComponentService {
                 _component.validation = validation;
             }
             return _component;
-        } else if (componentType === 'textInput') {
-            const _component: TextInput = {
-                data: { value: '' },
-                component: 'textInput',
-                settings: { textInputComponent: { textareaHeight: 50 } },
-            };
-
-            if (validation) {
-                _component.validation = validation;
-            }
-            return _component;
         } else if (componentType === 'table') {
             // row?: { column: { size?: number; text: string }[] }[];
             const _component: Table = {
@@ -111,13 +101,13 @@ export class CoreComponentService {
                                 item: [{ text: 'Heading 1' }, { text: 'Heading 2' }, { text: 'Heading 3' }],
                             },
                             {
-                                item: [{ text: '' }, { text: '' }, { text: '' }],
+                                item: [{ text: 'item1' }, { text: 'item2' }, { text: 'item3' }],
                             },
                             {
-                                item: [{ text: '' }, { text: '' }, { text: '' }],
+                                item: [{ text: 'item4' }, { text: 'item5' }, { text: 'item6' }],
                             },
                             {
-                                item: [{ text: '' }, { text: '' }, { text: '' }],
+                                item: [{ text: 'item7' }, { text: 'item8' }, { text: 'item9' }],
                             },
                         ],
                     },
@@ -133,6 +123,16 @@ export class CoreComponentService {
             const _component: Embed = {
                 data: { value: [{ href: '' }] },
                 component: 'embed',
+            };
+
+            if (validation) {
+                _component.validation = validation;
+            }
+            return _component;
+        } else if (componentType === 'pdf') {
+            const _component: PDF = {
+                data: { value: { href: '' } },
+                component: 'pdf',
             };
 
             if (validation) {

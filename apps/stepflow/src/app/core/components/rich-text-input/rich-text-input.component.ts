@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { BlockConfig, ComponentMode, ComponentSettings } from '@stepflow/interfaces';
-import { MenuItem } from 'primeng/api';
+import { Editor, Toolbar, Validators } from 'ngx-editor';
 import { ProjectService } from '../../../services/project/project.service';
 import { CoreComponentService } from '../../core-component.service';
 
@@ -16,29 +16,38 @@ export class RichTextInputComponent implements OnInit {
     @Input() field: BlockConfig = this.coreComponentService.createBlockConfig('textInput');
     @Input() resizable?: boolean;
     @Input() componentMode?: ComponentMode;
-    // @ViewChild('textBlock')
-    // textBlockElement!: ElementRef;
-
-    constructor(private projectService: ProjectService, private coreComponentService: CoreComponentService) {}
-
-    ngOnInit() {}
-
     public height?: number;
     public settings?: ComponentSettings;
-    // public readonly AngularResizeElementDirection = AngularResizeElementDirection;
-
+    public editor!: Editor;
+    public toolbar: Toolbar = [
+        ['bold', 'italic'],
+        ['underline', 'strike'],
+        ['code', 'blockquote'],
+        ['ordered_list', 'bullet_list'],
+        ['link'],
+    ];
+    public html!: '';
     public showSaveButton: boolean = false;
     // public keyStrokeCount: number = 1;
 
-    public items: MenuItem[] = [
-        {
-            label: 'Delete Block',
-            icon: 'pi pi-times',
-            command: () => {
-                this.onDeleteBlock();
-            },
-        },
-    ];
+    constructor(private projectService: ProjectService, private coreComponentService: CoreComponentService) {}
+
+    form = new FormGroup({
+        editorContent: new FormControl('', Validators.required()),
+    });
+
+    ngOnInit() {
+        this.editor = new Editor();
+        this.showSaveButton = false;
+    }
+
+    ngOnDestroy(): void {
+        this.editor.destroy();
+    }
+
+    // onChange(event: Event) {
+    // add this to editor if needed: (ngModelChange)="onChange($event)"
+    // }
 
     public onDeleteBlock() {
         const index = this.index ? this.index : 0;
@@ -61,16 +70,6 @@ export class RichTextInputComponent implements OnInit {
         this.field.metadata.settings = { ...this.field.metadata.settings, height: height };
     }
 
-    // public onResize(evt: ResizeEvent): void {
-    //     this.height = evt.currentHeightValue;
-    // }
-
-    // public onResizeEnd(evt: ResizeEvent): void {
-    //     const height = evt.currentHeightValue;
-    //     this.updateHeight(height);
-    //     this.projectService.syncProject();
-    // }
-
     public onKeyup(event: Event) {
         // this.keyStrokeCount = this.keyStrokeCount + 1;
         // if (this.keyStrokeCount % 3 == 1) {
@@ -84,7 +83,8 @@ export class RichTextInputComponent implements OnInit {
     }
 
     public onFocusOut(event: Event) {
-        // add in HTML: on-focusout="onFocusOut($event)"
+        // this was almost working, but focusing on the url button forced a onFocusOut event
+        // on-focusout on dom element
         this.projectService.syncProject();
         this.showSaveButton = false;
     }

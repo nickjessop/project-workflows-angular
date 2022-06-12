@@ -14,7 +14,7 @@ import { CoreComponentService } from '../../core-component.service';
 export class TableComponent implements OnInit {
     @Input() group!: FormGroup;
     @Input() index = 0;
-    @Input() field: BlockConfig = this.coreComponentService.createBlockConfig('textInput');
+    @Input() field: BlockConfig = this.coreComponentService.createBlockConfig('table');
     @Input() resizable?: boolean;
     @Input() componentMode?: ComponentMode;
 
@@ -30,25 +30,25 @@ export class TableComponent implements OnInit {
                 {
                     label: 'Insert row above',
                     command: () => {
-                        this.addTableRow(this.selectedData.rowIndex);
+                        this.addRow(this.selectedData.rowIndex);
                     },
                 },
                 {
                     label: 'Insert row below',
                     command: () => {
-                        this.addTableRow(this.selectedData.rowIndex + 1);
+                        this.addRow(this.selectedData.rowIndex + 1);
                     },
                 },
                 {
                     label: 'Insert column right',
                     command: () => {
-                        this.addTableColumn(this.selectedData.colIndex + 1);
+                        this.addCol(this.selectedData.colIndex + 1);
                     },
                 },
                 {
                     label: 'Insert column left',
                     command: () => {
-                        this.addTableColumn(this.selectedData.colIndex);
+                        this.addCol(this.selectedData.colIndex);
                     },
                 },
             ],
@@ -106,29 +106,6 @@ export class TableComponent implements OnInit {
         this.projectService.setBlockDrag(false);
     }
 
-    private updateHeight(height: number = 400) {
-        if (!this.resizable) {
-            return;
-        }
-        this.height = height;
-        this.field.metadata.settings = { ...this.field.metadata.settings, height: height };
-    }
-
-    // public onResize(evt: AngularResizeElementEvent): void {
-    //     this.height = evt.currentHeightValue;
-
-    // this.data.width = evt.currentWidthValue;
-    // this.data.height = evt.currentHeightValue;
-    // this.data.top = evt.currentTopValue;
-    // this.data.left = evt.currentLeftValue;
-    // }
-
-    // public onResizeEnd(evt: AngularResizeElementEvent): void {
-    //     const height = evt.currentHeightValue;
-    //     this.updateHeight(height);
-    //     this.projectService.syncProject();
-    // }
-
     ngOnInit() {
         this.tableValues = (this.field.metadata as Table).data.value;
     }
@@ -170,7 +147,7 @@ export class TableComponent implements OnInit {
         this.projectService.syncProject();
     }
 
-    public addTableColumn(addAtIndex?: number) {
+    public addCol(addAtIndex?: number) {
         const column = this.tableValues?.row;
 
         if (!column) {
@@ -196,7 +173,7 @@ export class TableComponent implements OnInit {
         this.projectService.syncProject();
     }
 
-    private addTableRow(addAtIndex?: number) {
+    public addRow(addAtIndex?: number) {
         const columns = this.tableValues?.row;
 
         if (!columns) {
@@ -223,15 +200,22 @@ export class TableComponent implements OnInit {
         return column;
     }
 
-    public columnsResized(event: Event & { delta: number; element: { clientWidth: number; cellIndex: number } }) {
-        const sizeChangeDelta = event.delta;
-        const newWidth = event.element.clientWidth;
-        const cellIndex = event.element.cellIndex;
-    }
+    public columnsResized(event: Event & { delta: number; element: { clientWidth: number; id: number } }) {
+        const newWidth = String(event.element.clientWidth);
+        const colIndex = Number(event.element.id);
 
-    // TODO:
-    // Add save and restoring of column resizes
-    // Remove requirement to double click to save and edit another cell
+        const totalRows = this.tableValues?.row?.length || 0;
+
+        for (var i = 0; i < totalRows; i++) {
+            if (this.tableValues?.row?.[i].item?.[colIndex]) {
+                this.tableValues.row[i].item[colIndex].width = newWidth;
+            }
+        }
+
+        console.log(this.tableValues);
+
+        this.projectService.syncProject();
+    }
 
     public saveTableData() {
         this.projectService.syncProject();

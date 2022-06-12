@@ -18,21 +18,6 @@
     </div>
 </div>
 <ng-container *ngIf="authMode === 'register'">
-    <div class="p-col-12 info">
-        <div class="container p-p-4">
-            <h4><i class="pi pi-info-circle"></i> Early access</h4>
-            <p>
-                We’re currently in the process of testing the first version of our application with select users. When
-                you sign up you will be added to a waitlist and notified when you can access Stepflow as we gradually
-                allow more users in.
-            </p>
-            <p>
-                By creating your account you will be one of the first to access all Stepflow has to offer. After the
-                early access period you will be automatically switched to a 14 day trial for your selected plan. We are
-                excited to have you around and we hope you enjoy this first glimpse at our app!
-            </p>
-        </div>
-    </div>
     <div class="container p-pb-4 register">
         <div class="p-d-flex p-px-4 p-mt-4">
             <div class="p-col-7">
@@ -94,7 +79,8 @@
                         />
                     </div>
                     <div class="p-field">
-                        <input type="hidden" name="plan" value="{{ authInfo.plan }}" [(ngModel)]="authInfo.plan" />
+                        <!-- <input type="hidden" name="plan" value="{{ authInfo.plan }}" [(ngModel)]="authInfo.plan" /> -->
+                        <input type="hidden" name="plan" value="Starter" />
                         <button pButton type="button" label="Sign up" (click)="register()"></button>
                         <p>
                             By clicking "Sign up" you agree to Stepflow's
@@ -105,7 +91,22 @@
                 </div>
             </div>
             <div class="p-col-5">
-                <p-card header="{{ authInfo.plan }} plan" subheader="${{ authInfo.planPrice }}/mo" class="price">
+                <div class="info">
+                    <div class="p-p-4">
+                        <h4><i class="pi pi-info-circle"></i> Stepflow is in beta</h4>
+                        <p>
+                            We’re currently in the process of testing the first version of our application with select
+                            users. When you sign up you will be added to a waitlist and notified when you can access
+                            Stepflow as we gradually allow more users in.
+                        </p>
+                        <p>
+                            By creating your account you will be one of the first to access all Stepflow has to offer.
+                            After the beta period you will have the choice to stay on our free tier or upgrade. We are
+                            excited to have you around and we hope you enjoy this first glimpse at our app!
+                        </p>
+                    </div>
+                </div>
+                <!-- <p-card header="{{ authInfo.plan }} plan" subheader="${{ authInfo.planPrice }}/mo" class="price">
                     + Early access<br />
                     + 14 day trial<br />
                     <hr />
@@ -114,7 +115,7 @@
                 </p-card>
                 <div class="p-mt-2">
                     <a href="https://stepflow.co/plans-and-pricing">Switch plans</a>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>

@@ -13,7 +13,6 @@ import {
 } from '@angular/core';
 import { Project, Status, Step, StepConfig } from '@stepflow/interfaces';
 import * as _ from 'lodash';
-import { MenuItem } from 'primeng/api';
 import { fromEvent, Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ProjectService } from '../../services/project/project.service';
@@ -43,7 +42,7 @@ export class StepsComponent implements OnInit {
     @Input()
     canConfigureProject: boolean = false;
 
-    scrollSubject = new Subject();
+    scrollSubject = new Subject<void>();
     scrollSubject$ = this.scrollSubject.asObservable();
 
     public showDialog = false;
@@ -61,10 +60,10 @@ export class StepsComponent implements OnInit {
     constructor(public projectService: ProjectService) {
         this.statusOptions = [
             { label: 'No status', value: 'no-status', icon: '' },
-            { label: 'In progress', value: 'in-progress', icon: 'pi-progress' },
-            { label: 'Needs review', value: 'needs-review', icon: 'pi-exclamation' },
-            { label: 'Upcoming', value: 'upcoming', icon: 'pi-clock-hands' },
-            { label: 'Completed', value: 'completed', icon: 'pi-check' },
+            { label: 'In progress', value: 'in-progress', icon: 'pi-step-inprogress' },
+            { label: 'Needs review', value: 'needs-review', icon: 'pi-step-important' },
+            { label: 'Upcoming', value: 'upcoming', icon: 'pi-step-upcoming' },
+            { label: 'Completed', value: 'completed', icon: 'pi-step-completed' },
         ];
     }
 
@@ -101,7 +100,7 @@ export class StepsComponent implements OnInit {
 
     private initializeProject() {
         this.subscriptions.add(
-            this.projectService.projectConfig$.subscribe(_project => {
+            this.projectService.projectConfig$.subscribe((_project) => {
                 if (_project) {
                     this.project = _project;
 
@@ -114,23 +113,6 @@ export class StepsComponent implements OnInit {
         );
     }
 
-    public stepMenuOptions: MenuItem[] = [
-        {
-            label: 'Edit Step',
-            icon: 'pi pi-pencil',
-            command: () => {
-                this.onEditCurrentStep();
-            },
-        },
-        {
-            label: 'Delete Step',
-            icon: 'pi pi-trash',
-            command: () => {
-                this.onDeleteCurrentStep();
-            },
-        },
-    ];
-
     public onStepPress(stepIndex: number) {
         this.projectService.setNewCurrentProjectStep(stepIndex);
     }
@@ -139,7 +121,7 @@ export class StepsComponent implements OnInit {
         this.openDialog('new');
     }
 
-    private onEditCurrentStep() {
+    public onEditCurrentStep() {
         const currentStep = this.projectService.getCurrentStep();
 
         this.openDialog('edit', currentStep);

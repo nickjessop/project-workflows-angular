@@ -32,11 +32,20 @@ export type ComponentType =
     | 'richTextInput'
     | 'textInput'
     | 'table'
-    | 'embed';
+    | 'embed'
+    | 'pdf';
 
 export type ComponentMode = 'edit' | 'view' | 'configure';
 
-export type ComponentMetadata = Checkboxes | FileUploader | ImageUploader | RichTextInput | TextInput | Table | Embed;
+export type ComponentMetadata =
+    | Checkboxes
+    | FileUploader
+    | ImageUploader
+    | RichTextInput
+    | TextInput
+    | Table
+    | Embed
+    | PDF;
 
 export type BaseComponent = {
     component: ComponentType;
@@ -91,12 +100,15 @@ export interface Table extends BaseComponent {
 }
 
 export interface TableColumn {
-    row?: { item: { text: string }[] }[];
+    row?: { item: { text: string; width?: string }[] }[];
 }
-
 export interface Embed extends BaseComponent {
     component: 'embed';
     data: { value: Link[] };
+}
+export interface PDF extends BaseComponent {
+    component: 'pdf';
+    data: { value: Link };
 }
 
 export type Link = {
@@ -117,7 +129,7 @@ export interface IProjectInvitation {
 
 export interface Project {
     name: string;
-    description: string;
+    description?: string;
     configuration?: StepConfig[];
     shareLink?: ShareLink;
     members: string[];
@@ -139,7 +151,7 @@ export interface StepConfig {
 export interface Step {
     title: string;
     icon?: string;
-    description: string;
+    description?: string;
     visibility?: 'show' | 'hide';
     interaction?: 'document' | 'form';
     isCurrentStep?: boolean;
@@ -159,10 +171,10 @@ export type SharePermission = typeof SharePermissions[number];
 export type Status = typeof NoStatus | typeof InProgress | typeof NeedsReview | typeof Upcoming | typeof Complete;
 
 export const NoStatus = { label: 'No status', value: 'no-status', icon: '' } as const;
-export const InProgress = { label: 'In progress', value: 'in-progress', icon: 'pi-progress' } as const;
-export const NeedsReview = { label: 'Needs review', value: 'needs-review', icon: 'pi-exclamation' } as const;
-export const Upcoming = { label: 'Upcoming', value: 'upcoming', icon: 'pi-clock-hands' } as const;
-export const Complete = { label: 'Completed', value: 'completed', icon: 'pi-check' } as const;
+export const InProgress = { label: 'In progress', value: 'in-progress', icon: 'pi-step-inprogress' } as const;
+export const NeedsReview = { label: 'Needs review', value: 'needs-review', icon: 'pi-step-important' } as const;
+export const Upcoming = { label: 'Upcoming', value: 'upcoming', icon: 'pi-step-upcoming' } as const;
+export const Complete = { label: 'Completed', value: 'completed', icon: 'pi-step-completed' } as const;
 
 export interface ShareLink {
     userId: string;

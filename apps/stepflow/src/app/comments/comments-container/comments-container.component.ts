@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { BlockConfig, Comment, CommentDetail, User } from '@stepflow/interfaces';
 import { CommentsService } from '../../services/comments/comments.service';
-import { UserService } from '../../services/user/user.service';
+import { AuthenticationService } from '../../services/authentication/authentication.service';
 
 export enum commentFilters {
   ALL = 'All',
@@ -37,12 +37,12 @@ export class CommentsContainerComponent {
 
   // Logic to determine whether a comment is editable or deletable. Add custom logic here if/when needed.
   // Currently, only the author can edit or delete a comment. Anyone can resolve.
-  isEditable = (comment: Comment, currentUserId: string): boolean => comment.authorId?.toString() === currentUserId;
-  isDeletable = (comment: Comment, currentUserId: string): boolean => comment.authorId?.toString() === currentUserId;
+  isEditable = (comment: Comment, currentUserId: string | undefined): boolean => !currentUserId && comment.authorId?.toString() === currentUserId;
+  isDeletable = (comment: Comment, currentUserId: string | undefined): boolean => !currentUserId && comment.authorId?.toString() === currentUserId;
 
   constructor(
     private commentsService: CommentsService,
-    private userService: UserService,
+    private authenticationService: AuthenticationService,
   ) { }
 
   async refreshComments(): Promise<void> {
@@ -62,7 +62,7 @@ export class CommentsContainerComponent {
   private async getUsers(): Promise<void> {
     const userIds = this.comments.map((comment: Comment) => comment.authorId!);
     if (!userIds || userIds.length == 0) { this.users = {}; return; }
-    const users = await this.userService.getUsers(userIds);
+    const users = await this.authenticationService.getUsers(userIds);
     this.users = users;
   }
 
@@ -72,7 +72,7 @@ export class CommentsContainerComponent {
     // Consider the current filter
     const currentFilter = this.filterSelect.value;
     // Get currently authenticated user to determine if comments are editable/deletable.
-    const currentUserId = this.userService.currentUser.uid;
+    const currentUserId = this.authenticationService.getCurrentUser()?.uid;
     // This method determines a user's display name; change this if you want to use, say, the first name only.
     const constructDisplayName = (user: User) => user.displayName || user.email || 'Unknown';
 
