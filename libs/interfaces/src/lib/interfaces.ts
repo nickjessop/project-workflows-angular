@@ -187,9 +187,15 @@ export interface Comment {
     resolved?: boolean;
 }
 
-export type CommentDetail = {
+export interface CommentDetail {
     comment: Comment;
     isEditable: boolean;
     isDeletable: boolean;
     authorDisplayName: string;
 }
+
+export type CommentCounts = {
+    all: number;
+    resolved: number;
+    unresolved: number;
+} 

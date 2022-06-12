@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { v4 as uuid } from 'uuid'; 
 
-import { Comment } from '@stepflow/interfaces'
+import { Comment, CommentCounts } from '@stepflow/interfaces'
 import { AuthenticationService } from '../authentication/authentication.service';
 import { FirebaseService } from '../firebase/firebase.service';
 
@@ -63,13 +63,14 @@ export class CommentsService {
   }
 
   public async addComment(comment: Comment): Promise<boolean> {
-    
+    // Get the author id
     const authorId: string | undefined = this.authenticationService.getCurrentUser()?.uid
     if (!authorId) {
       console.error(`Could not add comment: no current user id available.`);
       return Promise.resolve(false)
     }
 
+    // Set auto-generated fields
     const rightNow: number = Date.now();
     const commentId = uuid();
     const additionalFields: Partial<Comment> = {
@@ -131,5 +132,46 @@ export class CommentsService {
         return false
       }
     )
+  }
+
+  public async getNumberOfCommentsForBlocks(blockIds: string[]): Promise<{ [key: string]: CommentCounts }> {
+    return this.firebaseService
+      .getDbInstance()!
+      .collection(this.COMMENTS_COLLECTION)
+      .where('blockId', 'in', blockIds)
+      .where('deleted', '==', false)
+      .get()
+      .then(
+        querySnapshot => {
+          let result: { [key: string]: CommentCounts } = {}
+          querySnapshot.forEach(doc => {
+            // Grab the comment
+            const comment = doc.data() as Comment
+            // Ensure there's a blockId
+            if (!comment.blockId) {
+              console.error(`Comment with id ${comment.commentId} has no blockId.`)
+              return;
+            };
+            // Ensure there's a commentCounts object for the blockId in the results
+            if (!result[comment.blockId]) {
+              const emptyCounts = {
+                all: 0,
+                resolved: 0,
+                unresolved: 0,
+              }
+              result[comment.blockId] = emptyCounts;
+            }
+
+            // Increment the counts
+            result[comment.blockId].all++
+            if (comment.resolved) {
+              result[comment.blockId].resolved++
+            } else {
+              result[comment.blockId].unresolved++
+            }
+          });
+          return result;
+        }
+      )
   }
 }

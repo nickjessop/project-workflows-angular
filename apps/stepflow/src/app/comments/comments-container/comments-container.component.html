@@ -14,8 +14,7 @@
                 [commentDetails]="threadedComments[block.id] || []"
                 (onAdd)="onAdd($event)"
                 (onUpdate)="onUpdate($event)"
-                (onDelete)="onDelete($event)"
-                (onRefresh)="refreshComments()">
+                (onDelete)="onDelete($event)">
             </comment-thread-view>
         </div>
     </ng-container>

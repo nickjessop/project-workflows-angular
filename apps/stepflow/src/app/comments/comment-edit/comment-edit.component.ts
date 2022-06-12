@@ -28,7 +28,6 @@ export class CommentEditComponent implements OnInit {
   onSubmitPressed(): void {
     const newCommentBody = this.formGroup.get('body')?.value || '';
 
-    // TODO: Validate and throw an error if the comment body is not valid.
     if (this.commentDetail) {
       this.commentDetail.comment.body = newCommentBody;
       this.onCommentEdit.emit(this.commentDetail.comment);
