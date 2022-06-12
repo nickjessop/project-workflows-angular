@@ -5,32 +5,104 @@
     [index]="index"
 >
     <ng-container *ngIf="componentMode === 'view'">
-        <div class="table--container">
-            <div *ngFor="let row of tableValues?.row; first as firstRow">
-                <div class="table view p-col p-d-flex p-p-0">
-                    <div class="p-row p-d-flex p-p-0" [ngClass]="{ header: firstRow }">
-                        <!-- row?: { item: { text: string }[] }[]; -->
-                        <div *ngFor="let rowItem of row.item">
-                            <input type="text" pInputText disabled [(ngModel)]="rowItem.text" />
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="table view">
+            <p-table [value]="tableValues?.row" styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <ng-container *ngFor="let row of tableValues?.row">
+                            <ng-container *ngFor="let col of row.item">
+                                <th pResizableColumn *ngIf="col.isHeader">
+                                    {{ col.text }}
+                                </th>
+                            </ng-container>
+                        </ng-container>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-value>
+                    <tr>
+                        <ng-container *ngFor="let col of value.item">
+                            <td *ngIf="!col.isHeader">
+                                {{ col.text }}
+                            </td>
+                        </ng-container>
+                    </tr>
+                </ng-template>
+            </p-table>
         </div>
     </ng-container>
     <ng-container *ngIf="componentMode === 'edit' || componentMode === 'configure'">
-        <div class="table--container">
-            <div *ngFor="let row of tableValues?.row; first as firstRow">
-                <div class="table p-col p-d-flex p-p-0">
-                    <div class="p-row p-d-flex p-p-0" [ngClass]="{ header: firstRow }">
-                        <div *ngFor="let rowItem of row.item; index as index">
-                            <div>
-                                <input type="text" pInputText [(ngModel)]="rowItem.text" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <p-contextMenu #cm [model]="menuItems" appendTo="body"></p-contextMenu>
+
+        <div class="table" aria-haspopup="true">
+            <p-table
+                #table
+                [value]="tableValues?.row"
+                [(contextMenuSelection)]="selectedData"
+                [contextMenu]="cm"
+                [resizableColumns]="true"
+                (onColResize)="columnsResized($event)"
+                columnResizeMode="expand"
+                scrollDirection="both"
+                styleClass="p-datatable-gridlines"
+            >
+                <ng-template pTemplate="header">
+                    <tr pEditableRow>
+                        <ng-container *ngFor="let row of tableValues?.row; index as rowIndex">
+                            <ng-container *ngFor="let col of row.item; index as hIndex">
+                                <th
+                                    pEditableColumn
+                                    pResizableColumn
+                                    *ngIf="rowIndex === 0"
+                                    id="{{ hIndex }}"
+                                    [ngStyle]="{ 'width.px': col.width }"
+                                >
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="text" [(ngModel)]="col.text" />
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            <input
+                                                pInputText
+                                                type="text"
+                                                readonly
+                                                [(ngModel)]="col.text"
+                                                class="cell-display"
+                                            />
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </th>
+                            </ng-container>
+                        </ng-container>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-value let-r="rowIndex">
+                    <tr>
+                        <ng-container *ngFor="let col of value.item; index as colIndex">
+                            <td
+                                pEditableColumn
+                                *ngIf="r !== 0"
+                                [pContextMenuRow]="{ rowIndex: r, colIndex: colIndex }"
+                                [ngStyle]="{ 'width.px': col.width }"
+                            >
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input pInputText type="text" [(ngModel)]="col.text" />
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        <input
+                                            pInputText
+                                            type="text"
+                                            readonly
+                                            [(ngModel)]="col.text"
+                                            class="cell-display"
+                                        />
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                        </ng-container>
+                    </tr>
+                </ng-template>
+            </p-table>
         </div>
     </ng-container>
 </project-drag-and-resize>

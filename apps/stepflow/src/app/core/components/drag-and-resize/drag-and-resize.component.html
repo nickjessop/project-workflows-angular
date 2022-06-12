@@ -1,44 +1,27 @@
-<!-- <ng-container *ngIf="isDraggable; else showDefault">
-</ng-container>
-<ng-template #showDefault></ng-template> -->
 <ng-container *ngIf="componentMode === 'configure'; else showView">
     <div
-        class="field p-mb-2 p-p-2"
+        class="field p-mb-4 p-px-3 p-py-4"
         cdkDrag
         #fieldContainer
         (cdkDragStarted)="dragStarted()"
         (cdkDragReleased)="dragFinished()"
         [style.height.px]="field.metadata.settings?.height && resizable ? field.metadata.settings!.height : ''"
+        mwlResizable
+        [enableGhostResize]="resizable"
+        (resizeEnd)="onResizeEnd($event)"
     >
         <div *ngIf="isDraggable" class="field__handle"><i class="pi pi-drag" cdkDragHandle></i></div>
-        <div
-            class="resize resize__bottom--right"
-            (resize)="onResize($event)"
-            (resizeEnd)="onResizeEnd($event)"
-            mwlResizable
-            [enableGhostResize]="resizable"
-            (resizeEnd)="onResizeEnd($event)"
-            *ngIf="resizable"
-        ></div>
-        <!-- <div
-            class="resize resize__bottom--right"
-            (resize)="onResize($event)"
-            (resizeEnd)="onResizeEnd($event)"
-            [targetElement]="fieldContainer"
-            [direction]="AngularResizeElementDirection.BOTTOM_RIGHT"
-            *ngIf="resizable"
-        ></div> -->
-        <div class="p-d-flex p-jc-between p-ai-center p-mb-2">
-            <div class="field__label">
-                <p-inplace closable="true" closeIcon="pi pi-check" (onDeactivate)="saveBlockData()">
-                    <ng-template pTemplate="display">
-                        <span class="ms-1">{{ field.label ? field.label : 'Untitled block' }}</span>
-                    </ng-template>
-                    <ng-template pTemplate="content">
-                        <input type="text" class="p-inputtext ms-1" [(ngModel)]="field.label" pInputText />
-                    </ng-template>
-                </p-inplace>
-            </div>
+        <div class="resize" mwlResizeHandle [resizeEdges]="{ bottom: true }" *ngIf="resizable"></div>
+
+        <div class="field__label p-d-flex p-jc-between p-ai-center p-mb-2">
+            <p-inplace closable="true" closeIcon="pi pi-check" (onDeactivate)="saveBlockData()">
+                <ng-template pTemplate="display">
+                    <span class="ms-1">{{ field.label ? field.label : 'Untitled block' }}</span>
+                </ng-template>
+                <ng-template pTemplate="content">
+                    <input type="text" class="p-inputtext ms-1" [(ngModel)]="field.label" pInputText />
+                </ng-template>
+            </p-inplace>
             <div class="field__settings">
                 <button
                     type="button"
@@ -51,18 +34,22 @@
             </div>
         </div>
         <div class="field__description mb-2 ms-01">Description</div>
-        <ng-container *ngTemplateOutlet="transposedContent"></ng-container>
+        <div class="field__content">
+            <ng-container *ngTemplateOutlet="transposedContent"></ng-container>
+        </div>
     </div>
 </ng-container>
 <ng-template #showView>
     <div class="field p-mb-3 p-py-4 p-px-2" #fieldContainer [style.height.px]="field.metadata.settings?.height">
-        <div class="p-d-flex p-jc-between p-ai-center p-mb-2">
-            <div class="field__label p-ml-2 p-mb-2 ms-1">
+        <div class="field__label p-d-flex p-jc-between p-ai-center p-mb-2">
+            <div class="p-ml-2 p-mb-2 ms-1">
                 {{ field.label ? field.label : 'Untitled block' }}
             </div>
         </div>
         <div class="field__description mb-2 ms-01">Description</div>
-        <ng-container *ngTemplateOutlet="transposedContent"></ng-container>
+        <div class="field__content">
+            <ng-container *ngTemplateOutlet="transposedContent"></ng-container>
+        </div>
     </div>
 </ng-template>
 <ng-template #transposedContent><ng-content></ng-content></ng-template>

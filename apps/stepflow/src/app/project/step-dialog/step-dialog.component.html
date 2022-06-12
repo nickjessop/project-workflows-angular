@@ -17,9 +17,15 @@
         </div>
     </ng-container>
     <ng-template #showDefault>
+        <p-message
+            *ngIf="showError"
+            severity="error"
+            text="Enter a title to add a new step"
+            styleClass="p-mb-4"
+        ></p-message>
+
         <div class="p-field">
             <label for="title" aria-describedby="Name your step" styleClass="labelBlock">Title</label>
-
             <input id="title" type="text" pInputText [(ngModel)]="step.title" style="width: 100%" />
         </div>
         <div class="p-field p-pt-2">
@@ -52,6 +58,23 @@
     </ng-template>
 
     <p-footer>
-        <button type="button" pButton [label]="getButtonLabel()" (click)="onDialogSubmit($event)"></button>
+        <div class="p-d-flex p-jc-between">
+            <button
+                *ngIf="this.mode === 'edit'"
+                type="button"
+                class="p-button-secondary"
+                icon="pi pi-trash"
+                pButton
+                label="Delete"
+                (click)="this.mode = 'delete'"
+            ></button>
+            <button
+                type="button"
+                pButton
+                [ngClass]="{ 'p-button-danger': this.mode === 'delete' }"
+                [label]="getButtonLabel()"
+                (click)="onDialogSubmit($event)"
+            ></button>
+        </div>
     </p-footer>
 </p-dialog>

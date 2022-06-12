@@ -16,17 +16,18 @@ export class StepDialogComponent implements OnInit {
     @Input() showDialog = false;
     @Output() dialogSubmitEvent = new EventEmitter<{ step?: Step; mode: 'edit' | 'new' | 'delete' }>();
     @Output() onHideEvent = new EventEmitter<true>();
+    public showError: boolean = false;
 
-    statusOptions: Status[];
-    selectedStatus: Status = { label: 'No status', value: 'no-status', icon: '' };
+    public statusOptions: Status[];
+    public selectedStatus: Status = { label: 'No status', value: 'no-status', icon: '' };
 
     constructor() {
         this.statusOptions = [
             { label: 'No status', value: 'no-status', icon: '' },
-            { label: 'In progress', value: 'in-progress', icon: 'pi-progress' },
-            { label: 'Needs review', value: 'needs-review', icon: 'pi-exclamation' },
-            { label: 'Upcoming', value: 'upcoming', icon: 'pi-clock-hands' },
-            { label: 'Completed', value: 'completed', icon: 'pi-check' },
+            { label: 'In progress', value: 'in-progress', icon: 'pi-step-inprogress' },
+            { label: 'Needs review', value: 'needs-review', icon: 'pi-step-important' },
+            { label: 'Upcoming', value: 'upcoming', icon: 'pi-step-upcoming' },
+            { label: 'Completed', value: 'completed', icon: 'pi-step-completed' },
         ];
     }
 
@@ -50,7 +51,8 @@ export class StepDialogComponent implements OnInit {
     }
 
     public onDialogSubmit($event: Event) {
-        if (this.mode !== 'delete' && (!this.step.title || !this.step.description)) {
+        if (this.mode !== 'delete' && !this.step.title) {
+            this.showError = true;
             return;
         }
         this.step.status = this.selectedStatus;

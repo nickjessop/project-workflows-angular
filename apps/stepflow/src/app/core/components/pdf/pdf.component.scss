@@ -1,0 +1,57 @@
+.edit,
+.view {
+    height: 100%;
+    .upload {
+        height: 100%;
+        display: flex;
+        flex: 1 0 100%;
+        width: 100%;
+    }
+}
+.pdf-progress {
+    height: 100%;
+}
+.pdf-options {
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+    z-index: 999;
+}
+.fade {
+    width: 100%;
+    height: 40px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
+    position: absolute;
+    left: 0;
+    bottom: 0;
+}
+
+:host ::ng-deep {
+    .p-fileupload {
+        width: 100%;
+        .p-fileupload-content {
+            border-style: dashed;
+        }
+        .p-fileupload-buttonbar {
+            border: none;
+            background: white;
+            display: flex;
+            justify-content: center;
+            padding-top: 0;
+        }
+    }
+}
+
+:host ::ng-deep .file-spinner .p-progress-spinner-circle {
+    animation: custom-progress-spinner-color 6s ease infinite;
+}
+
+@keyframes custom-progress-spinner-color {
+    100% {
+        stroke: var(--primary-color);
+    }
+    80%,
+    90% {
+        stroke: var(--primary-color);
+    }
+}

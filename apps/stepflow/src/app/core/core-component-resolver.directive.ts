@@ -5,6 +5,7 @@ import { CheckboxesComponent } from './components/checkboxes/checkboxes.componen
 import { EmbedComponent } from './components/embed/embed.component';
 import { FileUploaderComponent } from './components/file-uploader/file-uploader.component';
 import { ImageUploaderComponent } from './components/image-uploader/image-uploader.component';
+import { PdfComponent } from './components/pdf/pdf.component';
 import { RichTextInputComponent } from './components/rich-text-input/rich-text-input.component';
 import { TableComponent } from './components/table/table.component';
 import { TextInputComponent } from './components/text-input/text-input.component';
@@ -26,6 +27,7 @@ export class CoreComponentResolverDirective implements OnInit {
         | TextInputComponent
         | TableComponent
         | EmbedComponent
+        | PdfComponent
     >;
 
     constructor(
@@ -92,6 +94,15 @@ export class CoreComponentResolverDirective implements OnInit {
         } else if (componentType === 'embed') {
             const factory = this.componentFactoryResolver.resolveComponentFactory(EmbedComponent);
             const _componentRef = this.viewContainerRef.createComponent<EmbedComponent>(factory);
+            _componentRef.instance.field = this.field;
+            _componentRef.instance.group = this.group;
+            _componentRef.instance.index = this.index;
+            _componentRef.instance.componentMode = this.componentMode;
+
+            this.componentRef = _componentRef;
+        } else if (componentType === 'pdf') {
+            const factory = this.componentFactoryResolver.resolveComponentFactory(PdfComponent);
+            const _componentRef = this.viewContainerRef.createComponent<PdfComponent>(factory);
             _componentRef.instance.field = this.field;
             _componentRef.instance.group = this.group;
             _componentRef.instance.index = this.index;

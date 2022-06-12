@@ -5,6 +5,8 @@
     &__content {
         width: 100%;
         height: 100%;
+        background: white;
+        border-bottom: 1px solid var(--surface-c);
     }
     .user-menu {
         &:hover {

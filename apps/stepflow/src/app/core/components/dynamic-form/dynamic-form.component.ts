@@ -32,7 +32,7 @@ export class DynamicFormComponent implements OnInit {
     createControl() {
         const group = this.formBuilder.group({});
         if (this.fields && this.fields.length > 0) {
-            this.fields.forEach(field => {
+            this.fields.forEach((field) => {
                 const control = this.formBuilder.control(field, this.bindValidations(field.metadata.validation || []));
                 group.addControl(field.name, control);
             });
@@ -45,7 +45,7 @@ export class DynamicFormComponent implements OnInit {
         if (validations.length > 0) {
             const validList: ValidatorFn[] = [];
 
-            validations.forEach(valid => {
+            validations.forEach((valid) => {
                 validList.push(valid.validator);
             });
 
@@ -68,7 +68,7 @@ export class DynamicFormComponent implements OnInit {
     }
 
     validateAllFormFields(formGroup: FormGroup) {
-        Object.keys(formGroup.controls).forEach(field => {
+        Object.keys(formGroup.controls).forEach((field) => {
             const control = formGroup.get(field);
 
             if (control) {

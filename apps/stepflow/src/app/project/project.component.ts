@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { ConfirmationService } from 'primeng/api';
-import { ApiService } from '../services/api/api.service';
 import { ProjectService } from '../services/project/project.service';
 
 @Component({
@@ -17,7 +17,7 @@ export class ProjectComponent implements OnInit {
     constructor(
         private projectService: ProjectService,
         private confirmationService: ConfirmationService,
-        private apiService: ApiService
+        private router: Router
     ) {}
 
     ngOnInit() {
@@ -30,7 +30,7 @@ export class ProjectComponent implements OnInit {
 
         try {
             const allProjects = await this.projectService.getProjects();
-            this.allProjects = allProjects.map(project => {
+            this.allProjects = allProjects.map((project) => {
                 return {
                     id: project.itemData.id!,
                     description: project.itemData.description,
@@ -39,8 +39,8 @@ export class ProjectComponent implements OnInit {
                     isOwner: project.isOwner,
                 };
             });
-            this.myProjects = this.allProjects.filter(project => project.isOwner === true);
-            this.sharedProjects = this.allProjects.filter(project => project.isOwner === false);
+            this.myProjects = this.allProjects.filter((project) => project.isOwner === true);
+            this.sharedProjects = this.allProjects.filter((project) => project.isOwner === false);
         } catch (error) {
             // TODO: handle error;
         }
@@ -50,13 +50,13 @@ export class ProjectComponent implements OnInit {
 
     public onDeleteProject($event: { id: string }) {
         this.confirmationService.confirm({
-            message: 'Are you sure you want to delete this project?',
+            message: 'Are you sure you want to delete this project? This action cannot be undone.',
             accept: () => {
                 this.projectService.deleteProject($event.id).then(
-                    success => {
+                    (success) => {
                         this.getProjects();
                     },
-                    error => {
+                    (error) => {
                         console.log(`Error deleting project ${$event.id}`);
                     }
                 );
@@ -64,14 +64,19 @@ export class ProjectComponent implements OnInit {
         });
     }
 
-    public onCreateNewProjectEvent($event: { projectName: string; description: string }) {
-        this.projectService.createNewProject($event.projectName, $event.description).then(
-            success => {
-                this.getProjects();
-            },
-            error => {
-                console.log('Error creating new project');
-            }
-        );
+    public async onCreateNewProjectEvent($event: { projectName: string; description: string }) {
+        const newProject = await this.projectService.createNewProject($event.projectName, $event.description);
+
+        if (newProject) {
+            this.router.navigateByUrl(`/project/${newProject.id}`);
+        }
+        // this.projectService.createNewProject($event.projectName, $event.description).then(
+        //     success => {
+        //         this.getProjects();
+        //     },
+        //     error => {
+        //         console.log('Error creating new project');
+        //     }
+        // );
     }
 }
