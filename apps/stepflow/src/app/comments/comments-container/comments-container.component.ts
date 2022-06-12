@@ -37,8 +37,8 @@ export class CommentsContainerComponent {
 
   // Logic to determine whether a comment is editable or deletable. Add custom logic here if/when needed.
   // Currently, only the author can edit or delete a comment. Anyone can resolve.
-  isEditable = (comment: Comment, currentUserId: string | undefined): boolean => !currentUserId && comment.authorId?.toString() === currentUserId;
-  isDeletable = (comment: Comment, currentUserId: string | undefined): boolean => !currentUserId && comment.authorId?.toString() === currentUserId;
+  isEditable = (comment: Comment, currentUserId: string | undefined): boolean => !!currentUserId && comment.authorId?.toString() === currentUserId;
+  isDeletable = (comment: Comment, currentUserId: string | undefined): boolean => !!currentUserId && comment.authorId?.toString() === currentUserId;
 
   constructor(
     private commentsService: CommentsService,
@@ -52,6 +52,9 @@ export class CommentsContainerComponent {
     await this.getUsers();
     this.threadComments();
     this.isLoading = false;
+
+    const blockCounts = await this.commentsService.getNumberOfCommentsForBlocks(blockIds);
+    console.log(`Block counts: ${JSON.stringify(blockCounts)}`);
   }
 
   private async getComments(blockIds: string[]): Promise<void> {
