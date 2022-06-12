@@ -52,9 +52,6 @@ export class CommentsContainerComponent {
     await this.getUsers();
     this.threadComments();
     this.isLoading = false;
-
-    const blockCounts = await this.commentsService.getNumberOfCommentsForBlocks(blockIds);
-    console.log(`Block counts: ${JSON.stringify(blockCounts)}`);
   }
 
   private async getComments(blockIds: string[]): Promise<void> {
