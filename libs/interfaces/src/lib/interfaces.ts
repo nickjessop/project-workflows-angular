@@ -210,4 +210,4 @@ export type CommentCounts = {
     all: number;
     resolved: number;
     unresolved: number;
-} 
+}
