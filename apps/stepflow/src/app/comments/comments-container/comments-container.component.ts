@@ -4,7 +4,7 @@ import { BlockConfig, Comment, CommentDetail, User } from '@stepflow/interfaces'
 import { CommentsService } from '../../services/comments/comments.service';
 import { UserService } from '../../services/user/user.service';
 
-enum commentFilters {
+export enum commentFilters {
   ALL = 'All',
   RESOLVED = 'Resolved',
   UNRESOLVED = 'Unresolved',
@@ -26,15 +26,17 @@ export class CommentsContainerComponent {
     return this._blocks;
   }
 
+  // Declaring this here to be accessible in the template.
   filterOptions = commentFilters;
-  filterSelect = new FormControl('All')
+  filterSelect = new FormControl(commentFilters.ALL);
 
   isLoading = false;
   comments: Comment[] = [];
   threadedComments: { [blockId: string]: CommentDetail[]} = {};
   users: { [key: string]: User } = {};
 
-  // Logic to determine whether a comment is editable or deletable. Add custom logic here if needed.
+  // Logic to determine whether a comment is editable or deletable. Add custom logic here if/when needed.
+  // Currently, only the author can edit or delete a comment. Anyone can resolve.
   isEditable = (comment: Comment, currentUserId: string): boolean => comment.authorId?.toString() === currentUserId;
   isDeletable = (comment: Comment, currentUserId: string): boolean => comment.authorId?.toString() === currentUserId;
 
@@ -44,17 +46,17 @@ export class CommentsContainerComponent {
   ) { }
 
   async refreshComments(): Promise<void> {
+    this.isLoading = true;
     const blockIds = this.blocks.filter(block => !!block.id).map(block => block.id!);
     await this.getComments(blockIds);
     await this.getUsers();
     this.threadComments();
+    this.isLoading = false;
   }
 
   private async getComments(blockIds: string[]): Promise<void> {
-    this.isLoading = true;
-    const comments = await this.commentsService.listComments(blockIds).then(comments => {
-      this.comments = comments;
-    }).finally(() => this.isLoading = false );
+    const comments = await this.commentsService.listComments(blockIds);
+    this.comments = comments;
   }
 
   private async getUsers(): Promise<void> {
@@ -67,23 +69,31 @@ export class CommentsContainerComponent {
   threadComments(): void {
     this.threadedComments = {};
     
+    // Consider the current filter
     const currentFilter = this.filterSelect.value;
+    // Get currently authenticated user to determine if comments are editable/deletable.
     const currentUserId = this.userService.currentUser.uid;
+    // This method determines a user's display name; change this if you want to use, say, the first name only.
     const constructDisplayName = (user: User) => user.displayName || user.email || 'Unknown';
+
     for (const comment of this.comments) {
+      // Omit comments that are not in the current filter
       if (currentFilter === commentFilters.RESOLVED && !comment.resolved) { continue; }
       else if (currentFilter === commentFilters.UNRESOLVED && comment.resolved) { continue; }
+      // Omit comments that do not have block ids or author ids; these shouldn't happen, but checking here just in case
+      // to dodge any NPEs
       if (!comment.blockId || !comment.authorId) { continue; }
       if (!this.threadedComments[comment.blockId]) {
         this.threadedComments[comment.blockId] = [];
       }
 
+      // Populate the commentDetail fields.
       const author = this.users[comment.authorId];
       const commentDetail: CommentDetail = {
         comment: comment,
         isEditable: this.isEditable(comment, currentUserId),
         isDeletable: this.isDeletable(comment, currentUserId),
-        authorDisplayName: author ? constructDisplayName(this.users[comment.authorId]) : 'Unknown',
+        authorDisplayName: author ? constructDisplayName(author) : 'Unknown',
       };
 
       this.threadedComments[comment.blockId].push(commentDetail);
@@ -101,7 +111,6 @@ export class CommentsContainerComponent {
 
   async onUpdate(comment: Comment): Promise<void> {
     await this.commentsService.putComment(comment);
-    // this.refreshComments();
   }
 
   async onDelete(comment: Comment): Promise<void> {
