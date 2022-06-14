@@ -17,13 +17,11 @@ import { ImageUploaderComponent } from './components/image-uploader/image-upload
 import { PdfComponent } from './components/pdf/pdf.component';
 import { RichTextInputComponent } from './components/rich-text-input/rich-text-input.component';
 import { TableComponent } from './components/table/table.component';
-import { TextInputComponent } from './components/text-input/text-input.component';
 import { CoreComponentResolverDirective } from './core-component-resolver.directive';
 
 @NgModule({
     declarations: [
         RichTextInputComponent,
-        TextInputComponent,
         ImageUploaderComponent,
         FileUploaderComponent,
         TableComponent,
@@ -65,7 +63,6 @@ import { CoreComponentResolverDirective } from './core-component-resolver.direct
     ],
     exports: [
         RichTextInputComponent,
-        TextInputComponent,
         ImageUploaderComponent,
         FileUploaderComponent,
         TableComponent,
@@ -77,7 +74,6 @@ import { CoreComponentResolverDirective } from './core-component-resolver.direct
     ],
     entryComponents: [
         RichTextInputComponent,
-        TextInputComponent,
         ImageUploaderComponent,
         FileUploaderComponent,
         TableComponent,

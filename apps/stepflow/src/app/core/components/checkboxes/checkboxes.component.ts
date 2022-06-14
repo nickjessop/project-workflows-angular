@@ -12,7 +12,7 @@ import { CoreComponentService } from '../../core-component.service';
 })
 export class CheckboxesComponent implements OnInit {
     @Input() index = 0;
-    @Input() field: BlockConfig = this.coreComponentService.createBlockConfig('textInput');
+    @Input() field: BlockConfig = this.coreComponentService.createBlockConfig('checkboxes');
     @Input() resizable?: boolean;
     public componentMode: ComponentMode = 'view';
     public showSaveButton: boolean = false;

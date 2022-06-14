@@ -25,7 +25,7 @@
             </p-table>
         </div>
     </ng-container>
-    <ng-container *ngIf="componentMode === 'edit' || componentMode === 'configure'">
+    <ng-container *ngIf="componentMode === 'edit'">
         <p-contextMenu #cm [model]="menuItems" appendTo="body"></p-contextMenu>
 
         <div class="table" aria-haspopup="true">
