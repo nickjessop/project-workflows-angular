@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Project, ProjectMode, SharePermission, StepConfig } from '@stepflow/interfaces';
 import { Subscription } from 'rxjs';
@@ -9,7 +9,7 @@ import { ProjectService } from '../../services/project/project.service';
     templateUrl: './viewer.component.html',
     styleUrls: ['./viewer.component.scss'],
 })
-export class ViewerComponent {
+export class ViewerComponent implements OnDestroy {
     private subscriptions = new Subscription();
 
     public project?: Project;
