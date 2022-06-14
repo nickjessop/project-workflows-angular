@@ -1,8 +1,8 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { BlockConfig, ComponentMode, ComponentSettings } from '@stepflow/interfaces';
-// import { AngularResizeElementDirection, AngularResizeElementEvent } from 'angular-resize-element';
 import { ResizeEvent } from 'angular-resizable-element';
 import { MenuItem } from 'primeng/api';
+import { Subscription } from 'rxjs';
 import { ProjectService } from '../../../services/project/project.service';
 import { CoreComponentService } from '../../core-component.service';
 
@@ -13,11 +13,18 @@ import { CoreComponentService } from '../../core-component.service';
 })
 export class DragAndResizeComponent {
     @Input() isDraggable = false;
-    @Input() componentMode: ComponentMode = 'view';
     @Input() field: BlockConfig = this.coreComponentService.createBlockConfig('textInput');
     @Input() index = 0;
     @Input() resizable?: boolean;
     @Input() settings?: ComponentSettings;
+    @Output() componentMode = new EventEmitter<ComponentMode>();
+
+    public canConfigureBlocks: boolean = false;
+    public canEditBlocks: boolean = false;
+    public editMode: boolean = false;
+    public subscriptions: Subscription = new Subscription();
+
+    // need button + function to set component to edit (should only be viewable by caneditblocks users)
 
     public items: MenuItem[] = [
         {
@@ -30,6 +37,32 @@ export class DragAndResizeComponent {
     ];
 
     constructor(private projectService: ProjectService, private coreComponentService: CoreComponentService) {}
+
+    ngOnInit() {
+        this.subscriptions.add(
+            this.projectService.modesAvailable$.subscribe((val) => {
+                if (val.allowedProjectModes.configure === true) {
+                    this.canConfigureBlocks = true;
+                }
+                if (val.allowedProjectModes.edit === true) {
+                    this.canEditBlocks = true;
+                }
+            })
+        );
+    }
+
+    ngOnDestroy() {
+        this.subscriptions.unsubscribe();
+    }
+
+    public onEditBlock() {
+        this.componentMode.emit('edit');
+        this.editMode = true;
+    }
+
+    public onSaveBlock() {
+        this.projectService.syncProject();
+    }
 
     public onDeleteBlock() {
         this.projectService.deleteProjectBlock(this.index);

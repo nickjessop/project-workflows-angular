@@ -1,7 +1,6 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, Input, OnInit } from '@angular/core';
 import { BlockConfig, Checkboxes, ComponentMode, ComponentSettings } from '@stepflow/interfaces';
-// import { AngularResizeElementDirection, AngularResizeElementEvent } from 'angular-resize-element';
 import * as _ from 'lodash';
 import { MenuItem } from 'primeng/api';
 import { ProjectService } from '../../../services/project/project.service';
@@ -15,14 +14,10 @@ export class CheckboxesComponent implements OnInit {
     @Input() index = 0;
     @Input() field: BlockConfig = this.coreComponentService.createBlockConfig('textInput');
     @Input() resizable?: boolean;
-    @Input() componentMode?: ComponentMode;
-
+    public componentMode: ComponentMode = 'view';
+    public showSaveButton: boolean = false;
     public height?: number;
     public settings?: ComponentSettings;
-
-    constructor(private projectService: ProjectService, private coreComponentService: CoreComponentService) {}
-
-    // public readonly AngularResizeElementDirection = AngularResizeElementDirection;
 
     public items: MenuItem[] = [
         {
@@ -33,6 +28,14 @@ export class CheckboxesComponent implements OnInit {
             },
         },
     ];
+
+    constructor(private projectService: ProjectService, private coreComponentService: CoreComponentService) {}
+
+    ngOnInit() {}
+
+    public setComponentMode($event: ComponentMode) {
+        this.componentMode = $event;
+    }
 
     public onDeleteBlock() {
         const index = this.index ? this.index : 0;
@@ -55,15 +58,14 @@ export class CheckboxesComponent implements OnInit {
         this.field.metadata.settings = { ...this.field.metadata.settings, height: height };
     }
 
-    // public onResize(evt: AngularResizeElementEvent): void {
-    //     this.height = evt.currentHeightValue;
-    // }
+    public saveTextblock() {
+        this.showSaveButton = false;
+        this.projectService.syncProject();
+    }
 
-    // public onResizeEnd(evt: AngularResizeElementEvent): void {
-    //     const height = evt.currentHeightValue;
-    //     this.updateHeight(height);
-    //     this.projectService.syncProject();
-    // }
+    public onFocusIn() {
+        this.showSaveButton = true;
+    }
 
     public getCheckboxMenuItems(index: number): MenuItem[] {
         return [
@@ -77,13 +79,9 @@ export class CheckboxesComponent implements OnInit {
         ];
     }
 
-    ngOnInit() {}
-
     public onAddCheckboxPress() {
-        console.log('test');
         const newCheckbox = { item: '', checked: false };
         (this.field?.metadata as Checkboxes).data.value.splice(0, 0, newCheckbox);
-        this.projectService.syncProject();
     }
 
     public onCheckboxPress() {
@@ -99,12 +97,10 @@ export class CheckboxesComponent implements OnInit {
             return 0;
         });
         this.field.metadata.data.value = sortedData;
-        this.projectService.syncProject();
     }
 
     public onCheckboxDeletePress(index: number) {
         (this.field.metadata as Checkboxes).data.value.splice(index, 1);
-        this.projectService.syncProject();
     }
 
     drop(event: CdkDragDrop<any>) {
@@ -116,10 +112,9 @@ export class CheckboxesComponent implements OnInit {
         const _checkboxes = _.cloneDeep(checkboxes);
         moveItemInArray(_checkboxes!, previousIndex, currentIndex);
         this.field.metadata.data.value = _checkboxes;
-        this.projectService.syncProject();
     }
 
     public saveContent() {
-        this.projectService.syncProject();
+        // this.projectService.syncProject();
     }
 }

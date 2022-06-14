@@ -27,6 +27,7 @@
     --surface-d: #e7e7e7;
     --surface-e: #d8d7d7;
     --surface-f: #c5c4c4;
+    --surface-g: #9a9393; // passes contrast check for icons or large text
     --text-color: rgb(28, 28, 57);
     --text-color-secondary: rgb(116, 116, 152);
     --border-radius-sm: 2px;
@@ -178,12 +179,13 @@ button {
     border-radius: 6px;
     display: inline-flex;
     font-size: 0.8rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
     align-items: center;
     &__button {
         color: white !important;
         background: transparent !important;
         border: none !important;
+        padding: 0.5rem !important;
         &:hover {
             background: rgba(255, 255, 255, 0.2) !important;
         }

@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { BlockConfig, ComponentMode, ComponentSettings, ImageUploader, Link } from '@stepflow/interfaces';
-// import { AngularResizeElementDirection, AngularResizeElementEvent } from 'angular-resize-element';
 import { MenuItem, MessageService } from 'primeng/api';
 import { map, switchMap } from 'rxjs/operators';
 import { ProjectService } from '../../../services/project/project.service';
@@ -18,7 +17,6 @@ export class ImageUploaderComponent implements OnInit {
     @Input() index = 0;
     @Input() field: BlockConfig = this.coreComponentService.createBlockConfig('imageUploader');
     @Input() resizable?: boolean;
-    @Input() componentMode?: ComponentMode;
 
     public responsiveOptions: any[] = [
         {
@@ -38,9 +36,11 @@ export class ImageUploaderComponent implements OnInit {
     public displayLightbox = false;
     public showThumbnails: boolean = false;
     public showImageUploaderDialog = false;
-
     public imageData: Link[] = [];
     public selectedImages: number[] = [];
+    public componentMode: ComponentMode = 'view';
+    public height?: number;
+    public settings?: ComponentSettings;
 
     constructor(
         public projectService: ProjectService,
@@ -48,9 +48,6 @@ export class ImageUploaderComponent implements OnInit {
         private messageService: MessageService,
         private coreComponentService: CoreComponentService
     ) {}
-
-    public height?: number;
-    public settings?: ComponentSettings;
 
     public items: MenuItem[] = [
         {
@@ -61,6 +58,10 @@ export class ImageUploaderComponent implements OnInit {
             },
         },
     ];
+
+    public setComponentMode($event: ComponentMode) {
+        this.componentMode = $event;
+    }
 
     public onDeleteBlock() {
         const index = this.index ? this.index : 0;

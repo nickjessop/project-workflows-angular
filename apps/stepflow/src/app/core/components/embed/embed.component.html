@@ -1,9 +1,8 @@
 <project-drag-and-resize
-    [isDraggable]="componentMode === 'configure'"
     [(field)]="field"
-    [componentMode]="componentMode"
+    (componentMode)="setComponentMode($event)"
     [index]="index"
-    [resizable]="componentMode === 'configure'"
+    [resizable]="true"
 >
     <ng-container *ngIf="componentMode === 'view'">
         <div
@@ -22,7 +21,7 @@
             </div>
         </ng-template>
     </ng-container>
-    <ng-container *ngIf="componentMode === 'edit' || componentMode === 'configure'">
+    <ng-container *ngIf="componentMode === 'edit'">
         <div class="edit p-d-flex p-flex-column p-mb-2">
             <ng-container *ngIf="embedData.data.value[0].href && domain.hostname != ''; else add">
                 <iframe [src]="cleanUrl" allowfullscreen frameBorder="0" #iframe></iframe>

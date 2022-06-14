@@ -34,7 +34,20 @@ export type ComponentType =
     | 'embed'
     | 'pdf';
 
-export type ComponentMode = 'edit' | 'view' | 'configure';
+export type ModeMap = {
+    readonly [path in Role]: { allowedProjectModes: { [path in ProjectMode]: boolean } };
+};
+
+export const allowedModes: ModeMap = {
+    owner: { allowedProjectModes: { configure: true, edit: true, view: true } },
+    creator: { allowedProjectModes: { configure: true, edit: true, view: true } },
+    editor: { allowedProjectModes: { configure: false, edit: true, view: true } },
+    viewer: { allowedProjectModes: { configure: false, edit: false, view: true } },
+};
+
+export type ProjectMode = 'edit' | 'view' | 'configure';
+
+export type ComponentMode = 'edit' | 'view';
 
 export type ComponentMetadata =
     | Checkboxes

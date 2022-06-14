@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ComponentMode, Project } from '@stepflow/interfaces';
+import { Project, ProjectMode } from '@stepflow/interfaces';
 import { MenuItem, MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import { AuthenticationService } from '../services/authentication/authentication.service';
@@ -26,7 +26,7 @@ export class NavBarComponent implements OnInit {
     baseUrl = this.parsedUrl.origin;
     linkCopiedMsg: any[] = [];
 
-    public componentMode?: ComponentMode;
+    public projectMode?: ProjectMode;
     public isNewProject = false;
     public canConfigureProject = false;
 
@@ -85,8 +85,8 @@ export class NavBarComponent implements OnInit {
         this.subscriptions.add(
             this.projectService.projectMode$.subscribe((result) => {
                 console.log(result);
-                this.componentMode = result;
-                if (this.componentMode === 'configure') {
+                this.projectMode = result;
+                if (this.projectMode === 'configure') {
                     this.canConfigureProject = true;
                 } else {
                     this.canConfigureProject = false;

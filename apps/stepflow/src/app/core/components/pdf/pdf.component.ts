@@ -18,7 +18,7 @@ export class PdfComponent implements OnInit {
     @Input() index = 0;
     @Input() field: BlockConfig = this.coreComponentService.createBlockConfig('pdf');
     @Input() resizable = true;
-    @Input() componentMode?: ComponentMode;
+    public componentMode: ComponentMode = 'view';
 
     public pdfData: Link = { href: '', title: '', filePath: '', type: '', size: 0 };
     public pdfFile: string = '';
@@ -41,6 +41,11 @@ export class PdfComponent implements OnInit {
         if (this.pdfData.size) {
             this.pdfSize = this.bytesToSize(this.pdfData.size);
         }
+        console.log(this.pdfData);
+    }
+
+    public setComponentMode($event: ComponentMode) {
+        this.componentMode = $event;
     }
 
     // public onRotatePDF(rotate: number) {
@@ -144,6 +149,7 @@ export class PdfComponent implements OnInit {
                     const name = file.name;
                     const downloadUrl = filedata.downloadUrl;
                     const filePath = filedata.filePath;
+                    const height = 400; // sets a reasonable default height
                     this.pdfData = {
                         href: downloadUrl,
                         title: name,
@@ -151,6 +157,7 @@ export class PdfComponent implements OnInit {
                         size: size,
                     };
                     (this.field.metadata as PDF).data.value = this.pdfData;
+                    this.field.metadata.settings = { ...this.field.metadata.settings, height };
                     this.projectService.syncProject();
                 },
                 (err) => {

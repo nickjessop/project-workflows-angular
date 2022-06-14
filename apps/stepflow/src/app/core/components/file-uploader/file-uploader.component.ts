@@ -1,7 +1,6 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { BlockConfig, ComponentMode, ComponentSettings, FileUploader, Link } from '@stepflow/interfaces';
-// import { AngularResizeElementDirection, AngularResizeElementEvent } from 'angular-resize-element';
 import * as mime from 'mime';
 import { MenuItem, MessageService } from 'primeng/api';
 import { FileUpload } from 'primeng/fileupload';
@@ -18,7 +17,6 @@ export class FileUploaderComponent implements OnInit {
     @ViewChild('fileUploader', { static: true }) fileUploaderButton!: FileUpload;
 
     @Input() group!: FormGroup;
-    @Input() componentMode?: ComponentMode;
     @Input() index = 0;
     @Input() field: BlockConfig = this.coreComponentService.createBlockConfig('fileUploader');
     @Input() resizable?: boolean;
@@ -32,9 +30,21 @@ export class FileUploaderComponent implements OnInit {
 
     public fileData: Link[] = [{ href: '', title: '', description: '', thumbnail: '' }];
     public dialogData: Link & { file?: File } = { href: '', title: '', description: '' };
-
     public showFileUploaderDialog = false;
     public fileDialogMode = 'upload';
+    public componentMode: ComponentMode = 'view';
+    public height?: number;
+    public settings?: ComponentSettings;
+
+    public items: MenuItem[] = [
+        {
+            label: 'Delete Block',
+            icon: 'pi pi-times',
+            command: () => {
+                this.onDeleteBlock();
+            },
+        },
+    ];
 
     constructor(
         private storageService: StorageService,
@@ -51,19 +61,10 @@ export class FileUploaderComponent implements OnInit {
         }
         this.fileData = _fileData;
     }
-    public height?: number;
-    public settings?: ComponentSettings;
-    // public readonly AngularResizeElementDirection = AngularResizeElementDirection;
 
-    public items: MenuItem[] = [
-        {
-            label: 'Delete Block',
-            icon: 'pi pi-times',
-            command: () => {
-                this.onDeleteBlock();
-            },
-        },
-    ];
+    public setComponentMode($event: ComponentMode) {
+        this.componentMode = $event;
+    }
 
     public onDeleteBlock() {
         const index = this.index ? this.index : 0;
@@ -142,7 +143,7 @@ export class FileUploaderComponent implements OnInit {
                     this.fileData.splice(index, 1);
                     this.projectService.syncProject();
                 },
-                err => {
+                (err) => {
                     console.log(err);
                 }
             );
@@ -157,8 +158,8 @@ export class FileUploaderComponent implements OnInit {
         const downloadLink = document.createElement('a');
         try {
             fetch(href)
-                .then(res => res.blob())
-                .then(blob => {
+                .then((res) => res.blob())
+                .then((blob) => {
                     let url = URL.createObjectURL(blob);
                     downloadLink.href = url;
                     downloadLink.download = title + '.' + extension || 'download';
@@ -193,9 +194,9 @@ export class FileUploaderComponent implements OnInit {
         this.storageService
             .uploadProjectFile(file, projectId)
             .pipe(
-                switchMap(file => {
+                switchMap((file) => {
                     return this.storageService.getDownloadUrl(file.metadata.fullPath).pipe(
-                        map(downloadUrl => {
+                        map((downloadUrl) => {
                             return {
                                 fileMetadata: file.metadata,
                                 downloadUrl: downloadUrl as string,
@@ -206,7 +207,7 @@ export class FileUploaderComponent implements OnInit {
                 })
             )
             .subscribe(
-                filedata => {
+                (filedata) => {
                     const { size, fullPath } = filedata.fileMetadata;
                     const { title, description, type, extension } = this.dialogData;
                     const downloadUrl = filedata.downloadUrl;
@@ -223,7 +224,7 @@ export class FileUploaderComponent implements OnInit {
                     this.projectService.syncProject();
                     this.resetDialog();
                 },
-                err => {
+                (err) => {
                     this.messageService.add({
                         severity: 'error',
                         key: 'global-toast',
