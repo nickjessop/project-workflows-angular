@@ -13,7 +13,7 @@ import { CoreComponentService } from '../../core-component.service';
 })
 export class DragAndResizeComponent {
     @Input() isDraggable = false;
-    @Input() field: BlockConfig = this.coreComponentService.createBlockConfig('textInput');
+    @Input() field: BlockConfig = this.coreComponentService.createBlockConfig('richTextInput');
     @Input() index = 0;
     @Input() resizable?: boolean;
     @Input() settings?: ComponentSettings;
@@ -23,8 +23,6 @@ export class DragAndResizeComponent {
     public canEditBlocks: boolean = false;
     public editMode: boolean = false;
     public subscriptions: Subscription = new Subscription();
-
-    // need button + function to set component to edit (should only be viewable by caneditblocks users)
 
     public items: MenuItem[] = [
         {

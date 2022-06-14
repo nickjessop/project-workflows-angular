@@ -8,7 +8,6 @@ import { ImageUploaderComponent } from './components/image-uploader/image-upload
 import { PdfComponent } from './components/pdf/pdf.component';
 import { RichTextInputComponent } from './components/rich-text-input/rich-text-input.component';
 import { TableComponent } from './components/table/table.component';
-import { TextInputComponent } from './components/text-input/text-input.component';
 
 @Directive({
     selector: '[appCoreComponentResolver]',
@@ -24,7 +23,6 @@ export class CoreComponentResolverDirective implements OnInit {
         | ImageUploaderComponent
         | RichTextInputComponent
         | CheckboxesComponent
-        | TextInputComponent
         | TableComponent
         | EmbedComponent
         | PdfComponent
@@ -67,15 +65,6 @@ export class CoreComponentResolverDirective implements OnInit {
         } else if (componentType === 'richTextInput') {
             const factory = this.componentFactoryResolver.resolveComponentFactory(RichTextInputComponent);
             const _componentRef = this.viewContainerRef.createComponent<RichTextInputComponent>(factory);
-            _componentRef.instance.field = this.field;
-            _componentRef.instance.group = this.group;
-            _componentRef.instance.index = this.index;
-            _componentRef.instance.componentMode = this.componentMode;
-
-            this.componentRef = _componentRef;
-        } else if (componentType === 'textInput') {
-            const factory = this.componentFactoryResolver.resolveComponentFactory(TextInputComponent);
-            const _componentRef = this.viewContainerRef.createComponent<TextInputComponent>(factory);
             _componentRef.instance.field = this.field;
             _componentRef.instance.group = this.group;
             _componentRef.instance.index = this.index;
