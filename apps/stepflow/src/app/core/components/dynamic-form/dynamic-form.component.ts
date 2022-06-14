@@ -11,7 +11,7 @@ import { BlockConfig, ComponentMode, Validator } from '@stepflow/interfaces';
 export class DynamicFormComponent implements OnInit {
     @Input() fields: BlockConfig[] = [];
     // @Output() submitEvent: EventEmitter<any> = new EventEmitter<any>();
-    @Input() componentMode: ComponentMode = 'edit';
+    public componentMode: ComponentMode = 'view';
 
     @Output() dragAndDropEvent: EventEmitter<{
         previousIndex: number;

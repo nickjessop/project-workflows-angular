@@ -16,7 +16,6 @@ export class EmbedComponent implements OnInit {
     @Input() index = 0;
     @Input() field: BlockConfig = this.coreComponentService.createBlockConfig('textInput');
     @Input() resizable = true;
-    @Input() componentMode?: ComponentMode;
 
     @ViewChild('iframe') iframe!: ElementRef;
 
@@ -25,6 +24,7 @@ export class EmbedComponent implements OnInit {
     public href = '';
     public domain: { hostname: string } = { hostname: '' };
     public settings?: ComponentSettings;
+    public componentMode: ComponentMode = 'view';
 
     public items: MenuItem[] = [
         {
@@ -48,7 +48,7 @@ export class EmbedComponent implements OnInit {
 
         this.cleanUrl = this.domSantizer.bypassSecurityTrustResourceUrl(this.embedData.data.value[0].href || '');
 
-        const isResizable = this.componentMode === 'configure' || this.componentMode === 'edit';
+        const isResizable = this.componentMode === 'edit';
 
         this.resizable = isResizable;
 
@@ -63,6 +63,10 @@ export class EmbedComponent implements OnInit {
 
     ngAfterViewInit() {
         // this.getBlockDrag();
+    }
+
+    public setComponentMode($event: ComponentMode) {
+        this.componentMode = $event;
     }
 
     private getBlockDrag() {

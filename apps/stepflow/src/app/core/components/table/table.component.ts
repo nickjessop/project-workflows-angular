@@ -16,7 +16,7 @@ export class TableComponent implements OnInit {
     @Input() index = 0;
     @Input() field: BlockConfig = this.coreComponentService.createBlockConfig('table');
     @Input() resizable?: boolean;
-    @Input() componentMode?: ComponentMode;
+    public componentMode: ComponentMode = 'view';
 
     @ViewChild('table') table!: any;
     selectedData: { rowIndex: number; colIndex: number } = { rowIndex: 0, colIndex: 0 };
@@ -74,8 +74,6 @@ export class TableComponent implements OnInit {
     ];
     public tableValues?: TableColumn;
 
-    constructor(private projectService: ProjectService, private coreComponentService: CoreComponentService) {}
-
     public height?: number;
     public settings?: ComponentSettings;
     // public readonly AngularResizeElementDirection = AngularResizeElementDirection;
@@ -83,6 +81,9 @@ export class TableComponent implements OnInit {
         width: 200,
         height: 300,
     };
+
+    constructor(private projectService: ProjectService, private coreComponentService: CoreComponentService) {}
+
     public items: MenuItem[] = [
         {
             label: 'Delete Block',
@@ -92,6 +93,14 @@ export class TableComponent implements OnInit {
             },
         },
     ];
+
+    ngOnInit() {
+        this.tableValues = (this.field.metadata as Table).data.value;
+    }
+
+    public setComponentMode($event: ComponentMode) {
+        this.componentMode = $event;
+    }
 
     public onDeleteBlock() {
         const index = this.index ? this.index : 0;
@@ -104,10 +113,6 @@ export class TableComponent implements OnInit {
 
     public dragFinished() {
         this.projectService.setBlockDrag(false);
-    }
-
-    ngOnInit() {
-        this.tableValues = (this.field.metadata as Table).data.value;
     }
 
     public removeTableRow(removeAtIndex?: number) {
@@ -131,7 +136,7 @@ export class TableComponent implements OnInit {
             return;
         }
 
-        column.forEach(col => {
+        column.forEach((col) => {
             if (col.item) {
                 if (removeAtIndex == 0) {
                     col.item.shift();
@@ -159,7 +164,7 @@ export class TableComponent implements OnInit {
             return;
         }
 
-        column.forEach(column => {
+        column.forEach((column) => {
             if (column.item) {
                 const newElement = this.createRowElements(1);
                 if (addAtIndex == 0) {
@@ -212,9 +217,9 @@ export class TableComponent implements OnInit {
             }
         }
 
-        console.log(this.tableValues);
+        // console.log(this.tableValues);
 
-        this.projectService.syncProject();
+        // this.projectService.syncProject();
     }
 
     public saveTableData() {

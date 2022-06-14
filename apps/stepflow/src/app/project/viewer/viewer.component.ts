@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ComponentMode, Project, SharePermission, StepConfig } from '@stepflow/interfaces';
+import { Project, ProjectMode, SharePermission, StepConfig } from '@stepflow/interfaces';
 import { combineLatest, Subscription } from 'rxjs';
 import { ProjectService } from '../../services/project/project.service';
 
@@ -14,7 +14,7 @@ export class ViewerComponent {
 
     public project?: Project;
     public currentStep?: StepConfig;
-    public componentMode?: ComponentMode;
+    public projectMode?: ProjectMode;
     public isNewProject = false;
     public canConfigureProject = false;
 
@@ -35,17 +35,19 @@ export class ViewerComponent {
         }
 
         this.subscriptions.add(
-            combineLatest([this.projectService.projectConfig$, this.projectService.projectMode$]).subscribe(result => {
-                this.currentStep = result[0]?.configuration?.find(stepConfig => {
-                    return stepConfig.step.isCurrentStep;
-                });
+            combineLatest([this.projectService.projectConfig$, this.projectService.projectMode$]).subscribe(
+                (result) => {
+                    this.currentStep = result[0]?.configuration?.find((stepConfig) => {
+                        return stepConfig.step.isCurrentStep;
+                    });
 
-                this.project = result[0];
-                this.componentMode = result[1];
-                if (this.componentMode == 'configure') {
-                    this.canConfigureProject = true;
+                    this.project = result[0];
+                    this.projectMode = result[1];
+                    if (this.projectMode == 'configure') {
+                        this.canConfigureProject = true;
+                    }
                 }
-            })
+            )
         );
     }
 

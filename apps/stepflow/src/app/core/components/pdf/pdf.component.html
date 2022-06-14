@@ -1,9 +1,8 @@
 <project-drag-and-resize
-    [isDraggable]="componentMode === 'configure'"
     [(field)]="field"
-    [componentMode]="componentMode"
+    (componentMode)="setComponentMode($event)"
     [index]="index"
-    [resizable]="componentMode === 'configure'"
+    [resizable]="true"
 >
     <div class="pdf-progress p-d-flex p-ai-center p-jc-center" *ngIf="displaySpinner != false">
         <p-progressSpinner
@@ -28,17 +27,21 @@
             (click)="onZoomOutPDF(0.1)"
         ></button>
     </div>
-    <ng-container *ngIf="componentMode === 'view'">
+    <ng-container *ngIf="componentMode === 'view' && pdfData.href != ''">
         <div class="view">
             <pdf-viewer
-                [src]="pdfData"
+                [src]="pdfData.href"
                 [render-text]="true"
                 [original-size]="false"
+                [zoom]="zoomSetting"
+                [rotation]="rotateSetting"
+                (on-progress)="onProgress($event)"
                 style="width: 100%; height: 100%"
             ></pdf-viewer>
         </div>
     </ng-container>
-    <ng-container *ngIf="componentMode === 'edit' || componentMode === 'configure'">
+    <div *ngIf="pdfData.href === '' && componentMode != 'edit'" class="p-d-flex p-jc-center">No PDF added yet.</div>
+    <ng-container *ngIf="componentMode === 'edit'">
         <div class="edit">
             <ng-container *ngIf="pdfData.href != ''; else uploadPDF">
                 <div class="toolbar">

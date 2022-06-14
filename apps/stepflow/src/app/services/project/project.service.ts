@@ -2,9 +2,10 @@ import { moveItemInArray } from '@angular/cdk/drag-drop';
 import { EventEmitter, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import {
+    allowedModes,
     BlockConfig,
-    ComponentMode,
     Project,
+    ProjectMode,
     ProjectUsers,
     Role,
     ShareLink,
@@ -31,13 +32,14 @@ export class ProjectService {
     public readonly projectConfig$ = this._projectConfig.asObservable();
     public isDragging: EventEmitter<boolean> = new EventEmitter();
 
-    private _projectMode: BehaviorSubject<ComponentMode> = new BehaviorSubject<ComponentMode>('view');
+    private _projectMode: BehaviorSubject<ProjectMode> = new BehaviorSubject<ProjectMode>('view');
     public readonly projectMode$ = this._projectMode.asObservable();
 
-    // private _currentStepConfig: BehaviorSubject<StepConfig | undefined> = new BehaviorSubject<StepConfig | undefined>(
-    //     this._projectConfig.value.configuration?.[0]
-    // );
-    // public readonly currentStepConfig$ = this._currentStepConfig.asObservable();
+    private _modesAvailable: BehaviorSubject<{ allowedProjectModes: { [path in ProjectMode]: boolean } }> =
+        new BehaviorSubject<{ allowedProjectModes: { [path in ProjectMode]: boolean } }>({
+            allowedProjectModes: { configure: false, edit: false, view: false },
+        });
+    public readonly modesAvailable$ = this._modesAvailable.asObservable();
 
     public unsubscribeToProjectListener?: () => void;
 
@@ -60,9 +62,10 @@ export class ProjectService {
         return this._projectMode.getValue();
     }
 
-    public set projectMode(mode: ComponentMode) {
+    public set projectMode(mode: ProjectMode) {
         this._projectMode.next(mode);
     }
+
     private async setProject(project: Project, persistChange = true) {
         const projectCopy1 = _.cloneDeep(this.projectConfig);
         const projectCopy2 = _.cloneDeep(project);
@@ -481,6 +484,18 @@ export class ProjectService {
                     if (!project) {
                         this.router.navigate(['404']);
                     }
+
+                    const currentUserRole = project.memberRoles.find((role) => {
+                        return role.userId === this.authenticationService.user?.id;
+                    });
+
+                    this._modesAvailable.next({
+                        allowedProjectModes: {
+                            edit: allowedModes[currentUserRole!.role].allowedProjectModes.edit,
+                            view: allowedModes[currentUserRole!.role].allowedProjectModes.view,
+                            configure: allowedModes[currentUserRole!.role].allowedProjectModes.configure,
+                        },
+                    });
 
                     if (sharePermission) {
                         this._projectMode.next(sharePermission);

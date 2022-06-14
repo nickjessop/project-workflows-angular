@@ -1,9 +1,4 @@
-<project-drag-and-resize
-    [isDraggable]="componentMode === 'configure'"
-    [(field)]="field"
-    [componentMode]="componentMode"
-    [index]="index"
->
+<project-drag-and-resize [(field)]="field" (componentMode)="setComponentMode($event)" [index]="index">
     <ng-container *ngIf="imageData.length > 0; else noImages">
         <ng-container *ngIf="componentMode === 'view'">
             <div class="images">
@@ -17,7 +12,7 @@
                 </div>
             </div>
         </ng-container>
-        <ng-container *ngIf="componentMode === 'edit' || componentMode === 'configure'">
+        <ng-container *ngIf="componentMode === 'edit'">
             <div class="images p-p-2">
                 <div *ngFor="let image of imageData; let index = index" class="images__item" key="index">
                     <img [src]="image.thumbnail" [alt]="image.description" (click)="imageClick(index)" />
@@ -79,7 +74,7 @@
         </div>
     </ng-template>
 
-    <p-toolbar styleClass="p-p-2 p-mt-2" *ngIf="componentMode === 'edit' || componentMode === 'configure'">
+    <p-toolbar styleClass="p-p-2 p-mt-2" *ngIf="componentMode === 'edit'">
         <div class="p-toolbar-group-left">
             <p-fileUpload
                 mode="basic"
@@ -117,7 +112,7 @@
         [showItemNavigators]="true"
         [showThumbnails]="showThumbnails"
         [containerStyle]="{ width: '100%', height: '100%' }"
-        [baseZIndex]="100000"
+        [baseZIndex]="1000000"
         class="gallery"
     >
         <ng-template pTemplate="header">
@@ -139,7 +134,7 @@
         </ng-template>
         <ng-template pTemplate="thumbnail" let-item>
             <div class="p-grid p-nogutter p-justify-center gallery-thumbnail p-mr-1">
-                <img [src]="item.href" style="display: block;" />
+                <img [src]="item.href" style="display: block" />
             </div>
         </ng-template>
         <ng-template pTemplate="footer" let-item>
