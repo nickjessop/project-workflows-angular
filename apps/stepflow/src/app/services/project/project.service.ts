@@ -4,9 +4,9 @@ import { Router } from '@angular/router';
 import {
     BlockConfig,
     ComponentMode,
+    Member,
     MemberRole,
     Project,
-    ProjectUsers,
     Role,
     ShareLink,
     SharePermission,
@@ -26,6 +26,7 @@ import { SupabaseService } from '../supabase/supabase.service';
 export class ProjectService {
     private readonly PROJECT_COLLECTION = 'projects';
     private readonly INVITATION_COLLECTION = 'invitations';
+    private readonly MEMBERSHIP_COLLECTION = 'members';
     private readonly SHARE_COLLECTION = 'shareLinks';
     private _projectConfig: BehaviorSubject<Project> = new BehaviorSubject<Project>(this.createBaseProject('', '', ''));
     public readonly projectConfig$ = this._projectConfig.asObservable();
@@ -94,10 +95,7 @@ export class ProjectService {
         const project1Len = project1.configuration?.length || 0;
         const project2Len = project2.configuration?.length || 0;
 
-        const project1RolesLen = project1.memberRoles?.length || 0;
-        const project2RolesLen = project2.memberRoles?.length || 0;
-
-        if (project1Len !== project2Len || project1RolesLen !== project2RolesLen) {
+        if (project1Len !== project2Len) {
             return true;
         }
 
@@ -124,19 +122,6 @@ export class ProjectService {
                 return true;
             }
             if (JSON.stringify(step1) !== JSON.stringify(step2)) {
-                return true;
-            }
-        }
-
-        for (let i = 0; i < (project1.memberRoles || []).length; i++) {
-            const roles1 = project1.memberRoles?.[i];
-            const roles2 = project2.memberRoles?.[i];
-
-            if (!roles2 || !roles1) {
-                return true;
-            }
-
-            if (JSON.stringify(roles1) !== JSON.stringify(roles2)) {
                 return true;
             }
         }
@@ -173,9 +158,6 @@ export class ProjectService {
         const baseProject: Project = {
             name: projectName,
             description,
-            memberRoles: [{ userId, role: 'owner' }],
-            members: [userId],
-            pendingMembers: [],
             configuration: config,
         };
 
@@ -274,21 +256,19 @@ export class ProjectService {
         return true;
     }
 
-    public async getProjectUserDetails(projectMemberRoles: Project['memberRoles']) {
-        const memberIds = projectMemberRoles.map(member => {
-            return member.userId;
-        });
-        const projectMembersDetails = await this.authenticationService.getUserGroupMetaData(memberIds);
+    public async getProjectUserIsApartOf(projectId: string) {
+        const { data, error } = await this.supabaseService.supabase
+            .from<Member>(this.MEMBERSHIP_COLLECTION)
+            .select(`project_id, role, user_id (email)`)
+            .eq('project_id', projectId);
 
-        const memberList: ProjectUsers[] | undefined = projectMembersDetails?.map(projectMember => {
-            const found = projectMemberRoles.find(_member => {
-                return _member.userId === projectMember.id;
-            });
+        if (error || data === null) {
+            return;
+        }
 
-            return { ...projectMember, ...found };
-        });
+        console.log(data);
 
-        return memberList;
+        return data;
     }
 
     public addProjectBlock(projectBlock: BlockConfig) {
@@ -381,22 +361,22 @@ export class ProjectService {
     public async getProjects() {
         const userId = this.authenticationService.user?.id || '';
         const projects = await this.supabaseService.supabase
-            .from<Project>(this.PROJECT_COLLECTION)
-            .select()
-            .contains('members', [userId]);
+            .from(this.MEMBERSHIP_COLLECTION)
+            .select('project_id, role, projects: project_id');
 
         if (!projects.data || projects.data?.[0] === null) {
             return;
         }
 
-        const _projects = projects.data.map(projs => {
-            const isOwner = this.isOwner(projs.memberRoles);
-            const itemData = projs;
-            const memberData = { isOwner, itemData };
-            return memberData;
-        });
+        console.log(projects.data);
+        // const _projects = projects.data.map(projs => {
+        //     const isOwner = this.isOwner(projs.memberRoles);
+        //     const itemData = projs;
+        //     const memberData = { isOwner, itemData };
+        //     return memberData;
+        // });
 
-        return _projects;
+        // return _projects;
     }
 
     public isOwner(memberRoles: MemberRole[]) {
@@ -406,11 +386,10 @@ export class ProjectService {
     }
 
     public async updateProjectRoles(projectRoles: { userId: string; role: Role }[]) {
-        const _projectConfig = _.cloneDeep(this.projectConfig);
-        _projectConfig.memberRoles = projectRoles;
-
-        const setResult = await this.setProject(_projectConfig);
-        return setResult;
+        // const _projectConfig = _.cloneDeep(this.projectConfig);
+        // _projectConfig.memberRoles = projectRoles;
+        // const setResult = await this.setProject(_projectConfig);
+        // return setResult;
     }
 
     public async subscribeAndSetProject(projectId: string, sharePermission?: SharePermission) {
@@ -424,45 +403,45 @@ export class ProjectService {
             return;
         }
 
-        const projectMode = this.getProjectMode(
-            data[0].memberRoles,
-            this.authenticationService.user.id,
-            sharePermission
-        );
-        this._projectMode.next(projectMode);
-        this.projectConfig = data[0];
+        // const projectMode = this.getProjectMode(
+        //     data[0].memberRoles,
+        //     this.authenticationService.user.id,
+        //     sharePermission
+        // );
+        // this._projectMode.next(projectMode);
+        // this.projectConfig = data[0];
 
-        this.supabaseService.supabase
-            .from<Project>(`${this.PROJECT_COLLECTION}:id=eq.${projectId}`)
-            .on('*', projectUpdate => {
-                // const oldProject = projectUpdate.old; // old pre-updated project
-                const project = projectUpdate.new; // new updated project
+        // this.supabaseService.supabase
+        //     .from<Project>(`${this.PROJECT_COLLECTION}:id=eq.${projectId}`)
+        //     .on('*', projectUpdate => {
+        //         // const oldProject = projectUpdate.old; // old pre-updated project
+        //         const project = projectUpdate.new; // new updated project
 
-                if (projectUpdate.eventType === 'DELETE' || !this.authenticationService.user?.id) {
-                    return this.router.navigate(['404']);
-                }
+        //         if (projectUpdate.eventType === 'DELETE' || !this.authenticationService.user?.id) {
+        //             return this.router.navigate(['404']);
+        //         }
 
-                const projectMode = this.getProjectMode(
-                    project.memberRoles,
-                    this.authenticationService.user.id,
-                    sharePermission
-                );
-                this._projectMode.next(projectMode);
+        //         const projectMode = this.getProjectMode(
+        //             project.memberRoles,
+        //             this.authenticationService.user.id,
+        //             sharePermission
+        //         );
+        //         this._projectMode.next(projectMode);
 
-                const currentStepSet = project.configuration?.some(stepConfig => {
-                    return stepConfig.step.isCurrentStep;
-                });
+        //         const currentStepSet = project.configuration?.some(stepConfig => {
+        //             return stepConfig.step.isCurrentStep;
+        //         });
 
-                if (!currentStepSet) {
-                    if (project.configuration?.[0]?.step) {
-                        project.configuration[0].step.isCurrentStep = true;
-                    }
-                }
+        //         if (!currentStepSet) {
+        //             if (project.configuration?.[0]?.step) {
+        //                 project.configuration[0].step.isCurrentStep = true;
+        //             }
+        //         }
 
-                this.projectConfig = project;
+        //         this.projectConfig = project;
 
-                return;
-            });
+        //         return;
+        //     });
     }
 
     private getProjectMode(
@@ -516,59 +495,60 @@ export class ProjectService {
     }
 
     public async addNewProjectMembers(emails: string[], role: Role) {
-        return this.authenticationService
-            .findUsersMatchingEmail(emails)
-            .then(async users => {
-                const _projectConfig = _.cloneDeep(this.projectConfig);
-                const newMembers: { userId: string; role: Role }[] = [];
-                const pendingMembers: { email: string; role: Role }[] = [];
-
-                // combine existing members and pending members with new ones
-                if (users?.newMembers) {
-                    users?.newMembers.map(member => {
-                        return newMembers.push({ userId: member, role: role || 'viewer' });
-                    });
-                    _projectConfig.members = _.union(_projectConfig.members, users.newMembers);
-                    _projectConfig.memberRoles = _.union(_projectConfig.memberRoles, newMembers);
-                }
-
-                if (users?.pendingMembers) {
-                    users?.pendingMembers.map(member => {
-                        return pendingMembers.push({ email: member, role: role || 'viewer' });
-                    });
-                    _projectConfig.pendingMembers = _.union(_projectConfig.pendingMembers, users.pendingMembers);
-                }
-                const addInvitations = await this.addInvitations(pendingMembers, this.projectConfig?.id);
-                if (addInvitations === true) {
-                    const setResult = await this.setProject(_projectConfig);
-                    return setResult;
-                } else {
-                    return false;
-                }
-            })
-            .catch(function(error: Error) {
-                console.log(error, 'add members error');
-                // TODO handle error
-                return false;
-            });
+        return this.addInvitations([{ email: emails[0], role }], this.projectConfig.id!);
+        // return this.authenticationService
+        //     .findUsersMatchingEmail(emails)
+        //     .then(async users => {
+        //         const _projectConfig = _.cloneDeep(this.projectConfig);
+        //         const newMembers: { userId: string; role: Role }[] = [];
+        //         const pendingMembers: { email: string; role: Role }[] = [];
+        //         // combine existing members and pending members with new ones
+        //         if (users?.newMembers) {
+        //             users?.newMembers.map(member => {
+        //                 return newMembers.push({ userId: member, role: role || 'viewer' });
+        //             });
+        //             _projectConfig.members = _.union(_projectConfig.members, users.newMembers);
+        //             _projectConfig.memberRoles = _.union(_projectConfig.memberRoles, newMembers);
+        //         }
+        //         if (users?.pendingMembers) {
+        //             users?.pendingMembers.map(member => {
+        //                 return pendingMembers.push({ email: member, role: role || 'viewer' });
+        //             });
+        //             _projectConfig.pendingMembers = _.union(_projectConfig.pendingMembers, users.pendingMembers);
+        //         }
+        //         const addInvitations = await this.addInvitations(pendingMembers, this.projectConfig?.id);
+        //         if (addInvitations === true) {
+        //             const setResult = await this.setProject(_projectConfig);
+        //             return setResult;
+        //         } else {
+        //             return false;
+        //         }
+        //     })
+        //     .catch(function(error: Error) {
+        //         console.log(error, 'add members error');
+        //         // TODO handle error
+        //         return false;
+        //     });
     }
 
     public async removeProjectMember(userId: string) {
-        const _projectConfig = _.cloneDeep(this.projectConfig);
-        _projectConfig.members = _projectConfig?.members?.filter(member => {
-            return member !== userId;
-        });
-        _projectConfig.memberRoles = _projectConfig?.memberRoles?.filter(member => {
-            return member.userId !== userId;
-        });
-        const setResult = await this.setProject(_projectConfig);
-        return setResult;
+        // const _projectConfig = _.cloneDeep(this.projectConfig);
+        // _projectConfig.members = _projectConfig?.members?.filter(member => {
+        //     return member !== userId;
+        // });
+        // _projectConfig.memberRoles = _projectConfig?.memberRoles?.filter(member => {
+        //     return member.userId !== userId;
+        // });
+        // const setResult = await this.setProject(_projectConfig);
+        // return setResult;
+        return false;
     }
 
-    private async addInvitations(pendingMembers: { email: string; role: Role }[], projectId?: string) {
-        let { data, error } = await this.supabaseService.supabase.rpc('create_invite_link', {
-            input2: pendingMembers,
-            input1: projectId,
+    private async addInvitations(pendingMembers: { email: string; role: Role }[], projectId: string) {
+        let { data, error } = await this.supabaseService.supabase.rpc('create_invitation', {
+            email: pendingMembers[0].email,
+            projectid: projectId,
+            role: pendingMembers[0].role,
         });
 
         if (error) return false;

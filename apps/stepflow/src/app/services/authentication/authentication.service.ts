@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Profile, Project, Role, User, UserPlan } from '@stepflow/interfaces';
+import { Profile, Role, User, UserPlan } from '@stepflow/interfaces';
 import { AuthChangeEvent, Session } from '@supabase/supabase-js';
-import * as _ from 'lodash';
 import { MessageService } from 'primeng/api';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { FirebaseService } from '../firebase/firebase.service';
@@ -142,7 +141,9 @@ export class AuthenticationService {
             });
     }
 
-    public getUserGroupMetaData2(projectMembers: string[]) {}
+    public getUserGroupMetaData2(projectMembers: string[]) {
+        // return this.supabaseService.
+    }
 
     // public setUserMetaData({
     //     photoFilePath,
@@ -313,38 +314,38 @@ export class AuthenticationService {
         }
         const db = this.firebaseService.getDbInstance()!;
 
-        projects.forEach(async (project, index) => {
-            try {
-                await db.runTransaction(async transaction => {
-                    let projectRef = db.collection(this.PROJECT_COLLECTION_NAME).doc(project.projectId);
-                    const doc = await transaction.get(projectRef);
+        // projects.forEach(async (project, index) => {
+        //     try {
+        //         await db.runTransaction(async transaction => {
+        //             let projectRef = db.collection(this.PROJECT_COLLECTION_NAME).doc(project.projectId);
+        //             const doc = await transaction.get(projectRef);
 
-                    if (!doc.exists) {
-                        return;
-                    }
-                    const _project = doc.data() as Project;
-                    let newMember: { userId: string; role: Role }[] = [{ userId: userId, role: project.role }];
-                    let _memberRoles: { userId: string; role: Role }[];
-                    let _members: string[];
-                    _members = _project.members;
-                    _memberRoles = _project.memberRoles;
-                    let members = _.union(_members, [userId]);
-                    let memberRoles = _.union(_memberRoles, newMember);
+        //             if (!doc.exists) {
+        //                 return;
+        //             }
+        //             const _project = doc.data() as Project;
+        //             let newMember: { userId: string; role: Role }[] = [{ userId: userId, role: project.role }];
+        //             let _memberRoles: { userId: string; role: Role }[];
+        //             let _members: string[];
+        //             _members = _project.members;
+        //             _memberRoles = _project.memberRoles;
+        //             let members = _.union(_members, [userId]);
+        //             let memberRoles = _.union(_memberRoles, newMember);
 
-                    const _pendingMembers = _project?.pendingMembers?.filter(pendingMember => {
-                        return pendingMember !== email;
-                    });
+        //             const _pendingMembers = _project?.pendingMembers?.filter(pendingMember => {
+        //                 return pendingMember !== email;
+        //             });
 
-                    transaction.update(projectRef, {
-                        memberRoles: memberRoles,
-                        members: members,
-                        pendingMembers: _pendingMembers,
-                    });
-                });
-            } catch (e) {
-                console.log(`error running transaction ${e}`);
-            }
-        });
+        //             transaction.update(projectRef, {
+        //                 memberRoles: memberRoles,
+        //                 members: members,
+        //                 pendingMembers: _pendingMembers,
+        //             });
+        //         });
+        //     } catch (e) {
+        //         console.log(`error running transaction ${e}`);
+        //     }
+        // });
     }
 
     public updateProfileDetails(profile: Profile) {

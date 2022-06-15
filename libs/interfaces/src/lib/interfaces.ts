@@ -130,14 +130,17 @@ export interface IProjectInvitation {
 }
 
 export interface Project {
+    id?: string;
     name: string;
     description?: string;
     configuration?: StepConfig[];
     shareLink?: ShareLink | null;
-    members: string[];
-    memberRoles: Array<MemberRole>;
-    pendingMembers?: string[];
-    id?: string;
+}
+
+export interface Member {
+    user_id: string;
+    project_id: string;
+    role: Role;
 }
 
 export type MemberRole = {

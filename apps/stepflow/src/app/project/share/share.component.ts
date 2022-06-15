@@ -46,11 +46,11 @@ export class ShareComponent implements OnInit {
 
     ngOnInit(): void {
         if (this.project) {
-            this.projectService.getProjectUserDetails(this.project.memberRoles).then(result => {
-                this.projectUsers = result?.filter(user => user.role !== 'owner');
-                //TODO users can add new owners and owners can change each other's roles (this is how G docs goes about it but would need to think about it some more)
-                this.projectOwners = result?.filter(user => user.role === 'owner');
-            });
+            // this.projectService.getProjectUserDetails(this.project.memberRoles).then(result => {
+            //     this.projectUsers = result?.filter(user => user.role !== 'owner');
+            //     //TODO users can add new owners and owners can change each other's roles (this is how G docs goes about it but would need to think about it some more)
+            //     this.projectOwners = result?.filter(user => user.role === 'owner');
+            // });
 
             this.initShareLink();
         }
@@ -164,6 +164,7 @@ export class ShareComponent implements OnInit {
                 summary: "Can't send invitation emails.",
                 detail: 'Please make sure you have entered valid emails. The number of emails must be 10 or less.',
             });
+            return;
         }
 
         this.messageService.add({
@@ -191,7 +192,7 @@ export class ShareComponent implements OnInit {
 
     public async onRemoveUser(userId: string, email: string) {
         const removeMemberResult = await this.projectService.removeProjectMember(userId);
-        if (removeMemberResult == true) {
+        if (removeMemberResult === true) {
             this.messageService.add({
                 key: 'global-toast',
                 severity: 'success',

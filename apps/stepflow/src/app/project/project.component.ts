@@ -29,22 +29,22 @@ export class ProjectComponent implements OnInit {
         this.isLoadingProjects = true;
         const allProjects = await this.projectService.getProjects();
 
-        if (!allProjects) {
-            this.isLoadingProjects = false;
-            return;
-        }
+        // if (!allProjects) {
+        //     this.isLoadingProjects = false;
+        //     return;
+        // }
 
-        this.allProjects = allProjects.map(project => {
-            return {
-                id: project.itemData.id!,
-                description: project.itemData.description || '',
-                name: project.itemData.name,
-                memberRoles: project.itemData.memberRoles,
-                isOwner: project.isOwner,
-            };
-        });
-        this.myProjects = this.allProjects.filter(project => project.isOwner === true);
-        this.sharedProjects = this.allProjects.filter(project => project.isOwner === false);
+        // this.allProjects = allProjects.map(project => {
+        //     return {
+        //         id: project.itemData.id!,
+        //         description: project.itemData.description || '',
+        //         name: project.itemData.name,
+        //         memberRoles: project.itemData.memberRoles,
+        //         isOwner: project.isOwner,
+        //     };
+        // });
+        // this.myProjects = this.allProjects.filter(project => project.isOwner === true);
+        // this.sharedProjects = this.allProjects.filter(project => project.isOwner === false);
 
         this.isLoadingProjects = false;
     }
