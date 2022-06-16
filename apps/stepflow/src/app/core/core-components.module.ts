@@ -18,6 +18,7 @@ import { PdfComponent } from './components/pdf/pdf.component';
 import { RichTextInputComponent } from './components/rich-text-input/rich-text-input.component';
 import { TableComponent } from './components/table/table.component';
 import { CoreComponentResolverDirective } from './core-component-resolver.directive';
+import { CommentsModule } from '../comments/comments.module';
 
 @NgModule({
     declarations: [
@@ -41,6 +42,7 @@ import { CoreComponentResolverDirective } from './core-component-resolver.direct
         DragDropModule,
         BrowserModule,
         ResizableModule,
+        CommentsModule,
         PdfViewerModule,
         NgxEditorModule.forRoot({
             locals: {

@@ -22,6 +22,7 @@ export interface BlockConfig {
     label: string;
     name: string;
     metadata: ComponentMetadata;
+    id?: string;
 }
 
 export type ComponentType =
@@ -192,4 +193,34 @@ export interface ShareLink {
     userId: string;
     projectId: string;
     permission: SharePermission;
+}
+
+
+/**
+ * Comment Types
+ */
+
+export interface Comment {
+    commentId?: string;
+    createdAt?: number;
+    updatedAt?: number;
+    parentCommentId?: string;
+    authorId?: string;
+    blockId?: string;
+    body: string;
+    deleted?: boolean;
+    resolved?: boolean;
+}
+
+export interface CommentDetail {
+    comment: Comment;
+    isEditable: boolean;
+    isDeletable: boolean;
+    authorDisplayName: string;
+}
+
+export type CommentCounts = {
+    all: number;
+    resolved: number;
+    unresolved: number;
 }
