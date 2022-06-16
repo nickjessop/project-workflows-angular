@@ -1,0 +1,17 @@
+<div>
+    <form [formGroup]="formGroup">
+        <div class="form-group">
+            <label for="comment">Comment</label>
+            <textarea class="form-control" id="comment" formControlName="body" rows="3"></textarea>
+        </div>
+    </form>
+    <button 
+        pButton 
+        type="button" 
+        class="btn btn-primary" 
+        (click)="onSubmitPressed()" 
+        [disabled]="!formGroup.valid || (commentDetail && !commentDetail?.isEditable)">
+            Submit
+    </button>
+    <button type="button" class="btn btn-default" (click)="onCancelPressed()">Cancel</button>
+</div>
