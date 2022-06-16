@@ -432,7 +432,7 @@ export class ProjectService {
         const userId = this.authenticationService.user?.id || '';
         const projects = await this.supabaseService.supabase
             .from(this.MEMBERSHIP_COLLECTION)
-            .select('project_id, role, projects: project_id');
+            .select('project_id, role, projects (project_id, name, description)');
 
         if (!projects.data || projects.data?.[0] === null) {
             return;
