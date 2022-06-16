@@ -96,15 +96,11 @@ export interface Draw extends BaseComponent {
     component: 'draw';
     data: { value: DrawHistory };
 }
-export type DrawHistory =
-    | [
-          {
-              x: number;
-              y: number;
-              lineWidth: number;
-          }
-      ]
-    | Array<any>;
+export type DrawHistory = {
+    x: number;
+    y: number;
+    lineWidth: number;
+}[];
 
 export interface Table extends BaseComponent {
     component: 'table';
@@ -196,7 +192,6 @@ export interface ShareLink {
     permission: SharePermission;
 }
 
-
 /**
  * Comment Types
  */
@@ -224,4 +219,4 @@ export type CommentCounts = {
     all: number;
     resolved: number;
     unresolved: number;
-}
+};
