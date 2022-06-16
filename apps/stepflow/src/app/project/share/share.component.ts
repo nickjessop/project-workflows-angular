@@ -122,32 +122,27 @@ export class ShareComponent implements OnInit {
         // }
     }
 
-    public onSavePermissionsSelected() {
-        this.projectService.updateProjectRoles(this.updatedMemberRoles).then(
-            (value: any) => {
-                if (value === true) {
-                    this.displayShareDialog = false;
-                    this.displayDialogSave = false;
-                    this.messageService.add({
-                        key: 'global-toast',
-                        severity: 'success',
-                        detail: 'Permissions updated.',
-                    });
-                } else {
-                    this.displayShareDialog = false;
-                    this.displayDialogSave = false;
-                    this.messageService.add({
-                        key: 'global-toast',
-                        severity: 'error',
-                        detail: "Can't update permissions. Please try again.",
-                    });
-                }
-            },
-            reason => {
-                // TODO: Error handling
-            }
-        );
-    }
+    // public onSavePermissionsSelected() {
+    //     this.projectService.updateProjectRoles(this.updatedMemberRoles).then((value: any) => {
+    //         if (value === true) {
+    //             this.displayShareDialog = false;
+    //             this.displayDialogSave = false;
+    //             this.messageService.add({
+    //                 key: 'global-toast',
+    //                 severity: 'success',
+    //                 detail: 'Permissions updated.',
+    //             });
+    //         } else {
+    //             this.displayShareDialog = false;
+    //             this.displayDialogSave = false;
+    //             this.messageService.add({
+    //                 key: 'global-toast',
+    //                 severity: 'error',
+    //                 detail: "Can't update permissions. Please try again.",
+    //             });
+    //         }
+    //     });
+    // }
 
     public async onSendInvitationsSelected() {
         if (this.invitationEmails.length === 0 || !this.allowEmailSubmission) {
