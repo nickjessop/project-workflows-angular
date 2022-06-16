@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ComponentMode, Project, SharePermission, StepConfig } from '@stepflow/interfaces';
-import { combineLatest, Subscription } from 'rxjs';
+import { Project, ProjectMode, SharePermission, StepConfig } from '@stepflow/interfaces';
+import { Subscription } from 'rxjs';
 import { ProjectService } from '../../services/project/project.service';
 
 @Component({
@@ -9,12 +9,12 @@ import { ProjectService } from '../../services/project/project.service';
     templateUrl: './viewer.component.html',
     styleUrls: ['./viewer.component.scss'],
 })
-export class ViewerComponent {
-    private subscriptions = new Subscription();
+export class ViewerComponent implements OnDestroy {
+    private subscriptions: Array<Subscription> = [];
 
     public project?: Project;
     public currentStep?: StepConfig;
-    public componentMode?: ComponentMode;
+    public projectMode?: ProjectMode;
     public isNewProject = false;
     public canConfigureProject = false;
 
@@ -34,15 +34,17 @@ export class ViewerComponent {
             this.projectService.subscribeAndSetProject(projectId);
         }
 
-        this.subscriptions.add(
-            combineLatest([this.projectService.projectConfig$, this.projectService.projectMode$]).subscribe(result => {
-                this.currentStep = result[0]?.configuration?.find(stepConfig => {
+        this.subscriptions.push(
+            this.projectService.projectConfig$.subscribe((result) => {
+                this.currentStep = result?.configuration?.find((stepConfig) => {
                     return stepConfig.step.isCurrentStep;
                 });
+            })
+        );
 
-                this.project = result[0];
-                this.componentMode = result[1];
-                if (this.componentMode == 'configure') {
+        this.subscriptions.push(
+            this.projectService.modesAvailable$.subscribe((val) => {
+                if (val.allowedProjectModes.configure === true) {
                     this.canConfigureProject = true;
                 }
             })
@@ -50,6 +52,9 @@ export class ViewerComponent {
     }
 
     ngOnDestroy() {
+        this.subscriptions.forEach((subscription: Subscription) => {
+            subscription.unsubscribe();
+        });
         this.projectService.resetProject();
     }
 

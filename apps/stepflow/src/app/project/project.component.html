@@ -1,28 +1,23 @@
-<div class="p-px-5 p-py-5 container">
-    <div class="p-grid p-nogutter">
-        <div class="p-col-6">
-            <h1 class="p-m-0">Projects</h1>
+<div class="projects p-pb-6">
+    <div
+        class="container p-mb-6 p-pt-3 p-pr-5 p-pb-5 p-pl-5"
+        [ngStyle]="{ backgroundColor: 'var(--surface-a)', borderRadius: 'var(--border-radius-lg)' }"
+    >
+        <div class="p-grid p-nogutter p-my-4">
+            <div class="p-col-6">
+                <h1 class="p-m-0">Projects</h1>
+            </div>
+            <div class="p-col-6 p-d-flex p-ai-center p-jc-end">
+                <new-project-dialog (onCreateNewProject)="onCreateNewProjectEvent($event)"></new-project-dialog>
+            </div>
         </div>
-        <div class="p-col-6 p-d-flex p-ai-center p-jc-end">
-            <new-project-dialog (onCreateNewProject)="onCreateNewProjectEvent($event)"></new-project-dialog>
-        </div>
-    </div>
-</div>
-
-<div class="projects">
-    <ng-container *ngIf="isLoadingProjects; else showProjects">
-        <div class="p-d-flex p-jc-center p-py-6">
-            <p-progressSpinner></p-progressSpinner>
-        </div>
-    </ng-container>
-
-    <ng-template #showProjects>
-        <div
-            class="container p-mb-6 p-p-5 p-shadow-4"
-            *ngIf="allProjects?.length; else showNoProjects"
-            [ngStyle]="{ backgroundColor: 'var(--surface-a)', borderRadius: 'var(--border-radius-lg)' }"
-        >
-            <p-tabView>
+        <ng-container *ngIf="isLoadingProjects; else showProjects">
+            <div class="p-d-flex p-jc-center p-py-6">
+                <p-progressSpinner></p-progressSpinner>
+            </div>
+        </ng-container>
+        <ng-template #showProjects>
+            <p-tabView *ngIf="allProjects?.length; else showNoProjects">
                 <p-tabPanel header="All projects">
                     <ng-container *ngFor="let project of allProjects">
                         <project-card
@@ -66,12 +61,27 @@
                     </ng-container>
                 </p-tabPanel>
             </p-tabView>
-        </div>
-        <ng-template #showNoProjects>
-            <div class="p-py-3 p-text-center">Looks like you're not a part of any projects yet.</div>
         </ng-template>
-    </ng-template>
-    <p-confirmDialog header="Delete Project?" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+        <ng-template #showNoProjects>
+            <div class="no-projects p-py-3 p-text-center p-d-flex p-ai-center p-jc-center">
+                Looks like you're not a part of any projects yet. Try creating one above.
+            </div>
+        </ng-template>
+    </div>
+
+    <p-confirmDialog #cd header="Delete project?" icon="pi pi-exclamation-triangle">
+        <ng-template pTemplate="footer">
+            <button
+                type="button"
+                pButton
+                icon="pi pi-trash"
+                class="p-button-danger"
+                label="Delete project"
+                (click)="cd.accept()"
+            ></button>
+            <button type="button" pButton class="p-button-secondary" label="Cancel" (click)="cd.reject()"></button>
+        </ng-template>
+    </p-confirmDialog>
 </div>
 
 <router-outlet></router-outlet>

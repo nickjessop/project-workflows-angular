@@ -9,6 +9,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthenticationComponent } from './authentication/authentication.component';
 import { ConfirmationComponent } from './authentication/confirmation/confirmation.component';
+import { CommentsModule } from './comments/comments.module';
 import { CoreComponentsModule } from './core/core-components.module';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
@@ -27,6 +28,7 @@ import { StepsComponent } from './project/steps/steps.component';
 import { ViewerComponent } from './project/viewer/viewer.component';
 import { ProtectedRoutingModule } from './protected-routing.module';
 import { ApiService } from './services/api/api.service';
+
 
 @NgModule({
     declarations: [
@@ -60,6 +62,7 @@ import { ApiService } from './services/api/api.service';
         FormsModule,
         DragDropModule,
         ResizableModule,
+        CommentsModule,
     ],
     providers: [
         {

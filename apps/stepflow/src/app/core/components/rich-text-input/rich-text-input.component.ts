@@ -13,9 +13,9 @@ import { CoreComponentService } from '../../core-component.service';
 export class RichTextInputComponent implements OnInit {
     @Input() group!: FormGroup;
     @Input() index = 0;
-    @Input() field: BlockConfig = this.coreComponentService.createBlockConfig('textInput');
+    @Input() field: BlockConfig = this.coreComponentService.createBlockConfig('richTextInput');
     @Input() resizable?: boolean;
-    @Input() componentMode?: ComponentMode;
+    public componentMode: ComponentMode = 'view';
     public height?: number;
     public settings?: ComponentSettings;
     public editor!: Editor;
@@ -43,6 +43,10 @@ export class RichTextInputComponent implements OnInit {
 
     ngOnDestroy(): void {
         this.editor.destroy();
+    }
+
+    public setComponentMode($event: ComponentMode) {
+        this.componentMode = $event;
     }
 
     // onChange(event: Event) {
@@ -83,7 +87,7 @@ export class RichTextInputComponent implements OnInit {
     }
 
     public onFocusOut(event: Event) {
-        // this was almost working, but focusing on the url button forced a onFocusOut event
+        // this was almost working, but focusing on the url button forced an onFocusOut event
         // on-focusout on dom element
         this.projectService.syncProject();
         this.showSaveButton = false;

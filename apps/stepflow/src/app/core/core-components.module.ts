@@ -8,7 +8,6 @@ import { ResizableModule } from 'angular-resizable-element';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { NgxEditorModule } from 'ngx-editor';
 import { PrimengModule } from '../primeng/primeng.module';
-import { BaseFieldComponent } from './components/base-field/base-field.component';
 import { CheckboxesComponent } from './components/checkboxes/checkboxes.component';
 import { DragAndResizeComponent } from './components/drag-and-resize/drag-and-resize.component';
 import { DynamicFormComponent } from './components/dynamic-form/dynamic-form.component';
@@ -18,20 +17,18 @@ import { ImageUploaderComponent } from './components/image-uploader/image-upload
 import { PdfComponent } from './components/pdf/pdf.component';
 import { RichTextInputComponent } from './components/rich-text-input/rich-text-input.component';
 import { TableComponent } from './components/table/table.component';
-import { TextInputComponent } from './components/text-input/text-input.component';
 import { CoreComponentResolverDirective } from './core-component-resolver.directive';
+import { CommentsModule } from '../comments/comments.module';
 
 @NgModule({
     declarations: [
         RichTextInputComponent,
-        TextInputComponent,
         ImageUploaderComponent,
         FileUploaderComponent,
         TableComponent,
         CoreComponentResolverDirective,
         DynamicFormComponent,
         CheckboxesComponent,
-        BaseFieldComponent,
         EmbedComponent,
         DragAndResizeComponent,
         PdfComponent,
@@ -45,6 +42,7 @@ import { CoreComponentResolverDirective } from './core-component-resolver.direct
         DragDropModule,
         BrowserModule,
         ResizableModule,
+        CommentsModule,
         PdfViewerModule,
         NgxEditorModule.forRoot({
             locals: {
@@ -67,7 +65,6 @@ import { CoreComponentResolverDirective } from './core-component-resolver.direct
     ],
     exports: [
         RichTextInputComponent,
-        TextInputComponent,
         ImageUploaderComponent,
         FileUploaderComponent,
         TableComponent,
@@ -79,7 +76,6 @@ import { CoreComponentResolverDirective } from './core-component-resolver.direct
     ],
     entryComponents: [
         RichTextInputComponent,
-        TextInputComponent,
         ImageUploaderComponent,
         FileUploaderComponent,
         TableComponent,

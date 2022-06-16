@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ComponentMode, Project } from '@stepflow/interfaces';
+import { Project, ProjectMode } from '@stepflow/interfaces';
 import { MenuItem, MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import { AuthenticationService } from '../services/authentication/authentication.service';
@@ -26,11 +26,12 @@ export class NavBarComponent implements OnInit {
     baseUrl = this.parsedUrl.origin;
     linkCopiedMsg: any[] = [];
 
-    public componentMode?: ComponentMode;
+    public projectMode?: ProjectMode;
     public isNewProject = false;
     public canConfigureProject = false;
 
     public displaySettingsDialog: boolean = false;
+    public showSettingsError: boolean = false;
 
     public navMode: 'default' | 'project' = 'default';
     public project?: Project;
@@ -83,8 +84,8 @@ export class NavBarComponent implements OnInit {
 
         this.subscriptions.add(
             this.projectService.projectMode$.subscribe(result => {
-                this.componentMode = result;
-                if (this.componentMode === 'configure') {
+                this.projectMode = result;
+                if (this.projectMode === 'configure') {
                     this.canConfigureProject = true;
                 } else {
                     this.canConfigureProject = false;
@@ -142,9 +143,14 @@ export class NavBarComponent implements OnInit {
 
     hideSettingsDialog() {
         this.displaySettingsDialog = false;
+        this.showSettingsError = false;
     }
 
     onSaveSettingsSelected() {
+        if (!this.projectSettings.name) {
+            this.showSettingsError = true;
+            return;
+        }
         this.projectService.updateProjectSettings(this.projectSettings).then(value => {
             if (value === true) {
                 this.messageService.add({

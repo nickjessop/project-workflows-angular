@@ -1,9 +1,16 @@
 .projects {
     width: 100%;
-    height: 100%;
-    background-color: var(--surface-b);
+    min-height: calc(100vh - 69px);
+    background: var(--surface-a);
     tr th {
         background: none;
         border: none;
     }
+    .no-projects {
+        min-height: 200px;
+    }
+}
+
+:host ::ng-deep .p-tabview .p-tabview-panels {
+    padding: 0;
 }

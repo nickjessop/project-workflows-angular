@@ -25,6 +25,7 @@ export interface BlockConfig {
     label: string;
     name: string;
     metadata: ComponentMetadata;
+    id?: string;
 }
 
 export type ComponentType =
@@ -37,7 +38,20 @@ export type ComponentType =
     | 'embed'
     | 'pdf';
 
-export type ComponentMode = 'edit' | 'view' | 'configure';
+export type ModeMap = {
+    readonly [path in Role]: { allowedProjectModes: { [path in ProjectMode]: boolean } };
+};
+
+export const allowedModes: ModeMap = {
+    owner: { allowedProjectModes: { configure: true, edit: true, view: true } },
+    creator: { allowedProjectModes: { configure: true, edit: true, view: true } },
+    editor: { allowedProjectModes: { configure: false, edit: true, view: true } },
+    viewer: { allowedProjectModes: { configure: false, edit: false, view: true } },
+};
+
+export type ProjectMode = 'edit' | 'view' | 'configure';
+
+export type ComponentMode = 'edit' | 'view';
 
 export type ComponentMetadata =
     | Checkboxes
@@ -189,4 +203,34 @@ export interface ShareLink {
     userId: string;
     projectId: string;
     permission: SharePermission;
+}
+
+
+/**
+ * Comment Types
+ */
+
+export interface Comment {
+    commentId?: string;
+    createdAt?: number;
+    updatedAt?: number;
+    parentCommentId?: string;
+    authorId?: string;
+    blockId?: string;
+    body: string;
+    deleted?: boolean;
+    resolved?: boolean;
+}
+
+export interface CommentDetail {
+    comment: Comment;
+    isEditable: boolean;
+    isDeletable: boolean;
+    authorDisplayName: string;
+}
+
+export type CommentCounts = {
+    all: number;
+    resolved: number;
+    unresolved: number;
 }

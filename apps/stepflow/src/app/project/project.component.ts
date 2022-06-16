@@ -29,29 +29,29 @@ export class ProjectComponent implements OnInit {
         this.isLoadingProjects = true;
         const allProjects = await this.projectService.getProjects();
 
-        // if (!allProjects) {
-        //     this.isLoadingProjects = false;
-        //     return;
+        // try {
+        //     const allProjects = await this.projectService.getProjects();
+        //     this.allProjects = allProjects.map((project) => {
+        //         return {
+        //             id: project.itemData.id!,
+        //             description: project.itemData.description,
+        //             name: project.itemData.name,
+        //             memberRoles: project.itemData.memberRoles,
+        //             isOwner: project.isOwner,
+        //         };
+        //     });
+        //     this.myProjects = this.allProjects.filter((project) => project.isOwner === true);
+        //     this.sharedProjects = this.allProjects.filter((project) => project.isOwner === false);
+        // } catch (error) {
+        //     // TODO: handle error;
         // }
-
-        // this.allProjects = allProjects.map(project => {
-        //     return {
-        //         id: project.itemData.id!,
-        //         description: project.itemData.description || '',
-        //         name: project.itemData.name,
-        //         memberRoles: project.itemData.memberRoles,
-        //         isOwner: project.isOwner,
-        //     };
-        // });
-        // this.myProjects = this.allProjects.filter(project => project.isOwner === true);
-        // this.sharedProjects = this.allProjects.filter(project => project.isOwner === false);
 
         this.isLoadingProjects = false;
     }
 
     public onDeleteProject($event: { id: string }) {
         this.confirmationService.confirm({
-            message: 'Are you sure you want to delete this project?',
+            message: 'Are you sure you want to delete this project? This action cannot be undone.',
             accept: () => {
                 this.projectService.deleteProject($event.id).then(
                     success => {

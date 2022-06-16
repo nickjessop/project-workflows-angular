@@ -1,9 +1,4 @@
-<project-drag-and-resize
-    [isDraggable]="componentMode === 'configure'"
-    [(field)]="field"
-    [index]="index"
-    [componentMode]="componentMode"
->
+<project-drag-and-resize [(field)]="field" [index]="index" (componentMode)="setComponentMode($event)">
     <ng-container *ngIf="componentMode === 'view'">
         <div class="checkboxes checkboxes--view mb-2">
             <div class="p-d-flex p-ai-center p-pl-2 p-py-3 checkbox" *ngFor="let val of field.metadata.data.value">
@@ -12,8 +7,17 @@
             </div>
         </div>
     </ng-container>
-    <ng-container *ngIf="componentMode === 'edit' || componentMode === 'configure'">
-        <div class="checkboxes checkboxes--edit">
+    <ng-container *ngIf="componentMode === 'edit'">
+        <div class="checkboxes checkboxes--edit" on-focusin="onFocusIn()">
+            <button
+                pButton
+                type="button"
+                icon="pi pi-plus"
+                label="Add a task"
+                (click)="onAddCheckboxPress()"
+                class="p-button-text"
+                style="margin-left: -0.35rem"
+            ></button>
             <div
                 class="p-d-flex p-ai-center p-pl-2 p-py-2 checkbox"
                 *ngFor="let val of field.metadata.data.value; index as index"
@@ -50,18 +54,10 @@
                 ></button>
                 <p-menu #menu [popup]="true" [model]="getCheckboxMenuItems(index)" appendTo="body"></p-menu>
             </div>
-        </div>
-        <p-toolbar styleClass="p-p-2 p-mt-2">
-            <div class="p-toolbar-group-left">
-                <button
-                    pButton
-                    type="button"
-                    icon="pi pi-plus"
-                    label="Add an item"
-                    (click)="onAddCheckboxPress()"
-                    class="p-button-text"
-                ></button>
+            <div *ngIf="showSaveButton" class="p-d-flex p-align-center p-mt-2">
+                <button (click)="saveTextblock()" class="p-button p-mr-2">Save</button>
+                <i class="ms-01">Unsaved changes</i>
             </div>
-        </p-toolbar>
+        </div>
     </ng-container>
 </project-drag-and-resize>

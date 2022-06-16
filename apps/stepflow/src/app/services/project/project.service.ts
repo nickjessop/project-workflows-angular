@@ -3,10 +3,9 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import {
     BlockConfig,
-    ComponentMode,
     Member,
-    MemberRole,
     Project,
+    ProjectMode,
     Role,
     ShareLink,
     SharePermission,
@@ -32,13 +31,15 @@ export class ProjectService {
     public readonly projectConfig$ = this._projectConfig.asObservable();
     public isDragging: EventEmitter<boolean> = new EventEmitter();
 
-    private _projectMode: BehaviorSubject<ComponentMode> = new BehaviorSubject<ComponentMode>('view');
+    private _projectMode: BehaviorSubject<ProjectMode> = new BehaviorSubject<ProjectMode>('view');
     public readonly projectMode$ = this._projectMode.asObservable();
 
-    // private _currentStepConfig: BehaviorSubject<StepConfig | undefined> = new BehaviorSubject<StepConfig | undefined>(
-    //     this._projectConfig.value.configuration?.[0]
-    // );
-    // public readonly currentStepConfig$ = this._currentStepConfig.asObservable();
+    private _modesAvailable: BehaviorSubject<{
+        allowedProjectModes: { [path in ProjectMode]: boolean };
+    }> = new BehaviorSubject<{ allowedProjectModes: { [path in ProjectMode]: boolean } }>({
+        allowedProjectModes: { configure: false, edit: false, view: false },
+    });
+    public readonly modesAvailable$ = this._modesAvailable.asObservable();
 
     public unsubscribeToProjectListener?: () => void;
 
@@ -61,9 +62,10 @@ export class ProjectService {
         return this._projectMode.getValue();
     }
 
-    public set projectMode(mode: ComponentMode) {
+    public set projectMode(mode: ProjectMode) {
         this._projectMode.next(mode);
     }
+
     private async setProject(project: Project, persistChange = true) {
         const projectCopy1 = _.cloneDeep(this.projectConfig);
         const projectCopy2 = _.cloneDeep(project);
@@ -265,11 +267,79 @@ export class ProjectService {
         if (error || data === null) {
             return;
         }
+        // const proj = await this.firebaseService
+        //     .getDbInstance()!
+        //     .collection(this.PROJECT_COLLECTION)
+        //     .add(baseProject)
+        //     .then(
+        //         async (documentRef) => {
+        //             baseProject.id = documentRef.id;
+        //             await documentRef.update({ id: documentRef.id });
+        //             // this.projectConfig = baseProject;
+        //             return baseProject;
+        //         },
+        //         (error) => {
+        //             console.log(`Error occurred while creating a new project: ${error}`);
+        //         }
+        //     );
 
-        console.log(data);
-
-        return data;
+        // return proj;
     }
+
+    //TODO: Add firebase rule to check that users are authorized to edit this project
+    // public updateProject(projectConfig: Project, shouldMerge = true) {
+    //     return this.firebaseService
+    //         .getDbInstance()!
+    //         .collection(this.PROJECT_COLLECTION)
+    //         .doc(projectConfig.id)
+    //         .set(projectConfig, { merge: shouldMerge })
+    //         .then(
+    //             () => {
+    //                 console.log(`Successfully updated project`);
+    //                 return true;
+    //             },
+    //             (error) => {
+    //                 console.log(`An error occurred while updating project: ${error}`);
+    //                 return false;
+    //             }
+    //         );
+    // }
+
+    // public deleteProject(projectId: string) {
+    //     return this.firebaseService
+    //         .getDbInstance()!
+    //         .collection(this.PROJECT_COLLECTION)
+    //         .doc(projectId)
+    //         .delete()
+    //         .then(
+    //             (success) => {
+    //                 return true;
+    //             },
+    //             (error) => {
+    //                 return false;
+    //             }
+    //         );
+    // }
+
+    // public getAllProjectIds() {
+    //     return from(this.firebaseService.getDbInstance().collection(`${this.PROJECT_COLLECTION}`).get());
+    // }
+
+    // public async getProjectUserDetails(projectMemberRoles: Project['memberRoles']) {
+    //     const memberIds = projectMemberRoles.map((member) => {
+    //         return member.userId;
+    //     });
+    //     const projectMembersDetails = await this.authenticationService.getUserGroupMetaData(memberIds);
+
+    //     const memberList: ProjectUsers[] | undefined = projectMembersDetails?.map((projectMember) => {
+    //         const found = projectMemberRoles.find((_member) => {
+    //             return _member.userId === projectMember.id;
+    //         });
+
+    //     console.log(data);
+
+    //     return data;
+    // }
 
     public addProjectBlock(projectBlock: BlockConfig) {
         const currentStepIndex = this.getCurrentStepIndex() || 0;
@@ -375,22 +445,58 @@ export class ProjectService {
         //     const memberData = { isOwner, itemData };
         //     return memberData;
         // });
+        // const ref = this.firebaseService.getDbInstance().collection(this.PROJECT_COLLECTION);
+
+        // const projects = await ref.where('members', 'array-contains', userId).get();
+        // // return from(ref.where('members', 'array-contains', { userId: userId, role: 'owner' }).get()).pipe(
+        // const _projects = projects.docs.map((items) => {
+        //     const isOwner = this.isOwner(items.data().memberRoles);
+        //     const itemData = items.data();
+        //     const memberData = { isOwner, itemData };
+        //     return memberData;
+        // });
 
         // return _projects;
     }
 
-    public isOwner(memberRoles: MemberRole[]) {
+    // public getMyProjects() {
+    //     const userId = this.authenticationService.user?.id || '';
+
+    //     const ref = this.firebaseService.getDbInstance().collection(this.PROJECT_COLLECTION);
+
+    //     return from(ref.where('members', 'array-contains', { userId: userId, role: 'owner' }).get()).pipe(
+    //         map((data) => {
+    //             const projects = data.docs.map((items) => {
+    //                 return items.data();
+    //             });
+
+    //     // return _projects;
+    // }
+
+    public isOwner(memberRoles: [{ userId: string; role: Role }]) {
         return memberRoles.some(member => {
             return member.userId === this.authenticationService.user?.id && ['owner'].includes(member.role);
         });
     }
 
-    public async updateProjectRoles(projectRoles: { userId: string; role: Role }[]) {
-        // const _projectConfig = _.cloneDeep(this.projectConfig);
-        // _projectConfig.memberRoles = projectRoles;
-        // const setResult = await this.setProject(_projectConfig);
-        // return setResult;
-    }
+    // public async ownerLookup(memberRoles: [{ userId: string; role: Role }]) {
+    //     const ownerId = memberRoles.filter((member) => member.role.includes('owner'));
+    //     const userRef = this.firebaseService.getDbInstance().collection('users').doc(ownerId[0].userId);
+    //     try {
+    //         const doc = await userRef.get();
+    //         if (doc.exists) {
+    //             const ownerFirstName = doc.data()?.firstName;
+    //             const ownerLastName = doc.data()?.lastName;
+    //             return ownerFirstName + ' ' + ownerLastName;
+    //         } else {
+    //             //undefined
+    //             return;
+    //         }
+    //     } catch (error) {
+    //         // TODO: handle error;
+    //         return;
+    //     }
+    // }
 
     public async subscribeAndSetProject(projectId: string, sharePermission?: SharePermission) {
         const { data, error } = await this.supabaseService.supabase
@@ -444,29 +550,98 @@ export class ProjectService {
         //     });
     }
 
-    private getProjectMode(
-        members: MemberRole[],
-        currentAuthUserId: string,
-        sharePermission?: SharePermission
-    ): ComponentMode {
-        if (sharePermission) {
-            return sharePermission;
-        } else if (
-            members.some(member => {
-                return member.userId === currentAuthUserId && ['viewer'].includes(member.role);
-            })
-        ) {
-            return 'view';
-        } else if (
-            members.some(member => {
-                return member.userId === currentAuthUserId && ['owner'].includes(member.role);
-            })
-        ) {
-            return 'configure';
-        } else {
-            return 'edit';
-        }
-    }
+    // private getProjectMode(
+    //     members: MemberRole[],
+    //     currentAuthUserId: string,
+    //     sharePermission?: SharePermission
+    // ): ComponentMode {
+    //     if (sharePermission) {
+    //         return sharePermission;
+    //     } else if (
+    //         members.some(member => {
+    //             return member.userId === currentAuthUserId && ['viewer'].includes(member.role);
+    //         })
+    //     ) {
+    //         return 'view';
+    //     } else if (
+    //         members.some(member => {
+    //             return member.userId === currentAuthUserId && ['owner'].includes(member.role);
+    //         })
+    //     ) {
+    //         return 'configure';
+    //     } else {
+    //         return 'edit';
+    //     }
+    // }
+    // public subscribeAndSetProject(projectId: string, sharePermission?: SharePermission) {
+    //     // this.firebaseService.getDbInstance()!.collection(this.PROJECT_COLLECTION).doc(projectId).onSnapshot()
+    //     this.unsubscribeToProjectListener = this.firebaseService
+    //         .getDbInstance()!
+    //         .collection(this.PROJECT_COLLECTION)
+    //         .doc(projectId)
+    //         .onSnapshot(
+    //             (document) => {
+    //                 const project = document.data() as Project;
+
+    //                 if (!project) {
+    //                     this.router.navigate(['404']);
+    //                 }
+
+    //                 const currentUserRole = project.memberRoles.find((role) => {
+    //                     return role.userId === this.authenticationService.user?.id;
+    //                 });
+
+    //                 this._modesAvailable.next({
+    //                     allowedProjectModes: {
+    //                         edit: allowedModes[currentUserRole!.role].allowedProjectModes.edit,
+    //                         view: allowedModes[currentUserRole!.role].allowedProjectModes.view,
+    //                         configure: allowedModes[currentUserRole!.role].allowedProjectModes.configure,
+    //                     },
+    //                 });
+
+    //                 if (sharePermission) {
+    //                     this._projectMode.next(sharePermission);
+    //                 } else if (
+    //                     project.memberRoles.some((member) => {
+    //                         return (
+    //                             member.userId === this.authenticationService.user?.id &&
+    //                             ['viewer'].includes(member.role)
+    //                         );
+    //                     })
+    //                 ) {
+    //                     this._projectMode.next('view');
+    //                 } else if (
+    //                     project.memberRoles.some((member) => {
+    //                         return (
+    //                             (member.userId === this.authenticationService.user?.id &&
+    //                                 ['owner'].includes(member.role)) ||
+    //                             ['creator'].includes(member.role)
+    //                         );
+    //                     })
+    //                 ) {
+    //                     this._projectMode.next('configure');
+    //                 } else {
+    //                     this._projectMode.next('edit');
+    //                 }
+
+    //                 const currentStepSet = project.configuration?.some((stepConfig) => {
+    //                     return stepConfig.step.isCurrentStep;
+    //                 });
+
+    //                 if (!currentStepSet) {
+    //                     if (project.configuration?.[0]?.step) {
+    //                         project.configuration[0].step.isCurrentStep = true;
+    //                     }
+    //                 }
+
+    //                 this.projectConfig = project;
+    //             },
+    //             (error) => {
+    //                 console.log(error);
+    //                 this.router.navigate(['404']);
+    //             }
+    //         );
+    // }
 
     public async sendProjectInvitations(emails: string[], role: Role) {
         const success = await this.addNewProjectMembers(emails, role);
@@ -610,9 +785,29 @@ export class ProjectService {
 
         const configUpdate = this._projectConfig.getValue();
         configUpdate.shareLink = null;
+        delete configUpdate.shareLink;
 
-        await this.updateProject(configUpdate);
+        const updatedConfig = await this.updateProject(configUpdate);
     }
+
+    // public async getShareLink() {
+    //     const db = this.firebaseService.getDbInstance();
+    //     const currentProjectId = this._projectConfig.getValue().id;
+
+    //     const existingShareLink = await db
+    //         .collection(this.SHARE_COLLECTION)
+    //         .where('projectId', '==', currentProjectId)
+    //         .get();
+
+    //     if (existingShareLink.docs.length) {
+    //         return existingShareLink.docs[0].data() as unknown as ShareLink;
+    //     } else {
+    //         return undefined;
+    //     }
+    // }
+
+    //     await this.updateProject(configUpdate);
+    // }
 
     public resetProject() {
         const unsub = this.unsubscribeToProjectListener ? this.unsubscribeToProjectListener() : undefined;

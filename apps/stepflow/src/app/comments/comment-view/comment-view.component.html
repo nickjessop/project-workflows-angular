@@ -1,0 +1,15 @@
+<div>
+    <i>{{commentDetail.authorDisplayName}} says: </i><strong>{{commentDetail.comment.body}}</strong>
+    <p>
+        Resolved: {{commentDetail.comment.resolved ? 'YUP' : 'NOPE'}} - 
+        <button type="button" class="btn btn-primary" (click)="toggleResolvedPressed()">
+            {{commentDetail.comment.resolved ? 'Unresolve' : 'Resolve'}}
+        </button>
+        <button type="button" class="btn btn-primary" (click)="editPressed()" [disabled]="!commentDetail.isEditable">
+            Edit
+        </button>
+        <button type="button" class="btn btn-warning" (click)="deletePressed()" [disabled]="!commentDetail.isDeletable">
+            Delete
+        </button>
+    </p>
+</div>

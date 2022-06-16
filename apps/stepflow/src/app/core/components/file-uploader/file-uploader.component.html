@@ -1,9 +1,4 @@
-<project-drag-and-resize
-    [isDraggable]="componentMode === 'configure'"
-    [(field)]="field"
-    [componentMode]="componentMode"
-    [index]="index"
->
+<project-drag-and-resize [(field)]="field" [index]="index" (componentMode)="setComponentMode($event)">
     <ng-container *ngIf="fileData.length > 0; else noFiles">
         <ng-container *ngIf="componentMode === 'view' && fileData.length > 0">
             <p-table
@@ -25,8 +20,8 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
                     <ng-container>
-                        <tr style="height:34px" class="file">
-                            <td style="width: 30%;">
+                        <tr style="height: 34px" class="file">
+                            <td style="width: 30%">
                                 <ng-container [ngSwitch]="rowData.type">
                                     <ng-container *ngSwitchCase="'image'"><i class="pi pi-image"></i></ng-container>
                                     <ng-container *ngSwitchCase="'video'"><i class="pi pi-video"></i></ng-container>
@@ -37,9 +32,9 @@
                                 </ng-container>
                                 {{ rowData.title }}
                             </td>
-                            <td style="width: 50%;">{{ rowData.description }}</td>
-                            <td style="width: 10%;">{{ rowData.extension }}</td>
-                            <td style="width: 10%;text-align: right;">
+                            <td style="width: 50%">{{ rowData.description }}</td>
+                            <td style="width: 10%">{{ rowData.extension }}</td>
+                            <td style="width: 10%; text-align: right">
                                 <button
                                     pButton
                                     type="button"
@@ -53,14 +48,14 @@
                                         )
                                     "
                                 ></button>
-                                <a href="#" id="fileBlockDownload-{{ rowIndex }}" style="display: none;">Download</a>
+                                <a href="#" id="fileBlockDownload-{{ rowIndex }}" style="display: none">Download</a>
                             </td>
                         </tr>
                     </ng-container>
                 </ng-template>
             </p-table>
         </ng-container>
-        <ng-container *ngIf="componentMode === 'edit' || componentMode === 'configure'">
+        <ng-container *ngIf="componentMode === 'edit'">
             <p-table
                 [scrollable]="true"
                 [rows]="20"
@@ -80,8 +75,8 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
                     <ng-container>
-                        <tr style="height:34px" class="file">
-                            <td style="width: 30%;">
+                        <tr style="height: 34px" class="file">
+                            <td style="width: 30%">
                                 <ng-container [ngSwitch]="rowData.type">
                                     <ng-container *ngSwitchCase="'image'"><i class="pi pi-image"></i></ng-container>
                                     <ng-container *ngSwitchCase="'video'"><i class="pi pi-video"></i></ng-container>
@@ -92,9 +87,9 @@
                                 </ng-container>
                                 {{ rowData.title }}
                             </td>
-                            <td style="width: 50%;">{{ rowData.description }}</td>
-                            <td style="width: 10%;">{{ rowData.extension }}</td>
-                            <td style="width: 10%;text-align: right;">
+                            <td style="width: 50%">{{ rowData.description }}</td>
+                            <td style="width: 10%">{{ rowData.extension }}</td>
+                            <td style="width: 10%; text-align: right">
                                 <button
                                     pButton
                                     type="button"
@@ -102,7 +97,7 @@
                                     class="p-button-text file__menu"
                                     (click)="menu.toggle($event)"
                                 ></button>
-                                <a href="#" id="fileBlockDownload-{{ rowIndex }}" style="display: none;">Download</a>
+                                <a href="#" id="fileBlockDownload-{{ rowIndex }}" style="display: none">Download</a>
                                 <p-menu
                                     #menu
                                     [popup]="true"
@@ -124,7 +119,7 @@
         </div>
     </ng-template>
 
-    <p-toolbar styleClass="p-p-2" *ngIf="componentMode === 'edit' || componentMode === 'configure'">
+    <p-toolbar styleClass="p-p-2" *ngIf="componentMode === 'edit'">
         <div class="p-toolbar-group-left">
             <button
                 pButton
