@@ -67,6 +67,13 @@ export class BlockPanelOverlayComponent implements OnInit {
                 description: 'Display a PDF with convenient controls.',
                 component: 'pdf',
             },
+            {
+                enabled: true,
+                icon: 'pi-pencil',
+                label: 'Whiteboard',
+                description: 'Sketch out designs, diagrams, or anything else!',
+                component: 'draw',
+            },
         ];
 
         return options;
