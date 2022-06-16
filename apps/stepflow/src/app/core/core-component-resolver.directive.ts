@@ -2,6 +2,7 @@ import { ComponentFactoryResolver, ComponentRef, Directive, Input, OnInit, ViewC
 import { FormGroup } from '@angular/forms';
 import { BlockConfig, ComponentMode, ComponentType } from '@stepflow/interfaces';
 import { CheckboxesComponent } from './components/checkboxes/checkboxes.component';
+import { DrawComponent } from './components/draw/draw.component';
 import { EmbedComponent } from './components/embed/embed.component';
 import { FileUploaderComponent } from './components/file-uploader/file-uploader.component';
 import { ImageUploaderComponent } from './components/image-uploader/image-uploader.component';
@@ -26,6 +27,7 @@ export class CoreComponentResolverDirective implements OnInit {
         | TableComponent
         | EmbedComponent
         | PdfComponent
+        | DrawComponent
     >;
 
     constructor(
@@ -92,6 +94,15 @@ export class CoreComponentResolverDirective implements OnInit {
         } else if (componentType === 'pdf') {
             const factory = this.componentFactoryResolver.resolveComponentFactory(PdfComponent);
             const _componentRef = this.viewContainerRef.createComponent<PdfComponent>(factory);
+            _componentRef.instance.field = this.field;
+            _componentRef.instance.group = this.group;
+            _componentRef.instance.index = this.index;
+            _componentRef.instance.componentMode = this.componentMode;
+
+            this.componentRef = _componentRef;
+        } else if (componentType === 'draw') {
+            const factory = this.componentFactoryResolver.resolveComponentFactory(DrawComponent);
+            const _componentRef = this.viewContainerRef.createComponent<DrawComponent>(factory);
             _componentRef.instance.field = this.field;
             _componentRef.instance.group = this.group;
             _componentRef.instance.index = this.index;

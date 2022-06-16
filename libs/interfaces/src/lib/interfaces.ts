@@ -29,10 +29,10 @@ export type ComponentType =
     | 'fileUploader'
     | 'imageUploader'
     | 'richTextInput'
-    | 'textInput'
     | 'table'
     | 'embed'
-    | 'pdf';
+    | 'pdf'
+    | 'draw';
 
 export type ModeMap = {
     readonly [path in Role]: { allowedProjectModes: { [path in ProjectMode]: boolean } };
@@ -49,15 +49,7 @@ export type ProjectMode = 'edit' | 'view' | 'configure';
 
 export type ComponentMode = 'edit' | 'view';
 
-export type ComponentMetadata =
-    | Checkboxes
-    | FileUploader
-    | ImageUploader
-    | RichTextInput
-    | TextInput
-    | Table
-    | Embed
-    | PDF;
+export type ComponentMetadata = Checkboxes | FileUploader | ImageUploader | RichTextInput | Table | Embed | PDF | Draw;
 
 export type BaseComponent = {
     component: ComponentType;
@@ -99,10 +91,19 @@ export interface RichTextInput extends BaseComponent {
     data: { value: string };
 }
 
-export interface TextInput extends BaseComponent {
-    component: 'textInput';
-    data: { value: string };
+export interface Draw extends BaseComponent {
+    component: 'draw';
+    data: { value: DrawHistory };
 }
+export type DrawHistory =
+    | [
+          {
+              x: number;
+              y: number;
+              lineWidth: number;
+          }
+      ]
+    | Array<any>;
 
 export interface Table extends BaseComponent {
     component: 'table';
@@ -110,10 +111,10 @@ export interface Table extends BaseComponent {
         value: TableColumn;
     };
 }
-
 export interface TableColumn {
     row?: { item: { text: string; width?: string }[] }[];
 }
+
 export interface Embed extends BaseComponent {
     component: 'embed';
     data: { value: Link[] };
