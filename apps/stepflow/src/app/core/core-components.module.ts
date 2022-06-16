@@ -7,9 +7,11 @@ import { RouterModule } from '@angular/router';
 import { ResizableModule } from 'angular-resizable-element';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { NgxEditorModule } from 'ngx-editor';
+import { CommentsModule } from '../comments/comments.module';
 import { PrimengModule } from '../primeng/primeng.module';
 import { CheckboxesComponent } from './components/checkboxes/checkboxes.component';
 import { DragAndResizeComponent } from './components/drag-and-resize/drag-and-resize.component';
+import { DrawComponent } from './components/draw/draw.component';
 import { DynamicFormComponent } from './components/dynamic-form/dynamic-form.component';
 import { EmbedComponent } from './components/embed/embed.component';
 import { FileUploaderComponent } from './components/file-uploader/file-uploader.component';
@@ -18,7 +20,6 @@ import { PdfComponent } from './components/pdf/pdf.component';
 import { RichTextInputComponent } from './components/rich-text-input/rich-text-input.component';
 import { TableComponent } from './components/table/table.component';
 import { CoreComponentResolverDirective } from './core-component-resolver.directive';
-import { DrawComponent } from './components/draw/draw.component';
 
 @NgModule({
     declarations: [
@@ -43,6 +44,7 @@ import { DrawComponent } from './components/draw/draw.component';
         DragDropModule,
         BrowserModule,
         ResizableModule,
+        CommentsModule,
         PdfViewerModule,
         NgxEditorModule.forRoot({
             locals: {

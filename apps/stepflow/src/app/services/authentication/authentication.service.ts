@@ -613,4 +613,35 @@ export class AuthenticationService {
             }
         });
     }
+
+    public async getUsers(userIds: string[]): Promise<{ [key: string]: User }> {
+        userIds = userIds.filter((value, index, self) => self.indexOf(value) === index);
+
+        let users: { [key: string]: User } = {};
+        for await (const userId of userIds) {
+            const user = await this.getUser(userId);
+            if (user) users[userId] = user;
+        }
+
+        return users;
+    };
+
+    public async getUser(userId: string): Promise<User | null> {
+        return this.firebaseService
+            .getDbInstance()!
+            .collection(this.USER_COLLECTION_NAME)
+            .doc(userId)
+            .get()
+            .then(
+                querySnapshot => {
+                    let user = querySnapshot.data() as User;
+                    user.id = querySnapshot.id;
+                    return user;
+                },
+                error => {
+                    console.log(error);
+                    return null;
+                }
+            );
+    }
 }
