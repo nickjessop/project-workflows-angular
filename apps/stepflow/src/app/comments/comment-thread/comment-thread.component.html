@@ -1,0 +1,29 @@
+<div>
+    <h2>{{threadHeader || 'Untitled Block Thread'}}</h2>
+    <div *ngFor="let commentDetail of commentDetails">
+        <ng-container *ngIf="commentDetail.comment?.commentId === commentBeingEdited?.comment.commentId; then editBlock else viewBlock"></ng-container>
+        <ng-template #editBlock>
+            <comment-edit
+                [commentDetail]="commentDetail"
+                (onCommentEdit)="updateComment($event)"
+                (onCancel)="cancelEdit()">
+            </comment-edit>
+        </ng-template>
+        <ng-template #viewBlock>
+            <comment-view
+                [commentDetail]="commentDetail"
+                (onCommentEdit)="editPressed($event)"
+                (onCommentResolve)="updateComment($event)"
+                (onCommentDelete)="deleteComment($event)">
+            </comment-view>
+        </ng-template>
+    </div>
+    <div *ngIf="!composingNewComment && !commentBeingEdited">
+        <button type="button" class="btn btn-primary" (click)="toggleComposingNewComment()">
+            Add Comment
+        </button>
+    </div>
+    <div *ngIf="composingNewComment">
+        <comment-edit (onCommentEdit)="updateComment($event)" (onCancel)="cancelEdit()"></comment-edit>
+    </div>
+</div>

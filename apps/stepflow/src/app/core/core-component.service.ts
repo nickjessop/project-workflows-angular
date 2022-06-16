@@ -13,6 +13,8 @@ import {
     Validator,
 } from '@stepflow/interfaces';
 
+import { v4 as uuid } from 'uuid';
+
 @Injectable({
     providedIn: 'root',
 })
@@ -24,6 +26,7 @@ export class CoreComponentService {
             label: label || '',
             name: name || '',
             metadata: this.createComponentMetadataTemplate(type),
+            id: uuid(),
         };
 
         return block;
