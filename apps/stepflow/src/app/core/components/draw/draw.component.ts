@@ -29,7 +29,7 @@ export class DrawComponent implements AfterViewInit {
 
     public requestIdleCallback =
         window.requestIdleCallback ||
-        function (fn: (...args: any[]) => void) {
+        function(fn: (...args: any[]) => void) {
             setTimeout(fn, 1);
         };
 
@@ -98,11 +98,12 @@ export class DrawComponent implements AfterViewInit {
         this.strokeHistory.pop();
         this.context!.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-        this.strokeHistory.map((stroke) => {
+        this.strokeHistory.map(stroke => {
             if (this.strokeHistory.length === 0) return;
             this.context!.beginPath();
 
-            let strokePath: any[] = [];
+            let strokePath: DrawHistory[] = [];
+
             stroke.map((point: number) => {
                 strokePath.push(point);
                 this.drawOnCanvas(strokePath);
