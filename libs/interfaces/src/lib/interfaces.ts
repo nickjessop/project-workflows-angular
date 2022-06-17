@@ -152,6 +152,7 @@ export interface Project {
 }
 
 export interface Member {
+    id: string;
     user_id: string;
     project_id: string;
     role: Role;
@@ -205,7 +206,6 @@ export interface ShareLink {
     permission: SharePermission;
 }
 
-
 /**
  * Comment Types
  */
@@ -233,4 +233,4 @@ export type CommentCounts = {
     all: number;
     resolved: number;
     unresolved: number;
-}
+};

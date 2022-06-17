@@ -2,6 +2,7 @@ import { moveItemInArray } from '@angular/cdk/drag-drop';
 import { EventEmitter, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import {
+    allowedModes,
     BlockConfig,
     Member,
     Project,
@@ -132,9 +133,7 @@ export class ProjectService {
     }
 
     ngOnDestroy() {
-        if (this.unsubscribeToProjectListener) {
-            this.unsubscribeToProjectListener();
-        }
+        this.supabaseService.supabase.removeAllSubscriptions();
     }
 
     public syncProject() {
@@ -142,7 +141,7 @@ export class ProjectService {
         this.updateProject(this.projectConfig);
     }
 
-    public createBaseProject(userId: string, projectName: string, description?: string, configuration?: StepConfig[]) {
+    public createBaseProject(projectName: string, description?: string, configuration?: StepConfig[]) {
         const config: StepConfig[] = configuration
             ? configuration
             : [
@@ -222,7 +221,7 @@ export class ProjectService {
     public async createNewProject(projectName: string, projectDescription?: string) {
         const userId = this.authenticationService.user?.id;
 
-        const baseProject = this.createBaseProject(userId || '', projectName, projectDescription);
+        const baseProject = this.createBaseProject(projectName, projectDescription);
 
         const { data, error } = await this.supabaseService.supabase
             .from<Project>(this.PROJECT_COLLECTION)
@@ -319,26 +318,6 @@ export class ProjectService {
     //                 return false;
     //             }
     //         );
-    // }
-
-    // public getAllProjectIds() {
-    //     return from(this.firebaseService.getDbInstance().collection(`${this.PROJECT_COLLECTION}`).get());
-    // }
-
-    // public async getProjectUserDetails(projectMemberRoles: Project['memberRoles']) {
-    //     const memberIds = projectMemberRoles.map((member) => {
-    //         return member.userId;
-    //     });
-    //     const projectMembersDetails = await this.authenticationService.getUserGroupMetaData(memberIds);
-
-    //     const memberList: ProjectUsers[] | undefined = projectMembersDetails?.map((projectMember) => {
-    //         const found = projectMemberRoles.find((_member) => {
-    //             return _member.userId === projectMember.id;
-    //         });
-
-    //     console.log(data);
-
-    //     return data;
     // }
 
     public addProjectBlock(projectBlock: BlockConfig) {
@@ -450,194 +429,41 @@ export class ProjectService {
             };
         });
 
-        console.log(_projects);
-
         return _projects;
     }
 
-    // public getMyProjects() {
-    //     const userId = this.authenticationService.user?.id || '';
+    public async subscribeAndSetProject(projectId: string, currentUserId: string) {
+        this.supabaseService.supabase
+            .from<Project>(`${this.PROJECT_COLLECTION}:id=eq.${projectId}`)
+            .on('*', projectUpdate => {
+                // const oldProject = projectUpdate.old; // old pre-updated project
+                const project = projectUpdate.new; // new updated project
 
-    //     const ref = this.firebaseService.getDbInstance().collection(this.PROJECT_COLLECTION);
+                if (projectUpdate.eventType === 'DELETE' || !this.authenticationService.user?.id) {
+                    return this.router.navigate(['404']);
+                }
 
-    //     return from(ref.where('members', 'array-contains', { userId: userId, role: 'owner' }).get()).pipe(
-    //         map((data) => {
-    //             const projects = data.docs.map((items) => {
-    //                 return items.data();
-    //             });
+                this.projectConfig = project;
 
-    //     // return _projects;
-    // }
+                return;
+            });
 
-    public isOwner(memberRoles: [{ userId: string; role: Role }]) {
-        return memberRoles.some(member => {
-            return member.userId === this.authenticationService.user?.id && ['owner'].includes(member.role);
-        });
-    }
-
-    // public async ownerLookup(memberRoles: [{ userId: string; role: Role }]) {
-    //     const ownerId = memberRoles.filter((member) => member.role.includes('owner'));
-    //     const userRef = this.firebaseService.getDbInstance().collection('users').doc(ownerId[0].userId);
-    //     try {
-    //         const doc = await userRef.get();
-    //         if (doc.exists) {
-    //             const ownerFirstName = doc.data()?.firstName;
-    //             const ownerLastName = doc.data()?.lastName;
-    //             return ownerFirstName + ' ' + ownerLastName;
-    //         } else {
-    //             //undefined
-    //             return;
-    //         }
-    //     } catch (error) {
-    //         // TODO: handle error;
-    //         return;
-    //     }
-    // }
-
-    public async subscribeAndSetProject(projectId: string, sharePermission?: SharePermission) {
         const { data, error } = await this.supabaseService.supabase
-            .from<Project>(this.PROJECT_COLLECTION)
-            .select('*')
-            .eq('id', projectId);
+            .from<Member>(this.MEMBERSHIP_COLLECTION)
+            .select('id')
+            .eq('user_id', currentUserId)
+            .eq('project_id', projectId);
 
-        if (error || !this.authenticationService.user?.id || data === null) {
-            this.router.navigate(['404']);
-            return;
+        if (data !== null) {
+            this.supabaseService.supabase
+                .from<Member>(`${this.MEMBERSHIP_COLLECTION}:id=eq.${data[0].id}`)
+                .on('*', membershipUpdate => {
+                    const newRole = membershipUpdate.new.role;
+                    const permissions = allowedModes[newRole];
+                    this._modesAvailable.next(permissions);
+                });
         }
-
-        // const projectMode = this.getProjectMode(
-        //     data[0].memberRoles,
-        //     this.authenticationService.user.id,
-        //     sharePermission
-        // );
-        // this._projectMode.next(projectMode);
-        // this.projectConfig = data[0];
-
-        // this.supabaseService.supabase
-        //     .from<Project>(`${this.PROJECT_COLLECTION}:id=eq.${projectId}`)
-        //     .on('*', projectUpdate => {
-        //         // const oldProject = projectUpdate.old; // old pre-updated project
-        //         const project = projectUpdate.new; // new updated project
-
-        //         if (projectUpdate.eventType === 'DELETE' || !this.authenticationService.user?.id) {
-        //             return this.router.navigate(['404']);
-        //         }
-
-        //         const projectMode = this.getProjectMode(
-        //             project.memberRoles,
-        //             this.authenticationService.user.id,
-        //             sharePermission
-        //         );
-        //         this._projectMode.next(projectMode);
-
-        //         const currentStepSet = project.configuration?.some(stepConfig => {
-        //             return stepConfig.step.isCurrentStep;
-        //         });
-
-        //         if (!currentStepSet) {
-        //             if (project.configuration?.[0]?.step) {
-        //                 project.configuration[0].step.isCurrentStep = true;
-        //             }
-        //         }
-
-        //         this.projectConfig = project;
-
-        //         return;
-        //     });
     }
-
-    // private getProjectMode(
-    //     members: MemberRole[],
-    //     currentAuthUserId: string,
-    //     sharePermission?: SharePermission
-    // ): ComponentMode {
-    //     if (sharePermission) {
-    //         return sharePermission;
-    //     } else if (
-    //         members.some(member => {
-    //             return member.userId === currentAuthUserId && ['viewer'].includes(member.role);
-    //         })
-    //     ) {
-    //         return 'view';
-    //     } else if (
-    //         members.some(member => {
-    //             return member.userId === currentAuthUserId && ['owner'].includes(member.role);
-    //         })
-    //     ) {
-    //         return 'configure';
-    //     } else {
-    //         return 'edit';
-    //     }
-    // }
-    // public subscribeAndSetProject(projectId: string, sharePermission?: SharePermission) {
-    //     // this.firebaseService.getDbInstance()!.collection(this.PROJECT_COLLECTION).doc(projectId).onSnapshot()
-    //     this.unsubscribeToProjectListener = this.firebaseService
-    //         .getDbInstance()!
-    //         .collection(this.PROJECT_COLLECTION)
-    //         .doc(projectId)
-    //         .onSnapshot(
-    //             (document) => {
-    //                 const project = document.data() as Project;
-
-    //                 if (!project) {
-    //                     this.router.navigate(['404']);
-    //                 }
-
-    //                 const currentUserRole = project.memberRoles.find((role) => {
-    //                     return role.userId === this.authenticationService.user?.id;
-    //                 });
-
-    //                 this._modesAvailable.next({
-    //                     allowedProjectModes: {
-    //                         edit: allowedModes[currentUserRole!.role].allowedProjectModes.edit,
-    //                         view: allowedModes[currentUserRole!.role].allowedProjectModes.view,
-    //                         configure: allowedModes[currentUserRole!.role].allowedProjectModes.configure,
-    //                     },
-    //                 });
-
-    //                 if (sharePermission) {
-    //                     this._projectMode.next(sharePermission);
-    //                 } else if (
-    //                     project.memberRoles.some((member) => {
-    //                         return (
-    //                             member.userId === this.authenticationService.user?.id &&
-    //                             ['viewer'].includes(member.role)
-    //                         );
-    //                     })
-    //                 ) {
-    //                     this._projectMode.next('view');
-    //                 } else if (
-    //                     project.memberRoles.some((member) => {
-    //                         return (
-    //                             (member.userId === this.authenticationService.user?.id &&
-    //                                 ['owner'].includes(member.role)) ||
-    //                             ['creator'].includes(member.role)
-    //                         );
-    //                     })
-    //                 ) {
-    //                     this._projectMode.next('configure');
-    //                 } else {
-    //                     this._projectMode.next('edit');
-    //                 }
-
-    //                 const currentStepSet = project.configuration?.some((stepConfig) => {
-    //                     return stepConfig.step.isCurrentStep;
-    //                 });
-
-    //                 if (!currentStepSet) {
-    //                     if (project.configuration?.[0]?.step) {
-    //                         project.configuration[0].step.isCurrentStep = true;
-    //                     }
-    //                 }
-
-    //                 this.projectConfig = project;
-    //             },
-    //             (error) => {
-    //                 console.log(error);
-    //                 this.router.navigate(['404']);
-    //             }
-    //         );
-    // }
 
     public async sendProjectInvitations(emails: string[], role: Role) {
         const success = await this.addNewProjectMembers(emails, role);
@@ -806,8 +632,8 @@ export class ProjectService {
     // }
 
     public resetProject() {
-        const unsub = this.unsubscribeToProjectListener ? this.unsubscribeToProjectListener() : undefined;
-        this._projectConfig.next(this.createBaseProject('', '', ''));
+        this.supabaseService.supabase.removeAllSubscriptions();
+        this._projectConfig.next(this.createBaseProject('', ''));
         this._projectMode.next('view');
         this.router.navigate(['/project']);
     }

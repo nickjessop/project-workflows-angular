@@ -1,6 +1,6 @@
 import { Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Project, ProjectMode, SharePermission, StepConfig } from '@stepflow/interfaces';
+import { Project, ProjectMode, StepConfig } from '@stepflow/interfaces';
 import { Subscription } from 'rxjs';
 import { ProjectService } from '../../services/project/project.service';
 
@@ -24,26 +24,23 @@ export class ViewerComponent implements OnDestroy {
 
     private async initProject() {
         const routeParams = this.route.snapshot.params;
-        const projectId = routeParams.projectId as string | undefined;
-        const userId = routeParams.userId as string | undefined;
-        const sharePermission = routeParams.sharePermission as SharePermission | undefined;
+        const projectId = routeParams.projectId as string;
+        const userId = routeParams.userId as string;
 
-        if (userId && projectId && sharePermission) {
-            this.projectService.subscribeAndSetProject(projectId, 'view');
-        } else if (projectId) {
-            this.projectService.subscribeAndSetProject(projectId);
+        if (projectId && userId) {
+            this.projectService.subscribeAndSetProject(projectId, userId);
         }
 
         this.subscriptions.push(
-            this.projectService.projectConfig$.subscribe((result) => {
-                this.currentStep = result?.configuration?.find((stepConfig) => {
+            this.projectService.projectConfig$.subscribe(result => {
+                this.currentStep = result?.configuration?.find(stepConfig => {
                     return stepConfig.step.isCurrentStep;
                 });
             })
         );
 
         this.subscriptions.push(
-            this.projectService.modesAvailable$.subscribe((val) => {
+            this.projectService.modesAvailable$.subscribe(val => {
                 if (val.allowedProjectModes.configure === true) {
                     this.canConfigureProject = true;
                 }
