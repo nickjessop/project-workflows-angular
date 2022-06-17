@@ -10,9 +10,9 @@ import { ProjectService } from '../services/project/project.service';
 })
 export class ProjectComponent implements OnInit {
     public isLoadingProjects = true;
-    public allProjects?: Array<{ id: string; description: string; name: string; isOwner: boolean }>;
-    public myProjects?: Array<{ id: string; description: string; name: string; isOwner: boolean }>;
-    public sharedProjects?: Array<{ id: string; description: string; name: string }>;
+    public allProjects?: Array<{ id: string; description?: string; name?: string; isOwner: boolean }>;
+    public myProjects?: Array<{ id: string; description?: string; name?: string; isOwner: boolean }>;
+    public sharedProjects?: Array<{ id: string; description?: string; name?: string }>;
 
     constructor(
         private projectService: ProjectService,
@@ -29,23 +29,22 @@ export class ProjectComponent implements OnInit {
         this.isLoadingProjects = true;
         const allProjects = await this.projectService.getProjects();
 
-        // try {
-        //     const allProjects = await this.projectService.getProjects();
-        //     this.allProjects = allProjects.map((project) => {
-        //         return {
-        //             id: project.itemData.id!,
-        //             description: project.itemData.description,
-        //             name: project.itemData.name,
-        //             memberRoles: project.itemData.memberRoles,
-        //             isOwner: project.isOwner,
-        //         };
-        //     });
-        //     this.myProjects = this.allProjects.filter((project) => project.isOwner === true);
-        //     this.sharedProjects = this.allProjects.filter((project) => project.isOwner === false);
-        // } catch (error) {
-        //     // TODO: handle error;
-        // }
+        if (!allProjects) {
+            this.isLoadingProjects = false;
+            return;
+        }
 
+        this.allProjects = allProjects?.map(proj => {
+            return {
+                id: proj.id!,
+                description: proj.description,
+                name: proj.name,
+                isOwner: proj.isOwner,
+            };
+        });
+
+        this.myProjects = this.allProjects?.filter(project => project.isOwner === true);
+        this.sharedProjects = this.allProjects?.filter(project => project.isOwner === false);
         this.isLoadingProjects = false;
     }
 

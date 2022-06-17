@@ -22,8 +22,8 @@
                     <ng-container *ngFor="let project of allProjects">
                         <project-card
                             class="project__card"
-                            projectName="{{ project.name }}"
-                            projectDescription="{{ project.description }}"
+                            projectName="{{ project.name || '' }}"
+                            projectDescription="{{ project.description || '' }}"
                             link="/project/{{ project.id }}"
                             projectId="{{ project.id }}"
                             [projectOwner]="project.isOwner"
@@ -36,8 +36,8 @@
                     <ng-container *ngFor="let project of myProjects">
                         <project-card
                             class="project__card"
-                            projectName="{{ project.name }}"
-                            projectDescription="{{ project.description }}"
+                            projectName="{{ project.name || '' }}"
+                            projectDescription="{{ project.description || '' }}"
                             link="/project/{{ project.id }}"
                             projectId="{{ project.id }}"
                             [projectOwner]="project.isOwner"
@@ -50,8 +50,8 @@
                     <ng-container *ngFor="let project of sharedProjects">
                         <project-card
                             class="project__card"
-                            projectName="{{ project.name }}"
-                            projectDescription="{{ project.description }}"
+                            projectName="{{ project.name || '' }}"
+                            projectDescription="{{ project.description || '' }}"
                             link="/project/{{ project.id }}"
                             projectId="{{ project.id }}"
                             [projectOwner]="project.isOwner"

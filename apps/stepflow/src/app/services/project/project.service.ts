@@ -430,33 +430,29 @@ export class ProjectService {
 
     public async getProjects() {
         const userId = this.authenticationService.user?.id || '';
-        const projects = await this.supabaseService.supabase
-            .from(this.MEMBERSHIP_COLLECTION)
-            .select('project_id, role, projects (project_id, name, description)');
+        const { data, error } = await this.supabaseService.supabase
+            .from<Member & { projects: Pick<Project, 'id' | 'description' | 'name'> }>(this.MEMBERSHIP_COLLECTION)
+            .select('project_id, role, projects (id, name, description)')
+            .eq('user_id', userId);
 
-        if (!projects.data || projects.data?.[0] === null) {
+        if (error || data === null) {
             return;
         }
 
-        console.log(projects.data);
-        // const _projects = projects.data.map(projs => {
-        //     const isOwner = this.isOwner(projs.memberRoles);
-        //     const itemData = projs;
-        //     const memberData = { isOwner, itemData };
-        //     return memberData;
-        // });
-        // const ref = this.firebaseService.getDbInstance().collection(this.PROJECT_COLLECTION);
+        const _projects = data.map(project => {
+            const { role, projects } = project;
 
-        // const projects = await ref.where('members', 'array-contains', userId).get();
-        // // return from(ref.where('members', 'array-contains', { userId: userId, role: 'owner' }).get()).pipe(
-        // const _projects = projects.docs.map((items) => {
-        //     const isOwner = this.isOwner(items.data().memberRoles);
-        //     const itemData = items.data();
-        //     const memberData = { isOwner, itemData };
-        //     return memberData;
-        // });
+            return {
+                isOwner: role === 'owner',
+                description: projects.description,
+                id: projects.id,
+                name: projects.name,
+            };
+        });
 
-        // return _projects;
+        console.log(_projects);
+
+        return _projects;
     }
 
     // public getMyProjects() {
