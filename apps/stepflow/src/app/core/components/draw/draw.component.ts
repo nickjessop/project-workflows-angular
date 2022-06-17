@@ -6,6 +6,8 @@ import { ProjectService } from '../../../services/project/project.service';
 import { CoreComponentService } from '../../core-component.service';
 //TODO: stop drawing if mouse/touch goes off canvas
 //TODO: handle resizing block
+//TODO: limit stroke history to ~10
+//TODO: investigate if we can compress stroke data
 @Component({
     selector: 'app-draw',
     templateUrl: './draw.component.html',
@@ -101,13 +103,12 @@ export class DrawComponent implements AfterViewInit {
         this.strokeHistory.map(stroke => {
             if (this.strokeHistory.length === 0) return;
             this.context!.beginPath();
-
+            console.log(stroke);
             let strokePath: DrawHistory[] = [];
+            const { x, y, lineWidth } = stroke;
 
-            stroke.map((point: number) => {
-                strokePath.push(point);
-                this.drawOnCanvas(strokePath);
-            });
+            // strokePath.push({ x, y, lineWidth }); //typescript error
+            this.drawOnCanvas(strokePath);
         });
     }
 
@@ -119,8 +120,8 @@ export class DrawComponent implements AfterViewInit {
             if ((e as any).touches[0]['force'] > 0) {
                 pressure = (e as any).touches[0]['force'];
             }
-            x = (e as any).touches[0].offsetX * 2;
-            y = (e as any).touches[0].offsetY * 2;
+            x = (e as any).touches[0].offsetX;
+            y = (e as any).touches[0].offsetY;
         } else {
             pressure = 1.0;
             x = (e as any).offsetX; // removed * 2 from each of these below
@@ -148,8 +149,8 @@ export class DrawComponent implements AfterViewInit {
             if ((e as any).touches[0]['force'] > 0) {
                 pressure = (e as any).touches[0]['force'];
             }
-            x = (e as any).touches[0].offsetX * 2;
-            y = (e as any).touches[0].offsetY * 2;
+            x = (e as any).touches[0].offsetX;
+            y = (e as any).touches[0].offsetY;
         } else {
             pressure = 1.0;
             x = (e as any).offsetX;
@@ -172,8 +173,8 @@ export class DrawComponent implements AfterViewInit {
             if ((e as any).touches[0]['force'] > 0) {
                 pressure = (e as any).touches[0]['force'];
             }
-            x = (e as any).touches[0].offsetX * 2;
-            y = (e as any).touches[0].offsetY * 2;
+            x = (e as any).touches[0].offsetX;
+            y = (e as any).touches[0].offsetY;
         } else {
             pressure = 1.0;
             x = (e as any).offsetX;
