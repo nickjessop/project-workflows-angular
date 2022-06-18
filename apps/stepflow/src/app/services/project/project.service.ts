@@ -28,7 +28,7 @@ export class ProjectService {
     private readonly INVITATION_COLLECTION = 'invitations';
     private readonly MEMBERSHIP_COLLECTION = 'members';
     private readonly SHARE_COLLECTION = 'shareLinks';
-    private _projectConfig: BehaviorSubject<Project> = new BehaviorSubject<Project>(this.createBaseProject('', '', ''));
+    private _projectConfig: BehaviorSubject<Project> = new BehaviorSubject<Project>(this.createBaseProject('', ''));
     public readonly projectConfig$ = this._projectConfig.asObservable();
     public isDragging: EventEmitter<boolean> = new EventEmitter();
 
@@ -454,15 +454,20 @@ export class ProjectService {
             .eq('user_id', currentUserId)
             .eq('project_id', projectId);
 
-        if (data !== null) {
-            this.supabaseService.supabase
-                .from<Member>(`${this.MEMBERSHIP_COLLECTION}:id=eq.${data[0].id}`)
-                .on('*', membershipUpdate => {
-                    const newRole = membershipUpdate.new.role;
-                    const permissions = allowedModes[newRole];
-                    this._modesAvailable.next(permissions);
-                });
+        if (data === null) {
+            return;
         }
+        const role = data[0].role;
+        const permissions = allowedModes[role];
+        this._modesAvailable.next(permissions);
+
+        this.supabaseService.supabase
+            .from<Member>(`${this.MEMBERSHIP_COLLECTION}:id=eq.${data[0].id}`)
+            .on('*', membershipUpdate => {
+                const newRole = membershipUpdate.new.role;
+                const permissions = allowedModes[newRole];
+                this._modesAvailable.next(permissions);
+            });
     }
 
     public async sendProjectInvitations(emails: string[], role: Role) {
