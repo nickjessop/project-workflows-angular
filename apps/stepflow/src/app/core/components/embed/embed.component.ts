@@ -14,7 +14,7 @@ import { CoreComponentService } from '../../core-component.service';
 export class EmbedComponent implements OnInit {
     @Input() group!: FormGroup;
     @Input() index = 0;
-    @Input() field: BlockConfig = this.coreComponentService.createBlockConfig('textInput');
+    @Input() field: BlockConfig = this.coreComponentService.createBlockConfig('embed');
     @Input() resizable = true;
 
     @ViewChild('iframe') iframe!: ElementRef;

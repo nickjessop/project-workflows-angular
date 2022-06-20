@@ -3,13 +3,13 @@ import {
     BlockConfig,
     Checkboxes,
     ComponentType,
+    Draw,
     Embed,
     FileUploader,
     ImageUploader,
     PDF,
     RichTextInput,
     Table,
-    TextInput,
     Validator,
 } from '@stepflow/interfaces';
 
@@ -140,9 +140,9 @@ export class CoreComponentService {
             }
             return _component;
         } else {
-            const _component: TextInput = {
-                data: { value: '' },
-                component: 'textInput',
+            const _component: Draw = {
+                data: { value: [{ x: 0, y: 0, lineWidth: 0 }] },
+                component: 'draw',
             };
 
             if (validation) {
