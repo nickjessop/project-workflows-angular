@@ -7,7 +7,6 @@
         &:hover {
             .block-item-content {
                 div:first-child {
-                    color: var(--primary-color);
                     transition: all 0.2s ease-in-out;
                 }
             }
@@ -15,12 +14,14 @@
                 transition: all 0.3s ease-in-out;
                 transform: scale(1.05);
             }
+            background-color: var(--surface-b);
             cursor: pointer;
             border-radius: 6px;
         }
         .block-icon {
-            background: var(--surface-c);
-            border-radius: 6px;
+            background: var(--primary-color);
+            border-radius: 12px;
+            color: white;
         }
         .block-item-content {
             flex-grow: 1;

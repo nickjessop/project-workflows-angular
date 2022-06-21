@@ -7,12 +7,15 @@
 >
     <div class="block-overlay">
         <ng-container *ngIf="blockOptions?.length">
-            <div *ngFor="let blockOption of blockOptions" class="p-mt-2">
+            <div *ngFor="let blockOption of getPublicBlocks" class="p-mt-2">
                 <div
                     class="p-d-flex p-jc-between p-ai-center p-mb-4 block-overlay__item"
                     (click)="onAddNewBlockPress(blockOption.component)"
                 >
-                    <i class="pi {{ blockOption.icon }} ms-4 p-p-3 p-mr-3 block-icon"></i>
+                    <i
+                        class="pi {{ blockOption.icon }} ms-4 p-p-3 p-mr-3 block-icon"
+                        [style.background-color]="blockOption.colour"
+                    ></i>
                     <div class="block-item-content">
                         <div class="ms-01 p-pb-1 p-text-bold">{{ blockOption.label }}</div>
                         <div class="ms-02">{{ blockOption.description }}</div>
