@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { BlockConfig, ComponentMode, ComponentSettings } from '@stepflow/interfaces';
+import { BlockConfig, ComponentMetadata, ComponentMode, ComponentSettings } from '@stepflow/interfaces';
 import { ResizeEvent } from 'angular-resizable-element';
 import { MenuItem } from 'primeng/api';
 import { Subscription } from 'rxjs';
@@ -23,6 +23,7 @@ export class DragAndResizeComponent {
     public canEditBlocks: boolean = false;
     public editMode: boolean = false;
     public subscriptions: Subscription = new Subscription();
+    public blockMetaData!: ComponentMetadata;
 
     public items: MenuItem[] = [
         {
@@ -38,7 +39,7 @@ export class DragAndResizeComponent {
 
     ngOnInit() {
         this.subscriptions.add(
-            this.projectService.modesAvailable$.subscribe((val) => {
+            this.projectService.modesAvailable$.subscribe(val => {
                 if (val.allowedProjectModes.configure === true) {
                     this.canConfigureBlocks = true;
                 }
@@ -47,6 +48,7 @@ export class DragAndResizeComponent {
                 }
             })
         );
+        this.blockMetaData = this.coreComponentService.createComponentMetadataTemplate(this.field.metadata.component);
     }
 
     ngOnDestroy() {
@@ -82,7 +84,6 @@ export class DragAndResizeComponent {
     }
 
     public onResizeEnd(event: ResizeEvent): void {
-        console.log('Element was resized', event);
         const height = event.rectangle.height as number;
         this.updateHeight(height);
         this.projectService.syncProject();

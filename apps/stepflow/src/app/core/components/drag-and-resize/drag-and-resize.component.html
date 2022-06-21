@@ -21,14 +21,22 @@
         ></div>
 
         <div class="field__label p-d-flex p-jc-between p-ai-center p-mb-2">
-            <p-inplace closable="true" closeIcon="pi pi-check" (onDeactivate)="saveBlockData()">
-                <ng-template pTemplate="display">
-                    <span class="ms-1">{{ field.label ? field.label : 'Untitled block' }}</span>
-                </ng-template>
-                <ng-template pTemplate="content">
-                    <input type="text" class="p-inputtext ms-1" [(ngModel)]="field.label" pInputText />
-                </ng-template>
-            </p-inplace>
+            <div class="p-d-flex p-ai-center">
+                <i
+                    *ngIf="blockMetaData"
+                    class="pi {{ blockMetaData.icon }} p-p-1 p-mr-1 field-icon"
+                    [style.background-color]="blockMetaData.colour"
+                    title="{{ blockMetaData.label }} block: {{ blockMetaData.description }}"
+                ></i>
+                <p-inplace closable="true" closeIcon="pi pi-check" (onDeactivate)="saveBlockData()">
+                    <ng-template pTemplate="display">
+                        <span class="ms-1">{{ field.label ? field.label : 'Untitled block' }}</span>
+                    </ng-template>
+                    <ng-template pTemplate="content">
+                        <input type="text" class="p-inputtext ms-1" [(ngModel)]="field.label" pInputText />
+                    </ng-template>
+                </p-inplace>
+            </div>
             <div class="field__settings">
                 <button
                     type="button"
@@ -66,8 +74,16 @@
             [resizeEdges]="{ bottom: true }"
         ></div>
         <div class="field__label p-d-flex p-jc-between p-ai-center p-mb-2">
-            <div class="p-ml-2 p-mb-2 ms-1">
-                {{ field.label ? field.label : 'Untitled block' }}
+            <div class="p-d-flex p-ai-center">
+                <i
+                    *ngIf="blockMetaData"
+                    class="pi {{ blockMetaData.icon }} p-p-1 p-mr-1 field-icon"
+                    [style.background-color]="blockMetaData.colour"
+                    title="{{ blockMetaData.label }} block: {{ blockMetaData.description }}"
+                ></i>
+                <div class="ms-1">
+                    {{ field.label ? field.label : 'Untitled block' }}
+                </div>
             </div>
             <div class="field__settings">
                 <button

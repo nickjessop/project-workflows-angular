@@ -37,6 +37,11 @@ export class CoreComponentService {
             const _component: Checkboxes = {
                 component: 'checkboxes',
                 data: { value: [{ item: '', checked: false }] },
+                colour: '#9e3d8a',
+                icon: 'pi-check-square',
+                label: 'Checklist',
+                description: 'Track a list of items.',
+                beta: false,
             };
 
             if (validation) {
@@ -57,6 +62,11 @@ export class CoreComponentService {
                     ],
                 },
                 component: 'fileUploader',
+                icon: 'pi-folder',
+                label: 'Files',
+                description: 'Upload files for users to browse and download.',
+                colour: '#3d4c9e',
+                beta: false,
             };
 
             if (validation) {
@@ -76,6 +86,11 @@ export class CoreComponentService {
                     ],
                 },
                 component: 'imageUploader',
+                icon: 'pi-images',
+                label: 'Images',
+                description: 'Upload images and display them in a gallery.',
+                colour: '#8b9e3d',
+                beta: false,
             };
             if (validation) {
                 _component.validation = validation;
@@ -85,6 +100,11 @@ export class CoreComponentService {
             const _component: RichTextInput = {
                 data: { value: '' },
                 component: 'richTextInput',
+                icon: 'pi-large-text',
+                label: 'Text',
+                description: 'Capture notes and ideas with simple editing tools.',
+                colour: '#3497ac',
+                beta: false,
             };
 
             if (validation) {
@@ -113,6 +133,11 @@ export class CoreComponentService {
                     },
                 },
                 component: 'table',
+                icon: 'pi-table',
+                label: 'Table',
+                description: 'Organize data inside a simple table.',
+                colour: '#34ac80',
+                beta: false,
             };
 
             if (validation) {
@@ -123,6 +148,11 @@ export class CoreComponentService {
             const _component: Embed = {
                 data: { value: [{ href: '' }] },
                 component: 'embed',
+                icon: 'pi-embed',
+                label: 'Embed',
+                description: 'Embed third-party apps directly into a step.',
+                colour: '#ac7434',
+                beta: false,
             };
 
             if (validation) {
@@ -133,6 +163,11 @@ export class CoreComponentService {
             const _component: PDF = {
                 data: { value: { href: '' } },
                 component: 'pdf',
+                icon: 'pi-file-pdf',
+                label: 'PDF',
+                description: 'Display a PDF with convenient controls.',
+                colour: '#ac3434',
+                beta: false,
             };
 
             if (validation) {
@@ -143,6 +178,11 @@ export class CoreComponentService {
             const _component: Draw = {
                 data: { value: [{ x: 0, y: 0, lineWidth: 0 }] },
                 component: 'draw',
+                icon: 'pi-pencil',
+                label: 'Whiteboard',
+                description: 'Sketch out designs, diagrams, or anything else!',
+                colour: '#643d9e',
+                beta: true,
             };
 
             if (validation) {
@@ -150,5 +190,24 @@ export class CoreComponentService {
             }
             return _component;
         }
+    }
+
+    public getBlockMetaData() {
+        const blockTypes: ComponentType[] = [
+            'checkboxes',
+            'fileUploader',
+            'imageUploader',
+            'richTextInput',
+            'table',
+            'embed',
+            'pdf',
+            'draw',
+        ];
+        const blocks: (Checkboxes | FileUploader | ImageUploader | RichTextInput | Table | Embed | PDF | Draw)[] = [];
+        blockTypes.map(block => {
+            let newBlock = this.createComponentMetadataTemplate(block);
+            blocks.push(newBlock);
+        });
+        return blocks;
     }
 }

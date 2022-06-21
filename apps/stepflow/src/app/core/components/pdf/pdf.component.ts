@@ -41,7 +41,6 @@ export class PdfComponent implements OnInit {
         if (this.pdfData.size) {
             this.pdfSize = this.bytesToSize(this.pdfData.size);
         }
-        console.log(this.pdfData);
     }
 
     public setComponentMode($event: ComponentMode) {
@@ -100,7 +99,7 @@ export class PdfComponent implements OnInit {
                     // Successfully removed file
                     this.projectService.syncProject();
                 },
-                (err) => {
+                err => {
                     console.log(err);
                 }
             );
@@ -131,9 +130,9 @@ export class PdfComponent implements OnInit {
         this.storageService
             .uploadProjectFile(file, projectId)
             .pipe(
-                switchMap((file) => {
+                switchMap(file => {
                     return this.storageService.getDownloadUrl(file.metadata.fullPath).pipe(
-                        map((downloadUrl) => {
+                        map(downloadUrl => {
                             return {
                                 fileMetadata: file.metadata,
                                 downloadUrl: downloadUrl as string,
@@ -144,7 +143,7 @@ export class PdfComponent implements OnInit {
                 })
             )
             .subscribe(
-                (filedata) => {
+                filedata => {
                     const size = filedata.fileMetadata.size;
                     const name = file.name;
                     const downloadUrl = filedata.downloadUrl;
@@ -160,7 +159,7 @@ export class PdfComponent implements OnInit {
                     this.field.metadata.settings = { ...this.field.metadata.settings, height };
                     this.projectService.syncProject();
                 },
-                (err) => {
+                err => {
                     this.messageService.add({
                         severity: 'error',
                         key: 'global-toast',
