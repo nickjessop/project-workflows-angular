@@ -42,8 +42,6 @@ export class ProjectService {
     });
     public readonly modesAvailable$ = this._modesAvailable.asObservable();
 
-    public unsubscribeToProjectListener?: () => void;
-
     constructor(
         private supabaseService: SupabaseService,
         private authenticationService: AuthenticationService,
@@ -223,11 +221,20 @@ export class ProjectService {
 
         const baseProject = this.createBaseProject(projectName, projectDescription);
 
-        const { data, error } = await this.supabaseService.supabase
-            .from<Project>(this.PROJECT_COLLECTION)
-            .insert([baseProject]);
+        const { data, error } = await this.supabaseService.supabase.rpc<Project['id']>('create_project', {
+            name: baseProject.name,
+            configuration: baseProject.configuration,
+            description: baseProject.description,
+        });
 
-        return error ? undefined : data?.[0];
+        if (error) console.error(error);
+        else console.log(data);
+
+        // const { data, error } = await this.supabaseService.supabase
+        //     .from<Project>(this.PROJECT_COLLECTION)
+        //     .insert([baseProject]);
+
+        return error ? undefined : data;
     }
 
     private async updateProject(projectConfig: Project) {
@@ -432,7 +439,7 @@ export class ProjectService {
         return _projects;
     }
 
-    public async subscribeAndSetProject(projectId: string, currentUserId: string) {
+    public async subscribeAndSetProject(projectId: string) {
         this.supabaseService.supabase
             .from<Project>(`${this.PROJECT_COLLECTION}:id=eq.${projectId}`)
             .on('*', projectUpdate => {
@@ -448,15 +455,22 @@ export class ProjectService {
                 return;
             });
 
+        const currentUserId = this.authenticationService.user?.id;
+
+        if (!currentUserId) {
+            return;
+        }
+
         const { data, error } = await this.supabaseService.supabase
             .from<Member>(this.MEMBERSHIP_COLLECTION)
-            .select('id')
+            .select('*')
             .eq('user_id', currentUserId)
             .eq('project_id', projectId);
 
         if (data === null) {
             return;
         }
+
         const role = data[0].role;
         const permissions = allowedModes[role];
         this._modesAvailable.next(permissions);

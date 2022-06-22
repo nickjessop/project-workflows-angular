@@ -1,6 +1,6 @@
 import { Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Project, ProjectMode, StepConfig } from '@stepflow/interfaces';
+import { Project, ProjectMode, SharePermission, StepConfig } from '@stepflow/interfaces';
 import { Subscription } from 'rxjs';
 import { ProjectService } from '../../services/project/project.service';
 
@@ -26,9 +26,10 @@ export class ViewerComponent implements OnDestroy {
         const routeParams = this.route.snapshot.params;
         const projectId = routeParams.projectId as string;
         const userId = routeParams.userId as string;
+        const sharePermission = routeParams.sharePermission as SharePermission | undefined;
 
-        if (projectId && userId) {
-            this.projectService.subscribeAndSetProject(projectId, userId);
+        if (projectId) {
+            this.projectService.subscribeAndSetProject(projectId);
         }
 
         this.subscriptions.push(
@@ -41,9 +42,7 @@ export class ViewerComponent implements OnDestroy {
 
         this.subscriptions.push(
             this.projectService.modesAvailable$.subscribe(val => {
-                if (val.allowedProjectModes.configure === true) {
-                    this.canConfigureProject = true;
-                }
+                this.canConfigureProject = val.allowedProjectModes?.configure;
             })
         );
     }

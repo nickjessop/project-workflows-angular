@@ -65,10 +65,10 @@ export class ProjectComponent implements OnInit {
     }
 
     public async onCreateNewProjectEvent($event: { projectName: string; description: string }) {
-        const newProject = await this.projectService.createNewProject($event.projectName, $event.description);
+        const newProjectId = await this.projectService.createNewProject($event.projectName, $event.description);
 
-        if (newProject) {
-            this.router.navigateByUrl(`/project/${newProject.id}`);
+        if (newProjectId) {
+            this.router.navigateByUrl(`/project/${newProjectId}`);
         }
         // this.projectService.createNewProject($event.projectName, $event.description).then(
         //     success => {
