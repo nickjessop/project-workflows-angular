@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Project, ProjectMode } from '@stepflow/interfaces';
 import { MenuItem, MessageService } from 'primeng/api';
 import { Observable, Subscription } from 'rxjs';
-import { AuthenticationService } from '../services/authentication/authentication.service';
+import { AuthenticationService, AuthStatus } from '../services/authentication/authentication.service';
 import { ProjectService } from '../services/project/project.service';
 
 @Component({
@@ -72,17 +72,8 @@ export class NavBarComponent implements OnInit {
         );
 
         this.subscriptions.add(
-            this.authService.$loginStatus.subscribe({
-                next: (status: any) => {
-                    if (status.authStatus === 0) {
-                        this.authenticated = true;
-                    } else {
-                        this.authenticated = false;
-                    }
-                },
-                error: (err: any) => {
-                    console.log(err);
-                },
+            this.authService.$loginStatus.subscribe(loginStatus => {
+                this.authenticated = loginStatus.authStatus === AuthStatus.AUTHENTICATED;
             })
         );
     }

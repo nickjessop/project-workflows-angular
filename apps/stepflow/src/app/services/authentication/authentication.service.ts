@@ -51,9 +51,7 @@ export class AuthenticationService {
     }
 
     private setAuthStatus(user?: User | null) {
-        if (user === undefined) {
-            this.$loginStatus.next({ authStatus: AuthStatus.UNKNOWN });
-        } else if (user === null) {
+        if (user === null || user === undefined) {
             this.$loginStatus.next({ authStatus: AuthStatus.UNAUTHENTICATED });
         } else {
             this.$loginStatus.next({ authStatus: AuthStatus.AUTHENTICATED });
