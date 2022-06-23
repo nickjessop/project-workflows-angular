@@ -145,7 +145,6 @@ export interface Project {
     name: string;
     description?: string;
     configuration?: StepConfig[];
-    shareLink?: ShareLink | null;
 }
 
 export interface Member {
@@ -153,6 +152,12 @@ export interface Member {
     user_id: string;
     project_id: string;
     role: Role;
+}
+
+export interface ShareLink {
+    project_id: string;
+    user_id: string;
+    permission: SharePermission;
 }
 
 export type MemberRole = {
@@ -196,12 +201,6 @@ export const InProgress = { label: 'In progress', value: 'in-progress', icon: 'p
 export const NeedsReview = { label: 'Needs review', value: 'needs-review', icon: 'pi-step-important' } as const;
 export const Upcoming = { label: 'Upcoming', value: 'upcoming', icon: 'pi-step-upcoming' } as const;
 export const Complete = { label: 'Completed', value: 'completed', icon: 'pi-step-completed' } as const;
-
-export interface ShareLink {
-    userId: string;
-    projectId: string;
-    permission: SharePermission;
-}
 
 /**
  * Comment Types

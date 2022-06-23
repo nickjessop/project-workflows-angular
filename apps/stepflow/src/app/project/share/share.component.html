@@ -5,7 +5,7 @@
     icon="pi pi-users"
     class="p-mr-3"
     (click)="showShareDialog()"
-    *ngIf="(projectService.projectMode$ | async) != 'view'"
+    *ngIf="(projectService.projectMode$ | async) !== 'view'"
 ></button>
 
 <p-dialog

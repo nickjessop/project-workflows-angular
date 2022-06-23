@@ -65,12 +65,11 @@ export class ShareComponent implements OnInit {
     }
 
     private initShareLink() {
-        if (this.project?.shareLink) {
-            const { userId, projectId, permission } = this.project.shareLink;
-
-            this.shareLink = `${location.host}/project/${userId}/${projectId}/${permission}`;
-            this.shareLinkChecked = true;
-        }
+        // if (this.project?.shareLink) {
+        //     const { userId, projectId, permission } = this.project.shareLink;
+        //     this.shareLink = `${location.host}/project/${userId}/${projectId}/${permission}`;
+        //     this.shareLinkChecked = true;
+        // }
     }
 
     public validateEmails() {
@@ -228,15 +227,15 @@ export class ShareComponent implements OnInit {
     }
 
     private async deleteShareLink() {
-        const res = await this.projectService.deleteShareLink();
+        // const res = await this.projectService.deleteShareLink();
     }
 
     public async generateSharingLink() {
         const shareLink = await this.projectService.generateShareLink(this.selectedSharePermission);
 
-        if (shareLink) {
-            this.shareLink = `${location.host}/project/${shareLink.userId}/${shareLink.projectId}/${shareLink.permission}`;
-        }
+        // if (shareLink) {
+        //     this.shareLink = `${location.host}/project/${shareLink.userId}/${shareLink.projectId}/${shareLink.permission}`;
+        // }
     }
 
     copyInputMessage(linkInput: any) {

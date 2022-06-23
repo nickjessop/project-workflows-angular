@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Project, ProjectMode } from '@stepflow/interfaces';
 import { MenuItem, MessageService } from 'primeng/api';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { AuthenticationService } from '../services/authentication/authentication.service';
 import { ProjectService } from '../services/project/project.service';
 
@@ -13,27 +13,18 @@ import { ProjectService } from '../services/project/project.service';
 })
 export class NavBarComponent implements OnInit {
     items!: MenuItem[];
-
-    public displayName: string = '';
-    public photoURL: string = '';
-    public loggedInUserId: string = '';
-    public authenticated: boolean = false;
-
     private subscriptions = new Subscription();
 
-    public href: string = '';
-    parsedUrl = new URL(window.location.href);
-    baseUrl = this.parsedUrl.origin;
-    linkCopiedMsg: any[] = [];
+    public displayName = '';
+    public photoURL = '';
+    public loggedInUserId = '';
+    public authenticated = false;
 
-    public projectMode?: ProjectMode;
-    public isNewProject = false;
-    public canConfigureProject = false;
+    public projectMode?: Observable<ProjectMode>;
+    public displaySettingsDialog = false;
 
-    public displaySettingsDialog: boolean = false;
-    public showSettingsError: boolean = false;
+    public showSettingsError = false;
 
-    public navMode: 'default' | 'project' = 'default';
     public project?: Project;
     public projectSettings: {
         name: string;
@@ -51,6 +42,8 @@ export class NavBarComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
+        this.projectMode = this.projectService.projectMode$;
+
         this.items = [
             {
                 label: 'Account settings',
@@ -70,41 +63,11 @@ export class NavBarComponent implements OnInit {
                 },
             },
         ];
-
         this.subscriptions.add(
-            this.projectService.projectConfig$.subscribe(projectData => {
-                this.project = projectData;
-                if (projectData?.id) {
-                    this.navMode = 'project';
-                } else {
-                    this.navMode = 'default';
-                }
-            })
-        );
-
-        this.subscriptions.add(
-            this.projectService.projectMode$.subscribe(result => {
-                this.projectMode = result;
-                if (this.projectMode === 'configure') {
-                    this.canConfigureProject = true;
-                } else {
-                    this.canConfigureProject = false;
-                }
-            })
-        );
-
-        this.subscriptions.add(
-            this.authService.$user.subscribe({
-                next: () => {
-                    this.displayName =
-                        this.authService.user?.profile?.displayName || this.authService.user?.email || '';
-                    this.photoURL =
-                        this.authService.user?.profile?.photoURL || '/assets/placeholder/placeholder-profile.png';
-                    this.loggedInUserId = this.authService.user?.id || '';
-                },
-                error: (err: any) => {
-                    console.log(err);
-                },
+            this.authService.$user.subscribe(user => {
+                this.displayName = user?.email || user?.profile.displayName || '';
+                this.photoURL = user?.profile.photoURL || '/assets/placeholder/placeholder-profile.png';
+                this.loggedInUserId = user?.id || '';
             })
         );
 

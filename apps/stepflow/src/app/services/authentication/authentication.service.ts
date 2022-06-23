@@ -229,16 +229,11 @@ export class AuthenticationService {
         this.router.navigate([this.redirectUrl]);
     }
 
-    public logout(redirect?: boolean) {
-        this.firebaseService
-            .getAuthInstance()!
-            .signOut()
-            .then(() => {
-                this.user = undefined;
-                if (redirect) {
-                    this.router.navigate(['/auth/login']);
-                }
-            });
+    public async logout(redirect?: boolean) {
+        const { error } = await this.supabaseService.signOut();
+        if (!error && redirect) {
+            this.router.navigate(['/auth/login']);
+        }
     }
 
     public reAuthenticateUser(userProvidedPassword: string): Promise<any> {
@@ -474,7 +469,7 @@ export class AuthenticationService {
         }
 
         return users;
-    };
+    }
 
     public async getUser(userId: string): Promise<User | null> {
         return this.firebaseService

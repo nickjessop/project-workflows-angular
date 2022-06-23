@@ -8,7 +8,6 @@ import {
     Project,
     ProjectMode,
     Role,
-    ShareLink,
     SharePermission,
     Status,
     Step,
@@ -264,69 +263,6 @@ export class ProjectService {
         return true;
     }
 
-    public async getProjectUserIsApartOf(projectId: string) {
-        const { data, error } = await this.supabaseService.supabase
-            .from<Member>(this.MEMBERSHIP_COLLECTION)
-            .select(`project_id, role, user_id (email)`)
-            .eq('project_id', projectId);
-
-        if (error || data === null) {
-            return;
-        }
-        // const proj = await this.firebaseService
-        //     .getDbInstance()!
-        //     .collection(this.PROJECT_COLLECTION)
-        //     .add(baseProject)
-        //     .then(
-        //         async (documentRef) => {
-        //             baseProject.id = documentRef.id;
-        //             await documentRef.update({ id: documentRef.id });
-        //             // this.projectConfig = baseProject;
-        //             return baseProject;
-        //         },
-        //         (error) => {
-        //             console.log(`Error occurred while creating a new project: ${error}`);
-        //         }
-        //     );
-
-        // return proj;
-    }
-
-    //TODO: Add firebase rule to check that users are authorized to edit this project
-    // public updateProject(projectConfig: Project, shouldMerge = true) {
-    //     return this.firebaseService
-    //         .getDbInstance()!
-    //         .collection(this.PROJECT_COLLECTION)
-    //         .doc(projectConfig.id)
-    //         .set(projectConfig, { merge: shouldMerge })
-    //         .then(
-    //             () => {
-    //                 console.log(`Successfully updated project`);
-    //                 return true;
-    //             },
-    //             (error) => {
-    //                 console.log(`An error occurred while updating project: ${error}`);
-    //                 return false;
-    //             }
-    //         );
-    // }
-
-    // public deleteProject(projectId: string) {
-    //     return this.firebaseService
-    //         .getDbInstance()!
-    //         .collection(this.PROJECT_COLLECTION)
-    //         .doc(projectId)
-    //         .delete()
-    //         .then(
-    //             (success) => {
-    //                 return true;
-    //             },
-    //             (error) => {
-    //                 return false;
-    //             }
-    //         );
-    // }
-
     public addProjectBlock(projectBlock: BlockConfig) {
         const currentStepIndex = this.getCurrentStepIndex() || 0;
 
@@ -474,6 +410,8 @@ export class ProjectService {
         const role = data[0].role;
         const permissions = allowedModes[role];
         this._modesAvailable.next(permissions);
+        const { configure, edit } = permissions.allowedProjectModes;
+        this._projectMode.next(configure ? 'configure' : edit ? 'edit' : 'view');
 
         this.supabaseService.supabase
             .from<Member>(`${this.MEMBERSHIP_COLLECTION}:id=eq.${data[0].id}`)
@@ -481,6 +419,9 @@ export class ProjectService {
                 const newRole = membershipUpdate.new.role;
                 const permissions = allowedModes[newRole];
                 this._modesAvailable.next(permissions);
+
+                const { configure, edit } = permissions.allowedProjectModes;
+                this._projectMode.next(configure ? 'configure' : edit ? 'edit' : 'view');
             });
     }
 
@@ -569,67 +510,43 @@ export class ProjectService {
 
         if (error) return false;
         else return true;
-
-        // if (!projectId) {
-        //     return;
-        // }
-        // const db = this.firebaseService.getDbInstance()!;
-        // const batch = db.batch();
-        // const projectRef = db.collection(this.PROJECT_COLLECTION).doc(projectId);
-
-        // pendingMembers.map(member => {
-        //     let invitationRef = db.collection(this.INVITATION_COLLECTION).doc();
-        //     batch.set(invitationRef, { email: member.email, role: member.role, project: projectRef });
-        // });
-
-        // // Commit the batch
-        // return batch
-        //     .commit()
-        //     .then(() => {
-        //         return true;
-        //     })
-        //     .catch(() => {
-        //         return false;
-        //     });
     }
 
     public async generateShareLink(permission: SharePermission) {
-        const currentUserId = this.authenticationService.user?.id;
+        // const currentUserId = this.authenticationService.user?.id;
         const currentProjectId = this._projectConfig.getValue().id;
 
-        if (!currentUserId || !currentProjectId) {
-            console.log('Cannot generate share link when db/userid/projectid is missing');
+        // if (!currentUserId || !currentProjectId) {
+        //     console.log('Cannot generate share link when db/userid/projectid is missing');
 
-            return;
-        }
+        //     return;
+        // }
 
-        const shareLink: ShareLink = {
-            userId: currentUserId,
-            projectId: currentProjectId,
+        let { data, error } = await this.supabaseService.supabase.rpc('create_sharelink', {
+            project_id: currentProjectId,
             permission,
-        };
-        const configUpdate = this._projectConfig.getValue();
-        configUpdate.shareLink = shareLink;
+        });
 
-        const updatedConfig = await this.updateProject(configUpdate);
+        if (error) console.error(error);
+        else console.log(data);
 
-        return updatedConfig ? shareLink : undefined;
+        return data;
     }
 
-    public async deleteShareLink() {
-        const currentUserId = this.authenticationService.user?.id;
-        const currentProjectId = this._projectConfig.getValue().id;
+    // public async deleteShareLink() {
+    //     const currentUserId = this.authenticationService.user?.id;
+    //     const currentProjectId = this._projectConfig.getValue().id;
 
-        if (!currentUserId || !currentProjectId) {
-            return;
-        }
+    //     if (!currentUserId || !currentProjectId) {
+    //         return;
+    //     }
 
-        const configUpdate = this._projectConfig.getValue();
-        configUpdate.shareLink = null;
-        delete configUpdate.shareLink;
+    //     const configUpdate = this._projectConfig.getValue();
+    //     configUpdate.shareLink = null;
+    //     delete configUpdate.shareLink;
 
-        const updatedConfig = await this.updateProject(configUpdate);
-    }
+    //     const updatedConfig = await this.updateProject(configUpdate);
+    // }
 
     // public async getShareLink() {
     //     const db = this.firebaseService.getDbInstance();
