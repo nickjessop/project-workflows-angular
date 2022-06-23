@@ -68,6 +68,11 @@ mwlResizable {
         font-style: italic;
         display: none;
     }
+    .field-icon {
+        color: white;
+        border-radius: 4px;
+        display: block;
+    }
 }
 
 :host ::ng-deep {

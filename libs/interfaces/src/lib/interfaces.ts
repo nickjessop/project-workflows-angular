@@ -78,26 +78,51 @@ export type ComponentSettings = {
 export interface Checkboxes extends BaseComponent {
     component: 'checkboxes';
     data: { value: { item: string; checked?: boolean }[] };
+    colour: string;
+    icon: string;
+    description: string;
+    label: string;
+    beta: boolean;
 }
 
 export interface FileUploader extends BaseComponent {
     component: 'fileUploader';
     data: { value: Link[] };
+    colour: string;
+    icon: string;
+    description: string;
+    label: string;
+    beta: boolean;
 }
 
 export interface ImageUploader extends BaseComponent {
     component: 'imageUploader';
     data: { value: Link[] };
+    colour: string;
+    icon: string;
+    description: string;
+    label: string;
+    beta: boolean;
 }
 
 export interface RichTextInput extends BaseComponent {
     component: 'richTextInput';
     data: { value: string };
+    colour: string;
+    icon: string;
+    description: string;
+    label: string;
+    beta: boolean;
 }
 
 export interface Draw extends BaseComponent {
     component: 'draw';
     data: { value: DrawHistory };
+    colour: string;
+    icon: string;
+    description: string;
+    label: string;
+    beta: boolean;
 }
 export type DrawHistory = {
     x: number;
@@ -110,6 +135,11 @@ export interface Table extends BaseComponent {
     data: {
         value: TableColumn;
     };
+    colour: string;
+    icon: string;
+    description: string;
+    label: string;
+    beta: boolean;
 }
 export interface TableColumn {
     row?: { item: { text: string; width?: string }[] }[];
@@ -118,10 +148,20 @@ export interface TableColumn {
 export interface Embed extends BaseComponent {
     component: 'embed';
     data: { value: Link[] };
+    colour: string;
+    icon: string;
+    description: string;
+    label: string;
+    beta: boolean;
 }
 export interface PDF extends BaseComponent {
     component: 'pdf';
     data: { value: Link };
+    colour: string;
+    icon: string;
+    description: string;
+    label: string;
+    beta: boolean;
 }
 
 export type Link = {
