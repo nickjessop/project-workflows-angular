@@ -27,11 +27,13 @@ export class ProjectService {
     private readonly INVITATION_COLLECTION = 'invitations';
     private readonly MEMBERSHIP_COLLECTION = 'members';
     private readonly SHARE_COLLECTION = 'shareLinks';
-    private _projectConfig: BehaviorSubject<Project> = new BehaviorSubject<Project>(this.createBaseProject('', ''));
+    private _projectConfig: BehaviorSubject<Project | undefined> = new BehaviorSubject<Project | undefined>(undefined);
     public readonly projectConfig$ = this._projectConfig.asObservable();
     public isDragging: EventEmitter<boolean> = new EventEmitter();
 
-    private _projectMode: BehaviorSubject<ProjectMode> = new BehaviorSubject<ProjectMode>('view');
+    private _projectMode: BehaviorSubject<ProjectMode | undefined> = new BehaviorSubject<ProjectMode | undefined>(
+        undefined
+    );
     public readonly projectMode$ = this._projectMode.asObservable();
 
     private _modesAvailable: BehaviorSubject<{
@@ -52,7 +54,7 @@ export class ProjectService {
         return this._projectConfig.getValue();
     }
 
-    public set projectConfig(project: Project) {
+    public set projectConfig(project: Project | undefined) {
         this._projectConfig.next(project);
     }
 
@@ -60,7 +62,7 @@ export class ProjectService {
         return this._projectMode.getValue();
     }
 
-    public set projectMode(mode: ProjectMode) {
+    public set projectMode(mode: ProjectMode | undefined) {
         this._projectMode.next(mode);
     }
 
@@ -80,7 +82,11 @@ export class ProjectService {
             return true;
         }
     }
-    private areProjectsDifferent(project1: Project, project2: Project) {
+    private areProjectsDifferent(project1?: Project, project2?: Project) {
+        if (!project1 || !project2 || (!project1 && !project2)) {
+            return false;
+        }
+
         // Drop values we shouldn't save or compare
         project1.configuration?.forEach(config => {
             config.step.isCurrentStep = false;
@@ -134,7 +140,12 @@ export class ProjectService {
     }
 
     public syncProject() {
-        this.projectConfig = _.cloneDeep(this.projectConfig);
+        const projCopy = _.cloneDeep(this.projectConfig);
+        if (!projCopy) {
+            return;
+        }
+
+        this.projectConfig = projCopy;
         this.updateProject(this.projectConfig);
     }
 
@@ -165,15 +176,15 @@ export class ProjectService {
     public swapBlockOrder(previousIndex: number, currentIndex: number) {
         // moveItemInArray(this.fields, event.previousIndex, event.currentIndex);
         const currentStepIndex =
-            this.projectConfig.configuration?.findIndex(config => {
+            this.projectConfig?.configuration?.findIndex(config => {
                 return config.step.isCurrentStep;
             }) || 0;
 
         const _projectConfig = _.cloneDeep(this.projectConfig);
 
-        moveItemInArray(_projectConfig.configuration![currentStepIndex].components!, previousIndex, currentIndex);
+        moveItemInArray(_projectConfig!.configuration![currentStepIndex].components!, previousIndex, currentIndex);
         // this.projectConfig = _projectConfig;
-        this.setProject(_projectConfig);
+        this.setProject(_projectConfig!);
     }
 
     public setBlockDrag(dragging: boolean) {
@@ -182,8 +193,8 @@ export class ProjectService {
 
     public swapStepOrder(previousIndex: number, currentIndex: number) {
         const _projectConfig = _.cloneDeep(this.projectConfig);
-        moveItemInArray(_projectConfig.configuration!, previousIndex, currentIndex);
-        this.setProject(_projectConfig);
+        moveItemInArray(_projectConfig!.configuration!, previousIndex, currentIndex);
+        this.setProject(_projectConfig!);
     }
 
     public createNewProjectStep(
@@ -210,9 +221,9 @@ export class ProjectService {
     public updateProjectStep(step: Step) {
         const currentStepIndex = this.getCurrentStepIndex() || 0;
         const _projectConfig = _.cloneDeep(this.projectConfig);
-        _projectConfig.configuration![currentStepIndex].step = step;
+        _projectConfig!.configuration![currentStepIndex].step = step;
 
-        this.setProject(_projectConfig);
+        this.setProject(_projectConfig!);
     }
 
     public async createNewProject(projectName: string, projectDescription?: string) {
@@ -267,52 +278,52 @@ export class ProjectService {
         const currentStepIndex = this.getCurrentStepIndex() || 0;
 
         const _projectConfig = _.cloneDeep(this.projectConfig);
-        _projectConfig.configuration![currentStepIndex].components?.push(projectBlock);
+        _projectConfig!.configuration![currentStepIndex].components?.push(projectBlock);
 
         // this.projectConfig = _projectConfig;
-        this.setProject(_projectConfig);
+        this.setProject(_projectConfig!);
     }
 
     public async updateProjectSettings(projectSettings: { name: string; description: string }) {
         const _projectConfig = _.cloneDeep(this.projectConfig);
-        _projectConfig.name = projectSettings.name;
-        _projectConfig.description = projectSettings.description;
-        const setResult = await this.setProject(_projectConfig);
+        _projectConfig!.name = projectSettings.name;
+        _projectConfig!.description = projectSettings.description;
+        const setResult = await this.setProject(_projectConfig!);
         return setResult;
     }
 
     public addProjectStep(newStep: StepConfig) {
         const _projectConfig = _.cloneDeep(this.projectConfig);
-        _projectConfig.configuration?.push(newStep);
+        _projectConfig!.configuration?.push(newStep);
 
         this.setNewCurrentProjectStep(
-            _projectConfig.configuration ? _projectConfig.configuration.length - 1 : 0,
+            _projectConfig?.configuration ? _projectConfig.configuration.length - 1 : 0,
             _projectConfig
         );
 
-        this.setProject(_projectConfig);
+        this.setProject(_projectConfig!);
     }
 
     public deleteProjectBlock(blockIndex: number) {
         const currentStepIndex = this.getCurrentStepIndex() || 0;
 
         const _projectConfig = _.cloneDeep(this.projectConfig);
-        _projectConfig.configuration![currentStepIndex].components!.splice(blockIndex, 1);
+        _projectConfig!.configuration![currentStepIndex].components!.splice(blockIndex, 1);
 
-        this.setProject(_projectConfig);
+        this.setProject(_projectConfig!);
     }
 
     public deleteCurrentProjectStep() {
         const currentStepIndex = this.getCurrentStepIndex() || 0;
 
         const _projectConfig = _.cloneDeep(this.projectConfig);
-        _projectConfig.configuration?.splice(currentStepIndex, 1);
+        _projectConfig!.configuration?.splice(currentStepIndex, 1);
 
-        this.setProject(_projectConfig);
+        this.setProject(_projectConfig!);
     }
 
     private getCurrentStepIndex() {
-        const currentStepIndex = this.projectConfig.configuration?.findIndex(config => {
+        const currentStepIndex = this.projectConfig!.configuration?.findIndex(config => {
             return config.step.isCurrentStep;
         });
 
@@ -322,7 +333,7 @@ export class ProjectService {
     public getCurrentStep() {
         const index = this.getCurrentStepIndex() || 0;
 
-        return this.projectConfig.configuration![index].step;
+        return this.projectConfig!.configuration![index].step;
     }
 
     private resetCurrentProjectSteps(projectConfig: Project) {
@@ -339,7 +350,7 @@ export class ProjectService {
     public setNewCurrentProjectStep(stepIndex: number, projectConfig?: Project) {
         const _projectConfig = projectConfig
             ? this.resetCurrentProjectSteps(projectConfig)
-            : this.resetCurrentProjectSteps(_.cloneDeep(this.projectConfig));
+            : this.resetCurrentProjectSteps(_.cloneDeep(this.projectConfig!));
 
         if (_projectConfig.configuration?.[stepIndex]) {
             _projectConfig.configuration[stepIndex].step.isCurrentStep = true;
@@ -375,7 +386,24 @@ export class ProjectService {
         return _projects;
     }
 
+    public async getProjectById(projectId: string) {
+        const { data, error } = await this.supabaseService.supabase
+            .from<Project>(`${this.PROJECT_COLLECTION}`)
+            .select('*')
+            .eq('id', projectId);
+
+        return data ?? undefined;
+    }
+
     public async subscribeAndSetProject(projectId: string) {
+        const project = await this.getProjectById(projectId);
+
+        if (!project) {
+            return;
+        }
+
+        this.projectConfig = project[0];
+
         this.supabaseService.supabase
             .from<Project>(`${this.PROJECT_COLLECTION}:id=eq.${projectId}`)
             .on('*', projectUpdate => {
@@ -452,7 +480,7 @@ export class ProjectService {
     }
 
     public async addNewProjectMembers(emails: string[], role: Role) {
-        return this.addInvitations([{ email: emails[0], role }], this.projectConfig.id!);
+        return this.addInvitations([{ email: emails[0], role }], this.projectConfig!.id!);
         // return this.authenticationService
         //     .findUsersMatchingEmail(emails)
         //     .then(async users => {
@@ -513,24 +541,13 @@ export class ProjectService {
     }
 
     public async generateShareLink(permission: SharePermission) {
-        // const currentUserId = this.authenticationService.user?.id;
-        const currentProjectId = this._projectConfig.getValue().id;
-
-        // if (!currentUserId || !currentProjectId) {
-        //     console.log('Cannot generate share link when db/userid/projectid is missing');
-
-        //     return;
-        // }
-
-        let { data, error } = await this.supabaseService.supabase.rpc('create_sharelink', {
-            project_id: currentProjectId,
-            permission,
-        });
-
-        if (error) console.error(error);
-        else console.log(data);
-
-        return data;
+        // let { data, error } = await this.supabaseService.supabase.rpc('create_sharelink', {
+        //     project_id: currentProjectId,
+        //     permission,
+        // });
+        // if (error) console.error(error);
+        // else console.log(data);
+        // return data;
     }
 
     // public async deleteShareLink() {
@@ -569,8 +586,8 @@ export class ProjectService {
 
     public resetProject() {
         this.supabaseService.supabase.removeAllSubscriptions();
-        this._projectConfig.next(this.createBaseProject('', ''));
-        this._projectMode.next('view');
+        this._projectConfig.next(undefined);
+        this._projectMode.next(undefined);
         this.router.navigate(['/project']);
     }
 }

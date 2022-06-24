@@ -1,6 +1,7 @@
 <div class="navigation" *ngIf="authenticated; else showShareMode">
     <div class="navigation__content p-grid p-nogutter p-px-3">
-        <ng-container *ngIf="project">
+        <ng-container *ngIf="project; else nonProjectView">
+            project exists
             <div class="navigation-logo p-col-6 p-d-flex p-ai-center">
                 <i class="pi pi-chevron-left navigation__back" [routerLink]="['/project']"></i>
                 <div class="ms-1 p-text-bold p-ml-2">
@@ -13,7 +14,7 @@
                 </div>
             </div>
             <div class="navigation-profile p-col-6 p-d-flex p-ai-center p-jc-end">
-                <ng-container *ngIf="(projectMode | async) === 'configure'">
+                <ng-container *ngIf="(projectService.projectMode$ | async) === 'configure'">
                     <div class="p-col-6 p-d-flex p-jc-end p-ai-center">
                         <i class="pi pi-cog ms-3 p-mr-3 navigation__settings" (click)="showSettingsDialog()"></i>
                         <project-share [project]="project" [loggedInUserId]="loggedInUserId"></project-share>
@@ -68,18 +69,27 @@
                     <button type="button" pButton label="Save" (click)="onSaveSettingsSelected()"></button>
                 </p-footer>
             </p-dialog>
-        </ng-container>
-        <div class="navigation-logo p-col-6 p-d-flex p-ai-center">
-            <img src="/assets/stepflow-logo.svg" alt="Stepflow logo" height="26px" [routerLink]="['/project']" />
-        </div>
-        <div class="navigation-profile p-col-6 p-d-flex p-ai-center p-jc-end">
-            <div (click)="menu.toggle($event)" class="user-menu p-d-flex p-ai-center">
-                <span class="user-menu__label p-pr-2">{{ displayName }}</span>
-                <img src="{{ photoURL }}" width="34px" height="34px" alt="Your profile picture" class="rounded-image" />
+            <div class="navigation-logo p-col-6 p-d-flex p-ai-center">
+                <img src="/assets/stepflow-logo.svg" alt="Stepflow logo" height="26px" [routerLink]="['/project']" />
             </div>
+        </ng-container>
+        <ng-template #nonProjectView>
+            no project here
+            <div class="navigation-profile p-col-6 p-d-flex p-ai-center p-jc-end">
+                <div (click)="menu.toggle($event)" class="user-menu p-d-flex p-ai-center">
+                    <span class="user-menu__label p-pr-2">{{ displayName }}</span>
+                    <img
+                        src="{{ photoURL }}"
+                        width="34px"
+                        height="34px"
+                        alt="Your profile picture"
+                        class="rounded-image"
+                    />
+                </div>
 
-            <p-menu #menu [popup]="true" [model]="items" appendTo="body"></p-menu>
-        </div>
+                <p-menu #menu [popup]="true" [model]="items" appendTo="body"></p-menu>
+            </div>
+        </ng-template>
     </div>
 </div>
 <ng-template #showShareMode>

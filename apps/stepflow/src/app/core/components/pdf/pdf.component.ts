@@ -122,7 +122,7 @@ export class PdfComponent implements OnInit {
     }
 
     private uploadFile(file: File) {
-        const projectId = this.projectService.projectConfig.id;
+        const projectId = this.projectService.projectConfig?.id;
         if (!file || !projectId) {
             return;
         }

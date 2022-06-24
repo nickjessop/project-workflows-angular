@@ -36,14 +36,12 @@ export class NavBarComponent implements OnInit {
 
     constructor(
         private authService: AuthenticationService,
-        private projectService: ProjectService,
+        public projectService: ProjectService,
         private messageService: MessageService,
         private router: Router
     ) {}
 
     ngOnInit(): void {
-        this.projectMode = this.projectService.projectMode$;
-
         this.items = [
             {
                 label: 'Account settings',
@@ -74,6 +72,12 @@ export class NavBarComponent implements OnInit {
         this.subscriptions.add(
             this.authService.$loginStatus.subscribe(loginStatus => {
                 this.authenticated = loginStatus.authStatus === AuthStatus.AUTHENTICATED;
+            })
+        );
+        this.subscriptions.add(
+            this.projectService.projectConfig$.subscribe(proj => {
+                console.log(proj);
+                this.project = proj;
             })
         );
     }
@@ -124,6 +128,7 @@ export class NavBarComponent implements OnInit {
     }
     onBack() {
         this.projectService.resetProject();
+        this.subscriptions.unsubscribe();
     }
     openRegistration() {
         window.open('/auth/register', '_blank');

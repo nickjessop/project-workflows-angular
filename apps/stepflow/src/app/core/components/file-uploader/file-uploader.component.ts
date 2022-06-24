@@ -143,7 +143,7 @@ export class FileUploaderComponent implements OnInit {
                     this.fileData.splice(index, 1);
                     this.projectService.syncProject();
                 },
-                (err) => {
+                err => {
                     console.log(err);
                 }
             );
@@ -158,8 +158,8 @@ export class FileUploaderComponent implements OnInit {
         const downloadLink = document.createElement('a');
         try {
             fetch(href)
-                .then((res) => res.blob())
-                .then((blob) => {
+                .then(res => res.blob())
+                .then(blob => {
                     let url = URL.createObjectURL(blob);
                     downloadLink.href = url;
                     downloadLink.download = title + '.' + extension || 'download';
@@ -185,7 +185,7 @@ export class FileUploaderComponent implements OnInit {
 
     public onDialogSubmit($event: Event) {
         const file = this.dialogData.file;
-        const projectId = this.projectService.projectConfig.id;
+        const projectId = this.projectService.projectConfig?.id;
 
         if (!file || !projectId) {
             return;
@@ -194,9 +194,9 @@ export class FileUploaderComponent implements OnInit {
         this.storageService
             .uploadProjectFile(file, projectId)
             .pipe(
-                switchMap((file) => {
+                switchMap(file => {
                     return this.storageService.getDownloadUrl(file.metadata.fullPath).pipe(
-                        map((downloadUrl) => {
+                        map(downloadUrl => {
                             return {
                                 fileMetadata: file.metadata,
                                 downloadUrl: downloadUrl as string,
@@ -207,7 +207,7 @@ export class FileUploaderComponent implements OnInit {
                 })
             )
             .subscribe(
-                (filedata) => {
+                filedata => {
                     const { size, fullPath } = filedata.fileMetadata;
                     const { title, description, type, extension } = this.dialogData;
                     const downloadUrl = filedata.downloadUrl;
@@ -224,7 +224,7 @@ export class FileUploaderComponent implements OnInit {
                     this.projectService.syncProject();
                     this.resetDialog();
                 },
-                (err) => {
+                err => {
                     this.messageService.add({
                         severity: 'error',
                         key: 'global-toast',

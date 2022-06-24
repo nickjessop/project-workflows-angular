@@ -123,7 +123,7 @@ export class ImageUploaderComponent implements OnInit {
                         //Successfully removed file
                         this.projectService.syncProject();
                     },
-                    (error) => {
+                    error => {
                         console.log(error);
                     }
                 );
@@ -137,7 +137,7 @@ export class ImageUploaderComponent implements OnInit {
     }
 
     private uploadFile(file: File) {
-        const projectId = this.projectService.projectConfig.id;
+        const projectId = this.projectService.projectConfig?.id;
 
         if (!file || !projectId) {
             return;
@@ -146,9 +146,9 @@ export class ImageUploaderComponent implements OnInit {
         this.storageService
             .uploadProjectFile(file, projectId)
             .pipe(
-                switchMap((file) => {
+                switchMap(file => {
                     return this.storageService.getDownloadUrl(file.metadata.fullPath).pipe(
-                        map((downloadUrl) => {
+                        map(downloadUrl => {
                             return {
                                 fileMetadata: file.metadata,
                                 downloadUrl: downloadUrl as string,
@@ -159,7 +159,7 @@ export class ImageUploaderComponent implements OnInit {
                 })
             )
             .subscribe(
-                (filedata) => {
+                filedata => {
                     const size = filedata.fileMetadata.size;
                     const name = file.name;
                     const downloadUrl = filedata.downloadUrl;
@@ -173,7 +173,7 @@ export class ImageUploaderComponent implements OnInit {
                     });
                     this.projectService.syncProject();
                 },
-                (err) => {
+                err => {
                     this.messageService.add({
                         severity: 'error',
                         key: 'global-toast',
