@@ -1,7 +1,6 @@
 <div class="navigation" *ngIf="authenticated; else showShareMode">
     <div class="navigation__content p-grid p-nogutter p-px-3">
         <ng-container *ngIf="project; else nonProjectView">
-            project exists
             <div class="navigation-logo p-col-6 p-d-flex p-ai-center">
                 <i class="pi pi-chevron-left navigation__back" [routerLink]="['/project']"></i>
                 <div class="ms-1 p-text-bold p-ml-2">
@@ -69,12 +68,11 @@
                     <button type="button" pButton label="Save" (click)="onSaveSettingsSelected()"></button>
                 </p-footer>
             </p-dialog>
+        </ng-container>
+        <ng-template #nonProjectView>
             <div class="navigation-logo p-col-6 p-d-flex p-ai-center">
                 <img src="/assets/stepflow-logo.svg" alt="Stepflow logo" height="26px" [routerLink]="['/project']" />
             </div>
-        </ng-container>
-        <ng-template #nonProjectView>
-            no project here
             <div class="navigation-profile p-col-6 p-d-flex p-ai-center p-jc-end">
                 <div (click)="menu.toggle($event)" class="user-menu p-d-flex p-ai-center">
                     <span class="user-menu__label p-pr-2">{{ displayName }}</span>
