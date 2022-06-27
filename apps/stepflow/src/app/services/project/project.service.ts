@@ -35,10 +35,11 @@ export class ProjectService {
     private _projectMode: BehaviorSubject<ProjectMode> = new BehaviorSubject<ProjectMode>('view');
     public readonly projectMode$ = this._projectMode.asObservable();
 
-    private _modesAvailable: BehaviorSubject<{ allowedProjectModes: { [path in ProjectMode]: boolean } }> =
-        new BehaviorSubject<{ allowedProjectModes: { [path in ProjectMode]: boolean } }>({
-            allowedProjectModes: { configure: false, edit: false, view: false },
-        });
+    private _modesAvailable: BehaviorSubject<{
+        allowedProjectModes: { [path in ProjectMode]: boolean };
+    }> = new BehaviorSubject<{ allowedProjectModes: { [path in ProjectMode]: boolean } }>({
+        allowedProjectModes: { configure: false, edit: false, view: false },
+    });
     public readonly modesAvailable$ = this._modesAvailable.asObservable();
 
     public unsubscribeToProjectListener?: () => void;
@@ -84,10 +85,10 @@ export class ProjectService {
     }
     private areProjectsDifferent(project1: Project, project2: Project) {
         // Drop values we shouldn't save or compare
-        project1.configuration?.forEach((config) => {
+        project1.configuration?.forEach(config => {
             config.step.isCurrentStep = false;
         });
-        project2.configuration?.forEach((config) => {
+        project2.configuration?.forEach(config => {
             config.step.isCurrentStep = false;
         });
         // Did the number of steps change?
@@ -188,7 +189,7 @@ export class ProjectService {
     public swapBlockOrder(previousIndex: number, currentIndex: number) {
         // moveItemInArray(this.fields, event.previousIndex, event.currentIndex);
         const currentStepIndex =
-            this.projectConfig.configuration?.findIndex((config) => {
+            this.projectConfig.configuration?.findIndex(config => {
                 return config.step.isCurrentStep;
             }) || 0;
 
@@ -248,13 +249,13 @@ export class ProjectService {
             .collection(this.PROJECT_COLLECTION)
             .add(baseProject)
             .then(
-                async (documentRef) => {
+                async documentRef => {
                     baseProject.id = documentRef.id;
                     await documentRef.update({ id: documentRef.id });
                     // this.projectConfig = baseProject;
                     return baseProject;
                 },
-                (error) => {
+                error => {
                     console.log(`Error occurred while creating a new project: ${error}`);
                 }
             );
@@ -274,7 +275,7 @@ export class ProjectService {
                     console.log(`Successfully updated project`);
                     return true;
                 },
-                (error) => {
+                error => {
                     console.log(`An error occurred while updating project: ${error}`);
                     return false;
                 }
@@ -288,27 +289,32 @@ export class ProjectService {
             .doc(projectId)
             .delete()
             .then(
-                (success) => {
+                success => {
                     return true;
                 },
-                (error) => {
+                error => {
                     return false;
                 }
             );
     }
 
     public getAllProjectIds() {
-        return from(this.firebaseService.getDbInstance().collection(`${this.PROJECT_COLLECTION}`).get());
+        return from(
+            this.firebaseService
+                .getDbInstance()
+                .collection(`${this.PROJECT_COLLECTION}`)
+                .get()
+        );
     }
 
     public async getProjectUserDetails(projectMemberRoles: Project['memberRoles']) {
-        const memberIds = projectMemberRoles.map((member) => {
+        const memberIds = projectMemberRoles.map(member => {
             return member.userId;
         });
         const projectMembersDetails = await this.authenticationService.getUserGroupMetaData(memberIds);
 
-        const memberList: ProjectUsers[] | undefined = projectMembersDetails?.map((projectMember) => {
-            const found = projectMemberRoles.find((_member) => {
+        const memberList: ProjectUsers[] | undefined = projectMembersDetails?.map(projectMember => {
+            const found = projectMemberRoles.find(_member => {
                 return _member.userId === projectMember.id;
             });
 
@@ -367,7 +373,7 @@ export class ProjectService {
     }
 
     private getCurrentStepIndex() {
-        const currentStepIndex = this.projectConfig.configuration?.findIndex((config) => {
+        const currentStepIndex = this.projectConfig.configuration?.findIndex(config => {
             return config.step.isCurrentStep;
         });
 
@@ -382,7 +388,7 @@ export class ProjectService {
 
     private resetCurrentProjectSteps(projectConfig: Project) {
         const _projectConfig = _.cloneDeep(projectConfig);
-        _projectConfig.configuration?.forEach((stepConfig) => {
+        _projectConfig.configuration?.forEach(stepConfig => {
             if (stepConfig.step.isCurrentStep) {
                 stepConfig.step.isCurrentStep = false;
             }
@@ -412,7 +418,7 @@ export class ProjectService {
 
         const projects = await ref.where('members', 'array-contains', userId).get();
         // return from(ref.where('members', 'array-contains', { userId: userId, role: 'owner' }).get()).pipe(
-        const _projects = projects.docs.map((items) => {
+        const _projects = projects.docs.map(items => {
             const isOwner = this.isOwner(items.data().memberRoles);
             const itemData = items.data();
             const memberData = { isOwner, itemData };
@@ -428,8 +434,8 @@ export class ProjectService {
         const ref = this.firebaseService.getDbInstance().collection(this.PROJECT_COLLECTION);
 
         return from(ref.where('members', 'array-contains', { userId: userId, role: 'owner' }).get()).pipe(
-            map((data) => {
-                const projects = data.docs.map((items) => {
+            map(data => {
+                const projects = data.docs.map(items => {
                     return items.data();
                 });
 
@@ -439,14 +445,17 @@ export class ProjectService {
     }
 
     public isOwner(memberRoles: [{ userId: string; role: Role }]) {
-        return memberRoles.some((member) => {
+        return memberRoles.some(member => {
             return member.userId === this.authenticationService.user?.id && ['owner'].includes(member.role);
         });
     }
 
     public async ownerLookup(memberRoles: [{ userId: string; role: Role }]) {
-        const ownerId = memberRoles.filter((member) => member.role.includes('owner'));
-        const userRef = this.firebaseService.getDbInstance().collection('users').doc(ownerId[0].userId);
+        const ownerId = memberRoles.filter(member => member.role.includes('owner'));
+        const userRef = this.firebaseService
+            .getDbInstance()
+            .collection('users')
+            .doc(ownerId[0].userId);
         try {
             const doc = await userRef.get();
             if (doc.exists) {
@@ -471,36 +480,42 @@ export class ProjectService {
         return setResult;
     }
 
-    public subscribeAndSetProject(projectId: string, sharePermission?: SharePermission) {
+    public subscribeAndSetProject(projectId: string, sharePermission?: SharePermission, override?: SharePermission) {
         // this.firebaseService.getDbInstance()!.collection(this.PROJECT_COLLECTION).doc(projectId).onSnapshot()
         this.unsubscribeToProjectListener = this.firebaseService
             .getDbInstance()!
             .collection(this.PROJECT_COLLECTION)
             .doc(projectId)
             .onSnapshot(
-                (document) => {
+                document => {
                     const project = document.data() as Project;
 
                     if (!project) {
                         this.router.navigate(['404']);
                     }
 
-                    const currentUserRole = project.memberRoles.find((role) => {
+                    const currentUserRole = project.memberRoles.find(role => {
                         return role.userId === this.authenticationService.user?.id;
                     });
 
                     this._modesAvailable.next({
                         allowedProjectModes: {
-                            edit: allowedModes[currentUserRole!.role].allowedProjectModes.edit,
-                            view: allowedModes[currentUserRole!.role].allowedProjectModes.view,
-                            configure: allowedModes[currentUserRole!.role].allowedProjectModes.configure,
+                            edit: currentUserRole?.role
+                                ? allowedModes[currentUserRole.role].allowedProjectModes.edit
+                                : false,
+                            view: currentUserRole?.role
+                                ? allowedModes[currentUserRole.role].allowedProjectModes.view
+                                : true,
+                            configure: currentUserRole?.role
+                                ? allowedModes[currentUserRole.role].allowedProjectModes.configure
+                                : false,
                         },
                     });
 
                     if (sharePermission) {
                         this._projectMode.next(sharePermission);
                     } else if (
-                        project.memberRoles.some((member) => {
+                        project.memberRoles.some(member => {
                             return (
                                 member.userId === this.authenticationService.user?.id &&
                                 ['viewer'].includes(member.role)
@@ -509,7 +524,7 @@ export class ProjectService {
                     ) {
                         this._projectMode.next('view');
                     } else if (
-                        project.memberRoles.some((member) => {
+                        project.memberRoles.some(member => {
                             return (
                                 (member.userId === this.authenticationService.user?.id &&
                                     ['owner'].includes(member.role)) ||
@@ -522,7 +537,7 @@ export class ProjectService {
                         this._projectMode.next('edit');
                     }
 
-                    const currentStepSet = project.configuration?.some((stepConfig) => {
+                    const currentStepSet = project.configuration?.some(stepConfig => {
                         return stepConfig.step.isCurrentStep;
                     });
 
@@ -534,7 +549,7 @@ export class ProjectService {
 
                     this.projectConfig = project;
                 },
-                (error) => {
+                error => {
                     console.log(error);
                     this.router.navigate(['404']);
                 }
@@ -573,14 +588,14 @@ export class ProjectService {
     public async addNewProjectMembers(emails: string[], role: Role) {
         return this.authenticationService
             .findUsersMatchingEmail(emails)
-            .then(async (users) => {
+            .then(async users => {
                 const _projectConfig = _.cloneDeep(this.projectConfig);
                 const newMembers: { userId: string; role: Role }[] = [];
                 const pendingMembers: { email: string; role: Role }[] = [];
 
                 // combine existing members and pending members with new ones
                 if (users?.newMembers) {
-                    users?.newMembers.map((member) => {
+                    users?.newMembers.map(member => {
                         return newMembers.push({ userId: member, role: role || 'viewer' });
                     });
                     _projectConfig.members = _.union(_projectConfig.members, users.newMembers);
@@ -588,7 +603,7 @@ export class ProjectService {
                 }
                 console.log(users?.pendingMembers);
                 if (users?.pendingMembers) {
-                    users?.pendingMembers.map((member) => {
+                    users?.pendingMembers.map(member => {
                         return pendingMembers.push({ email: member, role: role || 'viewer' });
                     });
                     _projectConfig.pendingMembers = _.union(_projectConfig.pendingMembers, users.pendingMembers);
@@ -601,7 +616,7 @@ export class ProjectService {
                     return false;
                 }
             })
-            .catch(function (error: Error) {
+            .catch(function(error: Error) {
                 console.log(error, 'add members error');
                 // TODO handle error
                 return false;
@@ -610,10 +625,10 @@ export class ProjectService {
 
     public async removeProjectMember(userId: string) {
         const _projectConfig = _.cloneDeep(this.projectConfig);
-        _projectConfig.members = _projectConfig?.members?.filter((member) => {
+        _projectConfig.members = _projectConfig?.members?.filter(member => {
             return member !== userId;
         });
-        _projectConfig.memberRoles = _projectConfig?.memberRoles?.filter((member) => {
+        _projectConfig.memberRoles = _projectConfig?.memberRoles?.filter(member => {
             return member.userId !== userId;
         });
         const setResult = await this.setProject(_projectConfig);
@@ -628,7 +643,7 @@ export class ProjectService {
         const batch = db.batch();
         const projectRef = db.collection(this.PROJECT_COLLECTION).doc(projectId);
 
-        pendingMembers.map((member) => {
+        pendingMembers.map(member => {
             let invitationRef = db.collection(this.INVITATION_COLLECTION).doc();
             batch.set(invitationRef, { email: member.email, role: member.role, project: projectRef });
         });
@@ -694,7 +709,7 @@ export class ProjectService {
             .get();
 
         if (existingShareLink.docs.length) {
-            return existingShareLink.docs[0].data() as unknown as ShareLink;
+            return (existingShareLink.docs[0].data() as unknown) as ShareLink;
         } else {
             return undefined;
         }
