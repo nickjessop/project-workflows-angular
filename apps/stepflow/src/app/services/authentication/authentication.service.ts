@@ -37,6 +37,7 @@ export class AuthenticationService {
         'tpXpbNAPKpX1evoxSeRJs0O0pB02',
         'IoTwZeoPiSemew2z5IBbQcHPaNi2',
         'DxOw25Q8XigIlZMfnfN7vaCaVPo1',
+        '3OqrvQESBPafZ7nF5U6v0QyM2B02',
     ];
 
     constructor(
@@ -71,7 +72,7 @@ export class AuthenticationService {
 
         this.subscriptions.add(
             this.firebaseService.getAuthInstance().onAuthStateChanged(
-                (user) => {
+                user => {
                     if (user) {
                         this.user = {
                             id: user.uid,
@@ -86,7 +87,7 @@ export class AuthenticationService {
                         this.setAuthStatus(null);
                     }
                 },
-                (error) => {
+                error => {
                     this.setAuthStatus(null);
                 }
             )
@@ -111,7 +112,7 @@ export class AuthenticationService {
 
     public register(email: string, password: string, firstName: string, lastName: string, plan: UserPlan) {
         from(this.createUserAndAttachMetadata(email, password, firstName, lastName, plan)).subscribe(
-            (success) => {
+            success => {
                 this.checkNewUserProjects(email);
                 if (plan !== 'Essential') {
                     this.router.navigate(['/auth/confirmation?plan=' + plan]);
@@ -122,7 +123,7 @@ export class AuthenticationService {
                     this.logout(false);
                 }
             },
-            (error) => {
+            error => {
                 const msg = {
                     severity: 'error',
                     key: 'global-toast',
@@ -149,7 +150,7 @@ export class AuthenticationService {
         return firebaseAuth.setPersistence('local').then(() => {
             firebaseAuth
                 .createUserWithEmailAndPassword(email, password)
-                .then((userCredential) => {
+                .then(userCredential => {
                     const { user } = userCredential;
                     const parsedUser = {
                         id: user!.uid,
@@ -174,7 +175,10 @@ export class AuthenticationService {
 
     async getUserMetaData() {
         if (this.user) {
-            const userRef = this.firebaseService.getDbInstance().collection('users').doc(this.user.id);
+            const userRef = this.firebaseService
+                .getDbInstance()
+                .collection('users')
+                .doc(this.user.id);
             try {
                 const doc = await userRef.get();
                 if (doc.exists) {
@@ -204,14 +208,14 @@ export class AuthenticationService {
             .collection('users')
             .where(this.firebaseService.getFieldPathId(), 'in', projectMembers)
             .get()
-            .then((querySnapshot) => {
-                querySnapshot.forEach((doc) => {
+            .then(querySnapshot => {
+                querySnapshot.forEach(doc => {
                     const data = doc.data() as User;
                     members.push({ ...data, id: doc.id });
                 });
                 return members;
             })
-            .catch((error) => {
+            .catch(error => {
                 console.log('Error getting documents: ', error);
                 return undefined;
             });
@@ -241,7 +245,10 @@ export class AuthenticationService {
             ...(email ? { email } : {}),
         };
 
-        const userRef = this.firebaseService.getDbInstance().collection('users').doc(this.user.id);
+        const userRef = this.firebaseService
+            .getDbInstance()
+            .collection('users')
+            .doc(this.user.id);
 
         return userRef
             .update(update)
@@ -273,7 +280,7 @@ export class AuthenticationService {
         // return;
 
         from(this.firebaseService.getAuthInstance()!.signInWithEmailAndPassword(email, password)).subscribe(
-            (firebaseUser) => {
+            firebaseUser => {
                 const { user } = firebaseUser;
 
                 if (user && !this.allowedUserIds.includes(user?.uid)) {
@@ -298,7 +305,7 @@ export class AuthenticationService {
                 this.user = parsedUser;
                 this.router.navigate([this.redirectUrl]);
             },
-            (err) => {
+            err => {
                 this.messageService.add({
                     severity: 'error',
                     key: 'global-toast',
@@ -330,10 +337,10 @@ export class AuthenticationService {
                     .getProviderInstance()
                     .emailAuth.credential(user.email, userProvidedPassword);
                 user.reauthenticateWithCredential(credential)
-                    .then(function () {
+                    .then(function() {
                         resolve({ success: true });
                     })
-                    .catch((error) => {
+                    .catch(error => {
                         reject(error);
                     });
             }
@@ -350,8 +357,8 @@ export class AuthenticationService {
             .collection('users')
             .where('email', 'in', emails)
             .get()
-            .then((querySnapshot) => {
-                querySnapshot.forEach((doc) => {
+            .then(querySnapshot => {
+                querySnapshot.forEach(doc => {
                     if (doc.id != '' || doc.id != undefined) {
                         newMembers.push(doc.id);
                         const data = doc.data() as User;
@@ -359,10 +366,10 @@ export class AuthenticationService {
                         foundMembers.push(docEmail);
                     }
                 });
-                pendingMembers = emails.filter((e) => !foundMembers.includes(e));
+                pendingMembers = emails.filter(e => !foundMembers.includes(e));
                 return { newMembers: newMembers, pendingMembers: pendingMembers };
             })
-            .catch((error) => {
+            .catch(error => {
                 console.log('Error getting documents: ', error);
                 return undefined;
             });
@@ -375,8 +382,8 @@ export class AuthenticationService {
         invitationRef
             .where('email', '==', email)
             .get()
-            .then(async (querySnapshot) => {
-                querySnapshot.forEach((doc) => {
+            .then(async querySnapshot => {
+                querySnapshot.forEach(doc => {
                     projects.push({
                         id: doc.id,
                         projectId: doc.data().project.id,
@@ -398,7 +405,7 @@ export class AuthenticationService {
 
         projects.forEach(async (project, index) => {
             try {
-                await db.runTransaction(async (transaction) => {
+                await db.runTransaction(async transaction => {
                     let projectRef = db.collection(this.PROJECT_COLLECTION_NAME).doc(project.projectId);
                     const doc = await transaction.get(projectRef);
 
@@ -414,7 +421,7 @@ export class AuthenticationService {
                     let members = _.union(_members, [userId]);
                     let memberRoles = _.union(_memberRoles, newMember);
 
-                    const _pendingMembers = _project?.pendingMembers?.filter((pendingMember) => {
+                    const _pendingMembers = _project?.pendingMembers?.filter(pendingMember => {
                         return pendingMember !== email;
                     });
 
@@ -624,7 +631,7 @@ export class AuthenticationService {
         }
 
         return users;
-    };
+    }
 
     public async getUser(userId: string): Promise<User | null> {
         return this.firebaseService
