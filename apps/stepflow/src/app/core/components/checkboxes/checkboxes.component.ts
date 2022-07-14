@@ -55,7 +55,7 @@ export class CheckboxesComponent implements OnInit {
             return;
         }
         this.height = height;
-        this.field.metadata.settings = { ...this.field.metadata.settings, height: height };
+        this.field.metadata.settings = { ...this.field.metadata.settings, height };
     }
 
     public saveTextblock() {

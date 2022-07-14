@@ -23,12 +23,23 @@ export class ProtectedGuard implements CanActivate {
                     user === null ||
                     !this.authenticationService.allowedUserIds.includes(user.id || '')
                 ) {
-                    this.authenticationService.logout(true);
+                    this.authenticationService.logout(false);
                     this.router.navigate(['/auth/login']);
                     return of(false);
-                } else {
-                    return of(true);
                 }
+
+                return of(true);
+                // if (
+                //     user === undefined ||
+                //     user === null ||
+                //     !this.authenticationService.allowedUserIds.includes(user.id || '')
+                // ) {
+                //     this.authenticationService.logout(true);
+                //     this.router.navigate(['/auth/login']);
+                //     return of(false);
+                // } else {
+                // return of(true);
+                // }
             })
         );
     }

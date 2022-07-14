@@ -10,7 +10,7 @@ import { ProjectService } from '../../services/project/project.service';
     styleUrls: ['./viewer.component.scss'],
 })
 export class ViewerComponent implements OnDestroy {
-    private subscriptions: Array<Subscription> = [];
+    private subscriptions: Subscription = new Subscription();
 
     public project?: Project;
     public currentStep?: StepConfig;
@@ -31,8 +31,7 @@ export class ViewerComponent implements OnDestroy {
         if (projectId) {
             this.projectService.subscribeAndSetProject(projectId);
         }
-
-        this.subscriptions.push(
+        this.subscriptions.add(
             this.projectService.projectConfig$.subscribe(result => {
                 this.currentStep = result?.configuration?.find(stepConfig => {
                     return stepConfig.step.isCurrentStep;
@@ -40,7 +39,7 @@ export class ViewerComponent implements OnDestroy {
             })
         );
 
-        this.subscriptions.push(
+        this.subscriptions.add(
             this.projectService.modesAvailable$.subscribe(val => {
                 this.canConfigureProject = val.allowedProjectModes?.configure;
             })
@@ -48,9 +47,7 @@ export class ViewerComponent implements OnDestroy {
     }
 
     ngOnDestroy() {
-        this.subscriptions.forEach((subscription: Subscription) => {
-            subscription.unsubscribe();
-        });
+        this.subscriptions.unsubscribe();
         this.projectService.resetProject();
     }
 

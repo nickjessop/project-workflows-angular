@@ -252,7 +252,7 @@ export class ProjectService {
             .from<Project>(this.PROJECT_COLLECTION)
             .upsert(projectConfig);
 
-        if (!error && data !== null) {
+        if (data !== null) {
             this.projectConfig = data[0];
             this.setProject(data[0], false);
             return false;

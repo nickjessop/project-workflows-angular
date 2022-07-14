@@ -104,26 +104,19 @@ export class NavBarComponent implements OnInit {
         this.showSettingsError = false;
     }
 
-    onSaveSettingsSelected() {
+    async onSaveSettingsSelected() {
         if (!this.projectSettings.name) {
             this.showSettingsError = true;
             return;
         }
-        this.projectService.updateProjectSettings(this.projectSettings).then(value => {
-            if (value === true) {
-                this.messageService.add({
-                    key: 'global-toast',
-                    severity: 'success',
-                    detail: 'Project details updated.',
-                });
-            } else {
-                this.messageService.add({
-                    key: 'global-toast',
-                    severity: 'error',
-                    detail: "Can't update project details. Please try again.",
-                });
-            }
+        const success = await this.projectService.updateProjectSettings(this.projectSettings);
+
+        this.messageService.add({
+            key: 'global-toast',
+            severity: success ? 'success' : 'error',
+            detail: success ? 'Project details updated.' : `Can't update project details. Please try again.`,
         });
+
         this.hideSettingsDialog();
     }
     onBack() {

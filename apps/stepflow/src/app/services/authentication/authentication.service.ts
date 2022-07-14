@@ -18,7 +18,7 @@ export enum AuthStatus {
 })
 export class AuthenticationService {
     private readonly USER_COLLECTION_NAME = 'users';
-    private _user: BehaviorSubject<User | undefined | null> = new BehaviorSubject<User | undefined | null>(undefined);
+    private _user: BehaviorSubject<User | undefined | null> = new BehaviorSubject<User | undefined | null>(null);
     public readonly $user = this._user?.asObservable();
     public readonly $loginStatus = new BehaviorSubject<{ authStatus: AuthStatus }>({ authStatus: AuthStatus.UNKNOWN });
 
@@ -46,14 +46,15 @@ export class AuthenticationService {
         private router: Router,
         private messageService: MessageService
     ) {
-        this.setAuthStatus(this.user);
         this.initUserListener();
     }
 
     private setAuthStatus(user?: User | null) {
-        if (user === null || user === undefined) {
+        if (user === undefined) {
             this.$loginStatus.next({ authStatus: AuthStatus.UNAUTHENTICATED });
-        } else {
+        } else if (user === null) {
+            this.$loginStatus.next({ authStatus: AuthStatus.UNKNOWN });
+        } else if (user) {
             this.$loginStatus.next({ authStatus: AuthStatus.AUTHENTICATED });
         }
     }
@@ -61,9 +62,7 @@ export class AuthenticationService {
     initUserListener() {
         this.supabaseService.authChanges((event: AuthChangeEvent, session: Session | null) => {
             if (!session || session === null || session.user === null) {
-                this.setAuthStatus(null);
-
-                return;
+                return this.setAuthStatus(undefined);
             }
 
             const user = session.user;
@@ -82,6 +81,8 @@ export class AuthenticationService {
 
             this.setAuthStatus(this.user);
         });
+
+        this.setAuthStatus(this.user);
     }
 
     ngOnDestroy() {
