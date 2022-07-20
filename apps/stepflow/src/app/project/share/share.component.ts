@@ -64,12 +64,12 @@ export class ShareComponent implements OnInit {
         this.displayShareDialog = false;
     }
 
-    private initShareLink() {
-        // if (this.project?.shareLink) {
-        //     const { userId, projectId, permission } = this.project.shareLink;
-        //     this.shareLink = `${location.host}/project/${userId}/${projectId}/${permission}`;
-        //     this.shareLinkChecked = true;
-        // }
+    private async initShareLink() {
+        const shareLink = await this.projectService.getShareLink();
+        if (shareLink) {
+            this.shareLink = `${location.host}/project/${shareLink.user_id}/${shareLink.project_id}/${shareLink.permission}`;
+            this.shareLinkChecked = true;
+        }
     }
 
     public validateEmails() {
@@ -220,22 +220,28 @@ export class ShareComponent implements OnInit {
 
     public async enableShareLink(event: any) {
         if (event.checked === true) {
-            await this.generateSharingLink();
+            const shareLink = await this.projectService.generateShareLink(this.selectedSharePermission);
+
+            if (shareLink) {
+                this.shareLink = `${location.host}/project/${shareLink.user_id}/${shareLink.project_id}/${shareLink.permission}`;
+            } else {
+                this.messageService.add({
+                    key: 'global-toast',
+                    severity: 'error',
+                    detail: 'Failed to generate share link.',
+                });
+            }
         } else {
-            this.deleteShareLink();
+            const res = await this.projectService.deleteShareLink();
+
+            if (!res) {
+                this.messageService.add({
+                    key: 'global-toast',
+                    severity: 'error',
+                    detail: 'Failed to generate share link.',
+                });
+            }
         }
-    }
-
-    private async deleteShareLink() {
-        // const res = await this.projectService.deleteShareLink();
-    }
-
-    public async generateSharingLink() {
-        const shareLink = await this.projectService.generateShareLink(this.selectedSharePermission);
-
-        // if (shareLink) {
-        //     this.shareLink = `${location.host}/project/${shareLink.userId}/${shareLink.projectId}/${shareLink.permission}`;
-        // }
     }
 
     copyInputMessage(linkInput: any) {

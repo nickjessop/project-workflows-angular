@@ -8,6 +8,7 @@ import {
     Project,
     ProjectMode,
     Role,
+    ShareLink,
     SharePermission,
     Status,
     Step,
@@ -26,7 +27,7 @@ export class ProjectService {
     private readonly PROJECT_COLLECTION = 'projects';
     private readonly INVITATION_COLLECTION = 'invitations';
     private readonly MEMBERSHIP_COLLECTION = 'members';
-    private readonly SHARE_COLLECTION = 'shareLinks';
+    private readonly SHARE_LINK_COLLECTION = 'sharelinks';
     private _projectConfig: BehaviorSubject<Project | undefined> = new BehaviorSubject<Project | undefined>(undefined);
     public readonly projectConfig$ = this._projectConfig.asObservable();
     public isDragging: EventEmitter<boolean> = new EventEmitter();
@@ -541,45 +542,49 @@ export class ProjectService {
     }
 
     public async generateShareLink(permission: SharePermission) {
-        // let { data, error } = await this.supabaseService.supabase.rpc('create_sharelink', {
-        //     project_id: currentProjectId,
-        //     permission,
-        // });
-        // if (error) console.error(error);
-        // else console.log(data);
-        // return data;
+        const project_id = this.projectConfig?.id;
+        const user_id = this.authenticationService.user?.id;
+
+        if (!project_id || !user_id) {
+            return;
+        }
+
+        const shareLink: ShareLink = { permission, project_id, user_id };
+
+        const { data, error } = await this.supabaseService.supabase
+            .from<ShareLink>(this.SHARE_LINK_COLLECTION)
+            .upsert(shareLink);
+
+        return data?.[0];
     }
 
-    // public async deleteShareLink() {
-    //     const currentUserId = this.authenticationService.user?.id;
-    //     const currentProjectId = this._projectConfig.getValue().id;
+    public async deleteShareLink() {
+        const currentProjectId = this.projectConfig?.id;
 
-    //     if (!currentUserId || !currentProjectId) {
-    //         return;
-    //     }
+        if (!currentProjectId) {
+            return;
+        }
+        const { data, error } = await this.supabaseService.supabase
+            .from<ShareLink>(this.SHARE_LINK_COLLECTION)
+            .delete()
+            .eq('project_id', currentProjectId);
+        return data?.[0];
+    }
 
-    //     const configUpdate = this._projectConfig.getValue();
-    //     configUpdate.shareLink = null;
-    //     delete configUpdate.shareLink;
+    public async getShareLink() {
+        const projId = this.projectConfig?.id;
 
-    //     const updatedConfig = await this.updateProject(configUpdate);
-    // }
+        if (!projId) {
+            return;
+        }
 
-    // public async getShareLink() {
-    //     const db = this.firebaseService.getDbInstance();
-    //     const currentProjectId = this._projectConfig.getValue().id;
+        const { data, error } = await this.supabaseService.supabase
+            .from<ShareLink>(this.SHARE_LINK_COLLECTION)
+            .select('*')
+            .eq('project_id', projId);
 
-    //     const existingShareLink = await db
-    //         .collection(this.SHARE_COLLECTION)
-    //         .where('projectId', '==', currentProjectId)
-    //         .get();
-
-    //     if (existingShareLink.docs.length) {
-    //         return existingShareLink.docs[0].data() as unknown as ShareLink;
-    //     } else {
-    //         return undefined;
-    //     }
-    // }
+        return data?.[0];
+    }
 
     //     await this.updateProject(configUpdate);
     // }
