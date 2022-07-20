@@ -28,17 +28,6 @@ export class AuthenticationService {
     private readonly INVITATIONS_COLLECTION_NAME = 'invitations';
 
     public allowedUserIds = ['1de27b7a-f338-4b84-b4c1-36363580a1b1'];
-    // public allowedUserIds = [
-    //     '06T4lgj7x1emjUEMCmPnJYPFjum2',
-    //     'iIeZlcLjmebZSoEMuquh4F2htN92',
-    //     'LkkX7f9yheRFHNwZkoCHhMb6AmC2',
-    //     'S09Ert0pOpRKdb7pnc4rXFfyeWe2',
-    //     'o24opqInUhbxnC9MFywy3YLLBE03',
-    //     '0ZLQk9ekq3RJXMc2RMpCE8NEkJ73',
-    //     'tpXpbNAPKpX1evoxSeRJs0O0pB02',
-    //     'IoTwZeoPiSemew2z5IBbQcHPaNi2',
-    //     'DxOw25Q8XigIlZMfnfN7vaCaVPo1',
-    // ];
 
     constructor(
         private firebaseService: FirebaseService,

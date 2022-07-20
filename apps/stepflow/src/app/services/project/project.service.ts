@@ -255,10 +255,10 @@ export class ProjectService {
         if (data !== null) {
             this.projectConfig = data[0];
             this.setProject(data[0], false);
-            return false;
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     public async deleteProject(projectId: string) {
