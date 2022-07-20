@@ -18,7 +18,7 @@ export enum AuthStatus {
 })
 export class AuthenticationService {
     private readonly USER_COLLECTION_NAME = 'users';
-    private _user: BehaviorSubject<User | undefined | null> = new BehaviorSubject<User | undefined | null>(null);
+    private _user: BehaviorSubject<User | undefined | null> = new BehaviorSubject<User | undefined | null>(undefined);
     public readonly $user = this._user?.asObservable();
     public readonly $loginStatus = new BehaviorSubject<{ authStatus: AuthStatus }>({ authStatus: AuthStatus.UNKNOWN });
 
@@ -46,23 +46,29 @@ export class AuthenticationService {
         private router: Router,
         private messageService: MessageService
     ) {
+        // this.setAuthStatus(this.user);
         this.initUserListener();
     }
 
     private setAuthStatus(user?: User | null) {
         if (user === undefined) {
-            this.$loginStatus.next({ authStatus: AuthStatus.UNAUTHENTICATED });
-        } else if (user === null) {
             this.$loginStatus.next({ authStatus: AuthStatus.UNKNOWN });
-        } else if (user) {
+        } else if (user === null) {
+            this.$loginStatus.next({ authStatus: AuthStatus.UNAUTHENTICATED });
+        } else {
             this.$loginStatus.next({ authStatus: AuthStatus.AUTHENTICATED });
         }
     }
 
     initUserListener() {
+        const session = this.supabaseService.auth.session();
+        if (!session) {
+            this.setAuthStatus(null);
+        }
+
         this.supabaseService.authChanges((event: AuthChangeEvent, session: Session | null) => {
             if (!session || session === null || session.user === null) {
-                return this.setAuthStatus(undefined);
+                return this.setAuthStatus(null);
             }
 
             const user = session.user;
@@ -81,8 +87,6 @@ export class AuthenticationService {
 
             this.setAuthStatus(this.user);
         });
-
-        this.setAuthStatus(this.user);
     }
 
     ngOnDestroy() {
@@ -230,6 +234,8 @@ export class AuthenticationService {
 
     public async logout(redirect?: boolean) {
         const { error } = await this.supabaseService.signOut();
+        this.user = undefined;
+        await this.supabaseService.supabase.removeAllSubscriptions();
         if (!error && redirect) {
             this.router.navigate(['/auth/login']);
         }

@@ -86,8 +86,8 @@ export class NavBarComponent implements OnInit {
         this.subscriptions.unsubscribe();
     }
 
-    private logout() {
-        this.authService.logout(true);
+    private async logout() {
+        await this.authService.logout(true);
         this.authenticated = false;
     }
 
