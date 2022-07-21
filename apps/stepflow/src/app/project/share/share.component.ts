@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Project, ProjectUsers, Role, SharePermission } from '@stepflow/interfaces';
+import { Member, Project, Role, SharePermission } from '@stepflow/interfaces';
 import { MenuItem, MessageService } from 'primeng/api';
 import { AuthenticationService } from '../../services/authentication/authentication.service';
 import { ProjectService } from '../../services/project/project.service';
@@ -13,8 +13,8 @@ export class ShareComponent implements OnInit {
     @Input() project?: Project;
     @Input() loggedInUserId?: string;
 
-    public projectUsers?: ProjectUsers[];
-    public projectOwners?: ProjectUsers[];
+    public projectUsers: Member[] = [];
+    public projectOwners: Member[] = [];
     public updatedMemberRoles?: any;
     public invitationEmails: string[] = [];
     public invitationRole: Role = 'viewer';
@@ -42,18 +42,30 @@ export class ShareComponent implements OnInit {
         public projectService: ProjectService,
         private messageService: MessageService,
         public authenticationService: AuthenticationService
-    ) {}
+    ) {
+        this.getProjectMembers();
+    }
 
     ngOnInit(): void {
         if (this.project) {
-            // this.projectService.getProjectUserDetails(this.project.memberRoles).then(result => {
-            //     this.projectUsers = result?.filter(user => user.role !== 'owner');
-            //     //TODO users can add new owners and owners can change each other's roles (this is how G docs goes about it but would need to think about it some more)
-            //     this.projectOwners = result?.filter(user => user.role === 'owner');
-            // });
-
             this.initShareLink();
         }
+    }
+
+    private async getProjectMembers() {
+        const members = await this.projectService.getProjectMembers();
+
+        if (members === null) {
+            return;
+        }
+
+        members.forEach(member => {
+            if (member.role === 'owner') {
+                this.projectOwners.push(member);
+            } else {
+                this.projectUsers.push(member);
+            }
+        });
     }
 
     public showShareDialog() {
@@ -121,27 +133,27 @@ export class ShareComponent implements OnInit {
         // }
     }
 
-    // public onSavePermissionsSelected() {
-    //     this.projectService.updateProjectRoles(this.updatedMemberRoles).then((value: any) => {
-    //         if (value === true) {
-    //             this.displayShareDialog = false;
-    //             this.displayDialogSave = false;
-    //             this.messageService.add({
-    //                 key: 'global-toast',
-    //                 severity: 'success',
-    //                 detail: 'Permissions updated.',
-    //             });
-    //         } else {
-    //             this.displayShareDialog = false;
-    //             this.displayDialogSave = false;
-    //             this.messageService.add({
-    //                 key: 'global-toast',
-    //                 severity: 'error',
-    //                 detail: "Can't update permissions. Please try again.",
-    //             });
-    //         }
-    //     });
-    // }
+    public onSavePermissionsSelected() {
+        // this.projectService.updateProjectRoles(this.updatedMemberRoles).then((value: any) => {
+        //     if (value === true) {
+        //         this.displayShareDialog = false;
+        //         this.displayDialogSave = false;
+        //         this.messageService.add({
+        //             key: 'global-toast',
+        //             severity: 'success',
+        //             detail: 'Permissions updated.',
+        //         });
+        //     } else {
+        //         this.displayShareDialog = false;
+        //         this.displayDialogSave = false;
+        //         this.messageService.add({
+        //             key: 'global-toast',
+        //             severity: 'error',
+        //             detail: "Can't update permissions. Please try again.",
+        //         });
+        //     }
+        // });
+    }
 
     public async onSendInvitationsSelected() {
         if (this.invitationEmails.length === 0 || !this.allowEmailSubmission) {

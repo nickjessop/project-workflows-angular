@@ -228,10 +228,7 @@ export class ProjectService {
     }
 
     public async createNewProject(projectName: string, projectDescription?: string) {
-        const userId = this.authenticationService.user?.id;
-
         const baseProject = this.createBaseProject(projectName, projectDescription);
-
         const { data, error } = await this.supabaseService.supabase.rpc<Project['id']>('create_project', {
             name: baseProject.name,
             configuration: baseProject.configuration,
@@ -457,77 +454,28 @@ export class ProjectService {
     public async sendProjectInvitations(emails: string[], role: Role) {
         const success = await this.addNewProjectMembers(emails, role);
         return success;
-        // const callable = this.firebaseService.getFunctionsInstance().httpsCallable('invitationEmail');
-        // return callable({
-        //     emails: emails,
-        //     subject: `${this.projectConfig?.name} - Invitation to collaborate`,
-        //     projectName: `${this.projectConfig?.name}`,
-        //     projectSender: `${this.authenticationService.getCurrentUser()?.displayName}`,
-        //     projectRole: `${role}`,
-        //     fromEmail:
-        //         this.authenticationService.getCurrentUser()?.email ||
-        //         this.authenticationService.getCurrentUser()?.displayName ||
-        //         '',
-        //     projectLink: `https://app.stepflow.co/project/${this.projectConfig.id}`,
-        // }).then(
-        //     (response: { data: { success: boolean } }) => {
-        //         console.log(response);
-        //         return response;
-        //     },
-        //     (error: Error) => {
-        //         return undefined;
-        //     }
-        // );
     }
 
     public async addNewProjectMembers(emails: string[], role: Role) {
         return this.addInvitations([{ email: emails[0], role }], this.projectConfig!.id!);
-        // return this.authenticationService
-        //     .findUsersMatchingEmail(emails)
-        //     .then(async users => {
-        //         const _projectConfig = _.cloneDeep(this.projectConfig);
-        //         const newMembers: { userId: string; role: Role }[] = [];
-        //         const pendingMembers: { email: string; role: Role }[] = [];
-        //         // combine existing members and pending members with new ones
-        //         if (users?.newMembers) {
-        //             users?.newMembers.map(member => {
-        //                 return newMembers.push({ userId: member, role: role || 'viewer' });
-        //             });
-        //             _projectConfig.members = _.union(_projectConfig.members, users.newMembers);
-        //             _projectConfig.memberRoles = _.union(_projectConfig.memberRoles, newMembers);
-        //         }
-        //         if (users?.pendingMembers) {
-        //             users?.pendingMembers.map(member => {
-        //                 return pendingMembers.push({ email: member, role: role || 'viewer' });
-        //             });
-        //             _projectConfig.pendingMembers = _.union(_projectConfig.pendingMembers, users.pendingMembers);
-        //         }
-        //         const addInvitations = await this.addInvitations(pendingMembers, this.projectConfig?.id);
-        //         if (addInvitations === true) {
-        //             const setResult = await this.setProject(_projectConfig);
-        //             return setResult;
-        //         } else {
-        //             return false;
-        //         }
-        //     })
-        //     .catch(function(error: Error) {
-        //         console.log(error, 'add members error');
-        //         // TODO handle error
-        //         return false;
-        //     });
     }
 
     public async removeProjectMember(userId: string) {
-        // const _projectConfig = _.cloneDeep(this.projectConfig);
-        // _projectConfig.members = _projectConfig?.members?.filter(member => {
-        //     return member !== userId;
-        // });
-        // _projectConfig.memberRoles = _projectConfig?.memberRoles?.filter(member => {
-        //     return member.userId !== userId;
-        // });
-        // const setResult = await this.setProject(_projectConfig);
-        // return setResult;
         return false;
+    }
+
+    public async getProjectMembers() {
+        // const { data, error } = await this.supabaseService.supabase
+        //     .from<Member & { projects: Pick<Project, 'id' | 'description' | 'name'> }>(this.MEMBERSHIP_COLLECTION)
+        //     .select('project_id, role, projects (id, name, description)')
+        //     .eq('user_id', userId);
+
+        const { data, error } = await this.supabaseService.supabase
+            .from<Member>(this.MEMBERSHIP_COLLECTION)
+            .select()
+            .eq('project_id', this.projectConfig!.id!);
+
+        return data;
     }
 
     private async addInvitations(pendingMembers: { email: string; role: Role }[], projectId: string) {

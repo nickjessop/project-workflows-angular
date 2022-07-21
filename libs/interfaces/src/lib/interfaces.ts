@@ -190,6 +190,7 @@ export interface Project {
 export interface Member {
     id: string;
     user_id: string;
+    email: string;
     project_id: string;
     role: Role;
 }
@@ -204,10 +205,10 @@ export type MemberRole = {
     userId: string;
     role: Role;
 };
-export interface ProjectUsers extends User {
-    userId?: string;
-    role?: Role;
-}
+// export interface ProjectUsers extends User {
+//     userId?: string;
+//     role?: Role;
+// }
 
 export interface StepConfig {
     components?: BlockConfig[];

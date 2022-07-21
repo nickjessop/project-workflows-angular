@@ -55,19 +55,20 @@
     <p-table styleClass="p-datatable-sm" [value]="projectOwners">
         <ng-template pTemplate="body" let-user>
             <tr>
-                <td style="width: 30%">{{ user.firstName }} {{ user.lastName }}</td>
-                <td style="width: 30%">{{ user.email }}</td>
+                <!-- <td style="width: 30%">{{ user.name }}</td> -->
+                <td style="width: 60%">{{ user.email }}</td>
                 <td>
                     <i [style]="{ height: '32px', display: 'block', textAlign: 'center' }">{{ user.role }}</i>
                 </td>
             </tr>
         </ng-template>
     </p-table>
+    {{projectUsers?.[0]}}
     <p-table styleClass="p-datatable-sm" [scrollable]="true" scrollHeight="220px" [value]="projectUsers">
         <ng-template pTemplate="body" let-user>
             <tr>
-                <td style="width: 30%">{{ user.firstName }} {{ user.lastName }}</td>
-                <td style="width: 30%">{{ user.email }}</td>
+                <!-- <td style="width: 30%">{{ user.name }}</td> -->
+                <td style="width: 60%">{{ user.email }}</td>
                 <td style="width: 30%" style="text-align: center;">
                     <p-dropdown
                         appendTo="body"
