@@ -187,17 +187,13 @@ export class ProjectService {
     }
 
     public swapBlockOrder(previousIndex: number, currentIndex: number) {
-        // moveItemInArray(this.fields, event.previousIndex, event.currentIndex);
         const currentStepIndex =
             this.projectConfig.configuration?.findIndex(config => {
                 return config.step.isCurrentStep;
             }) || 0;
 
-        const _projectConfig = _.cloneDeep(this.projectConfig);
-
-        moveItemInArray(_projectConfig.configuration![currentStepIndex].components!, previousIndex, currentIndex);
-        // this.projectConfig = _projectConfig;
-        this.setProject(_projectConfig);
+        moveItemInArray(this.projectConfig.configuration![currentStepIndex].components!, previousIndex, currentIndex);
+        this.setProject(this.projectConfig);
     }
 
     public setBlockDrag(dragging: boolean) {
@@ -205,9 +201,8 @@ export class ProjectService {
     }
 
     public swapStepOrder(previousIndex: number, currentIndex: number) {
-        const _projectConfig = _.cloneDeep(this.projectConfig);
-        moveItemInArray(_projectConfig.configuration!, previousIndex, currentIndex);
-        this.setProject(_projectConfig);
+        moveItemInArray(this.projectConfig.configuration!, previousIndex, currentIndex);
+        this.setProject(this.projectConfig);
     }
 
     public createNewProjectStep(
