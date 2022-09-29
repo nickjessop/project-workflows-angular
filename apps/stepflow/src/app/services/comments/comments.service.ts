@@ -133,7 +133,7 @@ export class CommentsService {
             .where('deleted', '==', false)
             .get()
             .then(querySnapshot => {
-                let result: { [key: string]: CommentCounts } = {};
+                const result: { [key: string]: CommentCounts } = {};
                 querySnapshot.forEach(doc => {
                     // Grab the comment
                     const comment = doc.data() as Comment;
