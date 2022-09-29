@@ -481,12 +481,12 @@ export class AuthenticationService {
                 await this.storageService.deleteFile(currentFilePath);
             }
 
-            const filesnapshot = await this.storageService.uploadProfileImage(file, currentUser.id!).toPromise();
+            const filesnapshot = await this.storageService.uploadProfileImage(file, currentUser.id!);
 
             if (!filesnapshot) {
                 throw new Error(`Failed to upload profile image`);
             }
-            const downloadUrl = await this.storageService.getDownloadUrl(filesnapshot.metadata.fullPath).toPromise();
+            const downloadUrl = await this.storageService.getDownloadUrl(filesnapshot.metadata.fullPath);
             const filePath = filesnapshot.metadata.fullPath;
 
             const firebaseUser = this.getCurrentUser();
