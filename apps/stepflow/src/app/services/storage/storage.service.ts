@@ -13,7 +13,7 @@ export class StorageService {
         const fileId: string = uuid();
         const pathId = projectId;
         const folder = 'projects';
-        const storageRef = this.firebaseService.getStorageInstance().ref(`${folder}/${pathId}/${fileId}`);
+        const storageRef = this.firebaseService.storage.ref(`${folder}/${pathId}/${fileId}`);
         return from(storageRef.put(file));
     }
 
@@ -21,25 +21,15 @@ export class StorageService {
         const fileId: string = uuid();
         const pathId = userId;
         const folder = 'users';
-        const storageRef = this.firebaseService.getStorageInstance().ref(`${folder}/${pathId}/${fileId}`);
+        const storageRef = this.firebaseService.storage.ref(`${folder}/${pathId}/${fileId}`);
         return from(storageRef.put(file));
     }
 
     public getDownloadUrl(filePath: string) {
-        return from(
-            this.firebaseService
-                .getStorageInstance()
-                .ref(filePath)
-                .getDownloadURL()
-        );
+        return from(this.firebaseService.storage.ref(filePath).getDownloadURL());
     }
 
     public deleteFile(filePath: string) {
-        return from(
-            this.firebaseService
-                .getStorageInstance()
-                .ref(filePath)
-                .delete()
-        );
+        return from(this.firebaseService.storage.ref(filePath).delete());
     }
 }

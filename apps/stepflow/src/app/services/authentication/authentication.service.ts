@@ -71,7 +71,7 @@ export class AuthenticationService {
         // This makes it extremely difficult to rely on it for checking for unauthenticated state for app initialization.
 
         this.subscriptions.add(
-            this.firebaseService.getAuthInstance().onAuthStateChanged(
+            this.firebaseService.auth.onAuthStateChanged(
                 user => {
                     if (user) {
                         this.user = {
@@ -107,7 +107,7 @@ export class AuthenticationService {
     }
 
     public getCurrentUser() {
-        return this.firebaseService.getAuthInstance().currentUser;
+        return this.firebaseService.auth.currentUser;
     }
 
     public register(email: string, password: string, firstName: string, lastName: string, plan: UserPlan) {
@@ -146,7 +146,7 @@ export class AuthenticationService {
         lastName: string,
         plan: UserPlan
     ) {
-        const firebaseAuth = this.firebaseService.getAuthInstance();
+        const firebaseAuth = this.firebaseService.auth;
         return firebaseAuth.setPersistence('local').then(() => {
             firebaseAuth
                 .createUserWithEmailAndPassword(email, password)
@@ -158,9 +158,7 @@ export class AuthenticationService {
                         emailVerified: user!.emailVerified,
                     };
                     this.user = parsedUser;
-                    const updateUserMetadata = this.firebaseService
-                        .getFunctionsInstance()
-                        .httpsCallable('updateUserMetadata');
+                    const updateUserMetadata = this.firebaseService.function.httpsCallable('updateUserMetadata');
                     // .httpsCallable('updateUserMetadata', {});
 
                     return from(updateUserMetadata({ firstName, lastName, plan, email }));
@@ -175,10 +173,7 @@ export class AuthenticationService {
 
     async getUserMetaData() {
         if (this.user) {
-            const userRef = this.firebaseService
-                .getDbInstance()
-                .collection('users')
-                .doc(this.user.id);
+            const userRef = this.firebaseService.db.collection('users').doc(this.user.id);
             try {
                 const doc = await userRef.get();
                 if (doc.exists) {
@@ -203,10 +198,9 @@ export class AuthenticationService {
 
     public getUserGroupMetaData(projectMembers: string[]) {
         const members: User[] = [];
-        return this.firebaseService
-            .getDbInstance()
+        return this.firebaseService.db
             .collection('users')
-            .where(this.firebaseService.getFieldPathId(), 'in', projectMembers)
+            .where(this.firebaseService.fieldPathId, 'in', projectMembers)
             .get()
             .then(querySnapshot => {
                 querySnapshot.forEach(doc => {
@@ -245,10 +239,7 @@ export class AuthenticationService {
             ...(email ? { email } : {}),
         };
 
-        const userRef = this.firebaseService
-            .getDbInstance()
-            .collection('users')
-            .doc(this.user.id);
+        const userRef = this.firebaseService.db.collection('users').doc(this.user.id);
 
         return userRef
             .update(update)
@@ -279,12 +270,12 @@ export class AuthenticationService {
 
         // return;
 
-        from(this.firebaseService.getAuthInstance()!.signInWithEmailAndPassword(email, password)).subscribe(
+        from(this.firebaseService.auth.signInWithEmailAndPassword(email, password)).subscribe(
             firebaseUser => {
                 const { user } = firebaseUser;
 
                 if (user && !this.allowedUserIds.includes(user?.uid)) {
-                    this.firebaseService.getAuthInstance()!.signOut();
+                    this.firebaseService.auth.signOut();
 
                     this.messageService.add({
                         severity: 'error',
@@ -318,24 +309,19 @@ export class AuthenticationService {
     }
 
     public logout(redirect?: boolean) {
-        this.firebaseService
-            .getAuthInstance()!
-            .signOut()
-            .then(() => {
-                this.user = undefined;
-                if (redirect) {
-                    this.router.navigate(['/auth/login']);
-                }
-            });
+        this.firebaseService.auth.signOut().then(() => {
+            this.user = undefined;
+            if (redirect) {
+                this.router.navigate(['/auth/login']);
+            }
+        });
     }
 
     public reAuthenticateUser(userProvidedPassword: string): Promise<any> {
         return new Promise((resolve, reject) => {
             const user = this.getCurrentUser();
             if (user && user.email) {
-                const credential = this.firebaseService
-                    .getProviderInstance()
-                    .emailAuth.credential(user.email, userProvidedPassword);
+                const credential = this.firebaseService.provider.emailAuth.credential(user.email, userProvidedPassword);
                 user.reauthenticateWithCredential(credential)
                     .then(function() {
                         resolve({ success: true });
@@ -352,8 +338,7 @@ export class AuthenticationService {
         const newMembers: string[] = [];
         let pendingMembers: any[] = [];
         const foundMembers: string[] = [];
-        return this.firebaseService
-            .getDbInstance()
+        return this.firebaseService.db
             .collection('users')
             .where('email', 'in', emails)
             .get()
@@ -376,7 +361,7 @@ export class AuthenticationService {
     }
 
     public checkNewUserProjects(email: string) {
-        const db = this.firebaseService.getDbInstance()!;
+        const db = this.firebaseService.db;
         const invitationRef = db.collection(this.INVITATIONS_COLLECTION_NAME);
         const projects: { id: string; projectId: string; role: Role }[] = [];
         invitationRef
@@ -401,7 +386,7 @@ export class AuthenticationService {
         if (!projects || !email || !userId) {
             return;
         }
-        const db = this.firebaseService.getDbInstance()!;
+        const db = this.firebaseService.db;
 
         projects.forEach(async (project, index) => {
             try {
@@ -582,8 +567,7 @@ export class AuthenticationService {
 
                 this.reAuthenticateUser(userProvidedPassword)
                     .then(() => {
-                        this.firebaseService
-                            .getAuthInstance()
+                        this.firebaseService.auth
                             .sendPasswordResetEmail(email)
                             .then(() => {
                                 this.messageService.add({
@@ -634,8 +618,7 @@ export class AuthenticationService {
     }
 
     public async getUser(userId: string): Promise<User | null> {
-        return this.firebaseService
-            .getDbInstance()!
+        return this.firebaseService.db
             .collection(this.USER_COLLECTION_NAME)
             .doc(userId)
             .get()
