@@ -409,7 +409,6 @@ export class ProjectService {
         const ref = this.firebaseService.db.collection(this.PROJECT_COLLECTION);
 
         const projects = await ref.where('members', 'array-contains', userId).get();
-        // return from(ref.where('members', 'array-contains', { userId: userId, role: 'owner' }).get()).pipe(
         const _projects = projects.docs.map(items => {
             const isOwner = this.isOwner(items.data().memberRoles);
             const itemData = items.data();
@@ -470,7 +469,6 @@ export class ProjectService {
     }
 
     public subscribeAndSetProject(projectId: string, sharePermission?: SharePermission, override?: SharePermission) {
-        // this.firebaseService.getDbInstance()!.collection(this.PROJECT_COLLECTION).doc(projectId).onSnapshot()
         this.unsubscribeToProjectListener = this.firebaseService.db
             .collection(this.PROJECT_COLLECTION)
             .doc(projectId)

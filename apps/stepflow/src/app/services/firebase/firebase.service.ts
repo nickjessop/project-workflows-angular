@@ -55,9 +55,7 @@ export class FirebaseService {
         this.auth.setPersistence('local');
 
         this._function = firebase.functions();
-
         this._storage = firebase.storage();
-
         this._fieldPathId = firebase.firestore.FieldPath.documentId();
     }
 
@@ -83,9 +81,5 @@ export class FirebaseService {
 
     get fieldPathId() {
         return this._fieldPathId;
-    }
-
-    public getDeleteField() {
-        return firebase.firestore.FieldValue.delete();
     }
 }

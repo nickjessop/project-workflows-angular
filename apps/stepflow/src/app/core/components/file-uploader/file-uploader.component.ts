@@ -4,7 +4,6 @@ import { BlockConfig, ComponentMode, ComponentSettings, FileUploader, Link } fro
 import * as mime from 'mime';
 import { MenuItem, MessageService } from 'primeng/api';
 import { FileUpload } from 'primeng/fileupload';
-import { map, switchMap } from 'rxjs/operators';
 import { ProjectService } from '../../../services/project/project.service';
 import { StorageService } from '../../../services/storage/storage.service';
 import { CoreComponentService } from '../../core-component.service';
@@ -87,15 +86,6 @@ export class FileUploaderComponent implements OnInit {
         this.field.metadata.settings = { ...this.field.metadata.settings, height: height };
     }
 
-    // public onResize(evt: AngularResizeElementEvent): void {
-    //     this.height = evt.currentHeightValue;
-    // }
-
-    // public onResizeEnd(evt: AngularResizeElementEvent): void {
-    //     const height = evt.currentHeightValue;
-    //     this.updateHeight(height);
-    //     this.projectService.syncProject();
-    // }
     public getFileMenuItems(index: number, file: Link): MenuItem[] {
         return [
             {
@@ -133,20 +123,16 @@ export class FileUploaderComponent implements OnInit {
         this.dialogData.type = $event.currentFiles[0].type.split('/')[0] || '';
     }
 
-    public onFileDeletePress(index: number) {
+    public async onFileDeletePress(index: number) {
         const filePath = this.fileData?.[index]?.filePath;
 
         if (filePath) {
-            this.storageService.deleteFile(filePath).subscribe(
-                () => {
-                    // Successfully removed file
-                    this.fileData.splice(index, 1);
-                    this.projectService.syncProject();
-                },
-                (err) => {
-                    console.log(err);
-                }
-            );
+            const success = await this.storageService.deleteFile(filePath);
+
+            if (success) {
+                this.fileData.splice(index, 1);
+                this.projectService.syncProject();
+            }
         } else {
             this.fileData.splice(index, 1);
             this.projectService.syncProject();
@@ -158,8 +144,8 @@ export class FileUploaderComponent implements OnInit {
         const downloadLink = document.createElement('a');
         try {
             fetch(href)
-                .then((res) => res.blob())
-                .then((blob) => {
+                .then(res => res.blob())
+                .then(blob => {
                     let url = URL.createObjectURL(blob);
                     downloadLink.href = url;
                     downloadLink.download = title + '.' + extension || 'download';
@@ -183,7 +169,7 @@ export class FileUploaderComponent implements OnInit {
         }
     }
 
-    public onDialogSubmit($event: Event) {
+    public async onDialogSubmit($event: Event) {
         const file = this.dialogData.file;
         const projectId = this.projectService.projectConfig.id;
 
@@ -191,50 +177,26 @@ export class FileUploaderComponent implements OnInit {
             return;
         }
 
-        this.storageService
-            .uploadProjectFile(file, projectId)
-            .pipe(
-                switchMap((file) => {
-                    return this.storageService.getDownloadUrl(file.metadata.fullPath).pipe(
-                        map((downloadUrl) => {
-                            return {
-                                fileMetadata: file.metadata,
-                                downloadUrl: downloadUrl as string,
-                                filePath: file.metadata.fullPath,
-                            };
-                        })
-                    );
-                })
-            )
-            .subscribe(
-                (filedata) => {
-                    const { size, fullPath } = filedata.fileMetadata;
-                    const { title, description, type, extension } = this.dialogData;
-                    const downloadUrl = filedata.downloadUrl;
-                    this.fileData.push({
-                        href: downloadUrl,
-                        title: title,
-                        description: description,
-                        size,
-                        type,
-                        extension,
-                        filePath: fullPath,
-                    });
+        const filedata = await this.storageService.uploadProjectFile(file, projectId);
+        const downloadUrl: string = await this.storageService.getDownloadUrl(filedata.metadata.fullPath);
+        const fileMetadata = filedata.metadata;
+        const { size, fullPath } = fileMetadata;
+        const { title, description, type, extension } = this.dialogData;
 
-                    this.projectService.syncProject();
-                    this.resetDialog();
-                },
-                (err) => {
-                    this.messageService.add({
-                        severity: 'error',
-                        key: 'global-toast',
-                        life: 3000,
-                        closable: true,
-                        detail: 'Failed to upload file',
-                    });
-                }
-            );
+        this.fileData.push({
+            href: downloadUrl,
+            title,
+            description,
+            size,
+            type,
+            extension,
+            filePath: fullPath,
+        });
+
+        this.projectService.syncProject();
+        this.resetDialog();
     }
+
     public resetDialog() {
         this.dialogData = { href: '', title: '', description: '' };
         if (this.fileUploaderButton) {
