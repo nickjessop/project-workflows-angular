@@ -110,33 +110,30 @@ export class AuthenticationService {
         return this.firebaseService.auth.currentUser;
     }
 
-    public register(email: string, password: string, firstName: string, lastName: string, plan: UserPlan) {
-        from(this.createUserAndAttachMetadata(email, password, firstName, lastName, plan)).subscribe(
-            success => {
-                this.checkNewUserProjects(email);
-                if (plan !== 'Essential') {
-                    this.router.navigate(['/auth/confirmation?plan=' + plan]);
-                } else {
-                    this.router.navigate(['/auth/confirmation']);
-                }
-                if (!this.allowedUserIds.includes(this.user?.id || '')) {
-                    this.logout(false);
-                }
-            },
-            error => {
-                const msg = {
-                    severity: 'error',
-                    key: 'global-toast',
-                    life: 5000,
-                    closable: true,
-                    detail: '',
-                };
+    public async register(email: string, password: string, firstName: string, lastName: string, plan: UserPlan) {
+        await this.createUserAndAttachMetadata(email, password, firstName, lastName, plan).catch(error => {
+            const msg = {
+                severity: 'error',
+                key: 'global-toast',
+                life: 5000,
+                closable: true,
+                detail: '',
+            };
 
-                msg.detail = error?.message ? error.message : error;
+            msg.detail = error?.message ? error.message : error;
 
-                this.messageService.add(msg);
-            }
-        );
+            this.messageService.add(msg);
+        });
+
+        this.checkNewUserProjects(email);
+        if (plan !== 'Essential') {
+            this.router.navigate(['/auth/confirmation?plan=' + plan]);
+        } else {
+            this.router.navigate(['/auth/confirmation']);
+        }
+        if (!this.allowedUserIds.includes(this.user?.id || '')) {
+            this.logout(false);
+        }
     }
 
     private createUserAndAttachMetadata(
