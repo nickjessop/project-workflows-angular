@@ -55,8 +55,7 @@ export class NavBarComponent implements OnInit {
             {
                 label: 'Account settings',
                 icon: 'pi pi-fw pi-user',
-
-                routerLink: '/profile',
+                url: '/profile', // This refreshes the whole app vs using routerLink
             },
             // { label: 'Tell a friend', icon: 'pi pi-fw pi-thumbs-up', routerLink: ['/share'] },
             {
