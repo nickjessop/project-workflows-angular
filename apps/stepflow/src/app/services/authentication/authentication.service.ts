@@ -466,7 +466,6 @@ export class AuthenticationService {
             return;
         }
 
-        // const currentUser = this.getCurrentUser();
         const currentUser = this.user;
         if (!currentUser) {
             return;
@@ -475,7 +474,9 @@ export class AuthenticationService {
         try {
             const currentFilePath = currentUser.photoFilePath;
             if (currentFilePath) {
-                await this.storageService.deleteFile(currentFilePath);
+                await this.storageService.deleteFile(currentFilePath).catch(e => {
+                    console.error(`changeProfilePhoto() - Failed to delete file. ${currentFilePath}`);
+                });
             }
 
             const filesnapshot = await this.storageService.uploadProfileImage(file, currentUser.id!);
