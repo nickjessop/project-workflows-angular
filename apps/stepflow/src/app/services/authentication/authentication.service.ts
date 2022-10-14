@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Project, Role, User, UserPlan } from '@stepflow/interfaces';
 import * as _ from 'lodash';
+import firebase from 'firebase';
 import { MessageService } from 'primeng/api';
 import { BehaviorSubject, from, Subscription } from 'rxjs';
 import { FirebaseService } from '../firebase/firebase.service';
@@ -72,16 +73,9 @@ export class AuthenticationService {
 
         this.subscriptions.add(
             this.firebaseService.auth.onAuthStateChanged(
-                user => {
+                async user => {
                     if (user) {
-                        this.user = {
-                            id: user.uid,
-                            email: user.email || '',
-                            emailVerified: user.emailVerified,
-                            displayName: user.displayName || '',
-                            photoURL: user.photoURL || '',
-                        };
-                        this.getUserMetaData();
+                        await this.setUserData(user);
                         this.setAuthStatus(this.user);
                     } else {
                         this.setAuthStatus(null);
@@ -168,29 +162,28 @@ export class AuthenticationService {
         });
     }
 
-    async getUserMetaData() {
-        if (this.user) {
-            const userRef = this.firebaseService.db.collection('users').doc(this.user.id);
-            try {
-                const doc = await userRef.get();
-                if (doc.exists) {
-                    this.user.plan = doc.data()?.plan || '';
-                    this.user.photoFilePath = doc.data()?.photoFilePath || '';
-                    this.user.firstName = doc.data()?.firstName || '';
-                    this.user.lastName = doc.data()?.lastName || '';
-                } else {
-                    console.log('User does not exist.');
-                }
-            } catch (error) {
-                // this.messageService.add({
-                //     severity: 'error',
-                //     key: 'global-toast',
-                //     life: 5000,
-                //     closable: true,
-                //     detail: 'Error fetching user details.',
-                // });
-            }
-        }
+    async setUserData(user: firebase.User) {
+        const userRef = this.firebaseService.db.collection('users').doc(this.user?.id);
+        const userDoc = await userRef.get();
+
+        const obj = userDoc.exists
+            ? {
+                  plan: userDoc?.data()?.plan || '',
+                  photoFilePath: userDoc?.data()?.photoFilePath || '',
+                  firstName: userDoc?.data()?.firstName || '',
+                  lastName: userDoc?.data()?.lastName || '',
+              }
+            : {};
+
+        const _user = {
+            id: user.uid,
+            email: user.email || '',
+            emailVerified: user.emailVerified,
+            displayName: user.displayName || '',
+            photoURL: user.photoURL || '',
+            ...obj,
+        };
+        this.user = _user;
     }
 
     public getUserGroupMetaData(projectMembers: string[]) {
@@ -212,7 +205,7 @@ export class AuthenticationService {
             });
     }
 
-    public setUserMetaData({
+    public async setUserMetaData({
         photoFilePath,
         plan,
         firstName,
@@ -237,23 +230,19 @@ export class AuthenticationService {
         };
 
         const userRef = this.firebaseService.db.collection('users').doc(this.user.id);
-
-        return userRef
-            .update(update)
-            .then(() => {
-                return true;
-            })
-            .catch((error: Error) => {
-                this.messageService.add({
-                    severity: 'error',
-                    key: 'global-toast',
-                    life: 5000,
-                    closable: true,
-                    detail: 'Error updating user info.',
-                });
-
-                return false;
+        await userRef.update(update).catch(e => {
+            this.messageService.add({
+                severity: 'error',
+                key: 'global-toast',
+                life: 5000,
+                closable: true,
+                detail: 'Error updating user info.',
             });
+
+            return false;
+        });
+
+        return true;
     }
 
     public login(email: string, password: string) {
@@ -419,7 +408,7 @@ export class AuthenticationService {
         });
     }
 
-    public updateProfileDetails(userDetails: User) {
+    public async updateProfileDetails(userDetails: User) {
         const photoURL = userDetails.photoURL || '/assets/placeholder/placeholder-profile.png';
         const plan = userDetails.plan || '';
         const photoFilePath = userDetails.photoFilePath || '';
@@ -433,32 +422,32 @@ export class AuthenticationService {
             return;
         }
 
-        currentUser
+        await currentUser
             .updateProfile({
                 displayName: `${firstName} ${lastName}`,
                 photoURL,
             })
-            .then(
-                () => {
-                    this.setUserMetaData({ photoFilePath, plan, firstName, lastName, email });
-                    this.messageService.add({
-                        severity: 'success',
-                        key: 'global-toast',
-                        life: 5000,
-                        closable: true,
-                        detail: 'Profile updated',
-                    });
-                },
-                (error: Error) => {
-                    this.messageService.add({
-                        severity: 'error',
-                        key: 'global-toast',
-                        life: 5000,
-                        closable: true,
-                        detail: 'Failed to update profile',
-                    });
-                }
-            );
+            .catch(err => {
+                this.messageService.add({
+                    severity: 'error',
+                    key: 'global-toast',
+                    life: 5000,
+                    closable: true,
+                    detail: 'Failed to update profile',
+                });
+            });
+
+        const success = await this.setUserMetaData({ photoFilePath, plan, firstName, lastName, email });
+
+        if (success) {
+            this.messageService.add({
+                severity: 'success',
+                key: 'global-toast',
+                life: 5000,
+                closable: true,
+                detail: 'Profile updated',
+            });
+        }
     }
 
     public async changeProfilePhoto(file?: File) {

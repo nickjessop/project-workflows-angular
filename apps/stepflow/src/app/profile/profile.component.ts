@@ -51,11 +51,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
         this.displayProfileModal = false;
     }
 
-    public async onProfileImageUploadSelected($event: { originalEvent: Event; files: FileList; currentFiles: File[] }) {
-        const success = await this.authService.changeProfilePhoto($event.currentFiles[0]);
-
-        if (success) {
-        }
+    public async onProfileImageUploadSelected($event: { files: File[] }) {
+        await this.authService.changeProfilePhoto($event.files[0]);
+        this.displayProfileModal = false;
     }
 
     public onChangeEmailSelected(password: string) {
