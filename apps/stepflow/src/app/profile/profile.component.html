@@ -99,7 +99,7 @@
                 <div class="p-d-flex p-ai-center">
                     <ng-container *ngIf="userDetails.photoURL; else placeholder"
                         ><img
-                            src="{{ userDetails.photoURL }}"
+                            [src]="userDetails.photoURL"
                             height="100px"
                             class="img-responsive rounded-image"
                             alt="Your profile picture"
@@ -115,12 +115,12 @@
                     <p-fileUpload
                         mode="basic"
                         name="profileImageUpload"
-                        [customUpload]="true"
+                        customUpload="true"
                         accept="image/*"
                         maxFileSize="1000000"
                         fileLimit="1"
                         chooseLabel="Upload profile image"
-                        (onSelect)="onProfileImageUploadSelected($event)"
+                        (uploadHandler)="onProfileImageUploadSelected($event)"
                         styleClass="p-button-text p-button-text-hover p-ml-3"
                         [auto]="true"
                     ></p-fileUpload>
