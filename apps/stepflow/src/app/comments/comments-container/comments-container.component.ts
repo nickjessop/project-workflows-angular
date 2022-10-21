@@ -117,7 +117,7 @@ export class CommentsContainerComponent implements OnInit {
         // This method determines a user's display name; change this if you want to use, say, the first name only.
         const constructDisplayName = (user: User) => user.firstName || user.email || 'Unknown';
 
-        const constructAuthorImage = (user: User) => {
+        const constructAuthorImage = async (user: User) => {
             // if (user.photoFilePath) {
             //     const photoURL =
             //         this.storageService.getDownloadUrl(user.photoFilePath) ||
@@ -126,9 +126,8 @@ export class CommentsContainerComponent implements OnInit {
             //     return;
             // }
             if (!user.photoFilePath) return;
-            return this.storageService.getDownloadUrl(user.photoFilePath).subscribe(result => {
-                result as string;
-            });
+            const result = await this.storageService.getDownloadUrl(user.photoFilePath);
+            return result;
             // .pipe(
             //     map((downloadUrl: string) => {
             //         return {

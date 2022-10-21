@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Project, Role, User, UserPlan } from '@stepflow/interfaces';
-import * as _ from 'lodash';
+import { union as _union } from 'lodash';
+import firebase from 'firebase';
 import { MessageService } from 'primeng/api';
 import { BehaviorSubject, from, Subscription } from 'rxjs';
 import { FirebaseService } from '../firebase/firebase.service';
@@ -37,6 +38,7 @@ export class AuthenticationService {
         'tpXpbNAPKpX1evoxSeRJs0O0pB02',
         'IoTwZeoPiSemew2z5IBbQcHPaNi2',
         'DxOw25Q8XigIlZMfnfN7vaCaVPo1',
+        '3OqrvQESBPafZ7nF5U6v0QyM2B02',
     ];
 
     constructor(
@@ -70,23 +72,16 @@ export class AuthenticationService {
         // This makes it extremely difficult to rely on it for checking for unauthenticated state for app initialization.
 
         this.subscriptions.add(
-            this.firebaseService.getAuthInstance().onAuthStateChanged(
-                (user) => {
+            this.firebaseService.auth.onAuthStateChanged(
+                async user => {
                     if (user) {
-                        this.user = {
-                            id: user.uid,
-                            email: user.email || '',
-                            emailVerified: user.emailVerified,
-                            displayName: user.displayName || '',
-                            photoURL: user.photoURL || '',
-                        };
-                        this.getUserMetaData();
+                        await this.setUserData(user);
                         this.setAuthStatus(this.user);
                     } else {
                         this.setAuthStatus(null);
                     }
                 },
-                (error) => {
+                error => {
                     this.setAuthStatus(null);
                 }
             )
@@ -106,36 +101,33 @@ export class AuthenticationService {
     }
 
     public getCurrentUser() {
-        return this.firebaseService.getAuthInstance().currentUser;
+        return this.firebaseService.auth.currentUser;
     }
 
-    public register(email: string, password: string, firstName: string, lastName: string, plan: UserPlan) {
-        from(this.createUserAndAttachMetadata(email, password, firstName, lastName, plan)).subscribe(
-            (success) => {
-                this.checkNewUserProjects(email);
-                if (plan !== 'Essential') {
-                    this.router.navigate(['/auth/confirmation?plan=' + plan]);
-                } else {
-                    this.router.navigate(['/auth/confirmation']);
-                }
-                if (!this.allowedUserIds.includes(this.user?.id || '')) {
-                    this.logout(false);
-                }
-            },
-            (error) => {
-                const msg = {
-                    severity: 'error',
-                    key: 'global-toast',
-                    life: 5000,
-                    closable: true,
-                    detail: '',
-                };
+    public async register(email: string, password: string, firstName: string, lastName: string, plan: UserPlan) {
+        await this.createUserAndAttachMetadata(email, password, firstName, lastName, plan).catch(error => {
+            const msg = {
+                severity: 'error',
+                key: 'global-toast',
+                life: 5000,
+                closable: true,
+                detail: '',
+            };
 
-                msg.detail = error?.message ? error.message : error;
+            msg.detail = error?.message ? error.message : error;
 
-                this.messageService.add(msg);
-            }
-        );
+            this.messageService.add(msg);
+        });
+
+        this.checkNewUserProjects(email);
+        if (plan !== 'Essential') {
+            this.router.navigate(['/auth/confirmation?plan=' + plan]);
+        } else {
+            this.router.navigate(['/auth/confirmation']);
+        }
+        if (!this.allowedUserIds.includes(this.user?.id || '')) {
+            this.logout(false);
+        }
     }
 
     private createUserAndAttachMetadata(
@@ -145,11 +137,11 @@ export class AuthenticationService {
         lastName: string,
         plan: UserPlan
     ) {
-        const firebaseAuth = this.firebaseService.getAuthInstance();
+        const firebaseAuth = this.firebaseService.auth;
         return firebaseAuth.setPersistence('local').then(() => {
             firebaseAuth
                 .createUserWithEmailAndPassword(email, password)
-                .then((userCredential) => {
+                .then(userCredential => {
                     const { user } = userCredential;
                     const parsedUser = {
                         id: user!.uid,
@@ -157,9 +149,7 @@ export class AuthenticationService {
                         emailVerified: user!.emailVerified,
                     };
                     this.user = parsedUser;
-                    const updateUserMetadata = this.firebaseService
-                        .getFunctionsInstance()
-                        .httpsCallable('updateUserMetadata');
+                    const updateUserMetadata = this.firebaseService.function.httpsCallable('updateUserMetadata');
                     // .httpsCallable('updateUserMetadata', {});
 
                     return from(updateUserMetadata({ firstName, lastName, plan, email }));
@@ -172,60 +162,57 @@ export class AuthenticationService {
         });
     }
 
-    async getUserMetaData() {
-        if (this.user) {
-            const userRef = this.firebaseService.getDbInstance().collection('users').doc(this.user.id);
-            try {
-                const doc = await userRef.get();
-                if (doc.exists) {
-                    this.user.plan = doc.data()?.plan || '';
-                    this.user.photoFilePath = doc.data()?.photoFilePath || '';
-                    this.user.firstName = doc.data()?.firstName || '';
-                    this.user.lastName = doc.data()?.lastName || '';
-                } else {
-                    console.log('User does not exist.');
-                }
-            } catch (error) {
-                // this.messageService.add({
-                //     severity: 'error',
-                //     key: 'global-toast',
-                //     life: 5000,
-                //     closable: true,
-                //     detail: 'Error fetching user details.',
-                // });
-            }
-        }
+    async setUserData(user: firebase.User) {
+        const userRef = this.firebaseService.db.collection('users').doc(this.user?.id);
+        const userDoc = await userRef.get();
+
+        const obj = userDoc.exists
+            ? {
+                  plan: userDoc?.data()?.plan || '',
+                  photoFilePath: userDoc?.data()?.photoFilePath || '',
+                  firstName: userDoc?.data()?.firstName || '',
+                  lastName: userDoc?.data()?.lastName || '',
+              }
+            : {};
+
+        const _user = {
+            id: user.uid,
+            email: user.email || '',
+            emailVerified: user.emailVerified,
+            displayName: user.displayName || '',
+            photoURL: user.photoURL || '',
+            ...obj,
+        };
+        this.user = _user;
     }
 
     public getUserGroupMetaData(projectMembers: string[]) {
         const members: User[] = [];
-        return this.firebaseService
-            .getDbInstance()
+        return this.firebaseService.db
             .collection('users')
-            .where(this.firebaseService.getFieldPathId(), 'in', projectMembers)
+            .where(this.firebaseService.fieldPathId, 'in', projectMembers)
             .get()
-            .then((querySnapshot) => {
-                querySnapshot.forEach((doc) => {
+            .then(querySnapshot => {
+                querySnapshot.forEach(doc => {
                     const data = doc.data() as User;
                     members.push({ ...data, id: doc.id });
                 });
                 return members;
             })
-            .catch((error) => {
+            .catch(error => {
                 console.log('Error getting documents: ', error);
                 return undefined;
             });
     }
 
-    public setUserMetaData({
+    // Updates our user metadata collection
+    public async updateUserMetaData({
         photoFilePath,
-        plan,
         firstName,
         lastName,
         email,
     }: {
         photoFilePath?: string;
-        plan?: string;
         firstName?: string;
         lastName?: string;
         email?: string;
@@ -235,49 +222,32 @@ export class AuthenticationService {
         }
         const update = {
             ...(photoFilePath ? { photoFilePath } : {}),
-            ...(plan ? { plan } : {}),
             ...(firstName ? { firstName } : {}),
             ...(lastName ? { lastName } : {}),
             ...(email ? { email } : {}),
         };
 
-        const userRef = this.firebaseService.getDbInstance().collection('users').doc(this.user.id);
-
-        return userRef
-            .update(update)
-            .then(() => {
-                return true;
-            })
-            .catch((error: Error) => {
-                this.messageService.add({
-                    severity: 'error',
-                    key: 'global-toast',
-                    life: 5000,
-                    closable: true,
-                    detail: 'Error updating user info.',
-                });
-
-                return false;
+        const userRef = this.firebaseService.db.collection('users').doc(this.user.id);
+        await userRef.update(update).catch(e => {
+            this.messageService.add({
+                severity: 'error',
+                key: 'global-toast',
+                life: 5000,
+                closable: true,
+                detail: 'Error updating user info.',
             });
+        });
+
+        return update;
     }
 
     public login(email: string, password: string) {
-        // this.messageService.add({
-        //     severity: 'error',
-        //     key: 'global-toast',
-        //     life: 5000,
-        //     closable: true,
-        //     detail: 'You may not login at this time.',
-        // });
-
-        // return;
-
-        from(this.firebaseService.getAuthInstance()!.signInWithEmailAndPassword(email, password)).subscribe(
-            (firebaseUser) => {
+        from(this.firebaseService.auth.signInWithEmailAndPassword(email, password)).subscribe(
+            firebaseUser => {
                 const { user } = firebaseUser;
 
                 if (user && !this.allowedUserIds.includes(user?.uid)) {
-                    this.firebaseService.getAuthInstance()!.signOut();
+                    this.firebaseService.auth.signOut();
 
                     this.messageService.add({
                         severity: 'error',
@@ -298,7 +268,7 @@ export class AuthenticationService {
                 this.user = parsedUser;
                 this.router.navigate([this.redirectUrl]);
             },
-            (err) => {
+            err => {
                 this.messageService.add({
                     severity: 'error',
                     key: 'global-toast',
@@ -311,29 +281,24 @@ export class AuthenticationService {
     }
 
     public logout(redirect?: boolean) {
-        this.firebaseService
-            .getAuthInstance()!
-            .signOut()
-            .then(() => {
-                this.user = undefined;
-                if (redirect) {
-                    this.router.navigate(['/auth/login']);
-                }
-            });
+        this.firebaseService.auth.signOut().then(() => {
+            this.user = undefined;
+            if (redirect) {
+                this.router.navigate(['/auth/login']);
+            }
+        });
     }
 
     public reAuthenticateUser(userProvidedPassword: string): Promise<any> {
         return new Promise((resolve, reject) => {
             const user = this.getCurrentUser();
             if (user && user.email) {
-                const credential = this.firebaseService
-                    .getProviderInstance()
-                    .emailAuth.credential(user.email, userProvidedPassword);
+                const credential = this.firebaseService.provider.emailAuth.credential(user.email, userProvidedPassword);
                 user.reauthenticateWithCredential(credential)
-                    .then(function () {
+                    .then(function() {
                         resolve({ success: true });
                     })
-                    .catch((error) => {
+                    .catch(error => {
                         reject(error);
                     });
             }
@@ -345,13 +310,12 @@ export class AuthenticationService {
         const newMembers: string[] = [];
         let pendingMembers: any[] = [];
         const foundMembers: string[] = [];
-        return this.firebaseService
-            .getDbInstance()
+        return this.firebaseService.db
             .collection('users')
             .where('email', 'in', emails)
             .get()
-            .then((querySnapshot) => {
-                querySnapshot.forEach((doc) => {
+            .then(querySnapshot => {
+                querySnapshot.forEach(doc => {
                     if (doc.id != '' || doc.id != undefined) {
                         newMembers.push(doc.id);
                         const data = doc.data() as User;
@@ -359,24 +323,24 @@ export class AuthenticationService {
                         foundMembers.push(docEmail);
                     }
                 });
-                pendingMembers = emails.filter((e) => !foundMembers.includes(e));
+                pendingMembers = emails.filter(e => !foundMembers.includes(e));
                 return { newMembers: newMembers, pendingMembers: pendingMembers };
             })
-            .catch((error) => {
+            .catch(error => {
                 console.log('Error getting documents: ', error);
                 return undefined;
             });
     }
 
     public checkNewUserProjects(email: string) {
-        const db = this.firebaseService.getDbInstance()!;
+        const db = this.firebaseService.db;
         const invitationRef = db.collection(this.INVITATIONS_COLLECTION_NAME);
         const projects: { id: string; projectId: string; role: Role }[] = [];
         invitationRef
             .where('email', '==', email)
             .get()
-            .then(async (querySnapshot) => {
-                querySnapshot.forEach((doc) => {
+            .then(async querySnapshot => {
+                querySnapshot.forEach(doc => {
                     projects.push({
                         id: doc.id,
                         projectId: doc.data().project.id,
@@ -394,11 +358,11 @@ export class AuthenticationService {
         if (!projects || !email || !userId) {
             return;
         }
-        const db = this.firebaseService.getDbInstance()!;
+        const db = this.firebaseService.db;
 
         projects.forEach(async (project, index) => {
             try {
-                await db.runTransaction(async (transaction) => {
+                await db.runTransaction(async transaction => {
                     let projectRef = db.collection(this.PROJECT_COLLECTION_NAME).doc(project.projectId);
                     const doc = await transaction.get(projectRef);
 
@@ -411,10 +375,10 @@ export class AuthenticationService {
                     let _members: string[];
                     _members = _project.members;
                     _memberRoles = _project.memberRoles;
-                    let members = _.union(_members, [userId]);
-                    let memberRoles = _.union(_memberRoles, newMember);
+                    let members = _union(_members, [userId]);
+                    let memberRoles = _union(_memberRoles, newMember);
 
-                    const _pendingMembers = _project?.pendingMembers?.filter((pendingMember) => {
+                    const _pendingMembers = _project?.pendingMembers?.filter(pendingMember => {
                         return pendingMember !== email;
                     });
 
@@ -430,9 +394,9 @@ export class AuthenticationService {
         });
     }
 
-    public updateProfileDetails(userDetails: User) {
+    // Update current users first or last name, or their profile photo
+    public async updateProfileDetails(userDetails: User) {
         const photoURL = userDetails.photoURL || '/assets/placeholder/placeholder-profile.png';
-        const plan = userDetails.plan || '';
         const photoFilePath = userDetails.photoFilePath || '';
         const firstName = userDetails.firstName || '';
         const lastName = userDetails.lastName || '';
@@ -440,36 +404,40 @@ export class AuthenticationService {
 
         const currentUser = this.getCurrentUser();
 
-        if (!currentUser || currentUser === null) {
+        if (currentUser == null) {
             return;
         }
 
-        currentUser
+        // Update the Firebase auth user's profile
+        await currentUser
             .updateProfile({
                 displayName: `${firstName} ${lastName}`,
                 photoURL,
             })
-            .then(
-                () => {
-                    this.setUserMetaData({ photoFilePath, plan, firstName, lastName, email });
-                    this.messageService.add({
-                        severity: 'success',
-                        key: 'global-toast',
-                        life: 5000,
-                        closable: true,
-                        detail: 'Profile updated',
-                    });
-                },
-                (error: Error) => {
-                    this.messageService.add({
-                        severity: 'error',
-                        key: 'global-toast',
-                        life: 5000,
-                        closable: true,
-                        detail: 'Failed to update profile',
-                    });
-                }
-            );
+            .catch(err => {
+                this.messageService.add({
+                    severity: 'error',
+                    key: 'global-toast',
+                    life: 5000,
+                    closable: true,
+                    detail: 'Failed to update profile',
+                });
+            });
+
+        // Update our custom user's collection with new metadata
+        const success = await this.updateUserMetaData({ photoFilePath, firstName, lastName, email });
+
+        if (success) {
+            this.messageService.add({
+                severity: 'success',
+                key: 'global-toast',
+                life: 5000,
+                closable: true,
+                detail: 'Profile updated',
+            });
+
+            this.user = success;
+        }
     }
 
     public async changeProfilePhoto(file?: File) {
@@ -477,7 +445,6 @@ export class AuthenticationService {
             return;
         }
 
-        // const currentUser = this.getCurrentUser();
         const currentUser = this.user;
         if (!currentUser) {
             return;
@@ -486,21 +453,23 @@ export class AuthenticationService {
         try {
             const currentFilePath = currentUser.photoFilePath;
             if (currentFilePath) {
-                await this.storageService.deleteFile(currentFilePath);
+                await this.storageService.deleteFile(currentFilePath).catch(e => {
+                    console.error(`changeProfilePhoto() - Failed to delete file. ${currentFilePath}`);
+                });
             }
 
-            const filesnapshot = await this.storageService.uploadProfileImage(file, currentUser.id!).toPromise();
+            const filesnapshot = await this.storageService.uploadProfileImage(file, currentUser.id!);
 
             if (!filesnapshot) {
                 throw new Error(`Failed to upload profile image`);
             }
-            const downloadUrl = await this.storageService.getDownloadUrl(filesnapshot.metadata.fullPath).toPromise();
+            const downloadUrl = await this.storageService.getDownloadUrl(filesnapshot.metadata.fullPath);
             const filePath = filesnapshot.metadata.fullPath;
 
             const firebaseUser = this.getCurrentUser();
             await firebaseUser!.updateProfile({ photoURL: downloadUrl });
 
-            const success = await this.setUserMetaData({ photoFilePath: filePath });
+            const success = await this.updateUserMetaData({ photoFilePath: filePath });
 
             return success;
         } catch (e) {
@@ -575,8 +544,7 @@ export class AuthenticationService {
 
                 this.reAuthenticateUser(userProvidedPassword)
                     .then(() => {
-                        this.firebaseService
-                            .getAuthInstance()
+                        this.firebaseService.auth
                             .sendPasswordResetEmail(email)
                             .then(() => {
                                 this.messageService.add({
@@ -624,11 +592,10 @@ export class AuthenticationService {
         }
 
         return users;
-    };
+    }
 
     public async getUser(userId: string): Promise<User | null> {
-        return this.firebaseService
-            .getDbInstance()!
+        return this.firebaseService.db
             .collection(this.USER_COLLECTION_NAME)
             .doc(userId)
             .get()

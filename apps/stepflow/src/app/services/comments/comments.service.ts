@@ -23,8 +23,7 @@ export class CommentsService {
 
     // API Methods
     public async listComments(blockIds: string[]): Promise<Comment[]> {
-        return this.firebaseService
-            .getDbInstance()!
+        return this.firebaseService.db
             .collection(this.COMMENTS_COLLECTION)
             .where('blockId', 'in', blockIds)
             .where('deleted', '==', false)
@@ -45,8 +44,7 @@ export class CommentsService {
     }
 
     public async getComment(id: string): Promise<Comment | null> {
-        return this.firebaseService
-            .getDbInstance()!
+        return this.firebaseService.db
             .collection(this.COMMENTS_COLLECTION)
             .doc(id)
             .get()
@@ -90,8 +88,7 @@ export class CommentsService {
             ...additionalFields,
         } as Comment;
 
-        return this.firebaseService
-            .getDbInstance()!
+        return this.firebaseService.db
             .collection(this.COMMENTS_COLLECTION)
             .doc(commentId)
             .set(commentToSave)
@@ -108,8 +105,7 @@ export class CommentsService {
 
     public async putComment(comment: Comment): Promise<Comment | null> {
         comment.updatedAt = Date.now();
-        return this.firebaseService
-            .getDbInstance()!
+        return this.firebaseService.db
             .collection(this.COMMENTS_COLLECTION)
             .doc(comment.commentId)
             .set(comment)
@@ -139,14 +135,13 @@ export class CommentsService {
     }
 
     public async getNumberOfCommentsForBlocks(blockIds: string[]): Promise<{ [key: string]: CommentCounts }> {
-        return this.firebaseService
-            .getDbInstance()!
+        return this.firebaseService.db
             .collection(this.COMMENTS_COLLECTION)
             .where('blockId', 'in', blockIds)
             .where('deleted', '==', false)
             .get()
             .then(querySnapshot => {
-                let result: { [key: string]: CommentCounts } = {};
+                const result: { [key: string]: CommentCounts } = {};
                 querySnapshot.forEach(doc => {
                     // Grab the comment
                     const comment = doc.data() as Comment;

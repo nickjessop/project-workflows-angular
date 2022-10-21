@@ -55,12 +55,8 @@ export class NavBarComponent implements OnInit {
             {
                 label: 'Account settings',
                 icon: 'pi pi-fw pi-user',
-                command: () => {
-                    this.router.navigateByUrl('/profile');
-                },
+                url: '/profile', // This refreshes the whole app vs using routerLink
             },
-            // { label: 'Account settings', icon: 'pi pi-fw pi-user', url: '/profile' },
-            // temporary fix above instead of using routerLink: issue #44
             // { label: 'Tell a friend', icon: 'pi pi-fw pi-thumbs-up', routerLink: ['/share'] },
             {
                 label: 'Sign out',
@@ -72,7 +68,7 @@ export class NavBarComponent implements OnInit {
         ];
 
         this.subscriptions.add(
-            this.projectService.projectConfig$.subscribe((projectData) => {
+            this.projectService.projectConfig$.subscribe(projectData => {
                 this.project = projectData;
                 if (projectData?.id) {
                     this.navMode = 'project';
@@ -83,7 +79,7 @@ export class NavBarComponent implements OnInit {
         );
 
         this.subscriptions.add(
-            this.projectService.projectMode$.subscribe((result) => {
+            this.projectService.projectMode$.subscribe(result => {
                 this.projectMode = result;
                 if (this.projectMode === 'configure') {
                     this.canConfigureProject = true;
@@ -149,7 +145,7 @@ export class NavBarComponent implements OnInit {
             this.showSettingsError = true;
             return;
         }
-        this.projectService.updateProjectSettings(this.projectSettings).then((value) => {
+        this.projectService.updateProjectSettings(this.projectSettings).then(value => {
             if (value === true) {
                 this.messageService.add({
                     key: 'global-toast',
