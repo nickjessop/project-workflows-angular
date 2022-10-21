@@ -1,9 +1,21 @@
-<div>
-    <i>{{commentDetail.authorDisplayName}} says: </i><strong>{{commentDetail.comment.body}}</strong>
-    <p>
-        Resolved: {{commentDetail.comment.resolved ? 'YUP' : 'NOPE'}} - 
+<div class="comment">
+    <div class="p-d-flex p-flex-column">
+        <div class="p-d-flex p-align-center">
+            <img
+                src="{{ commentDetail.authorProfileImage }}"
+                alt="{{ commentDetail.authorDisplayName }}'s profile picture."
+                width="30px"
+                height="30px"
+                class="p-mr-2"
+            />
+            <span class="comment__author">{{ commentDetail.authorDisplayName }}</span>
+        </div>
+        <p class="comment__body">{{ commentDetail.comment.body }}</p>
+    </div>
+    <div>
+        Resolved: {{ commentDetail.comment.resolved ? 'YUP' : 'NOPE' }} -
         <button type="button" class="btn btn-primary" (click)="toggleResolvedPressed()">
-            {{commentDetail.comment.resolved ? 'Unresolve' : 'Resolve'}}
+            {{ commentDetail.comment.resolved ? 'Unresolve' : 'Resolve' }}
         </button>
         <button type="button" class="btn btn-primary" (click)="editPressed()" [disabled]="!commentDetail.isEditable">
             Edit
@@ -11,5 +23,5 @@
         <button type="button" class="btn btn-warning" (click)="deletePressed()" [disabled]="!commentDetail.isDeletable">
             Delete
         </button>
-    </p>
+    </div>
 </div>

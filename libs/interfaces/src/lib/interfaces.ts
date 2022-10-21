@@ -253,6 +253,7 @@ export interface CommentDetail {
     isEditable: boolean;
     isDeletable: boolean;
     authorDisplayName: string;
+    authorProfileImage: string | void;
 }
 
 export type CommentCounts = {
