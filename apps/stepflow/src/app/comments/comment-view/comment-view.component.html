@@ -6,9 +6,17 @@
                 alt="{{ commentDetail.authorDisplayName }}'s profile picture."
                 width="30px"
                 height="30px"
-                class="p-mr-2"
+                class="p-mr-2 comment__image"
             />
             <span class="comment__author">{{ commentDetail.authorDisplayName }}</span>
+            <button
+                type="button"
+                class="p-button-text p-button-plain"
+                pButton
+                icon="pi pi-ellipsis-h"
+                (click)="menu.toggle($event)"
+            ></button>
+            <p-menu #menu [popup]="true" [model]="commentItems" appendTo="body"></p-menu>
         </div>
         <p class="comment__body">{{ commentDetail.comment.body }}</p>
     </div>

@@ -42,7 +42,7 @@ export class CommentsContainerComponent implements OnInit {
     isLoading = false;
     comments: Comment[] = [];
     threadedComments: { [blockId: string]: CommentDetail[] } = {};
-    users: { [key: string]: User } = {};
+    users: Map<string, User> = new Map();
     public displayCommentSidebar: boolean = false;
     public selectedblockId: BlockConfig['id'];
     public sidebarTitle: string = 'Comments';
@@ -101,14 +101,14 @@ export class CommentsContainerComponent implements OnInit {
     private async getUsers(): Promise<void> {
         const userIds = this.comments.map((comment: Comment) => comment.authorId!);
         if (!userIds || userIds.length == 0) {
-            this.users = {};
+            this.users = new Map();
             return;
         }
         const users = await this.authenticationService.getUsers(userIds);
-        this.users = users;
+        this.users = users || new Map();
     }
 
-    threadComments(): void {
+    async threadComments(): Promise<void> {
         this.threadedComments = {};
         // Consider the current filter
         const currentFilter = this.filterSelect;
@@ -118,23 +118,9 @@ export class CommentsContainerComponent implements OnInit {
         const constructDisplayName = (user: User) => user.firstName || user.email || 'Unknown';
 
         const constructAuthorImage = async (user: User) => {
-            // if (user.photoFilePath) {
-            //     const photoURL =
-            //         this.storageService.getDownloadUrl(user.photoFilePath) ||
-            //         '/assets/placeholder/placeholder-profile.png';
-            //     console.log(photoURL, 'the photo url');
-            //     return;
-            // }
             if (!user.photoFilePath) return;
             const result = await this.storageService.getDownloadUrl(user.photoFilePath);
             return result;
-            // .pipe(
-            //     map((downloadUrl: string) => {
-            //         return {
-            //             downloadUrl: downloadUrl as string,
-            //         };
-            //     })
-            // );
         };
 
         for (const comment of this.comments) {
@@ -154,20 +140,16 @@ export class CommentsContainerComponent implements OnInit {
             }
 
             // Populate the commentDetail fields.
-            const author = this.users[comment.authorId];
-            console.log(this.users);
-            console.log(author);
+            const author = this.users.get(comment.authorId);
             const commentDetail: CommentDetail = {
                 comment: comment,
                 isEditable: this.isEditable(comment, currentUserId),
                 isDeletable: this.isDeletable(comment, currentUserId),
                 authorDisplayName: author ? constructDisplayName(author) : 'Unknown',
-                authorProfileImage: '/assets/placeholder/placeholder-profile.png',
+                authorProfileImage: author
+                    ? await constructAuthorImage(author)
+                    : '/assets/placeholder/placeholder-profile.png',
             };
-            // author
-            //         ? constructAuthorImage(author)
-            //         :
-            console.log(author ? constructAuthorImage(author) : '/', 'return profile image test');
             this.threadedComments[comment.blockId].push(commentDetail);
         }
     }
