@@ -24,7 +24,7 @@ export class StorageService {
         return storageRef.put(file);
     }
 
-    public getDownloadUrl(filePath: string) {
+    public getDownloadUrl(filePath: string): Promise<string> {
         return this.firebaseService.storage.ref(filePath).getDownloadURL();
     }
 
