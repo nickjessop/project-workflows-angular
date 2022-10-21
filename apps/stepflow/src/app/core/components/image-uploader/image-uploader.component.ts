@@ -2,7 +2,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { BlockConfig, ComponentMode, ComponentSettings, ImageUploader, Link } from '@stepflow/interfaces';
 import { MenuItem, MessageService } from 'primeng/api';
-import { map, switchMap } from 'rxjs/operators';
 import { ProjectService } from '../../../services/project/project.service';
 import { StorageService } from '../../../services/storage/storage.service';
 import { CoreComponentService } from '../../core-component.service';
@@ -110,7 +109,7 @@ export class ImageUploaderComponent implements OnInit {
         this.uploadFile($event.currentFiles[0]);
     }
 
-    public onDeleteImagePress() {
+    public async onDeleteImagePress() {
         let index = this.selectedImages.length;
         while (index--) {
             const imageIndex = this.selectedImages[index];
@@ -118,15 +117,10 @@ export class ImageUploaderComponent implements OnInit {
             if (filePath) {
                 this.imageData.splice(imageIndex, 1);
                 this.selectedImages.splice(index, 1);
-                this.storageService.deleteFile(filePath).subscribe(
-                    () => {
-                        //Successfully removed file
-                        this.projectService.syncProject();
-                    },
-                    (error) => {
-                        console.log(error);
-                    }
-                );
+                const success = await this.storageService.deleteFile(filePath);
+                if (success) {
+                    this.projectService.syncProject();
+                }
             } else {
                 console.log('no file path');
                 this.imageData.splice(imageIndex, 1);
@@ -136,53 +130,29 @@ export class ImageUploaderComponent implements OnInit {
         }
     }
 
-    private uploadFile(file: File) {
+    private async uploadFile(file: File) {
         const projectId = this.projectService.projectConfig.id;
 
         if (!file || !projectId) {
             return;
         }
 
-        this.storageService
-            .uploadProjectFile(file, projectId)
-            .pipe(
-                switchMap((file) => {
-                    return this.storageService.getDownloadUrl(file.metadata.fullPath).pipe(
-                        map((downloadUrl) => {
-                            return {
-                                fileMetadata: file.metadata,
-                                downloadUrl: downloadUrl as string,
-                                filePath: file.metadata.fullPath,
-                            };
-                        })
-                    );
-                })
-            )
-            .subscribe(
-                (filedata) => {
-                    const size = filedata.fileMetadata.size;
-                    const name = file.name;
-                    const downloadUrl = filedata.downloadUrl;
-                    const filePath = filedata.filePath;
-                    this.imageData.push({
-                        href: downloadUrl,
-                        thumbnail: downloadUrl,
-                        title: name,
-                        filePath: filePath,
-                        size,
-                    });
-                    this.projectService.syncProject();
-                },
-                (err) => {
-                    this.messageService.add({
-                        severity: 'error',
-                        key: 'global-toast',
-                        life: 3000,
-                        closable: true,
-                        detail: 'Failed to upload image',
-                    });
-                }
-            );
+        const filedata = await this.storageService.uploadProjectFile(file, projectId);
+        const downloadUrl: string = await this.storageService.getDownloadUrl(filedata.metadata.fullPath);
+        const fileMetadata = filedata.metadata;
+        const filePath = fileMetadata.fullPath;
+        const size = fileMetadata.size;
+        const name = fileMetadata.name;
+
+        this.imageData.push({
+            href: downloadUrl,
+            thumbnail: downloadUrl,
+            title: name,
+            filePath,
+            size,
+        });
+
+        this.projectService.syncProject();
     }
 
     public updateImageMetadata(image: Link) {

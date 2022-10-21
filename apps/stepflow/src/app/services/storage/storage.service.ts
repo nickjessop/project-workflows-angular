@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { from } from 'rxjs';
 import { v4 as uuid } from 'uuid';
 import { FirebaseService } from '../firebase/firebase.service';
 
@@ -13,33 +12,23 @@ export class StorageService {
         const fileId: string = uuid();
         const pathId = projectId;
         const folder = 'projects';
-        const storageRef = this.firebaseService.getStorageInstance().ref(`${folder}/${pathId}/${fileId}`);
-        return from(storageRef.put(file));
+        const storageRef = this.firebaseService.storage.ref(`${folder}/${pathId}/${fileId}`);
+        return storageRef.put(file);
     }
 
     public uploadProfileImage(file: File, userId: string) {
         const fileId: string = uuid();
         const pathId = userId;
         const folder = 'users';
-        const storageRef = this.firebaseService.getStorageInstance().ref(`${folder}/${pathId}/${fileId}`);
-        return from(storageRef.put(file));
+        const storageRef = this.firebaseService.storage.ref(`${folder}/${pathId}/${fileId}`);
+        return storageRef.put(file);
     }
 
-    public getDownloadUrl(filePath: string) {
-        return from(
-            this.firebaseService
-                .getStorageInstance()
-                .ref(filePath)
-                .getDownloadURL()
-        );
+    public getDownloadUrl(filePath: string): Promise<string> {
+        return this.firebaseService.storage.ref(filePath).getDownloadURL();
     }
 
     public deleteFile(filePath: string) {
-        return from(
-            this.firebaseService
-                .getStorageInstance()
-                .ref(filePath)
-                .delete()
-        );
+        return this.firebaseService.storage.ref(filePath).delete();
     }
 }

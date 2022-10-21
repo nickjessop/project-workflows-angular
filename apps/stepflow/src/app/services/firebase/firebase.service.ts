@@ -35,58 +35,51 @@ export class FirebaseService {
         measurementId: 'G-YBLTH5VRQ9',
     };
 
-    private readonly db: firebase.firestore.Firestore;
-    private readonly auth: firebase.auth.Auth;
-    private readonly provider = {
+    private readonly _db: firebase.firestore.Firestore;
+    private readonly _auth: firebase.auth.Auth;
+    private readonly _provider = {
         emailAuth: firebase.auth.EmailAuthProvider,
-        //GoogleAuth, etc.
     };
-    private readonly functions: firebase.functions.Functions;
-    private readonly storage: firebase.storage.Storage;
-    private readonly fieldPathId: firebase.firestore.FieldPath;
+    private readonly _function: firebase.functions.Functions;
+    private readonly _storage: firebase.storage.Storage;
+    private readonly _fieldPathId: firebase.firestore.FieldPath;
 
     constructor() {
         firebase.initializeApp(this.stepflowAppFirebaseConfig);
 
-        this.db = firebase.firestore();
-        this.auth = firebase.auth();
-        this.provider = {
+        this._db = firebase.firestore();
+        this._auth = firebase.auth();
+        this._provider = {
             emailAuth: firebase.auth.EmailAuthProvider,
         };
         this.auth.setPersistence('local');
 
-        this.functions = firebase.functions();
-
-        this.storage = firebase.storage();
-
-        this.fieldPathId = firebase.firestore.FieldPath.documentId();
+        this._function = firebase.functions();
+        this._storage = firebase.storage();
+        this._fieldPathId = firebase.firestore.FieldPath.documentId();
     }
 
-    public getDbInstance() {
-        return this.db;
+    get db() {
+        return this._db;
     }
 
-    public getAuthInstance() {
-        return this.auth;
+    get auth() {
+        return this._auth;
     }
 
-    public getProviderInstance() {
-        return this.provider;
+    get provider() {
+        return this._provider;
     }
 
-    public getFunctionsInstance() {
-        return this.functions;
+    get function() {
+        return this._function;
     }
 
-    public getStorageInstance() {
-        return this.storage;
+    get storage() {
+        return this._storage;
     }
 
-    public getFieldPathId() {
-        return this.fieldPathId;
-    }
-
-    public getDeleteField() {
-        return firebase.firestore.FieldValue.delete();
+    get fieldPathId() {
+        return this._fieldPathId;
     }
 }

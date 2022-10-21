@@ -54,7 +54,7 @@
         "@nestjs/platform-express": "7.6.18",
         "@nrwl/angular": "13.7.2",
         "angular-resizable-element": "^5.0.0",
-        "firebase": "^8.2.1",
+        "firebase": "8.10.0",
         "firebase-admin": "9.8.0",
         "lodash": "^4.17.20",
         "mime": "^2.5.2",

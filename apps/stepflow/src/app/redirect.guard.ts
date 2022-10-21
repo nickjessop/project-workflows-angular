@@ -18,11 +18,11 @@ export class RedirectGuard implements CanActivate {
             take(1),
             switchMap(status => {
                 const user = this.authenticationService.user;
-                if (user !== undefined && user !== null) {
+                if (user == null) {
+                    return of(true);
+                } else {
                     this.router.navigate(['/project']);
                     return of(false);
-                } else {
-                    return of(true);
                 }
             })
         );

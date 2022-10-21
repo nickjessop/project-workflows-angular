@@ -3,7 +3,6 @@ import { FormGroup } from '@angular/forms';
 import { BlockConfig, ComponentMode, Link, PDF } from '@stepflow/interfaces';
 import { PDFProgressData } from 'ng2-pdf-viewer';
 import { MessageService } from 'primeng/api';
-import { map, switchMap } from 'rxjs';
 import { ProjectService } from '../../../services/project/project.service';
 import { StorageService } from '../../../services/storage/storage.service';
 import { CoreComponentService } from '../../core-component.service';
@@ -91,18 +90,16 @@ export class PdfComponent implements OnInit {
 
     public deleteDialog() {}
 
-    public onDeletePDF() {
+    public async onDeletePDF() {
         const filePath = this.pdfData.filePath;
         if (filePath) {
-            this.storageService.deleteFile(filePath).subscribe(
-                () => {
-                    // Successfully removed file
-                    this.projectService.syncProject();
-                },
-                err => {
-                    console.log(err);
-                }
-            );
+            const success = await this.storageService.deleteFile(filePath);
+
+            if (success) {
+                this.projectService.syncProject();
+            } else {
+                console.log('Error onDeletePDF()');
+            }
         } else {
             this.projectService.syncProject();
         }
@@ -121,53 +118,30 @@ export class PdfComponent implements OnInit {
         this.uploadFile(event.currentFiles[0]);
     }
 
-    private uploadFile(file: File) {
+    private async uploadFile(file: File) {
         const projectId = this.projectService.projectConfig.id;
         if (!file || !projectId) {
             return;
         }
 
-        this.storageService
-            .uploadProjectFile(file, projectId)
-            .pipe(
-                switchMap(file => {
-                    return this.storageService.getDownloadUrl(file.metadata.fullPath).pipe(
-                        map(downloadUrl => {
-                            return {
-                                fileMetadata: file.metadata,
-                                downloadUrl: downloadUrl as string,
-                                filePath: file.metadata.fullPath,
-                            };
-                        })
-                    );
-                })
-            )
-            .subscribe(
-                filedata => {
-                    const size = filedata.fileMetadata.size;
-                    const name = file.name;
-                    const downloadUrl = filedata.downloadUrl;
-                    const filePath = filedata.filePath;
-                    const height = 400; // sets a reasonable default height
-                    this.pdfData = {
-                        href: downloadUrl,
-                        title: name,
-                        filePath: filePath,
-                        size: size,
-                    };
-                    (this.field.metadata as PDF).data.value = this.pdfData;
-                    this.field.metadata.settings = { ...this.field.metadata.settings, height };
-                    this.projectService.syncProject();
-                },
-                err => {
-                    this.messageService.add({
-                        severity: 'error',
-                        key: 'global-toast',
-                        life: 3000,
-                        closable: true,
-                        detail: 'Failed to upload PDF',
-                    });
-                }
-            );
+        const filedata = await this.storageService.uploadProjectFile(file, projectId);
+        const downloadUrl: string = await this.storageService.getDownloadUrl(filedata.metadata.fullPath);
+
+        const fileMetadata = filedata.metadata;
+        const filePath = fileMetadata.fullPath;
+        const filename = fileMetadata.name;
+        const size = fileMetadata.size;
+        const height = 400; // sets a reasonable default height
+
+        this.pdfData = {
+            href: downloadUrl,
+            title: filename,
+            filePath,
+            size,
+        };
+
+        (this.field.metadata as PDF).data.value = this.pdfData;
+        this.field.metadata.settings = { ...this.field.metadata.settings, height };
+        this.projectService.syncProject();
     }
 }
