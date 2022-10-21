@@ -1,29 +1,43 @@
-<div>
-    <h2>{{threadHeader || 'Untitled Block Thread'}}</h2>
-    <div *ngFor="let commentDetail of commentDetails">
-        <ng-container *ngIf="commentDetail.comment?.commentId === commentBeingEdited?.comment.commentId; then editBlock else viewBlock"></ng-container>
-        <ng-template #editBlock>
-            <comment-edit
-                [commentDetail]="commentDetail"
-                (onCommentEdit)="updateComment($event)"
-                (onCancel)="cancelEdit()">
-            </comment-edit>
-        </ng-template>
-        <ng-template #viewBlock>
-            <comment-view
-                [commentDetail]="commentDetail"
-                (onCommentEdit)="editPressed($event)"
-                (onCommentResolve)="updateComment($event)"
-                (onCommentDelete)="deleteComment($event)">
-            </comment-view>
-        </ng-template>
+<div class="thread p-my-2" #thread>
+    <div *ngIf="!isSingleThread" class="thread__header p-py-3">
+        <h2 class="ms-1 p-px-2">{{ threadHeader || 'Untitled Block' }}</h2>
     </div>
-    <div *ngIf="!composingNewComment && !commentBeingEdited">
-        <button type="button" class="btn btn-primary" (click)="toggleComposingNewComment()">
-            Add Comment
-        </button>
-    </div>
-    <div *ngIf="composingNewComment">
-        <comment-edit (onCommentEdit)="updateComment($event)" (onCancel)="cancelEdit()"></comment-edit>
+    <div class="p-mt-4">
+        <div *ngFor="let commentDetail of commentDetails">
+            <ng-container
+                *ngIf="
+                    commentDetail.comment?.commentId === commentBeingEdited?.comment.commentId;
+                    then editBlock;
+                    else viewBlock
+                "
+            ></ng-container>
+            <ng-template #editBlock>
+                <comment-edit
+                    [commentDetail]="commentDetail"
+                    (onCommentEdit)="updateComment($event)"
+                    (onCancel)="cancelEdit()"
+                >
+                </comment-edit>
+            </ng-template>
+            <ng-template #viewBlock>
+                <comment-view
+                    [commentDetail]="commentDetail"
+                    (onCommentEdit)="editPressed($event)"
+                    (onCommentResolve)="updateComment($event)"
+                    (onCommentDelete)="deleteComment($event)"
+                >
+                </comment-view>
+            </ng-template>
+        </div>
+        <div class="thread__add p-p-3">
+            <div *ngIf="!composingNewComment && !commentBeingEdited && !isSingleThread">
+                <button type="button" class="btn btn-primary" (click)="toggleComposingNewComment()">
+                    Add Comment
+                </button>
+            </div>
+            <div *ngIf="composingNewComment || isSingleThread">
+                <comment-edit (onCommentEdit)="updateComment($event)" (onCancel)="cancelEdit()"></comment-edit>
+            </div>
+        </div>
     </div>
 </div>

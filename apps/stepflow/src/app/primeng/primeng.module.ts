@@ -24,7 +24,9 @@ import { MessageModule } from 'primeng/message';
 import { MessagesModule } from 'primeng/messages';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { SelectButtonModule } from 'primeng/selectbutton';
 import { SidebarModule } from 'primeng/sidebar';
+import { SkeletonModule } from 'primeng/skeleton';
 import { TableModule } from 'primeng/table';
 import { TabViewModule } from 'primeng/tabview';
 import { ToastModule } from 'primeng/toast';
@@ -64,6 +66,8 @@ import { TooltipModule } from 'primeng/tooltip';
         ChipModule,
         ChipsModule,
         InputSwitchModule,
+        SelectButtonModule,
+        SkeletonModule,
     ],
     exports: [
         AccordionModule,
@@ -94,6 +98,8 @@ import { TooltipModule } from 'primeng/tooltip';
         ChipModule,
         ChipsModule,
         InputSwitchModule,
+        SelectButtonModule,
+        SkeletonModule,
     ],
     providers: [ConfirmationService, MessageService],
 })

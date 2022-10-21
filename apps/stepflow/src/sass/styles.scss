@@ -165,12 +165,12 @@ button {
     display: inline-flex;
     &:hover {
         cursor: pointer;
-        color: var(--hvr-primary);
     }
     i {
         margin-right: 0.5rem;
     }
 }
+// REMOVE?
 
 .toolbar {
     background: rgba(0, 0, 0, 0.7);
@@ -263,6 +263,20 @@ button {
 }
 .p-button.p-button-white {
     background: var(--surface-a);
+}
+.p-button.p-button-link {
+    background: transparent;
+    color: var(--primary-color);
+    border: none;
+}
+.p-button.p-button-link:enabled:hover {
+    background: transparent;
+    color: var(--hvr-primary);
+    text-decoration: none;
+    border: none;
+}
+.p-button.p-button-link:enabled:hover .p-button-label {
+    text-decoration: none;
 }
 .p-checkbox .p-checkbox-box.p-highlight {
     background: var(--primary-color);
@@ -369,14 +383,28 @@ button {
     box-shadow: 0 2px 4px -1px rgb(0 0 0 / 10%), 0 4px 5px 0 rgb(0 0 0 / 7%), 0 1px 10px 0 rgb(0 0 0 / 5%);
 }
 
-.block-sidebar .p-sidebar-header {
+.block-sidebar .p-sidebar-header,
+.comment-sidebar .p-sidebar-header {
     justify-content: space-between;
     &:before {
-        content: 'Add blocks';
         display: block;
         font-weight: bold;
         font-size: 1.25rem;
     }
+}
+.block-sidebar .p-sidebar-header {
+    &:before {
+        content: 'Add blocks';
+    }
+}
+.comment-sidebar .p-sidebar-header {
+    display: none;
+}
+.comment-sidebar .p-sidebar-content .p-sidebar-header {
+    display: flex;
+}
+.comment-sidebar .p-sidebar-content {
+    position: initial;
 }
 
 // CDK DRAG & DROP
