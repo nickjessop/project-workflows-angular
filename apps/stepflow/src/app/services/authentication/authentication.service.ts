@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Project, Role, User, UserPlan } from '@stepflow/interfaces';
-import * as _ from 'lodash';
+import { union as _union } from 'lodash';
 import firebase from 'firebase';
 import { MessageService } from 'primeng/api';
 import { BehaviorSubject, from, Subscription } from 'rxjs';
@@ -205,15 +205,14 @@ export class AuthenticationService {
             });
     }
 
-    public async setUserMetaData({
+    // Updates our user metadata collection
+    public async updateUserMetaData({
         photoFilePath,
-        plan,
         firstName,
         lastName,
         email,
     }: {
         photoFilePath?: string;
-        plan?: string;
         firstName?: string;
         lastName?: string;
         email?: string;
@@ -223,7 +222,6 @@ export class AuthenticationService {
         }
         const update = {
             ...(photoFilePath ? { photoFilePath } : {}),
-            ...(plan ? { plan } : {}),
             ...(firstName ? { firstName } : {}),
             ...(lastName ? { lastName } : {}),
             ...(email ? { email } : {}),
@@ -238,24 +236,12 @@ export class AuthenticationService {
                 closable: true,
                 detail: 'Error updating user info.',
             });
-
-            return false;
         });
 
-        return true;
+        return update;
     }
 
     public login(email: string, password: string) {
-        // this.messageService.add({
-        //     severity: 'error',
-        //     key: 'global-toast',
-        //     life: 5000,
-        //     closable: true,
-        //     detail: 'You may not login at this time.',
-        // });
-
-        // return;
-
         from(this.firebaseService.auth.signInWithEmailAndPassword(email, password)).subscribe(
             firebaseUser => {
                 const { user } = firebaseUser;
@@ -389,8 +375,8 @@ export class AuthenticationService {
                     let _members: string[];
                     _members = _project.members;
                     _memberRoles = _project.memberRoles;
-                    let members = _.union(_members, [userId]);
-                    let memberRoles = _.union(_memberRoles, newMember);
+                    let members = _union(_members, [userId]);
+                    let memberRoles = _union(_memberRoles, newMember);
 
                     const _pendingMembers = _project?.pendingMembers?.filter(pendingMember => {
                         return pendingMember !== email;
@@ -408,9 +394,9 @@ export class AuthenticationService {
         });
     }
 
+    // Update current users first or last name, or their profile photo
     public async updateProfileDetails(userDetails: User) {
         const photoURL = userDetails.photoURL || '/assets/placeholder/placeholder-profile.png';
-        const plan = userDetails.plan || '';
         const photoFilePath = userDetails.photoFilePath || '';
         const firstName = userDetails.firstName || '';
         const lastName = userDetails.lastName || '';
@@ -418,10 +404,11 @@ export class AuthenticationService {
 
         const currentUser = this.getCurrentUser();
 
-        if (!currentUser || currentUser === null) {
+        if (currentUser == null) {
             return;
         }
 
+        // Update the Firebase auth user's profile
         await currentUser
             .updateProfile({
                 displayName: `${firstName} ${lastName}`,
@@ -437,7 +424,8 @@ export class AuthenticationService {
                 });
             });
 
-        const success = await this.setUserMetaData({ photoFilePath, plan, firstName, lastName, email });
+        // Update our custom user's collection with new metadata
+        const success = await this.updateUserMetaData({ photoFilePath, firstName, lastName, email });
 
         if (success) {
             this.messageService.add({
@@ -447,6 +435,8 @@ export class AuthenticationService {
                 closable: true,
                 detail: 'Profile updated',
             });
+
+            this.user = success;
         }
     }
 
@@ -479,7 +469,7 @@ export class AuthenticationService {
             const firebaseUser = this.getCurrentUser();
             await firebaseUser!.updateProfile({ photoURL: downloadUrl });
 
-            const success = await this.setUserMetaData({ photoFilePath: filePath });
+            const success = await this.updateUserMetaData({ photoFilePath: filePath });
 
             return success;
         } catch (e) {

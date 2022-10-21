@@ -46,8 +46,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
         }
     }
 
-    public onSaveProfileSelected() {
-        this.authService.updateProfileDetails(this.userDetails);
+    public async onSaveProfileSelected() {
+        await this.authService.updateProfileDetails(this.userDetails);
         this.displayProfileModal = false;
     }
 
