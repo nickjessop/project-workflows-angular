@@ -18,21 +18,14 @@ export class CommentViewComponent {
 
     public commentItems: MenuItem[] = [
         {
-            label: 'Resolve Comment',
-            icon: 'pi pi-check',
-            command: () => {
-                this.toggleResolvedPressed();
-            },
-        },
-        {
-            label: 'Edit Comment',
+            label: 'Edit',
             icon: 'pi pi-pencil',
             command: () => {
                 this.editPressed();
             },
         },
         {
-            label: 'Delete Comment',
+            label: 'Delete',
             icon: 'pi pi-trash',
             command: () => {
                 this.deletePressed();
