@@ -9,7 +9,17 @@
                     height="30px"
                     class="p-mr-2 comment__image"
                 />
-                <span class="comment__author">{{ commentDetail.authorDisplayName }}</span>
+                <div class="p-d-flex p-flex-column">
+                    <span class="comment__author">{{ commentDetail.authorDisplayName }}</span>
+                    <div
+                        pTooltip="{{ postedAtFormatted }}"
+                        tooltipPosition="bottom"
+                        class="ms-01 text-secondary"
+                        tooltipStyleClass="ms-01"
+                    >
+                        {{ postedAtRelative }}<br />
+                    </div>
+                </div>
             </div>
             <div class="p-d-flex p-align-center comment__meta-options">
                 <button
