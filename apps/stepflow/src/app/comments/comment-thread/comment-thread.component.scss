@@ -1,4 +1,5 @@
 .thread {
+    padding-bottom: 200px;
     &__header {
         h2 {
             margin: 0;
@@ -12,5 +13,7 @@
         border-top: 1px solid var(--surface-d);
         background: white;
     }
-    padding-bottom: 200px;
+    &__comments-comment {
+        border-top: solid var(--surface-d);
+    }
 }

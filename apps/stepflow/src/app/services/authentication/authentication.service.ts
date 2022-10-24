@@ -591,14 +591,14 @@ export class AuthenticationService {
     public async getUser(userIds: string[]) {
         return this.firebaseService.db
             .collection(this.USER_COLLECTION_NAME)
-            .where('id', 'array-contains', userIds)
+            .where(this.firebaseService.fieldPathId, 'in', userIds)
             .get()
             .then(
                 querySnapshot => {
                     const userData: Map<string, User> = new Map();
                     querySnapshot.docs.forEach(doc => {
                         const user = doc.data() as User;
-                        userData.set(user.id!, user);
+                        userData.set(doc.id, user);
                     });
                     return userData;
                 },

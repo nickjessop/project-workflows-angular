@@ -3,7 +3,8 @@
         <h2 class="ms-1 p-px-2">{{ threadHeader || 'Untitled Block' }}</h2>
     </div>
     <div class="p-mt-4">
-        <div *ngFor="let commentDetail of commentDetails">
+        <div *ngFor="let commentDetail of commentDetails; first as isFirst" class="thread__comments">
+            <div class="thread__comments-comment" [ngStyle]="{ 'border-width': isFirst ? '0px' : '1px' }"></div>
             <ng-container
                 *ngIf="
                     commentDetail.comment?.commentId === commentBeingEdited?.comment.commentId;
