@@ -584,7 +584,6 @@ export class AuthenticationService {
     public async getUsers(userIds: string[]) {
         userIds = userIds.filter((value, index, self) => self.indexOf(value) === index);
         const users = await this.getUser(userIds);
-        console.log(users);
         return users;
     }
 
