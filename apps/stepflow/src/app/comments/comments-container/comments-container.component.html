@@ -1,21 +1,68 @@
-<div>
-    <ng-container *ngIf="isLoading">loading comments...</ng-container>
+<p-sidebar
+    *ngIf="displayCommentSidebar"
+    [(visible)]="displayCommentSidebar"
+    position="right"
+    appendTo="body"
+    styleClass="comment-sidebar"
+    [modal]="false"
+    [showCloseIcon]="false"
+    [dismissible]="true"
+>
+    <ng-container *ngIf="isLoading">
+        <br class="p-mt-24" />
+        <ul style="list-style:none;" class="p-m-0 p-p-0">
+            <li class="p-mb-3" *ngFor="let index of [0, 1, 2]">
+                <div class="p-d-flex p-ai-center">
+                    <p-skeleton shape="circle" size="3rem" styleClass="p-mr-2"></p-skeleton>
+                    <div style="flex: 1">
+                        <p-skeleton width="75%" height="0.75rem" styleClass="p-mb-1"></p-skeleton>
+                        <p-skeleton width="50%" height="0.5rem"></p-skeleton>
+                    </div>
+                </div>
+                <div class="p-mt-2">
+                    <p-skeleton width="100%" styleClass="p-mb-2" height="1.5rem"></p-skeleton>
+                    <p-skeleton width="75%" height="1.5rem"></p-skeleton>
+                </div>
+            </li>
+        </ul>
+    </ng-container>
     <ng-container *ngIf="!isLoading">
-        <button pButton type="button" class="btn btn-primary" (click)="refreshComments()" [disabled]="isLoading">Refresh Comments</button>
-        <select [formControl]="filterSelect" (change)="threadComments()">
-            <option [value]="filterOptions.ALL">{{filterOptions.ALL}}</option>
-            <option [value]="filterOptions.RESOLVED">{{filterOptions.RESOLVED}}</option>
-            <option [value]="filterOptions.UNRESOLVED">{{filterOptions.UNRESOLVED}}</option>
-        </select>
-        <div *ngFor="let block of blocks">
+        <div class="sidebar-header">
+            <div class="sidebar-header__title p-my-4">
+                <h3 class="p-mb-2" *ngIf="commentCount > 1; else singleComment">{{ commentCount }} Comments</h3>
+                <ng-template #singleComment
+                    ><h3>{{ commentCount }} Comment</h3></ng-template
+                >
+                <span>{{ sidebarTitle }}</span>
+            </div>
+            <button
+                type="button"
+                class="p-button-text p-button-rounded p-button-plain"
+                pButton
+                icon="pi pi-times"
+                (click)="closeSidebar()"
+                (keydown.enter)="closeSidebar()"
+            ></button>
+        </div>
+        <p-selectButton
+            [options]="filterOptions"
+            [(ngModel)]="filterSelect"
+            (onChange)="threadComments()"
+            optionLabel="label"
+            optionValue="value"
+        ></p-selectButton>
+
+        <div *ngFor="let block of blocks; let i = index">
             <comment-thread-view
                 [blockId]="block.id"
                 [threadHeader]="block.label"
                 [commentDetails]="threadedComments[block.id] || []"
                 (onAdd)="onAdd($event)"
                 (onUpdate)="onUpdate($event)"
-                (onDelete)="onDelete($event)">
+                (onDelete)="onDelete($event)"
+                [index]="i"
+            >
             </comment-thread-view>
         </div>
     </ng-container>
-</div>
+</p-sidebar>

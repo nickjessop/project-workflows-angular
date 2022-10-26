@@ -1,0 +1,19 @@
+.thread {
+    padding-bottom: 200px;
+    &__header {
+        h2 {
+            margin: 0;
+        }
+    }
+    &__add {
+        width: 100%;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        border-top: 1px solid var(--surface-d);
+        background: white;
+    }
+    &__comments-comment {
+        border-top: solid var(--surface-d);
+    }
+}

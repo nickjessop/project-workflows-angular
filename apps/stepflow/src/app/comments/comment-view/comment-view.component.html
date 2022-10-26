@@ -1,15 +1,48 @@
-<div>
-    <i>{{commentDetail.authorDisplayName}} says: </i><strong>{{commentDetail.comment.body}}</strong>
-    <p>
-        Resolved: {{commentDetail.comment.resolved ? 'YUP' : 'NOPE'}} - 
-        <button type="button" class="btn btn-primary" (click)="toggleResolvedPressed()">
-            {{commentDetail.comment.resolved ? 'Unresolve' : 'Resolve'}}
-        </button>
-        <button type="button" class="btn btn-primary" (click)="editPressed()" [disabled]="!commentDetail.isEditable">
-            Edit
-        </button>
-        <button type="button" class="btn btn-warning" (click)="deletePressed()" [disabled]="!commentDetail.isDeletable">
-            Delete
-        </button>
-    </p>
+<div class="comment p-py-3">
+    <div class="p-d-flex p-flex-column">
+        <div class="p-d-flex p-align-center p-jc-between comment__meta">
+            <div class="p-d-flex p-align-center">
+                <img
+                    src="{{ commentDetail.authorProfileImage }}"
+                    alt="{{ commentDetail.authorDisplayName }}'s profile picture."
+                    width="30px"
+                    height="30px"
+                    class="p-mr-2 comment__image"
+                />
+                <div class="p-d-flex p-flex-column">
+                    <span class="comment__author">{{ commentDetail.authorDisplayName }}</span>
+                    <div
+                        pTooltip="{{ postedAtFormatted }}"
+                        tooltipPosition="bottom"
+                        class="ms-01 text-secondary"
+                        tooltipStyleClass="ms-01"
+                    >
+                        {{ postedAtRelative }}<br />
+                    </div>
+                </div>
+            </div>
+            <div class="p-d-flex p-align-center comment__meta-options">
+                <button
+                    type="button"
+                    pButton
+                    pRipple
+                    class="p-button-text p-button-plain"
+                    (click)="toggleResolvedPressed()"
+                    icon="{{ commentDetail.comment.resolved ? 'pi pi-times-circle' : 'pi pi-check-circle' }}"
+                    pTooltip="{{ commentDetail.comment.resolved ? 'Mark as open' : 'Mark as resolved' }}"
+                    tooltipPosition="left"
+                ></button>
+                <button
+                    type="button"
+                    class="p-button-text p-button-plain"
+                    pButton
+                    icon="pi pi-ellipsis-h"
+                    (click)="menu.toggle($event)"
+                    *ngIf="commentDetail.isEditable && commentDetail.isDeletable"
+                ></button>
+                <p-menu #menu [popup]="true" [model]="commentItems" appendTo="body"></p-menu>
+            </div>
+        </div>
+        <p class="comment__body p-py-1">{{ commentDetail.comment.body }}</p>
+    </div>
 </div>

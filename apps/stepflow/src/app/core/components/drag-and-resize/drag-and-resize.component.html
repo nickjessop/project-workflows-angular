@@ -88,6 +88,15 @@
             <div class="field__settings">
                 <button
                     *ngIf="canEditBlocks"
+                    (click)="onAddComment()"
+                    pButton
+                    type="button"
+                    icon="pi pi-comment"
+                    class="comment-button p-button-text p-button-plain"
+                    pTooltip="Add comment"
+                ></button>
+                <button
+                    *ngIf="canEditBlocks"
                     (click)="onEditBlock()"
                     pButton
                     type="button"

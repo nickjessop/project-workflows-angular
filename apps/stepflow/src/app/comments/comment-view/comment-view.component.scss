@@ -1,0 +1,20 @@
+.comment {
+    &__author {
+        font-weight: bold;
+    }
+    &__body {
+        word-wrap: break-word;
+        margin: 0;
+    }
+    &__image {
+        border-radius: 30px;
+    }
+    &:hover {
+        .comment__meta-options {
+            visibility: visible !important;
+        }
+    }
+    &__meta-options {
+        visibility: hidden !important;
+    }
+}

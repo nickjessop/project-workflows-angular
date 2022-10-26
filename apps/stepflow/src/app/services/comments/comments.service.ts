@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Comment, CommentCounts } from '@stepflow/interfaces';
+import { BlockConfig, Comment, CommentCounts } from '@stepflow/interfaces';
+import { BehaviorSubject } from 'rxjs';
 import { v4 as uuid } from 'uuid';
 import { AuthenticationService } from '../authentication/authentication.service';
 import { FirebaseService } from '../firebase/firebase.service';
@@ -9,11 +10,18 @@ import { FirebaseService } from '../firebase/firebase.service';
 })
 export class CommentsService {
     private readonly COMMENTS_COLLECTION = 'comments';
+    private _blockID: BehaviorSubject<BlockConfig['id']> = new BehaviorSubject<BlockConfig['id']>(undefined);
+    public readonly blockID$ = this._blockID.asObservable();
 
-    constructor(private firebaseService: FirebaseService, private authenticationService: AuthenticationService) {}
+    constructor(private firebaseService: FirebaseService, private authenticationService: AuthenticationService) {
+        console.log(this.blockID$);
+    }
+
+    public setBlockId(blockID: BlockConfig['id']) {
+        this._blockID.next(blockID);
+    }
 
     // API Methods
-
     public async listComments(blockIds: string[]): Promise<Comment[]> {
         return this.firebaseService.db
             .collection(this.COMMENTS_COLLECTION)

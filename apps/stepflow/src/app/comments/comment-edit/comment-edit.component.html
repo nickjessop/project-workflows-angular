@@ -1,17 +1,25 @@
-<div>
+<div class="edit">
     <form [formGroup]="formGroup">
-        <div class="form-group">
-            <label for="comment">Comment</label>
-            <textarea class="form-control" id="comment" formControlName="body" rows="3"></textarea>
+        <div class="edit__form-group p-p-2">
+            <textarea class="form-control" id="comment" formControlName="body" autosize></textarea>
+            <button
+                pButton
+                pRipple
+                type="button"
+                icon="pi pi-arrow-up"
+                aria-label="Comment"
+                class="p-button-rounded"
+                (click)="onSubmitPressed()"
+                [disabled]="!formGroup.valid || (commentDetail && !commentDetail?.isEditable)"
+            ></button>
         </div>
     </form>
-    <button 
-        pButton 
-        type="button" 
-        class="btn btn-primary" 
-        (click)="onSubmitPressed()" 
-        [disabled]="!formGroup.valid || (commentDetail && !commentDetail?.isEditable)">
-            Submit
-    </button>
-    <button type="button" class="btn btn-default" (click)="onCancelPressed()">Cancel</button>
+    <!-- <p-button
+        label="Comment"
+        (click)="onSubmitPressed()"
+        [disabled]="!formGroup.valid || (commentDetail && !commentDetail?.isEditable)"
+    ></p-button> -->
+    <!-- (keydown)="handleTextAreaHeight($event)" -->
+
+    <!-- <p-button label="Cancel" styleClass="p-button-link" (click)="onCancelPressed()"></p-button> -->
 </div>
