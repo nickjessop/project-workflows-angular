@@ -51,8 +51,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
         this.displayProfileModal = false;
     }
 
-    public async onProfileImageUploadSelected($event: { files: File[] }) {
+    public async onProfileImageUploadSelected($event: { files: File[] }, uploaderElement: any) {
         await this.authService.changeProfilePhoto($event.files[0]);
+        uploaderElement.clear();
         this.displayProfileModal = false;
     }
 

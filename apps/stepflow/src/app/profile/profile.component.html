@@ -113,6 +113,7 @@
                         />
                     </ng-template>
                     <p-fileUpload
+                        #fileUploader
                         mode="basic"
                         name="profileImageUpload"
                         customUpload="true"
@@ -120,7 +121,7 @@
                         maxFileSize="1000000"
                         fileLimit="1"
                         chooseLabel="Upload profile image"
-                        (uploadHandler)="onProfileImageUploadSelected($event)"
+                        (uploadHandler)="onProfileImageUploadSelected($event, fileUploader)"
                         styleClass="p-button-text p-button-text-hover p-ml-3"
                         [auto]="true"
                     ></p-fileUpload>
