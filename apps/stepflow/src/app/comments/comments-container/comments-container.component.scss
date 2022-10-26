@@ -1,0 +1,13 @@
+:host ::ng-deep .comment-sidebar.comment-sidebar .p-sidebar-header {
+    display: none;
+}
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    &__title {
+        h3 {
+            margin: 0;
+        }
+    }
+}

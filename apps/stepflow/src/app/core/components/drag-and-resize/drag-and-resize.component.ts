@@ -3,6 +3,7 @@ import { BlockConfig, ComponentMetadata, ComponentMode, ComponentSettings } from
 import { ResizeEvent } from 'angular-resizable-element';
 import { MenuItem } from 'primeng/api';
 import { Subscription } from 'rxjs';
+import { CommentsService } from '../../../services/comments/comments.service';
 import { ProjectService } from '../../../services/project/project.service';
 import { CoreComponentService } from '../../core-component.service';
 
@@ -35,7 +36,11 @@ export class DragAndResizeComponent {
         },
     ];
 
-    constructor(private projectService: ProjectService, private coreComponentService: CoreComponentService) {}
+    constructor(
+        private projectService: ProjectService,
+        private coreComponentService: CoreComponentService,
+        private commentsService: CommentsService
+    ) {}
 
     ngOnInit() {
         this.subscriptions.add(
@@ -58,6 +63,10 @@ export class DragAndResizeComponent {
     public onEditBlock() {
         this.componentMode.emit('edit');
         this.editMode = true;
+    }
+
+    public onAddComment() {
+        this.commentsService.setBlockId(this.field.id);
     }
 
     public onSaveBlock() {

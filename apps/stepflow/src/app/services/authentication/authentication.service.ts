@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Project, Role, User, UserPlan } from '@stepflow/interfaces';
-import { union as _union } from 'lodash';
 import firebase from 'firebase';
+import { union as _union } from 'lodash';
 import { MessageService } from 'primeng/api';
 import { BehaviorSubject, from, Subscription } from 'rxjs';
 import { FirebaseService } from '../firebase/firebase.service';
@@ -581,29 +581,26 @@ export class AuthenticationService {
             }
         });
     }
-
-    public async getUsers(userIds: string[]): Promise<{ [key: string]: User }> {
+    public async getUsers(userIds: string[]) {
         userIds = userIds.filter((value, index, self) => self.indexOf(value) === index);
-
-        let users: { [key: string]: User } = {};
-        for await (const userId of userIds) {
-            const user = await this.getUser(userId);
-            if (user) users[userId] = user;
-        }
-
+        const users = await this.getUser(userIds);
+        console.log(users);
         return users;
     }
 
-    public async getUser(userId: string): Promise<User | null> {
+    public async getUser(userIds: string[]) {
         return this.firebaseService.db
             .collection(this.USER_COLLECTION_NAME)
-            .doc(userId)
+            .where(this.firebaseService.fieldPathId, 'in', userIds)
             .get()
             .then(
                 querySnapshot => {
-                    let user = querySnapshot.data() as User;
-                    user.id = querySnapshot.id;
-                    return user;
+                    const userData: Map<string, User> = new Map();
+                    querySnapshot.docs.forEach(doc => {
+                        const user = doc.data() as User;
+                        userData.set(doc.id, user);
+                    });
+                    return userData;
                 },
                 error => {
                     console.log(error);
