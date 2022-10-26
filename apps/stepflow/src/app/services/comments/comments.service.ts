@@ -13,9 +13,7 @@ export class CommentsService {
     private _blockID: BehaviorSubject<BlockConfig['id']> = new BehaviorSubject<BlockConfig['id']>(undefined);
     public readonly blockID$ = this._blockID.asObservable();
 
-    constructor(private firebaseService: FirebaseService, private authenticationService: AuthenticationService) {
-        console.log(this.blockID$);
-    }
+    constructor(private firebaseService: FirebaseService, private authenticationService: AuthenticationService) {}
 
     public setBlockId(blockID: BlockConfig['id']) {
         this._blockID.next(blockID);
