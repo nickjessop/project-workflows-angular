@@ -1,7 +1,7 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { BlockConfig, ComponentMetadata, ComponentMode, ComponentSettings } from '@stepflow/interfaces';
 import { ResizeEvent } from 'angular-resizable-element';
-import { MenuItem } from 'primeng/api';
+import { ConfirmationService, MenuItem } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import { CommentsService } from '../../../services/comments/comments.service';
 import { ProjectService } from '../../../services/project/project.service';
@@ -12,7 +12,7 @@ import { CoreComponentService } from '../../core-component.service';
     templateUrl: './drag-and-resize.component.html',
     styleUrls: ['./drag-and-resize.component.scss'],
 })
-export class DragAndResizeComponent {
+export class DragAndResizeComponent implements OnInit {
     @Input() isDraggable = false;
     @Input() field: BlockConfig = this.coreComponentService.createBlockConfig('richTextInput');
     @Input() index = 0;
@@ -39,7 +39,8 @@ export class DragAndResizeComponent {
     constructor(
         private projectService: ProjectService,
         private coreComponentService: CoreComponentService,
-        private commentsService: CommentsService
+        private commentsService: CommentsService,
+        private confirmationService: ConfirmationService
     ) {}
 
     ngOnInit() {
@@ -74,7 +75,13 @@ export class DragAndResizeComponent {
     }
 
     public onDeleteBlock() {
-        this.projectService.deleteProjectBlock(this.index);
+        this.confirmationService.confirm({
+            message: 'Are you sure that you want to delete this block? This action cannot be undone.',
+            key: this.field.id,
+            accept: () => {
+                this.projectService.deleteProjectBlock(this.index);
+            },
+        });
     }
 
     public dragStarted() {

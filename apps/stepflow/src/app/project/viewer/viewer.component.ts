@@ -35,15 +35,15 @@ export class ViewerComponent implements OnDestroy {
         }
 
         this.subscriptions.push(
-            this.projectService.projectConfig$.subscribe((result) => {
-                this.currentStep = result?.configuration?.find((stepConfig) => {
+            this.projectService.projectConfig$.subscribe(result => {
+                this.currentStep = result?.configuration?.find(stepConfig => {
                     return stepConfig.step.isCurrentStep;
                 });
             })
         );
 
         this.subscriptions.push(
-            this.projectService.modesAvailable$.subscribe((val) => {
+            this.projectService.modesAvailable$.subscribe(val => {
                 if (val.allowedProjectModes.configure === true) {
                     this.canConfigureProject = true;
                 }
