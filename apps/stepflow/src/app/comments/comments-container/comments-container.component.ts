@@ -70,7 +70,7 @@ export class CommentsContainerComponent implements OnInit {
     ngOnInit() {
         this.commentsService.blockID$.subscribe(value => {
             this.selectedblockId = value;
-            if (this.selectedblockId != undefined) {
+            if (this.selectedblockId) {
                 this.displayCommentSidebar = true;
             }
             this.refreshComments();
@@ -79,12 +79,13 @@ export class CommentsContainerComponent implements OnInit {
 
     async refreshComments(): Promise<void> {
         this.isLoading = true;
-        let blockIds: string[];
-        if (this.selectedblockId != undefined) {
-            blockIds = [this.selectedblockId];
-        } else {
-            blockIds = this.blocks.filter(block => !!block.id).map(block => block.id!);
-        }
+        const ids: string[] = [];
+
+        this.blocks.forEach(block => {
+            if (block.id) ids.push(block.id);
+        });
+        const blockIds = this.selectedblockId ? [this.selectedblockId] : ids;
+
         await this.getComments(blockIds);
         await this.getUsers();
         this.threadComments();
@@ -92,7 +93,10 @@ export class CommentsContainerComponent implements OnInit {
         this.isLoading = false;
     }
 
-    private async getComments(blockIds: string[]): Promise<void> {
+    private async getComments(blockIds?: string[]): Promise<void> {
+        if (!blockIds?.length) {
+            return;
+        }
         const comments = await this.commentsService.listComments(blockIds);
         this.comments = comments;
         // check block id first and if there filter comments else fetch all
