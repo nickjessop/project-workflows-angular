@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Project, Role, User, UserPlan } from '@stepflow/interfaces';
 import firebase from 'firebase';
+import * as _ from 'lodash';
 import { union as _union } from 'lodash';
 import { MessageService } from 'primeng/api';
 import { BehaviorSubject, from, Subscription } from 'rxjs';
@@ -427,17 +428,16 @@ export class AuthenticationService {
         // Update our custom user's collection with new metadata
         const success = await this.updateUserMetaData({ photoFilePath, firstName, lastName, email });
 
-        if (success) {
-            this.messageService.add({
-                severity: 'success',
-                key: 'global-toast',
-                life: 5000,
-                closable: true,
-                detail: 'Profile updated',
-            });
-
-            this.user = success;
-        }
+        return success;
+        // if (success) {
+        //     this.messageService.add({
+        //         severity: 'success',
+        //         key: 'global-toast',
+        //         life: 5000,
+        //         closable: true,
+        //         detail: 'Profile updated',
+        //     });
+        // }
     }
 
     public async changeProfilePhoto(file?: File) {
@@ -470,6 +470,8 @@ export class AuthenticationService {
             await firebaseUser!.updateProfile({ photoURL: downloadUrl });
 
             const success = await this.updateUserMetaData({ photoFilePath: filePath });
+
+            this.user = { ...this.user, ...success, photoURL: downloadUrl };
 
             return success;
         } catch (e) {
