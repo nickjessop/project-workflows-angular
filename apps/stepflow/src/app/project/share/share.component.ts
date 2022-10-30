@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Project, ProjectUsers, Role, SharePermission } from '@stepflow/interfaces';
 import * as _ from 'lodash';
-import { MenuItem, MessageService } from 'primeng/api';
+import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
 import { AuthenticationService } from '../../services/authentication/authentication.service';
 import { ProjectService } from '../../services/project/project.service';
 
@@ -42,13 +42,18 @@ export class ShareComponent implements OnInit {
     constructor(
         public projectService: ProjectService,
         private messageService: MessageService,
-        public authenticationService: AuthenticationService
+        public authenticationService: AuthenticationService,
+        private confirmationService: ConfirmationService
     ) {}
 
     ngOnInit(): void {
         if (this.project) {
             this.projectService.getProjectUserDetails(this.project.memberRoles).then(result => {
-                this.projectUsers = result?.filter(user => user.role != 'owner');
+                const sortedResult = [
+                    ...(result as ProjectUsers[])?.filter(user => user.role === 'owner'),
+                    ...(result as ProjectUsers[])?.filter(user => user.role != 'owner'),
+                ];
+                this.projectUsers = sortedResult as ProjectUsers[];
                 //TODO users can add new owners and owners can change each other's roles (this is how G docs goes about it but would need to think about it some more)
                 this.projectOwners = result?.filter(user => user.role === 'owner');
             });
@@ -190,7 +195,16 @@ export class ShareComponent implements OnInit {
         ];
     }
 
-    public async onRemoveUser(userId: string, email: string) {
+    public onRemoveUser(userId: string, email: string) {
+        this.confirmationService.confirm({
+            message: 'Are you sure that you want to remove this user from your project? This action cannot be undone.',
+            accept: () => {
+                this.removeProjectMember(userId, email);
+            },
+        });
+    }
+
+    public async removeProjectMember(userId: string, email: string) {
         const removeMemberResult = await this.projectService.removeProjectMember(userId);
         if (removeMemberResult == true) {
             this.messageService.add({
@@ -208,21 +222,6 @@ export class ShareComponent implements OnInit {
             });
         }
     }
-
-    // copyInputMessage(linkInput: any) {
-    //     linkInput.select();
-    //     document.execCommand('copy');
-    //     linkInput.setSelectionRange(0, 0);
-    //     this.messageService.add({
-    //         key: 'global-toast',
-    //         severity: 'success',
-    //         detail: 'Link copied',
-    //     });
-    // }
-
-    // hideLinkCopiedMsg() {
-    //     this.linkCopiedMsg = [];
-    // }
 
     public enableShareLink(event: any) {
         if (event.checked === true) {
