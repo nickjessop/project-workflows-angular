@@ -62,7 +62,7 @@
                     </ng-container>
                 </td>
                 <td style="width: 50%">{{ user.email }}</td>
-                <td style="width: 30%" style="text-align: center;">
+                <td style="width: 30%" style="text-align: center; justify-content: end;">
                     <ng-container *ngIf="user.role != 'owner'; else indicateOwner">
                         <p-dropdown
                             appendTo="body"
@@ -86,7 +86,9 @@
                         ></p-menu>
                     </ng-container>
                     <ng-template #indicateOwner>
-                        <i [style]="{ height: '32px' }" class="p-d-flex p-align-center">{{ user.role }}</i>
+                        <i [style]="{ height: '32px' }" class="p-d-flex p-align-center p-pr-2"
+                            >Project {{ user.role }}</i
+                        >
                     </ng-template>
                 </td>
             </tr>
