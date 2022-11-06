@@ -78,6 +78,7 @@ export class DragAndResizeComponent implements OnInit {
         this.confirmationService.confirm({
             message: 'Are you sure that you want to delete this block? This action cannot be undone.',
             key: this.field.id,
+            header: 'Delete block?',
             accept: () => {
                 this.projectService.deleteProjectBlock(this.index);
             },

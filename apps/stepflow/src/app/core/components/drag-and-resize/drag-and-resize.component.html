@@ -112,7 +112,7 @@
         </div>
     </ng-template>
     <ng-template #transposedContent><ng-content></ng-content></ng-template>
-    <p-confirmDialog #cd header="Delete block?" icon="pi pi-exclamation-triangle" key="{{ field.id }}">
+    <p-confirmDialog #bd header="Delete block?" icon="pi pi-exclamation-triangle" key="{{ field.id }}">
         <ng-template pTemplate="footer">
             <button
                 type="button"
@@ -120,9 +120,9 @@
                 icon="pi pi-trash"
                 class="p-button-danger"
                 label="Delete block"
-                (click)="cd.accept()"
+                (click)="bd.accept()"
             ></button>
-            <button type="button" pButton class="p-button-secondary" label="Cancel" (click)="cd.reject()"></button>
+            <button type="button" pButton class="p-button-secondary" label="Cancel" (click)="bd.reject()"></button>
         </ng-template>
     </p-confirmDialog>
 </div>
