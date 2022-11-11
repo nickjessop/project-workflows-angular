@@ -1,0 +1,23 @@
+{
+    "root": "libs/interfaces",
+    "sourceRoot": "libs/interfaces/src",
+    "projectType": "library",
+    "generators": {},
+    "targets": {
+        "lint": {
+            "executor": "@nrwl/angular:tslint",
+            "options": {
+                "tsConfig": ["libs/interfaces/tsconfig.lib.json", "libs/interfaces/tsconfig.spec.json"],
+                "exclude": ["**/node_modules/**", "!libs/interfaces/**"]
+            }
+        },
+        "test": {
+            "executor": "@nrwl/jest:jest",
+            "options": {
+                "jestConfig": "libs/interfaces/jest.config.js",
+                "tsConfig": "libs/interfaces/tsconfig.spec.json",
+                "passWithNoTests": true
+            }
+        }
+    }
+}
