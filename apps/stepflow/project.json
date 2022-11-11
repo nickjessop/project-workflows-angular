@@ -1,0 +1,120 @@
+{
+    "projectType": "application",
+    "generators": {
+        "@schematics/angular:component": {
+            "style": "scss"
+        }
+    },
+    "root": "apps/stepflow",
+    "sourceRoot": "apps/stepflow/src",
+    "prefix": "app",
+    "targets": {
+        "build": {
+            "executor": "@angular-devkit/build-angular:browser",
+            "options": {
+                "outputPath": "dist/apps/stepflow",
+                "index": "apps/stepflow/src/index.html",
+                "main": "apps/stepflow/src/main.ts",
+                "polyfills": "apps/stepflow/src/polyfills.ts",
+                "tsConfig": "apps/stepflow/tsconfig.app.json",
+                "aot": true,
+                "assets": [
+                    "apps/stepflow/src/favicon.ico",
+                    "apps/stepflow/src/assets"
+                ],
+                "styles": [
+                    "node_modules/primeng/resources/themes/saga-blue/theme.css",
+                    "node_modules/primeng/resources/primeng.min.css",
+                    "node_modules/primeicons/primeicons.css",
+                    "node_modules/primeflex/primeflex.css",
+                    "node_modules/quill/dist/quill.core.css",
+                    "node_modules/quill/dist/quill.snow.css",
+                    "apps/stepflow/src/sass/styles.scss"
+                ],
+                "stylePreprocessorOptions": {
+                    "includePaths": [
+                        "apps/stepflow/src/sass"
+                    ]
+                },
+                "scripts": [
+                    "node_modules/quill/dist/quill.js"
+                ]
+            },
+            "configurations": {
+                "production": {
+                    "fileReplacements": [
+                        {
+                            "replace": "apps/stepflow/src/environments/environment.ts",
+                            "with": "apps/stepflow/src/environments/environment.prod.ts"
+                        }
+                    ],
+                    "optimization": true,
+                    "outputHashing": "all",
+                    "sourceMap": false,
+                    "namedChunks": false,
+                    "aot": true,
+                    "extractLicenses": true,
+                    "vendorChunk": false,
+                    "buildOptimizer": true,
+                    "budgets": [
+                        {
+                            "type": "initial",
+                            "maximumWarning": "2mb",
+                            "maximumError": "5mb"
+                        }
+                    ]
+                },
+                "dev": {
+                    "optimization": false,
+                    "aot": false,
+                    "buildOptimizer": false,
+                    "budgets": [
+                        {
+                            "type": "initial",
+                            "maximumWarning": "2mb",
+                            "maximumError": "5mb"
+                        }
+                    ],
+                    "sourceMap": true,
+                    "namedChunks": true,
+                    "extractLicenses": true,
+                    "vendorChunk": true
+                }
+            }
+        },
+        "serve": {
+            "executor": "@angular-devkit/build-angular:dev-server",
+            "options": {
+                "browserTarget": "stepflow:build",
+                "port": 4200,
+                "proxyConfig": "apps/stepflow/src/proxy.conf.json"
+            },
+            "configurations": {
+                "production": {
+                    "browserTarget": "stepflow:build:production"
+                },
+                "dev": {
+                    "browserTarget": "stepflow:build:dev"
+                }
+            }
+        },
+        "extract-i18n": {
+            "executor": "@angular-devkit/build-angular:extract-i18n",
+            "options": {
+                "browserTarget": "stepflow:build"
+            }
+        },
+        "lint": {
+            "executor": "@nrwl/linter:eslint",
+            "options": {
+                "tsConfig": [
+                    "apps/stepflow/tsconfig.app.json",
+                    "apps/stepflow/tsconfig.spec.json"
+                ],
+                "exclude": [
+                    "**/node_modules/**"
+                ]
+            }
+        }
+    }
+}
