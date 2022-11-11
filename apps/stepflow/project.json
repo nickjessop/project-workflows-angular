@@ -1,5 +1,6 @@
 {
     "projectType": "application",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
     "generators": {
         "@schematics/angular:component": {
             "style": "scss"
@@ -18,7 +19,10 @@
                 "polyfills": "apps/stepflow/src/polyfills.ts",
                 "tsConfig": "apps/stepflow/tsconfig.app.json",
                 "aot": true,
-                "assets": ["apps/stepflow/src/favicon.ico", "apps/stepflow/src/assets"],
+                "assets": [
+                    "apps/stepflow/src/favicon.ico",
+                    "apps/stepflow/src/assets"
+                ],
                 "styles": [
                     "node_modules/primeng/resources/themes/saga-blue/theme.css",
                     "node_modules/primeng/resources/primeng.min.css",
@@ -29,9 +33,13 @@
                     "apps/stepflow/src/sass/styles.scss"
                 ],
                 "stylePreprocessorOptions": {
-                    "includePaths": ["apps/stepflow/src/sass"]
+                    "includePaths": [
+                        "apps/stepflow/src/sass"
+                    ]
                 },
-                "scripts": ["node_modules/quill/dist/quill.js"]
+                "scripts": [
+                    "node_modules/quill/dist/quill.js"
+                ]
             },
             "configurations": {
                 "production": {
@@ -100,8 +108,13 @@
         "lint": {
             "executor": "@nrwl/linter:eslint",
             "options": {
-                "tsConfig": ["apps/stepflow/tsconfig.app.json", "apps/stepflow/tsconfig.spec.json"],
-                "exclude": ["**/node_modules/**"]
+                "tsConfig": [
+                    "apps/stepflow/tsconfig.app.json",
+                    "apps/stepflow/tsconfig.spec.json"
+                ],
+                "exclude": [
+                    "**/node_modules/**"
+                ]
             }
         }
     }
