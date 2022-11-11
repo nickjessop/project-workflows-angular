@@ -1,6 +1,5 @@
 {
     "projectType": "application",
-    "$schema": "../../node_modules/nx/schemas/project-schema.json",
     "generators": {
         "@schematics/angular:component": {
             "style": "scss"
