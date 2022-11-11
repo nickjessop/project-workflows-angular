@@ -261,3 +261,9 @@ export type CommentCounts = {
     resolved: number;
     unresolved: number;
 };
+
+export const USER_COLLECTION_NAME = 'users';
+export const PROJECTS_COLLECTION = 'projects';
+export const INVITATION_COLLECTION = 'invitations';
+export const COMMENTS_COLLECTION = 'comments';
+export const SHARE_COLLECTION = 'shareLinks';
