@@ -81,7 +81,10 @@ export class UserService {
 
             const success = await this.authService.updateUserMetaData({ photoFilePath: filePath });
 
-            return success;
+            const updatedUser = { ...currentUser, ...success, photoURL: downloadUrl };
+            this.authService.user = updatedUser;
+
+            return true;
         } catch (e) {
             return false;
         }

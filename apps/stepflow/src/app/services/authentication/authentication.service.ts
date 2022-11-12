@@ -236,10 +236,7 @@ export class AuthenticationService {
             });
         });
 
-        const updatedUser = { ...this.user, ...update };
-        this.user = updatedUser;
-
-        return updatedUser;
+        return update;
     }
 
     public login(email: string, password: string) {
