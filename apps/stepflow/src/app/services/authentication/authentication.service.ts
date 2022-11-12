@@ -236,7 +236,10 @@ export class AuthenticationService {
             });
         });
 
-        return update;
+        const updatedUser = { ...this.user, ...update };
+        this.user = updatedUser;
+
+        return updatedUser;
     }
 
     public login(email: string, password: string) {
@@ -287,20 +290,21 @@ export class AuthenticationService {
         });
     }
 
-    public reAuthenticateUser(userProvidedPassword: string): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const user = this.getCurrentUser();
-            if (user && user.email) {
-                const credential = this.firebaseService.provider.emailAuth.credential(user.email, userProvidedPassword);
-                user.reauthenticateWithCredential(credential)
-                    .then(function() {
-                        resolve({ success: true });
-                    })
-                    .catch(error => {
-                        reject(error);
-                    });
-            }
-        });
+    public async reAuthenticateUser(userProvidedPassword: string) {
+        const currentUser = this.getCurrentUser();
+        if (!currentUser || !currentUser.email) {
+            return false;
+        }
+
+        const credential = this.firebaseService.provider.emailAuth.credential(currentUser.email, userProvidedPassword);
+        return currentUser
+            .reauthenticateWithCredential(credential)
+            .catch(e => {
+                return false;
+            })
+            .then(success => {
+                return success;
+            });
     }
 
     public findUsersMatchingEmail(emails: string[]) {

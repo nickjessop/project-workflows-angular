@@ -81,40 +81,35 @@ export class UserService {
 
             const success = await this.authService.updateUserMetaData({ photoFilePath: filePath });
 
-            this.user = { ...this.user, ...success, photoURL: downloadUrl };
-
             return success;
         } catch (e) {
             return false;
         }
     }
 
-    public updateEmail(email: string, userProvidedPassword: string): Promise<any> {
-        // TODO: update email in user collection as well.. or switch to a different Auth provider?
-        return new Promise((resolve, reject) => {
-            const actionCodeSettings = {
-                url: 'https://app.stepflow.co/profile',
-            };
+    public async updateEmail(email: string, userProvidedPassword: string) {
+        const actionCodeSettings = {
+            url: 'https://app.stepflow.co/profile',
+        };
+        const currentUser = this.authService.getCurrentUser();
+        if (!currentUser) {
+            return false;
+        }
 
-            const currentUser = this.authService.getCurrentUser();
-            if (currentUser) {
-                this.authService
-                    .reAuthenticateUser(userProvidedPassword)
-                    .then(() => {
-                        currentUser
-                            .verifyBeforeUpdateEmail(email, actionCodeSettings)
-                            .then(() => {
-                                resolve({ success: true });
-                            })
-                            .catch((error: Error) => {
-                                reject(error);
-                            });
-                    })
-                    .catch((error: Error) => {
-                        return false;
-                    });
-            }
-        });
+        const reauthSuccess = await this.authService.reAuthenticateUser(userProvidedPassword);
+
+        if (!reauthSuccess) {
+            return false;
+        }
+
+        return currentUser
+            .verifyBeforeUpdateEmail(email, actionCodeSettings)
+            .catch(e => {
+                return false;
+            })
+            .then(success => {
+                return success;
+            });
     }
 
     public updatePassword(userProvidedPassword: string) {
