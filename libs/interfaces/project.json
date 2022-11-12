@@ -1,14 +1,23 @@
 {
     "root": "libs/interfaces",
     "sourceRoot": "libs/interfaces/src",
+    "tags": [
+        "scope:shared"
+    ],
     "projectType": "library",
     "generators": {},
     "targets": {
         "lint": {
             "executor": "@nrwl/angular:tslint",
             "options": {
-                "tsConfig": ["libs/interfaces/tsconfig.lib.json", "libs/interfaces/tsconfig.spec.json"],
-                "exclude": ["**/node_modules/**", "!libs/interfaces/**"]
+                "tsConfig": [
+                    "libs/interfaces/tsconfig.lib.json",
+                    "libs/interfaces/tsconfig.spec.json"
+                ],
+                "exclude": [
+                    "**/node_modules/**",
+                    "!libs/interfaces/**"
+                ]
             }
         },
         "test": {
