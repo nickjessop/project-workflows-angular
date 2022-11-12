@@ -4,15 +4,19 @@ import { Router } from '@angular/router';
 import {
     allowedModes,
     BlockConfig,
+    INVITATION_COLLECTION,
     Project,
     ProjectMode,
+    PROJECTS_COLLECTION,
     ProjectUsers,
     Role,
     ShareLink,
     SharePermission,
+    SHARE_COLLECTION,
     Status,
     Step,
     StepConfig,
+    USER_COLLECTION_NAME,
 } from '@stepflow/interfaces';
 import * as _ from 'lodash';
 import { BehaviorSubject, from } from 'rxjs';
@@ -25,9 +29,6 @@ import { FirebaseService } from '../firebase/firebase.service';
     providedIn: 'root',
 })
 export class ProjectService {
-    private readonly PROJECT_COLLECTION = 'projects';
-    private readonly INVITATION_COLLECTION = 'projects';
-    private readonly SHARE_COLLECTION = 'shareLinks';
     private _projectConfig: BehaviorSubject<Project> = new BehaviorSubject<Project>(this.createBaseProject('', '', ''));
     public readonly projectConfig$ = this._projectConfig.asObservable();
     public isDragging: EventEmitter<boolean> = new EventEmitter();
@@ -240,7 +241,7 @@ export class ProjectService {
         const baseProject = this.createBaseProject(userId || '', projectName, projectDescription);
 
         const proj = await this.firebaseService.db
-            .collection(this.PROJECT_COLLECTION)
+            .collection(PROJECTS_COLLECTION)
             .add(baseProject)
             .then(
                 async documentRef => {
@@ -260,7 +261,7 @@ export class ProjectService {
     //TODO: Add firebase rule to check that users are authorized to edit this project
     public updateProject(projectConfig: Project, shouldMerge = true) {
         return this.firebaseService.db
-            .collection(this.PROJECT_COLLECTION)
+            .collection(PROJECTS_COLLECTION)
             .doc(projectConfig.id)
             .set(projectConfig, { merge: shouldMerge })
             .then(
@@ -277,7 +278,7 @@ export class ProjectService {
 
     public deleteProject(projectId: string) {
         return this.firebaseService.db
-            .collection(this.PROJECT_COLLECTION)
+            .collection(PROJECTS_COLLECTION)
             .doc(projectId)
             .delete()
             .then(
@@ -291,7 +292,7 @@ export class ProjectService {
     }
 
     public getAllProjectIds() {
-        return from(this.firebaseService.db.collection(`${this.PROJECT_COLLECTION}`).get());
+        return from(this.firebaseService.db.collection(PROJECTS_COLLECTION).get());
     }
 
     public async getProjectUserDetails(projectMemberRoles: Project['memberRoles']) {
@@ -401,7 +402,7 @@ export class ProjectService {
     public async getProjects() {
         const userId = this.authenticationService.user?.id || '';
 
-        const ref = this.firebaseService.db.collection(this.PROJECT_COLLECTION);
+        const ref = this.firebaseService.db.collection(PROJECTS_COLLECTION);
 
         const projects = await ref.where('members', 'array-contains', userId).get();
         const _projects = projects.docs.map(items => {
@@ -417,9 +418,9 @@ export class ProjectService {
     public getMyProjects() {
         const userId = this.authenticationService.user?.id || '';
 
-        const ref = this.firebaseService.db.collection(this.PROJECT_COLLECTION);
+        const ref = this.firebaseService.db.collection(PROJECTS_COLLECTION);
 
-        return from(ref.where('members', 'array-contains', { userId: userId, role: 'owner' }).get()).pipe(
+        return from(ref.where('members', 'array-contains', { userId, role: 'owner' }).get()).pipe(
             map(data => {
                 const projects = data.docs.map(items => {
                     return items.data();
@@ -438,7 +439,7 @@ export class ProjectService {
 
     public async ownerLookup(memberRoles: [{ userId: string; role: Role }]) {
         const ownerId = memberRoles.filter(member => member.role.includes('owner'));
-        const userRef = this.firebaseService.db.collection('users').doc(ownerId[0].userId);
+        const userRef = this.firebaseService.db.collection(USER_COLLECTION_NAME).doc(ownerId[0].userId);
         try {
             const doc = await userRef.get();
             if (doc.exists) {
@@ -455,7 +456,7 @@ export class ProjectService {
         }
     }
 
-    public async updateProjectRoles(projectRoles: { userId: string; role: Role }[]) {
+    public async updateProjectRoles(projectRoles: Array<{ userId: string; role: Role }>) {
         const _projectConfig = _.cloneDeep(this.projectConfig);
         _projectConfig.memberRoles = projectRoles;
 
@@ -465,7 +466,7 @@ export class ProjectService {
 
     public subscribeAndSetProject(projectId: string, sharePermission?: SharePermission, override?: SharePermission) {
         this.unsubscribeToProjectListener = this.firebaseService.db
-            .collection(this.PROJECT_COLLECTION)
+            .collection(PROJECTS_COLLECTION)
             .doc(projectId)
             .onSnapshot(
                 document => {
@@ -537,6 +538,68 @@ export class ProjectService {
             );
     }
 
+    public checkNewUserProjects(email: string) {
+        const db = this.firebaseService.db;
+        const invitationRef = db.collection(INVITATION_COLLECTION);
+        const projects: Array<{ id: string; projectId: string; role: Role }> = [];
+        invitationRef
+            .where('email', '==', email)
+            .get()
+            .then(async querySnapshot => {
+                querySnapshot.forEach(doc => {
+                    projects.push({
+                        id: doc.id,
+                        projectId: doc.data().project.id,
+                        role: doc.data().role,
+                    });
+                    doc.ref.delete();
+                });
+                const addNewUsersToProjects = await this.addNewUserToProjects(email, projects);
+                return addNewUsersToProjects;
+            });
+    }
+
+    private async addNewUserToProjects(email: string, projects: Array<{ projectId: string; role: Role }>) {
+        const userId = this.authenticationService.getCurrentUser()?.uid;
+        if (!projects || !email || !userId) {
+            return;
+        }
+        const db = this.firebaseService.db;
+
+        projects.forEach(async (project, index) => {
+            try {
+                await db.runTransaction(async transaction => {
+                    const projectRef = db.collection(PROJECTS_COLLECTION).doc(project.projectId);
+                    const doc = await transaction.get(projectRef);
+
+                    if (!doc.exists) {
+                        return;
+                    }
+                    const _project = doc.data() as Project;
+                    const newMember: Array<{ userId: string; role: Role }> = [{ userId, role: project.role }];
+                    let _memberRoles: Array<{ userId: string; role: Role }>;
+                    let _members: string[];
+                    _members = _project.members;
+                    _memberRoles = _project.memberRoles;
+                    const members = _.union(_members, [userId]);
+                    const memberRoles = _.union(_memberRoles, newMember);
+
+                    const _pendingMembers = _project?.pendingMembers?.filter(pendingMember => {
+                        return pendingMember !== email;
+                    });
+
+                    transaction.update(projectRef, {
+                        memberRoles,
+                        members,
+                        pendingMembers: _pendingMembers,
+                    });
+                });
+            } catch (e) {
+                console.log(`error running transaction ${e}`);
+            }
+        });
+    }
+
     public async sendProjectInvitations(emails: string[], role: Role) {
         const addMemberResult = await this.addNewProjectMembers(emails, role);
         console.log(addMemberResult);
@@ -545,7 +608,7 @@ export class ProjectService {
         }
         const callable = this.firebaseService.function.httpsCallable('invitationEmail');
         return callable({
-            emails: emails,
+            emails,
             subject: `${this.projectConfig?.name} - Invitation to collaborate`,
             projectName: `${this.projectConfig?.name}`,
             projectSender: `${this.authenticationService.getCurrentUser()?.displayName}`,
@@ -571,8 +634,8 @@ export class ProjectService {
             .findUsersMatchingEmail(emails)
             .then(async users => {
                 const _projectConfig = _.cloneDeep(this.projectConfig);
-                const newMembers: { userId: string; role: Role }[] = [];
-                const pendingMembers: { email: string; role: Role }[] = [];
+                const newMembers: Array<{ userId: string; role: Role }> = [];
+                const pendingMembers: Array<{ email: string; role: Role }> = [];
 
                 // combine existing members and pending members with new ones
                 if (users?.newMembers) {
@@ -582,7 +645,7 @@ export class ProjectService {
                     _projectConfig.members = _.union(_projectConfig.members, users.newMembers);
                     _projectConfig.memberRoles = _.union(_projectConfig.memberRoles, newMembers);
                 }
-                console.log(users?.pendingMembers);
+
                 if (users?.pendingMembers) {
                     users?.pendingMembers.map(member => {
                         return pendingMembers.push({ email: member, role: role || 'viewer' });
@@ -597,7 +660,7 @@ export class ProjectService {
                     return false;
                 }
             })
-            .catch(function(error: Error) {
+            .catch((error: Error) => {
                 console.log(error, 'add members error');
                 // TODO handle error
                 return false;
@@ -616,16 +679,16 @@ export class ProjectService {
         return setResult;
     }
 
-    private async addInvitations(pendingMembers: { email: string; role: Role }[], projectId: string | undefined) {
+    private async addInvitations(pendingMembers: Array<{ email: string; role: Role }>, projectId: string | undefined) {
         if (!projectId) {
             return;
         }
         const db = this.firebaseService.db;
         const batch = db.batch();
-        const projectRef = db.collection(this.PROJECT_COLLECTION).doc(projectId);
+        const projectRef = db.collection(PROJECTS_COLLECTION).doc(projectId);
 
         pendingMembers.map(member => {
-            let invitationRef = db.collection(this.INVITATION_COLLECTION).doc();
+            const invitationRef = db.collection(INVITATION_COLLECTION).doc();
             batch.set(invitationRef, { email: member.email, role: member.role, project: projectRef });
         });
 
@@ -685,7 +748,7 @@ export class ProjectService {
         const currentProjectId = this._projectConfig.getValue().id;
 
         const existingShareLink = await db
-            .collection(this.SHARE_COLLECTION)
+            .collection(SHARE_COLLECTION)
             .where('projectId', '==', currentProjectId)
             .get();
 

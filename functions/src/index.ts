@@ -9,6 +9,7 @@
 import * as sgMail from '@sendgrid/mail';
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
+import { USER_COLLECTION_NAME } from '../../libs/interfaces/src';
 admin.initializeApp();
 // const db = admin.firestore();
 
@@ -85,7 +86,7 @@ function _updateUserMetadata(
 ) {
     return admin
         .firestore()
-        .collection('/users')
+        .collection(USER_COLLECTION_NAME)
         .doc(uid)
         .set({ firstName, lastName, plan, email })
         .then(
