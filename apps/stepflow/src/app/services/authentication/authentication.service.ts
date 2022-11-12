@@ -197,7 +197,7 @@ export class AuthenticationService {
         email?: string;
     }) {
         if (!this.user) {
-            return;
+            return false;
         }
         const update = {
             ...(photoFilePath ? { photoFilePath } : {}),
@@ -207,15 +207,18 @@ export class AuthenticationService {
         };
 
         const userRef = this.firebaseService.db.collection(USER_COLLECTION_NAME).doc(this.user.id);
-        await userRef.update(update).catch(e => {
-            this.messageService.add({
-                severity: 'error',
-                key: 'global-toast',
-                life: 5000,
-                closable: true,
-                detail: 'Error updating user info.',
+        const success = await userRef
+            .update(update)
+            .catch(e => {
+                return false;
+            })
+            .then(result => {
+                return true;
             });
-        });
+
+        if (!success) {
+            return false;
+        }
 
         return update;
     }
