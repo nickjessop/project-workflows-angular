@@ -99,7 +99,7 @@ export class AuthenticationComponent implements OnInit {
         }
     }
 
-    public login() {
+    public async login() {
         const email = this.authInfo.email;
         const password = this.authInfo.password;
 
@@ -107,6 +107,40 @@ export class AuthenticationComponent implements OnInit {
             return;
         }
 
-        this.authService.login(email, password);
+        const firebaseUser = await this.authService.login(email, password);
+        const { user } = firebaseUser;
+
+        if (user == null) {
+            this.messageService.add({
+                severity: 'error',
+                key: 'global-toast',
+                life: 5000,
+                closable: true,
+                detail: 'Invalid email or password.',
+            });
+        }
+
+        if (user && !allowedUserIds.includes(user?.uid)) {
+            this.authService.logout(true);
+
+            this.messageService.add({
+                severity: 'error',
+                key: 'global-toast',
+                life: 5000,
+                closable: true,
+                detail: 'You may not login at this time.',
+            });
+
+            return;
+        }
+
+        const parsedUser = {
+            id: user!.uid,
+            email: user!.email || undefined,
+            emailVerified: user!.emailVerified,
+        };
+
+        this.authService.user = parsedUser;
+        this.router.navigate(['project']);
     }
 }

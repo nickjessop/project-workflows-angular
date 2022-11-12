@@ -23,7 +23,6 @@ export class AuthenticationService {
     public readonly $loginStatus = new BehaviorSubject<{ authStatus: AuthStatus }>({ authStatus: AuthStatus.UNKNOWN });
 
     private subscriptions = new Subscription();
-    public redirectUrl = '/project';
 
     constructor(
         private firebaseService: FirebaseService,
@@ -221,43 +220,10 @@ export class AuthenticationService {
         return update;
     }
 
-    public login(email: string, password: string) {
-        from(this.firebaseService.auth.signInWithEmailAndPassword(email, password)).subscribe(
-            firebaseUser => {
-                const { user } = firebaseUser;
+    public async login(email: string, password: string) {
+        const firebaseUser = await this.firebaseService.auth.signInWithEmailAndPassword(email, password);
 
-                if (user && !allowedUserIds.includes(user?.uid)) {
-                    this.firebaseService.auth.signOut();
-
-                    this.messageService.add({
-                        severity: 'error',
-                        key: 'global-toast',
-                        life: 5000,
-                        closable: true,
-                        detail: 'You may not login at this time.',
-                    });
-
-                    return;
-                }
-
-                const parsedUser = {
-                    id: user!.uid,
-                    email: user!.email || undefined,
-                    emailVerified: user!.emailVerified,
-                };
-                this.user = parsedUser;
-                this.router.navigate([this.redirectUrl]);
-            },
-            err => {
-                this.messageService.add({
-                    severity: 'error',
-                    key: 'global-toast',
-                    life: 5000,
-                    closable: true,
-                    detail: 'Invalid email or password.',
-                });
-            }
-        );
+        return firebaseUser;
     }
 
     public logout(redirect?: boolean) {
