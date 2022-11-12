@@ -1,5 +1,8 @@
 {
     "projectType": "application",
+    "tags": [
+        "scope:client"
+    ],
     "generators": {
         "@schematics/angular:component": {
             "style": "scss"
