@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BlockConfig, Comment, CommentCounts } from '@stepflow/interfaces';
+import { BlockConfig, Comment, CommentCounts, COMMENTS_COLLECTION } from '@stepflow/interfaces';
 import { BehaviorSubject } from 'rxjs';
 import { v4 as uuid } from 'uuid';
 import { AuthenticationService } from '../authentication/authentication.service';
@@ -9,7 +9,6 @@ import { FirebaseService } from '../firebase/firebase.service';
     providedIn: 'root',
 })
 export class CommentsService {
-    private readonly COMMENTS_COLLECTION = 'comments';
     private _blockID: BehaviorSubject<BlockConfig['id']> = new BehaviorSubject<BlockConfig['id']>(undefined);
     public readonly blockID$ = this._blockID.asObservable();
 
@@ -22,7 +21,7 @@ export class CommentsService {
     // API Methods
     public async listComments(blockIds: string[]): Promise<Comment[]> {
         return this.firebaseService.db
-            .collection(this.COMMENTS_COLLECTION)
+            .collection(COMMENTS_COLLECTION)
             .where('blockId', 'in', blockIds)
             .where('deleted', '==', false)
             .get()
@@ -43,7 +42,7 @@ export class CommentsService {
 
     public async getComment(id: string): Promise<Comment | null> {
         return this.firebaseService.db
-            .collection(this.COMMENTS_COLLECTION)
+            .collection(COMMENTS_COLLECTION)
             .doc(id)
             .get()
             .then(
@@ -87,7 +86,7 @@ export class CommentsService {
         } as Comment;
 
         return this.firebaseService.db
-            .collection(this.COMMENTS_COLLECTION)
+            .collection(COMMENTS_COLLECTION)
             .doc(commentId)
             .set(commentToSave)
             .then(
@@ -104,7 +103,7 @@ export class CommentsService {
     public async putComment(comment: Comment): Promise<Comment | null> {
         comment.updatedAt = Date.now();
         return this.firebaseService.db
-            .collection(this.COMMENTS_COLLECTION)
+            .collection(COMMENTS_COLLECTION)
             .doc(comment.commentId)
             .set(comment)
             .then(
@@ -134,7 +133,7 @@ export class CommentsService {
 
     public async getNumberOfCommentsForBlocks(blockIds: string[]): Promise<{ [key: string]: CommentCounts }> {
         return this.firebaseService.db
-            .collection(this.COMMENTS_COLLECTION)
+            .collection(COMMENTS_COLLECTION)
             .where('blockId', 'in', blockIds)
             .where('deleted', '==', false)
             .get()

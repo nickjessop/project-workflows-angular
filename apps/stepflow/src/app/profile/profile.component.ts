@@ -3,6 +3,7 @@ import { User } from '@stepflow/interfaces';
 import { MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import { AuthenticationService } from '../services/authentication/authentication.service';
+import { UserService } from '../services/user/user.service';
 
 @Component({
     selector: 'app-profile',
@@ -18,7 +19,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
     private subscriptions: Subscription = new Subscription();
 
-    constructor(private authService: AuthenticationService, private messageService: MessageService) {}
+    constructor(
+        private authService: AuthenticationService,
+        private userService: UserService,
+        private messageService: MessageService
+    ) {}
 
     ngOnDestroy() {
         this.subscriptions.unsubscribe();
@@ -47,47 +52,50 @@ export class ProfileComponent implements OnInit, OnDestroy {
     }
 
     public async onSaveProfileSelected() {
-        await this.authService.updateProfileDetails(this.userDetails);
+        await this.userService.updateProfileDetails(this.userDetails);
         this.displayProfileModal = false;
     }
 
     public async onProfileImageUploadSelected($event: { files: File[] }, uploaderElement: any) {
-        await this.authService.changeProfilePhoto($event.files[0]);
+        const success = await this.userService.changeProfilePhoto($event.files[0]);
         uploaderElement.clear();
         this.displayProfileModal = false;
-    }
 
-    public onChangeEmailSelected(password: string) {
-        const currentEmail = this.authService.getCurrentUser()?.email;
-        if (this.userDetails.email && this.userDetails.email != currentEmail) {
-            this.authService
-                .updateEmail(this.userDetails.email, password)
-                .then(() => {
-                    this.passwordVerification = '';
-                    this.displayEmailModal = false;
-                })
-                .catch((error: Error) => {
-                    this.messageService.add({
-                        severity: 'error',
-                        key: 'global-toast',
-                        life: 5000,
-                        closable: true,
-                        detail: 'Unable to send email reset. Please check your email and password and try again.',
-                    });
-                });
-        } else {
+        if (!success) {
             this.messageService.add({
                 severity: 'error',
                 key: 'global-toast',
                 life: 5000,
                 closable: true,
-                detail: 'Incorrect password or email. Please try again.',
+                detail: 'Failed to upload profile image.',
             });
         }
     }
 
+    public async onChangeEmailSelected(password: string) {
+        const currentEmail = this.authService.getCurrentUser()?.email;
+        if (this.userDetails.email === currentEmail || !this.userDetails.email) {
+            return;
+        }
+
+        const success = await this.userService.updateEmail(this.userDetails.email, password);
+
+        if (!success) {
+            this.messageService.add({
+                severity: 'error',
+                key: 'global-toast',
+                life: 5000,
+                closable: true,
+                detail: 'Unable to send email reset. Please check your email and password and try again.',
+            });
+        }
+
+        this.passwordVerification = '';
+        this.displayEmailModal = false;
+    }
+
     public onChangePasswordSelected(password: string) {
-        this.authService
+        this.userService
             .updatePassword(password)
             .then(() => {
                 this.passwordVerification = '';

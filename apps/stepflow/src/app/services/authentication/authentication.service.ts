@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Project, Role, User, UserPlan } from '@stepflow/interfaces';
+import { Project, Role, User, UserPlan, USER_COLLECTION_NAME } from '@stepflow/interfaces';
 import firebase from 'firebase';
 import * as _ from 'lodash';
 import { union as _union } from 'lodash';
@@ -19,15 +19,12 @@ export enum AuthStatus {
     providedIn: 'root',
 })
 export class AuthenticationService {
-    private readonly USER_COLLECTION_NAME = 'users';
     private _user: BehaviorSubject<User | undefined | null> = new BehaviorSubject<User | undefined | null>(undefined);
     public readonly $user = this._user?.asObservable();
     public readonly $loginStatus = new BehaviorSubject<{ authStatus: AuthStatus }>({ authStatus: AuthStatus.UNKNOWN });
 
     private subscriptions = new Subscription();
     public redirectUrl = '/project';
-    private readonly PROJECT_COLLECTION_NAME = 'projects';
-    private readonly INVITATIONS_COLLECTION_NAME = 'invitations';
 
     public allowedUserIds = [
         '06T4lgj7x1emjUEMCmPnJYPFjum2',
@@ -120,7 +117,7 @@ export class AuthenticationService {
             this.messageService.add(msg);
         });
 
-        this.checkNewUserProjects(email);
+        // this.checkNewUserProjects(email);
         if (plan !== 'Essential') {
             this.router.navigate(['/auth/confirmation?plan=' + plan]);
         } else {
@@ -164,7 +161,7 @@ export class AuthenticationService {
     }
 
     async setUserData(user: firebase.User) {
-        const userRef = this.firebaseService.db.collection('users').doc(this.user?.id);
+        const userRef = this.firebaseService.db.collection(USER_COLLECTION_NAME).doc(this.user?.id);
         const userDoc = await userRef.get();
 
         const obj = userDoc.exists
@@ -190,7 +187,7 @@ export class AuthenticationService {
     public getUserGroupMetaData(projectMembers: string[]) {
         const members: User[] = [];
         return this.firebaseService.db
-            .collection('users')
+            .collection(USER_COLLECTION_NAME)
             .where(this.firebaseService.fieldPathId, 'in', projectMembers)
             .get()
             .then(querySnapshot => {
@@ -228,7 +225,7 @@ export class AuthenticationService {
             ...(email ? { email } : {}),
         };
 
-        const userRef = this.firebaseService.db.collection('users').doc(this.user.id);
+        const userRef = this.firebaseService.db.collection(USER_COLLECTION_NAME).doc(this.user.id);
         await userRef.update(update).catch(e => {
             this.messageService.add({
                 severity: 'error',
@@ -290,20 +287,21 @@ export class AuthenticationService {
         });
     }
 
-    public reAuthenticateUser(userProvidedPassword: string): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const user = this.getCurrentUser();
-            if (user && user.email) {
-                const credential = this.firebaseService.provider.emailAuth.credential(user.email, userProvidedPassword);
-                user.reauthenticateWithCredential(credential)
-                    .then(function() {
-                        resolve({ success: true });
-                    })
-                    .catch(error => {
-                        reject(error);
-                    });
-            }
-        });
+    public async reAuthenticateUser(userProvidedPassword: string) {
+        const currentUser = this.getCurrentUser();
+        if (!currentUser || !currentUser.email) {
+            return false;
+        }
+
+        const credential = this.firebaseService.provider.emailAuth.credential(currentUser.email, userProvidedPassword);
+        return currentUser
+            .reauthenticateWithCredential(credential)
+            .catch(e => {
+                return false;
+            })
+            .then(success => {
+                return success;
+            });
     }
 
     public findUsersMatchingEmail(emails: string[]) {
@@ -312,7 +310,7 @@ export class AuthenticationService {
         let pendingMembers: any[] = [];
         const foundMembers: string[] = [];
         return this.firebaseService.db
-            .collection('users')
+            .collection(USER_COLLECTION_NAME)
             .where('email', 'in', emails)
             .get()
             .then(querySnapshot => {
@@ -331,282 +329,5 @@ export class AuthenticationService {
                 console.log('Error getting documents: ', error);
                 return undefined;
             });
-    }
-
-    public checkNewUserProjects(email: string) {
-        const db = this.firebaseService.db;
-        const invitationRef = db.collection(this.INVITATIONS_COLLECTION_NAME);
-        const projects: { id: string; projectId: string; role: Role }[] = [];
-        invitationRef
-            .where('email', '==', email)
-            .get()
-            .then(async querySnapshot => {
-                querySnapshot.forEach(doc => {
-                    projects.push({
-                        id: doc.id,
-                        projectId: doc.data().project.id,
-                        role: doc.data().role,
-                    });
-                    doc.ref.delete();
-                });
-                const addNewUsersToProjects = await this.addNewUserToProjects(email, projects);
-                return addNewUsersToProjects;
-            });
-    }
-
-    private async addNewUserToProjects(email: string, projects: { projectId: string; role: Role }[]) {
-        const userId = this.getCurrentUser()!.uid;
-        if (!projects || !email || !userId) {
-            return;
-        }
-        const db = this.firebaseService.db;
-
-        projects.forEach(async (project, index) => {
-            try {
-                await db.runTransaction(async transaction => {
-                    let projectRef = db.collection(this.PROJECT_COLLECTION_NAME).doc(project.projectId);
-                    const doc = await transaction.get(projectRef);
-
-                    if (!doc.exists) {
-                        return;
-                    }
-                    const _project = doc.data() as Project;
-                    let newMember: { userId: string; role: Role }[] = [{ userId: userId, role: project.role }];
-                    let _memberRoles: { userId: string; role: Role }[];
-                    let _members: string[];
-                    _members = _project.members;
-                    _memberRoles = _project.memberRoles;
-                    let members = _union(_members, [userId]);
-                    let memberRoles = _union(_memberRoles, newMember);
-
-                    const _pendingMembers = _project?.pendingMembers?.filter(pendingMember => {
-                        return pendingMember !== email;
-                    });
-
-                    transaction.update(projectRef, {
-                        memberRoles: memberRoles,
-                        members: members,
-                        pendingMembers: _pendingMembers,
-                    });
-                });
-            } catch (e) {
-                console.log(`error running transaction ${e}`);
-            }
-        });
-    }
-
-    // Update current users first or last name, or their profile photo
-    public async updateProfileDetails(userDetails: User) {
-        const photoURL = userDetails.photoURL || '/assets/placeholder/placeholder-profile.png';
-        const photoFilePath = userDetails.photoFilePath || '';
-        const firstName = userDetails.firstName || '';
-        const lastName = userDetails.lastName || '';
-        const email = userDetails.email || '';
-
-        const currentUser = this.getCurrentUser();
-
-        if (currentUser == null) {
-            return;
-        }
-
-        // Update the Firebase auth user's profile
-        await currentUser
-            .updateProfile({
-                displayName: `${firstName} ${lastName}`,
-                photoURL,
-            })
-            .catch(err => {
-                this.messageService.add({
-                    severity: 'error',
-                    key: 'global-toast',
-                    life: 5000,
-                    closable: true,
-                    detail: 'Failed to update profile',
-                });
-            });
-
-        // Update our custom user's collection with new metadata
-        const success = await this.updateUserMetaData({ photoFilePath, firstName, lastName, email });
-
-        return success;
-        // if (success) {
-        //     this.messageService.add({
-        //         severity: 'success',
-        //         key: 'global-toast',
-        //         life: 5000,
-        //         closable: true,
-        //         detail: 'Profile updated',
-        //     });
-        // }
-    }
-
-    public async changeProfilePhoto(file?: File) {
-        if (!file) {
-            return;
-        }
-
-        const currentUser = this.user;
-        if (!currentUser) {
-            return;
-        }
-
-        try {
-            const currentFilePath = currentUser.photoFilePath;
-            if (currentFilePath) {
-                await this.storageService.deleteFile(currentFilePath).catch(e => {
-                    console.error(`changeProfilePhoto() - Failed to delete file. ${currentFilePath}`);
-                });
-            }
-
-            const filesnapshot = await this.storageService.uploadProfileImage(file, currentUser.id!);
-
-            if (!filesnapshot) {
-                throw new Error(`Failed to upload profile image`);
-            }
-            const downloadUrl = await this.storageService.getDownloadUrl(filesnapshot.metadata.fullPath);
-            const filePath = filesnapshot.metadata.fullPath;
-
-            const firebaseUser = this.getCurrentUser();
-            await firebaseUser!.updateProfile({ photoURL: downloadUrl });
-
-            const success = await this.updateUserMetaData({ photoFilePath: filePath });
-
-            this.user = { ...this.user, ...success, photoURL: downloadUrl };
-
-            return success;
-        } catch (e) {
-            this.messageService.add({
-                severity: 'error',
-                key: 'global-toast',
-                life: 5000,
-                closable: true,
-                detail: 'Failed to upload profile image',
-            });
-
-            return false;
-        }
-    }
-
-    public updateEmail(email: string, userProvidedPassword: string): Promise<any> {
-        // TODO: update email in user collection as well.. or switch to a different Auth provider?
-        return new Promise((resolve, reject) => {
-            const actionCodeSettings = {
-                url: 'https://app.stepflow.co/profile',
-            };
-
-            const currentUser = this.getCurrentUser();
-            if (currentUser) {
-                this.reAuthenticateUser(userProvidedPassword)
-                    .then(() => {
-                        currentUser
-                            .verifyBeforeUpdateEmail(email, actionCodeSettings)
-                            .then(() => {
-                                this.messageService.add({
-                                    severity: 'success',
-                                    key: 'global-toast',
-                                    life: 5000,
-                                    closable: true,
-                                    detail: 'Verification email sent.',
-                                });
-                                resolve({ success: true });
-                            })
-                            .catch((error: Error) => {
-                                this.messageService.add({
-                                    severity: 'error',
-                                    key: 'global-toast',
-                                    life: 5000,
-                                    closable: true,
-                                    detail: 'Failed to update email address.',
-                                });
-                                reject(error);
-                            });
-                    })
-                    .catch((error: Error) => {
-                        this.messageService.add({
-                            severity: 'error',
-                            key: 'global-toast',
-                            life: 5000,
-                            closable: true,
-                            detail: 'Incorrect password. Please try again.',
-                        });
-                    });
-            }
-        });
-    }
-
-    public updatePassword(userProvidedPassword: string): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const currentUser = this.getCurrentUser();
-            if (currentUser) {
-                const email = currentUser.email;
-
-                if (!email || email === null) {
-                    return;
-                }
-
-                this.reAuthenticateUser(userProvidedPassword)
-                    .then(() => {
-                        this.firebaseService.auth
-                            .sendPasswordResetEmail(email)
-                            .then(() => {
-                                this.messageService.add({
-                                    severity: 'success',
-                                    key: 'global-toast',
-                                    life: 5000,
-                                    closable: true,
-                                    detail: 'Password reset email sent to ' + email,
-                                });
-                                resolve({ success: true });
-                            })
-                            .catch((error: Error) => {
-                                this.messageService.add({
-                                    severity: 'error',
-                                    key: 'global-toast',
-                                    life: 5000,
-                                    closable: true,
-                                    detail: 'Unable to send password reset email at this time.',
-                                });
-                                reject(error);
-                                console.log(error);
-                            });
-                    })
-                    .catch((error: Error) => {
-                        this.messageService.add({
-                            severity: 'error',
-                            key: 'global-toast',
-                            life: 5000,
-                            closable: true,
-                            detail: 'Incorrect password. Please try again.',
-                        });
-                        console.log(error);
-                    });
-            }
-        });
-    }
-    public async getUsers(userIds: string[]) {
-        userIds = userIds.filter((value, index, self) => self.indexOf(value) === index);
-        const users = await this.getUser(userIds);
-        return users;
-    }
-
-    public async getUser(userIds: string[]) {
-        return this.firebaseService.db
-            .collection(this.USER_COLLECTION_NAME)
-            .where(this.firebaseService.fieldPathId, 'in', userIds)
-            .get()
-            .then(
-                querySnapshot => {
-                    const userData: Map<string, User> = new Map();
-                    querySnapshot.docs.forEach(doc => {
-                        const user = doc.data() as User;
-                        userData.set(doc.id, user);
-                    });
-                    return userData;
-                },
-                error => {
-                    console.log(error);
-                    return null;
-                }
-            );
     }
 }
