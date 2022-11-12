@@ -1,28 +1,42 @@
 {
-  "extends": "gts/tslint.json",
-  "rules": {
-    "member-access": false,
-    "nx-enforce-module-boundaries": [
-      true,
-      {
-        "allow": [],
-        "depConstraints": [
-          {
-            "sourceTag": "*",
-            "onlyDependOnLibsWithTags": [
-              "*"
-            ]
-          }
+    "extends": "gts/tslint.json",
+    "rules": {
+        "member-access": false,
+        "@nrwl/nx/enforce-module-boundaries": [
+            "error",
+            {
+                "allow": [],
+                "depConstraints": [
+                    {
+                        "sourceTag": "scope:client",
+                        "onlyDependOnLibsWithTags": [
+                            "scope:shared",
+                            "scope:client"
+                        ]
+                    },
+                    {
+                        "sourceTag": "scope:shared",
+                        "onlyDependOnLibsWithTags": [
+                            "scope:shared"
+                        ]
+                    },
+                    {
+                        "sourceTag": "scope:api",
+                        "onlyDependOnLibsWithTags": [
+                            "scope:shared",
+                            "scope:scopeApi"
+                        ]
+                    }
+                ]
+            }
         ]
-      }
+    },
+    "linterOptions": {
+        "exclude": [
+            "**/*.json"
+        ]
+    },
+    "rulesDirectory": [
+        "node_modules/@nrwl/workspace/src/tslint"
     ]
-  },
-  "linterOptions": {
-    "exclude": [
-      "**/*.json"
-    ]
-  },
-  "rulesDirectory": [
-    "node_modules/@nrwl/workspace/src/tslint"
-  ]
 }

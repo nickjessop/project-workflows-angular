@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { UserPlan } from '@stepflow/interfaces';
+import { ActivatedRoute, Router } from '@angular/router';
+import { allowedUserIds, UserPlan } from '@stepflow/interfaces';
 import { MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import { AuthenticationService } from '../services/authentication/authentication.service';
@@ -28,7 +28,6 @@ export class AuthenticationComponent implements OnInit {
         plan: 'Essential',
         planPrice: '9',
     };
-
     public authMode: 'register' | 'login' = 'login';
 
     private subscriptions = new Subscription();
@@ -36,7 +35,8 @@ export class AuthenticationComponent implements OnInit {
     constructor(
         private authService: AuthenticationService,
         private activatedRoute: ActivatedRoute,
-        private messageService: MessageService
+        private messageService: MessageService,
+        private router: Router
     ) {}
 
     ngOnInit(): void {
@@ -60,7 +60,7 @@ export class AuthenticationComponent implements OnInit {
         this.subscriptions.unsubscribe();
     }
 
-    public register() {
+    public async register() {
         const { firstName, lastName, plan, password, password2, email } = this.authInfo;
 
         const message = {
@@ -85,10 +85,21 @@ export class AuthenticationComponent implements OnInit {
             return;
         }
 
-        this.authService.register(email, password, firstName, lastName, plan);
+        const success = await this.authService.register(email, password, firstName, lastName, plan);
+        if (success) {
+            if (!allowedUserIds.includes(success?.id || '')) {
+                this.authService.logout(false);
+            }
+
+            if (plan !== 'Essential') {
+                this.router.navigate(['/auth/confirmation?plan=' + plan]);
+            } else {
+                this.router.navigate(['/auth/confirmation']);
+            }
+        }
     }
 
-    public login() {
+    public async login() {
         const email = this.authInfo.email;
         const password = this.authInfo.password;
 
@@ -96,6 +107,40 @@ export class AuthenticationComponent implements OnInit {
             return;
         }
 
-        this.authService.login(email, password);
+        const firebaseUser = await this.authService.login(email, password);
+        const { user } = firebaseUser;
+
+        if (user == null) {
+            this.messageService.add({
+                severity: 'error',
+                key: 'global-toast',
+                life: 5000,
+                closable: true,
+                detail: 'Invalid email or password.',
+            });
+        }
+
+        if (user && !allowedUserIds.includes(user?.uid)) {
+            this.authService.logout(true);
+
+            this.messageService.add({
+                severity: 'error',
+                key: 'global-toast',
+                life: 5000,
+                closable: true,
+                detail: 'You may not login at this time.',
+            });
+
+            return;
+        }
+
+        const parsedUser = {
+            id: user!.uid,
+            email: user!.email || undefined,
+            emailVerified: user!.emailVerified,
+        };
+
+        this.authService.user = parsedUser;
+        this.router.navigate(['project']);
     }
 }

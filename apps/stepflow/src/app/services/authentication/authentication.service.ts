@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Project, Role, User, UserPlan, USER_COLLECTION_NAME } from '@stepflow/interfaces';
+import { allowedUserIds, User, UserPlan, USER_COLLECTION_NAME } from '@stepflow/interfaces';
 import firebase from 'firebase';
 import * as _ from 'lodash';
 import { union as _union } from 'lodash';
 import { MessageService } from 'primeng/api';
 import { BehaviorSubject, from, Subscription } from 'rxjs';
 import { FirebaseService } from '../firebase/firebase.service';
-import { StorageService } from '../storage/storage.service';
 
 export enum AuthStatus {
     AUTHENTICATED,
@@ -24,26 +23,11 @@ export class AuthenticationService {
     public readonly $loginStatus = new BehaviorSubject<{ authStatus: AuthStatus }>({ authStatus: AuthStatus.UNKNOWN });
 
     private subscriptions = new Subscription();
-    public redirectUrl = '/project';
-
-    public allowedUserIds = [
-        '06T4lgj7x1emjUEMCmPnJYPFjum2',
-        'iIeZlcLjmebZSoEMuquh4F2htN92',
-        'LkkX7f9yheRFHNwZkoCHhMb6AmC2',
-        'S09Ert0pOpRKdb7pnc4rXFfyeWe2',
-        'o24opqInUhbxnC9MFywy3YLLBE03',
-        '0ZLQk9ekq3RJXMc2RMpCE8NEkJ73',
-        'tpXpbNAPKpX1evoxSeRJs0O0pB02',
-        'IoTwZeoPiSemew2z5IBbQcHPaNi2',
-        'DxOw25Q8XigIlZMfnfN7vaCaVPo1',
-        '3OqrvQESBPafZ7nF5U6v0QyM2B02',
-    ];
 
     constructor(
         private firebaseService: FirebaseService,
         private router: Router,
-        private messageService: MessageService,
-        private storageService: StorageService
+        private messageService: MessageService
     ) {
         this.setAuthStatus(this.user);
         this.initFirebaseUserListener();
@@ -103,61 +87,58 @@ export class AuthenticationService {
     }
 
     public async register(email: string, password: string, firstName: string, lastName: string, plan: UserPlan) {
-        await this.createUserAndAttachMetadata(email, password, firstName, lastName, plan).catch(error => {
-            const msg = {
-                severity: 'error',
-                key: 'global-toast',
-                life: 5000,
-                closable: true,
-                detail: '',
-            };
-
-            msg.detail = error?.message ? error.message : error;
-
-            this.messageService.add(msg);
-        });
+        const success = await this.createUserAndAttachMetadata(email, password, firstName, lastName, plan);
+        return success;
 
         // this.checkNewUserProjects(email);
-        if (plan !== 'Essential') {
-            this.router.navigate(['/auth/confirmation?plan=' + plan]);
-        } else {
-            this.router.navigate(['/auth/confirmation']);
-        }
-        if (!this.allowedUserIds.includes(this.user?.id || '')) {
-            this.logout(false);
-        }
     }
 
-    private createUserAndAttachMetadata(
+    private async createUserAndAttachMetadata(
         email: string,
         password: string,
         firstName: string,
         lastName: string,
         plan: UserPlan
     ) {
-        const firebaseAuth = this.firebaseService.auth;
-        return firebaseAuth.setPersistence('local').then(() => {
-            firebaseAuth
-                .createUserWithEmailAndPassword(email, password)
-                .then(userCredential => {
-                    const { user } = userCredential;
-                    const parsedUser = {
-                        id: user!.uid,
-                        email: user!.email || undefined,
-                        emailVerified: user!.emailVerified,
-                    };
-                    this.user = parsedUser;
-                    const updateUserMetadata = this.firebaseService.function.httpsCallable('updateUserMetadata');
-                    // .httpsCallable('updateUserMetadata', {});
+        const success = await this.firebaseService.auth
+            .setPersistence('local')
+            .catch(e => {
+                return false;
+            })
+            .then(success => {
+                return success;
+            });
 
-                    return from(updateUserMetadata({ firstName, lastName, plan, email }));
-                })
-                .then(() => {
-                    this.getCurrentUser()!.updateProfile({
-                        displayName: firstName + ' ' + lastName,
-                    });
-                });
+        if (!success) {
+            return false;
+        }
+
+        const userCredential = await this.firebaseService.auth.createUserWithEmailAndPassword(email, password);
+
+        if (!userCredential) {
+            return false;
+        }
+
+        const { user } = userCredential;
+        const parsedUser = {
+            id: user!.uid,
+            email: user!.email || undefined,
+            emailVerified: user!.emailVerified,
+        };
+        this.user = parsedUser;
+
+        const updateUserMetadata = this.firebaseService.function.httpsCallable('updateUserMetadata');
+        const metadataUpdated = await updateUserMetadata({ firstName, lastName, plan, email });
+
+        if (!metadataUpdated.data) {
+            return false;
+        }
+
+        this.getCurrentUser()!.updateProfile({
+            displayName: firstName + ' ' + lastName,
         });
+
+        return this.user;
     }
 
     async setUserData(user: firebase.User) {
@@ -216,7 +197,7 @@ export class AuthenticationService {
         email?: string;
     }) {
         if (!this.user) {
-            return;
+            return false;
         }
         const update = {
             ...(photoFilePath ? { photoFilePath } : {}),
@@ -226,56 +207,26 @@ export class AuthenticationService {
         };
 
         const userRef = this.firebaseService.db.collection(USER_COLLECTION_NAME).doc(this.user.id);
-        await userRef.update(update).catch(e => {
-            this.messageService.add({
-                severity: 'error',
-                key: 'global-toast',
-                life: 5000,
-                closable: true,
-                detail: 'Error updating user info.',
+        const success = await userRef
+            .update(update)
+            .catch(e => {
+                return false;
+            })
+            .then(result => {
+                return true;
             });
-        });
+
+        if (!success) {
+            return false;
+        }
 
         return update;
     }
 
-    public login(email: string, password: string) {
-        from(this.firebaseService.auth.signInWithEmailAndPassword(email, password)).subscribe(
-            firebaseUser => {
-                const { user } = firebaseUser;
+    public async login(email: string, password: string) {
+        const firebaseUser = await this.firebaseService.auth.signInWithEmailAndPassword(email, password);
 
-                if (user && !this.allowedUserIds.includes(user?.uid)) {
-                    this.firebaseService.auth.signOut();
-
-                    this.messageService.add({
-                        severity: 'error',
-                        key: 'global-toast',
-                        life: 5000,
-                        closable: true,
-                        detail: 'You may not login at this time.',
-                    });
-
-                    return;
-                }
-
-                const parsedUser = {
-                    id: user!.uid,
-                    email: user!.email || undefined,
-                    emailVerified: user!.emailVerified,
-                };
-                this.user = parsedUser;
-                this.router.navigate([this.redirectUrl]);
-            },
-            err => {
-                this.messageService.add({
-                    severity: 'error',
-                    key: 'global-toast',
-                    life: 5000,
-                    closable: true,
-                    detail: 'Invalid email or password.',
-                });
-            }
-        );
+        return firebaseUser;
     }
 
     public logout(redirect?: boolean) {
@@ -307,7 +258,6 @@ export class AuthenticationService {
     public findUsersMatchingEmail(emails: string[]) {
         // Firebase SDK limitation: 'in' supports up to 10 comparison values
         const newMembers: string[] = [];
-        let pendingMembers: any[] = [];
         const foundMembers: string[] = [];
         return this.firebaseService.db
             .collection(USER_COLLECTION_NAME)
@@ -315,15 +265,15 @@ export class AuthenticationService {
             .get()
             .then(querySnapshot => {
                 querySnapshot.forEach(doc => {
-                    if (doc.id != '' || doc.id != undefined) {
+                    if (doc.id !== '' || doc.id !== undefined) {
                         newMembers.push(doc.id);
                         const data = doc.data() as User;
                         const docEmail = data.email || '';
                         foundMembers.push(docEmail);
                     }
                 });
-                pendingMembers = emails.filter(e => !foundMembers.includes(e));
-                return { newMembers: newMembers, pendingMembers: pendingMembers };
+                const pendingMembers = emails.filter(e => !foundMembers.includes(e));
+                return { newMembers, pendingMembers };
             })
             .catch(error => {
                 console.log('Error getting documents: ', error);

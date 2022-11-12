@@ -267,3 +267,16 @@ export const PROJECTS_COLLECTION = 'projects';
 export const INVITATION_COLLECTION = 'invitations';
 export const COMMENTS_COLLECTION = 'comments';
 export const SHARE_COLLECTION = 'shareLinks';
+
+export const allowedUserIds = [
+    '06T4lgj7x1emjUEMCmPnJYPFjum2',
+    'iIeZlcLjmebZSoEMuquh4F2htN92',
+    'LkkX7f9yheRFHNwZkoCHhMb6AmC2',
+    'S09Ert0pOpRKdb7pnc4rXFfyeWe2',
+    'o24opqInUhbxnC9MFywy3YLLBE03',
+    '0ZLQk9ekq3RJXMc2RMpCE8NEkJ73',
+    'tpXpbNAPKpX1evoxSeRJs0O0pB02',
+    'IoTwZeoPiSemew2z5IBbQcHPaNi2',
+    'DxOw25Q8XigIlZMfnfN7vaCaVPo1',
+    '3OqrvQESBPafZ7nF5U6v0QyM2B02',
+];
