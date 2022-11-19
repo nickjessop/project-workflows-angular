@@ -3,6 +3,9 @@
     "sourceRoot": "apps/api/src",
     "projectType": "application",
     "prefix": "api",
+    "tags": [
+        "scope:api"
+    ],
     "generators": {
         "@nestjs/schematics": {}
     },
@@ -13,7 +16,9 @@
                 "outputPath": "dist/apps/api",
                 "main": "apps/api/src/main.ts",
                 "tsConfig": "apps/api/tsconfig.app.json",
-                "assets": ["apps/api/src/assets"]
+                "assets": [
+                    "apps/api/src/assets"
+                ]
             },
             "configurations": {
                 "production": {
@@ -40,8 +45,14 @@
         "lint": {
             "executor": "@angular-devkit/build-angular:tslint",
             "options": {
-                "tsConfig": ["apps/api/tsconfig.app.json", "apps/api/tsconfig.spec.json"],
-                "exclude": ["**/node_modules/**", "!apps/api/**"]
+                "tsConfig": [
+                    "apps/api/tsconfig.app.json",
+                    "apps/api/tsconfig.spec.json"
+                ],
+                "exclude": [
+                    "**/node_modules/**",
+                    "!apps/api/**"
+                ]
             }
         },
         "test": {

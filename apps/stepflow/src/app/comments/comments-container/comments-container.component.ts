@@ -3,6 +3,7 @@ import { BlockConfig, Comment, CommentDetail, User } from '@stepflow/interfaces'
 import { AuthenticationService } from '../../services/authentication/authentication.service';
 import { CommentsService } from '../../services/comments/comments.service';
 import { StorageService } from '../../services/storage/storage.service';
+import { UserService } from '../../services/user/user.service';
 
 export enum commentFilters {
     ALL = 'All',
@@ -64,7 +65,8 @@ export class CommentsContainerComponent implements OnInit {
     constructor(
         private commentsService: CommentsService,
         private authenticationService: AuthenticationService,
-        private storageService: StorageService
+        private storageService: StorageService,
+        private userService: UserService
     ) {}
 
     ngOnInit() {
@@ -108,7 +110,7 @@ export class CommentsContainerComponent implements OnInit {
             this.users = new Map();
             return;
         }
-        const users = await this.authenticationService.getUsers(userIds);
+        const users = await this.userService.getUsers(userIds);
         this.users = users || new Map();
     }
 
