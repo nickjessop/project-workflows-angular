@@ -1,4 +1,4 @@
-<div class="steps-container p-d-flex p-pt-6 p-pb-3">
+<div class="steps-container p-d-flex p-pt-6 p-pb-3 p-pl-2">
     <div class="steps" @fade>
         <div class="steps__fade-right"></div>
         <div class="steps__fade-left"></div>
@@ -18,18 +18,7 @@
             *ngIf="hasHorizontalScroll"
             (click)="scrollStepsRight()"
         ></button>
-        <div class="steps__list" #scrollable>
-            <div class="p-d-flex p-ai-center p-jc-between p-mb-3">
-                <div class="ms-01 text-secondary p-text-bold">Workflow</div>
-                <button
-                    pButton
-                    type="button"
-                    icon="pi pi-plus"
-                    class="p-button-text p-button-rounded p-ml-1"
-                    (click)="onAddNewStepPress()"
-                    *ngIf="canConfigureProject"
-                ></button>
-            </div>
+        <div class="steps__list" style="position: relative" #scrollable>
             <ng-container *ngIf="steps?.length; else showEmptyState">
                 <ng-container *ngIf="canConfigureProject; else showViewSteps">
                     <div
@@ -71,7 +60,17 @@
             </ng-container>
         </div>
     </div>
-
+    <div class="p-d-flex p-ai-center p-pl-2">
+        <button
+            pButton
+            type="button"
+            label="New step"
+            icon="pi pi-plus"
+            class="p-button-secondary p-button-rounded"
+            (click)="onAddNewStepPress()"
+            *ngIf="canConfigureProject"
+        ></button>
+    </div>
     <ng-template #showEmptyState>
         <div class="p-col-6 p-d-flex p-ai-center">Press the plus button to create your first step</div>
     </ng-template>

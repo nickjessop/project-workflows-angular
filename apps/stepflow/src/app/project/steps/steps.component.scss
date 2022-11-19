@@ -1,15 +1,10 @@
 $step-border-radius: 6px;
 .steps-container {
-    // margin: 35px 20px;
-    // max-height: calc(100vh - 9rem);
-    min-width: 300px;
-    max-width: 400px;
     .steps {
         position: relative;
         overflow: hidden;
         width: 100%;
         &__list {
-            padding-left: 15px;
             overflow-x: scroll;
             -ms-overflow-style: none;
             scrollbar-width: none;
@@ -57,9 +52,11 @@ $step-border-radius: 6px;
         border-radius: 6px;
         white-space: nowrap;
         font-weight: 500;
-        &:hover {
+        &:hover,
+        &:focus,
+        &:focus-within {
+            background: var(--primary-color-light);
             cursor: pointer;
-            background: var(--surface-b);
             border-radius: 6px;
         }
     }
@@ -76,7 +73,6 @@ $step-border-radius: 6px;
         &:hover,
         &:focus,
         &:focus-within {
-            background: var(--primary-color-light);
             .step__edit {
                 display: inline-flex;
                 pointer-events: initial;
@@ -96,16 +92,12 @@ $step-border-radius: 6px;
 
 @media screen and (min-width: 700px) {
     .steps-container {
-        height: calc(100vh - 110px); // minus navbar height
         position: sticky;
         top: 0;
         left: 0;
-        padding-right: 2rem;
-        // margin: 0 !important;
-        &__list {
-            padding: 0;
-            overflow-x: initial;
-        }
+        padding-right: 0.5rem;
+        max-width: 400px;
+        display: block !important;
         .cdk-drop-list {
             flex-direction: column;
             align-items: flex-start;
@@ -115,6 +107,12 @@ $step-border-radius: 6px;
             margin-bottom: 1rem;
         }
         .steps {
+            height: calc(100vh - 150px); // minus navbar and button height
+            &__list {
+                overflow-x: initial;
+                overflow-y: scroll;
+                height: 100%;
+            }
             &__fade-right,
             &__fade-left {
                 display: none;
@@ -125,7 +123,15 @@ $step-border-radius: 6px;
             }
         }
         .step {
-            width: 100%;
+            border: none;
+            color: var(--text-color-secondary);
+            &:hover {
+                border: none;
+                color: var(--text-color);
+            }
+        }
+        .step-selected {
+            color: var(--text-color);
         }
     }
 }
