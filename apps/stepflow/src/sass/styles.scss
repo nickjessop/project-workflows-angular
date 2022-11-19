@@ -278,6 +278,12 @@ button {
 .p-button.p-button-link:enabled:hover .p-button-label {
     text-decoration: none;
 }
+.nav-button.p-button .p-button-icon {
+    font-size: 1.3rem;
+}
+.nav-button.p-button .p-button-label {
+    font-weight: 500;
+}
 .p-checkbox .p-checkbox-box.p-highlight {
     background: var(--primary-color);
     border-color: var(--primary-color);

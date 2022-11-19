@@ -3,7 +3,7 @@
     type="button"
     label="Share"
     icon="pi pi-users"
-    class="p-mr-3"
+    class="p-button-text p-button-sm nav-button p-mr-1"
     (click)="showShareDialog()"
     *ngIf="(projectService.projectMode$ | async) != 'view'"
 ></button>

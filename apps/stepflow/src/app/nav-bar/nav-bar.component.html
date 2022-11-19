@@ -1,6 +1,6 @@
 <div class="navigation" *ngIf="authenticated">
-    <div class="navigation__content p-grid p-nogutter p-px-3">
-        <ng-container *ngIf="navMode === 'project' && project">
+    <ng-container *ngIf="navMode === 'project' && project">
+        <div class="navigation__content--project p-grid p-nogutter p-px-3">
             <div class="navigation-logo p-col-6 p-d-flex p-ai-center">
                 <i class="pi pi-chevron-left navigation__back" [routerLink]="['/project']"></i>
                 <div class="ms-1 p-text-bold p-ml-2">
@@ -14,7 +14,15 @@
             </div>
             <div class="navigation-profile p-col-6 p-d-flex p-ai-center p-jc-end">
                 <div class="p-col-6 p-d-flex p-jc-end p-ai-center" *ngIf="canConfigureProject">
-                    <i class="pi pi-cog ms-3 p-mr-3 navigation__settings" (click)="showSettingsDialog()"></i>
+                    <!-- <i class="pi pi-cog ms-3 p-mr-3 navigation__settings" ></i> -->
+                    <button
+                        pButton
+                        pRipple
+                        type="button"
+                        icon="pi pi-cog"
+                        class="p-button-rounded p-button-text p-button-sm nav-button"
+                        (click)="showSettingsDialog()"
+                    ></button>
                     <project-share [project]="project" [loggedInUserId]="loggedInUserId"></project-share>
                 </div>
                 <div (click)="menu.toggle($event)" class="user-menu p-d-flex p-ai-center">
@@ -66,8 +74,10 @@
                     <button type="button" pButton label="Save" (click)="onSaveSettingsSelected()"></button>
                 </p-footer>
             </p-dialog>
-        </ng-container>
-        <ng-container *ngIf="navMode === 'default'">
+        </div>
+    </ng-container>
+    <ng-container *ngIf="navMode === 'default'">
+        <div class="navigation__content p-grid p-nogutter p-px-3">
             <div class="navigation-logo p-col-6 p-d-flex p-ai-center">
                 <img src="/assets/stepflow-logo.svg" alt="Stepflow logo" height="26px" [routerLink]="['/project']" />
             </div>
@@ -85,9 +95,10 @@
 
                 <p-menu #menu [popup]="true" [model]="items" appendTo="body"></p-menu>
             </div>
-        </ng-container>
-    </div>
+        </div>
+    </ng-container>
 </div>
+<!-- Not authenticated -->
 <div class="navigation" *ngIf="navMode === 'project' && !authenticated && project">
     <div class="navigation__content p-grid p-nogutter p-px-3">
         <div class="navigation-logo p-col-6 p-d-flex p-ai-center">
