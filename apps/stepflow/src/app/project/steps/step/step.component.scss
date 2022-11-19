@@ -1,16 +1,14 @@
 .step-inner {
-    &:hover &__edit,
-    &:focus &__edit,
-    &:focus-within &__edit {
-        display: block;
-    }
-    &__edit {
-        display: none;
-        transition: 0.1s;
-    }
+    // &:hover &__edit,
+    // &:focus &__edit,
+    // &:focus-within &__edit {
+    //     display: block;
+    // }
+    // &__edit {
+    //     display: none;
+    //     transition: 0.1s;
+    // }
     .step-status {
-        padding-right: 2px;
-        padding-left: 6px;
         height: 22px;
         position: relative;
         .step-icon {
@@ -30,7 +28,7 @@
         }
     }
     .step-label {
-        font-weight: 500;
+        font-weight: bold;
     }
     @media screen and (min-width: 700px) {
         .step-inner {

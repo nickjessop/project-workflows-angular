@@ -1,17 +1,5 @@
-<div class="step-inner p-d-flex p-jc-between p-ai-center p-px-2 p-py-2">
-    <div class="p-d-flex p-jc-between" style="flex-grow: 1">
-        <div class="p-d-flex">
-            <div class="ms-0 p-mr-1">{{ step.title }}</div>
-            <button
-                *ngIf="currentStep"
-                type="button"
-                class="p-button-text p-button-plain step-inner__edit p-jc-center p-p-0"
-                pButton
-                icon="pi pi-pencil"
-                (click)="toggleMenu()"
-            ></button>
-        </div>
-    </div>
+<div class="step-inner p-d-flex p-ai-center p-px-2 p-py-2">
+    <div class="ms-1 step-label">{{ step.title }}</div>
     <div class="step-status p-d-flex p-ai-center p-jc-center" *ngIf="step.status">
         <ng-container [ngSwitch]="step.status.value">
             <div *ngSwitchCase="'upcoming'" class="step-icon p-d-flex p-jc-center p-ai-center">
@@ -45,4 +33,12 @@
             <div *ngSwitchCase="'no-status'" class="step-icon p-d-flex p-jc-center p-ai-center"></div>
         </ng-container>
     </div>
+    <button
+        *ngIf="currentStep"
+        type="button"
+        class="p-button-text p-button-plain step-inner__edit p-jc-center p-p-0"
+        pButton
+        icon="pi pi-pencil"
+        (click)="toggleMenu()"
+    ></button>
 </div>
