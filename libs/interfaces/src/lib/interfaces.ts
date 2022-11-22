@@ -7,11 +7,19 @@ export interface User {
     firstName?: string;
     lastName?: string;
     photoURL?: string;
-    photoFilePath?: string;
+    photoFilePath?: string; // Current file path for current photo
     plan?: UserPlan;
 }
 
 export type UserPlan = 'Plus' | 'Growth' | 'Essential' | 'Free';
+export interface UserDTO {
+    email?: string;
+    displayName?: string;
+    firstName?: string;
+    lastName?: string;
+    photoURL?: string;
+    photoFilePath?: string; // Current file path for current photo
+}
 
 export interface Validator {
     name: string;

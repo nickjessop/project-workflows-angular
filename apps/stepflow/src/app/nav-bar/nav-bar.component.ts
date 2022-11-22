@@ -14,14 +14,14 @@ import { ProjectService } from '../services/project/project.service';
 export class NavBarComponent implements OnInit {
     items!: MenuItem[];
 
-    public displayName: string = '';
-    public photoURL: string = '';
-    public loggedInUserId: string = '';
-    public authenticated: boolean = false;
+    public displayName = '';
+    public photoURL = '';
+    public loggedInUserId = '';
+    public authenticated = false;
 
     private subscriptions = new Subscription();
 
-    public href: string = '';
+    public href = '';
     parsedUrl = new URL(window.location.href);
     baseUrl = this.parsedUrl.origin;
     linkCopiedMsg: any[] = [];
@@ -30,8 +30,8 @@ export class NavBarComponent implements OnInit {
     public isNewProject = false;
     public canConfigureProject = false;
 
-    public displaySettingsDialog: boolean = false;
-    public showSettingsError: boolean = false;
+    public displaySettingsDialog = false;
+    public showSettingsError = false;
 
     public navMode: 'default' | 'project' = 'default';
     public project?: Project;

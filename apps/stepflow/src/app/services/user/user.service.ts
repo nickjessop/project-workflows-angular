@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
-import { User, USER_COLLECTION_NAME } from '@stepflow/interfaces';
+import { User, UserDTO, USER_COLLECTION_NAME } from '@stepflow/interfaces';
+import { ApiService } from '../api/api.service';
+
 import { AuthenticationService } from '../authentication/authentication.service';
 import { FirebaseService } from '../firebase/firebase.service';
 import { StorageService } from '../storage/storage.service';
@@ -11,43 +13,26 @@ export class UserService {
     constructor(
         private authService: AuthenticationService,
         private storageService: StorageService,
-        private firebaseService: FirebaseService
+        private firebaseService: FirebaseService,
+        private apiService: ApiService
     ) {}
 
     // Update current users first or last name, or their profile photo
-    public async updateProfileDetails(userDetails: User) {
-        const photoURL = userDetails.photoURL || '/assets/placeholder/placeholder-profile.png';
-        const photoFilePath = userDetails.photoFilePath || '';
-        const firstName = userDetails.firstName || '';
-        const lastName = userDetails.lastName || '';
-        const email = userDetails.email || '';
+    public async updateProfileDetails(userDetails: User, profileIcon?: File) {
+        const userDTO: UserDTO = userDetails;
+        const formData = new FormData();
 
-        const currentUser = this.authService.getCurrentUser();
+        Object.entries(userDTO).forEach(([key, value]) => {
+            formData.append(key, value);
+        });
 
-        if (currentUser == null) {
-            return;
+        if (profileIcon) {
+            formData.append('photo', profileIcon, profileIcon.name);
         }
 
-        // Update the Firebase auth user's profile
-        const result = await currentUser
-            .updateProfile({
-                displayName: `${firstName} ${lastName}`,
-                photoURL,
-            })
-            .then(res => {
-                return true;
-            })
-            .catch(e => {
-                return false;
-            });
+        const update = await this.apiService.put('user', formData);
 
-        if (!result) {
-            return false;
-        }
-
-        const success = await this.authService.updateUserMetaData({ photoFilePath, firstName, lastName, email });
-
-        return success;
+        return update;
     }
 
     public async changeProfilePhoto(file?: File) {
@@ -60,38 +45,12 @@ export class UserService {
             return;
         }
 
-        try {
-            const currentFilePath = currentUser.photoFilePath;
-            if (currentFilePath) {
-                await this.storageService.deleteFile(currentFilePath).catch(e => {
-                    console.error(`changeProfilePhoto() - Failed to delete file. ${currentFilePath}`);
-                });
-            }
+        const formData = new FormData();
+        formData.append('photo', file, file.name);
 
-            const filesnapshot = await this.storageService.uploadProfileImage(file, currentUser.id!);
+        const update = await this.apiService.put('user', formData);
 
-            if (!filesnapshot) {
-                throw new Error(`Failed to upload profile image`);
-            }
-            const downloadUrl = await this.storageService.getDownloadUrl(filesnapshot.metadata.fullPath);
-            const filePath = filesnapshot.metadata.fullPath;
-
-            const firebaseUser = this.authService.getCurrentUser();
-            await firebaseUser!.updateProfile({ photoURL: downloadUrl });
-
-            const success = await this.authService.updateUserMetaData({ photoFilePath: filePath });
-
-            if (!success) {
-                return false;
-            }
-
-            const updatedUser = { ...currentUser, ...success, photoURL: downloadUrl };
-            this.authService.user = updatedUser;
-
-            return true;
-        } catch (e) {
-            return false;
-        }
+        return update;
     }
 
     public async updateEmail(email: string, userProvidedPassword: string) {
