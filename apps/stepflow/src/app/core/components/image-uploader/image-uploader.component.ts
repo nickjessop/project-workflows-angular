@@ -59,7 +59,7 @@ export class ImageUploaderComponent implements OnInit {
     ];
 
     public columnSizes(): Object {
-        if (this.imageData.length > 1 && this.imageData.length < 4) {
+        if (this.imageData.length > 1 && this.imageData.length < 7) {
             return { 'column-count': 2, '-webkit-column-count': 2, '-moz-column-count': 2 };
         } else if (this.imageData.length === 1) {
             return { 'column-count': 1, '-webkit-column-count': 1, '-moz-column-count': 1 };
