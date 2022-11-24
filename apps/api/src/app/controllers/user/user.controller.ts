@@ -9,7 +9,7 @@ export class UserController {
 
     @Put()
     @UseInterceptors(FileInterceptor('photo'))
-    async updateUser(@UploadedFile() file: FormData, @Res() res: any, @Req() req: any, @Body() body: UserDTO) {
+    async updateUser(@UploadedFile() file: File, @Res() res: any, @Req() req: any, @Body() body: UserDTO) {
         const test = body;
         const uid = await res.locals.uid;
 
