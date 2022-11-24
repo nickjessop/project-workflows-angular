@@ -49,7 +49,7 @@ export class FirebaseService {
             .delete();
     }
 
-    public async uploadUserPhoto(userId: string, userPhoto?: FormData) {
+    public async uploadUserPhoto(userId: string, userPhoto?: File) {
         if (!userPhoto) {
             return;
         }
@@ -58,7 +58,10 @@ export class FirebaseService {
         const tmpPath = `/tmp/${fileId}`;
         const ref = `users/${userId}/profile.jpg`;
 
-        writeFileSync(tmpPath, userPhoto);
+        const buffer = userPhoto.buffer;
+        // const buffer2 = Buffer.from(buffer);
+        // const buffer2 = Buffer.from( new Uint8Array(buffer) );
+        writeFileSync(tmpPath, buffer);
 
         await admin
             .storage()
