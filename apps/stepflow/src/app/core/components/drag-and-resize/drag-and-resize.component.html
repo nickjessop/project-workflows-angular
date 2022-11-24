@@ -48,6 +48,15 @@
                 ></button>
                 <p-menu #menu [popup]="true" [model]="items" appendTo="body"></p-menu>
                 <button
+                    *ngIf="canEditBlocks"
+                    (click)="onAddComment()"
+                    pButton
+                    type="button"
+                    icon="pi pi-comment"
+                    class="comment-button p-button-text p-button-plain"
+                    pTooltip="Add comment"
+                ></button>
+                <button
                     *ngIf="canConfigureBlocks"
                     (click)="onSaveBlock()"
                     pButton
@@ -87,6 +96,15 @@
             </div>
             <div class="field__settings">
                 <button
+                    type="button"
+                    class="p-button-text p-button-plain"
+                    pButton
+                    icon="pi pi-ellipsis-h"
+                    (click)="menu.toggle($event)"
+                    *ngIf="canConfigureBlocks"
+                ></button>
+                <p-menu #menu [popup]="true" [model]="items" appendTo="body"></p-menu>
+                <button
                     *ngIf="canEditBlocks"
                     (click)="onAddComment()"
                     pButton
@@ -101,7 +119,7 @@
                     pButton
                     type="button"
                     icon="pi pi-pencil"
-                    class="edit-button p-button-text p-button-plain"
+                    class="p-button-text p-button-plain"
                     pTooltip="Edit block"
                 ></button>
             </div>

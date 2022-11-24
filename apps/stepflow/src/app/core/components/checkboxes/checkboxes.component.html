@@ -1,7 +1,7 @@
 <project-drag-and-resize [(field)]="field" [index]="index" (componentMode)="setComponentMode($event)">
     <ng-container *ngIf="componentMode === 'view'">
         <div class="checkboxes checkboxes--view mb-2">
-            <div class="p-d-flex p-ai-center p-pl-2 p-py-3 checkbox" *ngFor="let val of field.metadata.data.value">
+            <div class="p-d-flex p-ai-center p-py-3 checkbox" *ngFor="let val of field.metadata.data.value">
                 <p-checkbox [inputId]="index" [binary]="true" [(ngModel)]="val.checked" readonly="true"> </p-checkbox>
                 <label for="index" class="p-pl-2" [class.checkbox__completed]="val.checked">{{ val.item }}</label>
             </div>
@@ -15,8 +15,7 @@
                 icon="pi pi-plus"
                 label="Add a task"
                 (click)="onAddCheckboxPress()"
-                class="p-button-text"
-                style="margin-left: -0.35rem"
+                class="p-button p-button-secondary"
             ></button>
             <div
                 class="p-d-flex p-ai-center p-pl-2 p-py-2 checkbox"
@@ -32,7 +31,7 @@
                 ></p-checkbox>
                 <p-inplace
                     closable="true"
-                    styleClass="p-pl-2 checkbox__editable"
+                    styleClass="checkbox__editable"
                     closeIcon="pi pi-check"
                     (onDeactivate)="saveContent()"
                 >
@@ -42,7 +41,7 @@
                         }}</label>
                     </ng-template>
                     <ng-template pTemplate="content">
-                        <input type="text" class="p-inputtext" [(ngModel)]="val.item" pInputText />
+                        <textarea type="text" class="p-inputtext" [(ngModel)]="val.item" pInputText></textarea>
                     </ng-template>
                 </p-inplace>
                 <button
