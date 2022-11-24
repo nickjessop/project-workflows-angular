@@ -2,7 +2,7 @@
     <ng-container *ngIf="componentMode === 'view'">
         <div class="rich-text view">
             <div
-                class="p-p-2"
+                class="p-py-2"
                 [innerHTML]="field.metadata.data.value ? field.metadata.data.value : 'No content added yet.'"
             ></div>
         </div>
@@ -11,9 +11,9 @@
         <div class="rich-text edit">
             <form [formGroup]="form" on-focusin="onFocusIn($event)" #textBlock>
                 <ngx-editor-menu [editor]="editor" [toolbar]="toolbar"> </ngx-editor-menu>
-                <ngx-editor-floating-menu [editor]="editor">
+                <!-- <ngx-editor-floating-menu [editor]="editor">
                     <ngx-editor-menu [editor]="editor" [toolbar]="toolbar"></ngx-editor-menu>
-                </ngx-editor-floating-menu>
+                </ngx-editor-floating-menu> -->
                 <ngx-editor
                     [editor]="editor"
                     [(ngModel)]="field.metadata.data.value"

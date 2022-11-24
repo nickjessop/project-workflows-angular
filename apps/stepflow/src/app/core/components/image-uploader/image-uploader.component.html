@@ -1,7 +1,7 @@
 <project-drag-and-resize [(field)]="field" (componentMode)="setComponentMode($event)" [index]="index">
     <ng-container *ngIf="imageData.length > 0; else noImages">
         <ng-container *ngIf="componentMode === 'view'">
-            <div class="images">
+            <div class="images" [ngStyle]="columnSizes()">
                 <div *ngFor="let image of imageData; let index = index" class="images__item" key="index">
                     <img
                         [src]="image.thumbnail"

@@ -8,11 +8,11 @@ mwlResizable {
     position: relative;
     border-radius: 6px;
     background: white;
-    border: 1px solid var(--primary-color-light);
+    border: 1px solid transparent;
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    min-height: 220px;
+    min-height: 150px;
     .resize {
         visibility: hidden;
         position: absolute;
@@ -34,16 +34,14 @@ mwlResizable {
     &:hover,
     &:focus-within {
         border: 1px solid var(--surface-d);
-        .field__settings .menu,
+        .field__settings,
         .field__handle,
         .resize {
             visibility: visible;
         }
     }
     .field__settings {
-        .menu {
-            visibility: hidden;
-        }
+        visibility: hidden;
     }
     .field__handle {
         visibility: hidden;
@@ -76,9 +74,6 @@ mwlResizable {
 }
 
 :host ::ng-deep {
-    .edit-button span {
-        color: var(--surface-g) !important;
-    }
     .field__label {
         .p-button {
             margin-left: 0.5rem;
