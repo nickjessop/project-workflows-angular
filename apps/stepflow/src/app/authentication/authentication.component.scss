@@ -10,11 +10,23 @@
     }
 }
 .info {
-    background: linear-gradient(94.76deg, #d7e7f3 46.16%, #eaf2f8 288.04%);
+    background: linear-gradient(94.76deg, #eaeff4 46.16%, #ffffff 288.04%);
     border-radius: 4px;
 }
-.login {
-    height: calc(100vh - 60px);
+.login,
+.register {
+    height: 100vh;
+    background: white;
+}
+
+.register {
+    &__left {
+        background: var(--primary-color);
+        border-radius: var(--border-radius-md);
+        .intro {
+            color: white;
+        }
+    }
 }
 
 @media (max-width: 768px) {

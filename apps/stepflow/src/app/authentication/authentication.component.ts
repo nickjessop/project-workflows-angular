@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { allowedUserIds, UserPlan } from '@stepflow/interfaces';
 import { MessageService } from 'primeng/api';
@@ -36,7 +37,8 @@ export class AuthenticationComponent implements OnInit {
         private authService: AuthenticationService,
         private activatedRoute: ActivatedRoute,
         private messageService: MessageService,
-        private router: Router
+        private router: Router,
+        @Inject(DOCUMENT) private document: Document
     ) {}
 
     ngOnInit(): void {
@@ -79,7 +81,7 @@ export class AuthenticationComponent implements OnInit {
         }
 
         if (!password || !password2 || !firstName || !lastName || !plan) {
-            message.detail = 'Please fill in password, name and plan fields';
+            message.detail = 'Please fill in password and name fields';
             this.messageService.add(message);
 
             return;
@@ -104,10 +106,18 @@ export class AuthenticationComponent implements OnInit {
         const password = this.authInfo.password;
 
         if (!email || !password) {
+            this.messageService.add({
+                severity: 'error',
+                key: 'global-toast',
+                life: 5000,
+                closable: true,
+                detail: 'Please enter an email and password.',
+            });
             return;
         }
 
         const firebaseUser = await this.authService.login(email, password);
+
         const { user } = firebaseUser;
 
         if (user == null) {
@@ -128,7 +138,7 @@ export class AuthenticationComponent implements OnInit {
                 key: 'global-toast',
                 life: 5000,
                 closable: true,
-                detail: 'You may not login at this time.',
+                detail: 'Sorry, you may not login at this time.',
             });
 
             return;
@@ -142,5 +152,9 @@ export class AuthenticationComponent implements OnInit {
 
         this.authService.user = parsedUser;
         this.router.navigate(['project']);
+    }
+
+    goToHomepage(): void {
+        this.document.location.href = 'https://stepflow.co';
     }
 }
