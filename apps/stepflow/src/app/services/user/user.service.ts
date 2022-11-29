@@ -22,32 +22,26 @@ export class UserService {
         const lastName = userDetails.lastName || '';
         const email = userDetails.email || '';
 
-        const currentUser = this.authService.user;
+        const currentUser = this.authService.getCurrentUser();
 
         if (currentUser == null) {
             return;
         }
 
-        // Update the Firebase auth user's profile
-        // await currentUser
-        //     .updateProfile({
-        //         displayName: `${firstName} ${lastName}`,
-        //         photoURL,
-        //     })
-        //     .catch(err => {
-        //         this.messageService.add({
-        //             severity: 'error',
-        //             key: 'global-toast',
-        //             life: 5000,
-        //             closable: true,
-        //             detail: 'Failed to update profile',
-        //         });
-        //     });
+        try {
+            // Update the Firebase auth user's profile
+            await currentUser.updateProfile({
+                displayName: `${firstName} ${lastName}`,
+                photoURL,
+            });
 
-        // Update our custom user's collection with new metadata
-        // const success = await this.updateUserMetaData({ photoFilePath, firstName, lastName, email });
+            // Update our custom user's collection with new metadata
+            const success = await this.authService.updateUserMetaData({ photoFilePath, firstName, lastName, email });
 
-        return true;
+            return success;
+        } catch (e) {
+            return false;
+        }
     }
 
     public async changeProfilePhoto(file?: File) {

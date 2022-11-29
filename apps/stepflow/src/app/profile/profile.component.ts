@@ -16,6 +16,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     public displayEmailModal = false;
     public displayPasswordModal = false;
     public passwordVerification = '';
+    public isLoading = false;
 
     private subscriptions: Subscription = new Subscription();
 
@@ -52,15 +53,30 @@ export class ProfileComponent implements OnInit, OnDestroy {
     }
 
     public async onSaveProfileSelected() {
-        await this.userService.updateProfileDetails(this.userDetails);
+        this.isLoading = true;
+        const success = await this.userService.updateProfileDetails(this.userDetails);
+
+        if (!success) {
+            this.messageService.add({
+                severity: 'error',
+                key: 'global-toast',
+                life: 5000,
+                closable: true,
+                detail: 'Failed update your profile',
+            });
+        }
+
+        this.isLoading = false;
         this.displayProfileModal = false;
     }
 
     public async onProfileImageUploadSelected($event: { files: File[] }, uploaderElement: any) {
+        this.isLoading = true;
         const success = await this.userService.changeProfilePhoto($event.files[0]);
         uploaderElement.clear();
-        this.displayProfileModal = false;
 
+        this.displayProfileModal = false;
+        this.isLoading = false;
         if (!success) {
             this.messageService.add({
                 severity: 'error',
