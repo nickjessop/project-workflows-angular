@@ -24,11 +24,7 @@ export class AuthenticationService {
 
     private subscriptions = new Subscription();
 
-    constructor(
-        private firebaseService: FirebaseService,
-        private router: Router,
-        private messageService: MessageService
-    ) {
+    constructor(private firebaseService: FirebaseService, private router: Router) {
         this.setAuthStatus(this.user);
         this.initFirebaseUserListener();
     }
@@ -142,8 +138,10 @@ export class AuthenticationService {
     }
 
     async setUserData(user: firebase.User) {
-        const userRef = this.firebaseService.db.collection(USER_COLLECTION_NAME).doc(this.user?.id);
+        const userRef = this.firebaseService.db.collection(USER_COLLECTION_NAME).doc(user.uid);
         const userDoc = await userRef.get();
+
+        debugger;
 
         const obj = userDoc.exists
             ? {
