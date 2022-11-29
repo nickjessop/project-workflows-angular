@@ -16,7 +16,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
     public displayEmailModal = false;
     public displayPasswordModal = false;
     public passwordVerification = '';
-    public isLoading = false;
+    public isLoadingProfileDetails = false;
+    public isLoadingProfileIcon = false;
 
     private subscriptions: Subscription = new Subscription();
 
@@ -53,7 +54,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     }
 
     public async onSaveProfileSelected() {
-        this.isLoading = true;
+        this.isLoadingProfileDetails = true;
         const success = await this.userService.updateProfileDetails(this.userDetails);
 
         if (!success) {
@@ -66,17 +67,15 @@ export class ProfileComponent implements OnInit, OnDestroy {
             });
         }
 
-        this.isLoading = false;
+        this.isLoadingProfileDetails = false;
         this.displayProfileModal = false;
     }
 
     public async onProfileImageUploadSelected($event: { files: File[] }, uploaderElement: any) {
-        this.isLoading = true;
+        this.isLoadingProfileIcon = true;
         const success = await this.userService.changeProfilePhoto($event.files[0]);
         uploaderElement.clear();
 
-        this.displayProfileModal = false;
-        this.isLoading = false;
         if (!success) {
             this.messageService.add({
                 severity: 'error',
@@ -85,7 +84,14 @@ export class ProfileComponent implements OnInit, OnDestroy {
                 closable: true,
                 detail: 'Failed to upload profile image.',
             });
+
+            this.isLoadingProfileIcon = false;
+
+            return;
         }
+
+        this.isLoadingProfileIcon = false;
+        this.displayProfileModal = false;
     }
 
     public async onChangeEmailSelected(password: string) {
