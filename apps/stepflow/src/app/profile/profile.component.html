@@ -118,7 +118,8 @@
                         name="profileImageUpload"
                         customUpload="true"
                         accept="image/*"
-                        maxFileSize="1000000"
+                        [disabled]="isLoadingProfileIcon"
+                        [maxFileSize]="5 * 1024 * 1024"
                         fileLimit="1"
                         chooseLabel="Upload profile image"
                         (uploadHandler)="onProfileImageUploadSelected($event, fileUploader)"
@@ -129,7 +130,16 @@
             </div>
         </div>
         <p-footer
-            ><button pButton type="button" label="Update profile" (click)="onSaveProfileSelected()"></button
+            ><button
+                pButton
+                [disabled]="isLoadingProfileDetails || isLoadingProfileIcon"
+                type="button"
+                label="Update profile"
+                (click)="onSaveProfileSelected()"
+            >
+                <ng-container *ngIf="isLoadingProfileDetails || isLoadingProfileIcon">
+                    <p-progressSpinner [style]="{ width: '25px', height: '25px' }"></p-progressSpinner>
+                </ng-container></button
         ></p-footer>
     </p-dialog>
 

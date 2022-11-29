@@ -17,10 +17,9 @@ export class StorageService {
     }
 
     public uploadProfileImage(file: File, userId: string) {
-        const fileId: string = uuid();
         const pathId = userId;
         const folder = 'users';
-        const storageRef = this.firebaseService.storage.ref(`${folder}/${pathId}/${fileId}`);
+        const storageRef = this.firebaseService.storage.ref(`${folder}/${pathId}/profile.png`);
         return storageRef.put(file);
     }
 
