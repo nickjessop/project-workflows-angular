@@ -141,8 +141,6 @@ export class AuthenticationService {
         const userRef = this.firebaseService.db.collection(USER_COLLECTION_NAME).doc(user.uid);
         const userDoc = await userRef.get();
 
-        debugger;
-
         const obj = userDoc.exists
             ? {
                   plan: userDoc?.data()?.plan || '',
