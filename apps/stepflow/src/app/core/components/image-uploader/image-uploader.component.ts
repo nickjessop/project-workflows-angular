@@ -17,6 +17,7 @@ export class ImageUploaderComponent implements OnInit {
     @Input() field: BlockConfig = this.coreComponentService.createBlockConfig('imageUploader');
     @Input() resizable?: boolean;
 
+    public maxFileSize = 150 * 1024 * 1024;
     public responsiveOptions: any[] = [
         {
             breakpoint: '1024px',

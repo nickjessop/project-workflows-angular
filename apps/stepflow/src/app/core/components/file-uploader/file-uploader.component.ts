@@ -27,6 +27,7 @@ export class FileUploaderComponent implements OnInit {
         { field: 'menu', header: '', size: '10' },
     ];
 
+    public maxFileSize = 150 * 1024 * 1024;
     public fileData: Link[] = [{ href: '', title: '', description: '', thumbnail: '' }];
     public dialogData: Link & { file?: File } = { href: '', title: '', description: '' };
     public showFileUploaderDialog = false;
