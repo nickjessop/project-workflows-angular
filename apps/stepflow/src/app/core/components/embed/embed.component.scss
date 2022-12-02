@@ -2,7 +2,8 @@
 
 .edit,
 .view {
-    height: calc(100% - 40px);
+    height: 100%;
+    min-height: 350px;
     iframe {
         flex-grow: 1;
         width: 100%;

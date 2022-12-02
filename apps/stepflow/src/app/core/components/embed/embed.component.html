@@ -6,7 +6,7 @@
 >
     <ng-container *ngIf="componentMode === 'view'">
         <div
-            class="view p-d-flex p-flex-column p-mb-2"
+            class="view p-d-flex p-flex-column p-jc-between p-mb-2"
             *ngIf="embedData.data.value[0].href && domain.hostname != ''; else placeholder"
         >
             <iframe [src]="cleanUrl" allowfullscreen frameBorder="0"></iframe>
@@ -16,13 +16,14 @@
             </div>
         </div>
         <ng-template #placeholder>
-            <div class="placeholder">
+            <div class="placeholder p-d-flex p-flex-column p-ai-center p-jc-center" style="height: 100%">
                 <img src="/assets/placeholder/embed-placeholder.jpg" alt="Embed placeholder" />
+                <i class="text-secondary">No content embedded.</i>
             </div>
         </ng-template>
     </ng-container>
     <ng-container *ngIf="componentMode === 'edit'">
-        <div class="edit p-d-flex p-flex-column p-mb-2">
+        <div class="edit p-d-flex p-flex-column p-jc-between p-mb-2">
             <ng-container *ngIf="embedData.data.value[0].href && domain.hostname != ''; else add">
                 <iframe [src]="cleanUrl" allowfullscreen frameBorder="0" #iframe></iframe>
                 <div class="url p-mt-2 p-d-flex p-ai-center">
@@ -38,27 +39,42 @@
                 </div>
             </ng-container>
             <ng-template #add>
-                <div class="placeholder">
-                    <img src="/assets/placeholder/embed-placeholder.jpg" alt="Embed placeholder" />
-                    <div class="text-secondary">Enter a URL below to embed content.</div>
-                </div>
-                <div class="p-field p-d-flex p-ai-center p-jc-center add p-mt-5">
-                    <span class="p-float-label">
-                        <input id="float-input-add" type="url" pInputText [(ngModel)]="href" />
-                        <label for="float-input-add">Url</label>
-                    </span>
-                    <div>
-                        <button
-                            pButton
-                            class="p-button-icon p-ml-2"
-                            type="button"
-                            icon="pi pi-plus"
-                            label="Embed URL"
-                            (click)="onAddNewUrlPress()"
-                        ></button>
+                <div class="p-d-flex p-flex-column p-jc-center" style="height: 100%;">
+                    <div class="placeholder">
+                        <img src="/assets/placeholder/embed-placeholder.jpg" alt="Embed placeholder" />
+                        <div class="text-secondary">Enter a URL below to embed content.</div>
+                    </div>
+                    <div class="p-field p-d-flex p-ai-center p-jc-center add p-mt-5">
+                        <span class="p-float-label">
+                            <input id="float-input-add" type="url" pInputText [(ngModel)]="href" />
+                            <label for="float-input-add">Url</label>
+                        </span>
+                        <div>
+                            <button
+                                pButton
+                                class="p-button-icon p-ml-2"
+                                type="button"
+                                icon="pi pi-plus"
+                                label="Embed URL"
+                                (click)="onAddNewUrlPress()"
+                            ></button>
+                        </div>
                     </div>
                 </div>
             </ng-template>
         </div>
+        <p-confirmDialog #ud header="Delete URL?" icon="pi pi-exclamation-triangle" key="{{ field.id }}-embed">
+            <ng-template pTemplate="footer">
+                <button
+                    type="button"
+                    pButton
+                    icon="pi pi-trash"
+                    class="p-button-danger"
+                    label="Delete URL"
+                    (click)="ud.accept()"
+                ></button>
+                <button type="button" pButton class="p-button-secondary" label="Cancel" (click)="ud.reject()"></button>
+            </ng-template>
+        </p-confirmDialog>
     </ng-container>
 </project-drag-and-resize>
