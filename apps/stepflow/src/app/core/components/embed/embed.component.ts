@@ -2,7 +2,7 @@ import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { BlockConfig, ComponentMode, ComponentSettings, Embed } from '@stepflow/interfaces';
-import { MenuItem, MessageService } from 'primeng/api';
+import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
 import { ProjectService } from '../../../services/project/project.service';
 import { CoreComponentService } from '../../core-component.service';
 
@@ -40,7 +40,8 @@ export class EmbedComponent implements OnInit {
         public projectService: ProjectService,
         private domSantizer: DomSanitizer,
         private messageService: MessageService,
-        private coreComponentService: CoreComponentService
+        private coreComponentService: CoreComponentService,
+        private confirmationService: ConfirmationService
     ) {}
 
     ngOnInit(): void {
@@ -114,13 +115,19 @@ export class EmbedComponent implements OnInit {
     }
 
     public onRemoveUrlPress() {
-        this.embedData.data.value[0].href = '';
-        this.projectService.syncProject();
+        this.confirmationService.confirm({
+            message: 'Are you sure that you want to remove this URL? This action cannot be undone.',
+            key: this.field.id + '-embed',
+            header: 'Remove URL?',
+            accept: () => {
+                this.embedData.data.value[0].href = '';
+                this.projectService.syncProject();
+            },
+        });
     }
 
     public isValidUrl(url: string) {
-        const regexp =
-            /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
+        const regexp = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
 
         if (regexp.test(url)) {
             return true;
