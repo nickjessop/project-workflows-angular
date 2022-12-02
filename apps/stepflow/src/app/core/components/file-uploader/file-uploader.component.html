@@ -156,7 +156,7 @@
                         #fileUploader
                         mode="basic"
                         chooseLabel="Select a file"
-                        maxFileSize="10000000"
+                        [maxFileSize]="maxFileSize"
                         (onSelect)="onFileUploadSelected($event)"
                     ></p-fileUpload>
                 </div>
