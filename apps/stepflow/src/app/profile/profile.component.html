@@ -119,7 +119,7 @@
                         customUpload="true"
                         accept="image/*"
                         [disabled]="isLoadingProfileIcon"
-                        [maxFileSize]="5 * 1024 * 1024"
+                        [maxFileSize]="maxFileSize"
                         fileLimit="1"
                         chooseLabel="Upload profile image"
                         (uploadHandler)="onProfileImageUploadSelected($event, fileUploader)"

@@ -79,7 +79,7 @@
             <p-fileUpload
                 mode="basic"
                 accept="image/*"
-                maxFileSize="1000000"
+                [maxFileSize]="maxFileSize"
                 chooseLabel="Add an image"
                 (onSelect)="onFileUploadSelected($event)"
                 class="p-button-text p-mr-2"
