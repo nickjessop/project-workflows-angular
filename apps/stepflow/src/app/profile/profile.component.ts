@@ -19,6 +19,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
     public isLoadingProfileDetails = false;
     public isLoadingProfileIcon = false;
 
+    public maxFileSize = 5 * 1024 * 1024;
+
     private subscriptions: Subscription = new Subscription();
 
     constructor(
