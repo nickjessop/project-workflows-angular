@@ -8,7 +8,12 @@
         </div>
     </ng-container>
     <ng-container *ngIf="componentMode === 'edit'">
-        <div class="checkboxes checkboxes--edit" on-focusin="onFocusIn()">
+        <div
+            class="checkboxes checkboxes--edit"
+            on-focusin="onFocusIn()"
+            cdkDropList
+            (cdkDropListDropped)="drop($event)"
+        >
             <button
                 pButton
                 type="button"
@@ -16,7 +21,6 @@
                 label="Add a task"
                 (click)="onAddCheckboxPress()"
                 class="p-button p-button-secondary"
-                cdkDropList
             ></button>
             <div
                 class="p-d-flex p-ai-center p-pl-2 p-py-2 checkbox"
