@@ -9,24 +9,25 @@
     display: inline-block;
     margin-right: auto;
     margin-left: auto;
+    width: 100%;
     &__item {
         position: relative;
+        &.active {
+            img {
+                border-color: var(--primary-color);
+            }
+        }
         img {
             width: 100%;
             height: auto;
             margin-bottom: 1rem;
             border-radius: var(--border-radius-md);
+            border: 5px solid var(--surface-e);
         }
-        .image-edit,
-        .image-checkbox {
+        .image-edit {
             position: absolute;
             visibility: hidden;
             top: 10px;
-        }
-        .image-checkbox {
-            right: 10px;
-        }
-        .image-edit {
             left: 10px;
             background: white;
         }
@@ -51,10 +52,6 @@
     &:hover {
         background: var(--primary-color-light);
     }
-}
-
-:host ::ng-deep .p-checkbox-checked {
-    visibility: visible;
 }
 
 :host ::ng-deep .gallery {

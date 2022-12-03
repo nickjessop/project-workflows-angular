@@ -7,15 +7,60 @@
                         [src]="image.thumbnail"
                         [alt]="image.description"
                         style="cursor: pointer"
-                        (click)="imageClick(index)"
+                        (click)="enlargeImage(index)"
                     />
                 </div>
             </div>
         </ng-container>
         <ng-container *ngIf="componentMode === 'edit'">
-            <div class="images p-p-2">
-                <div *ngFor="let image of imageData; let index = index" class="images__item" key="index">
-                    <img [src]="image.thumbnail" [alt]="image.description" (click)="imageClick(index)" />
+            <p-toolbar styleClass="p-p-2 p-mb-4 p-mt-2" *ngIf="componentMode === 'edit'">
+                <div class="p-toolbar-group-left">
+                    <p-fileUpload
+                        mode="basic"
+                        accept="image/*"
+                        [maxFileSize]="maxFileSize"
+                        chooseLabel="Add an image"
+                        (onSelect)="onFileUploadSelected($event)"
+                        class="p-button-text p-mr-2"
+                        [auto]="true"
+                    ></p-fileUpload>
+                    <button
+                        pButton
+                        styleClass="p-button-sm"
+                        class="p-button-danger"
+                        type="button"
+                        label="Delete images"
+                        icon="pi pi-trash"
+                        (click)="onDeleteImagePress()"
+                        *ngIf="selectedImages.length > 0"
+                    ></button>
+                </div>
+                <div class="p-toolbar-group-right p-pr-2">
+                    <div>{{ imageData.length }} images</div>
+                </div>
+            </p-toolbar>
+            <div class="images" [ngStyle]="columnSizes()">
+                <div
+                    *ngFor="let image of imageData; let index = index"
+                    class="images__item"
+                    key="index"
+                    #galleryImage
+                    (click)="galleryImage.classList.toggle('active'); galleryImage.toggleAttribute('aria-selected')"
+                >
+                    <!--DEBUG <div
+                        style="position:absolute;top:15px;right:15px;z-index:9999;color:red;background:white;width: 25px;height: 25px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;"
+                    >
+                        {{ index }}
+                    </div> -->
+                    <img
+                        [src]="image.thumbnail"
+                        [alt]="image.description"
+                        (click)="selectImage(index)"
+                        (dblclick)="enlargeImage(index)"
+                    />
                     <p-button
                         label="Edit"
                         icon="pi pi-pencil"
@@ -23,12 +68,6 @@
                         class="image-edit"
                         (click)="imageEdit.toggle($event)"
                     ></p-button>
-                    <p-checkbox
-                        name="deleteImage"
-                        [value]="index"
-                        (onChange)="onCheckboxPress($event, index)"
-                        class="image-checkbox"
-                    ></p-checkbox>
                     <p-overlayPanel
                         #imageEdit
                         [showCloseIcon]="true"
@@ -73,33 +112,6 @@
             <div>No images added</div>
         </div>
     </ng-template>
-
-    <p-toolbar styleClass="p-p-2 p-mt-2" *ngIf="componentMode === 'edit'">
-        <div class="p-toolbar-group-left">
-            <p-fileUpload
-                mode="basic"
-                accept="image/*"
-                [maxFileSize]="maxFileSize"
-                chooseLabel="Add an image"
-                (onSelect)="onFileUploadSelected($event)"
-                class="p-button-text p-mr-2"
-                [auto]="true"
-            ></p-fileUpload>
-            <button
-                pButton
-                styleClass="p-button-sm"
-                class="p-button-danger"
-                type="button"
-                label="Delete images"
-                icon="pi pi-trash"
-                (click)="onDeleteImagePress()"
-                *ngIf="selectedImages.length > 0"
-            ></button>
-        </div>
-        <div class="p-toolbar-group-right p-pr-2">
-            <div>{{ imageData.length }} images</div>
-        </div>
-    </p-toolbar>
 
     <p-galleria
         [value]="imageData"
@@ -150,4 +162,18 @@
             </div>
         </ng-template>
     </p-galleria>
+
+    <p-confirmDialog #gd header="Delete Images?" icon="pi pi-exclamation-triangle" key="{{ field.id }}-gallery">
+        <ng-template pTemplate="footer">
+            <button
+                type="button"
+                pButton
+                icon="pi pi-trash"
+                class="p-button-danger"
+                label="Delete Images"
+                (click)="gd.accept()"
+            ></button>
+            <button type="button" pButton class="p-button-secondary" label="Cancel" (click)="gd.reject()"></button>
+        </ng-template>
+    </p-confirmDialog>
 </project-drag-and-resize>
