@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { BlockConfig, ComponentMode, ComponentSettings, ImageUploader, Link } from '@stepflow/interfaces';
-import { MenuItem, MessageService } from 'primeng/api';
+import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
 import { ProjectService } from '../../../services/project/project.service';
 import { StorageService } from '../../../services/storage/storage.service';
 import { CoreComponentService } from '../../core-component.service';
@@ -37,6 +37,7 @@ export class ImageUploaderComponent implements OnInit {
     public showThumbnails: boolean = false;
     public showImageUploaderDialog = false;
     public imageData: Link[] = [];
+    public imageDataCopy: Link[] = []; // copy to have a reference of original data
     public selectedImages: number[] = [];
     public componentMode: ComponentMode = 'view';
     public height?: number;
@@ -46,7 +47,8 @@ export class ImageUploaderComponent implements OnInit {
         public projectService: ProjectService,
         private storageService: StorageService,
         private messageService: MessageService,
-        private coreComponentService: CoreComponentService
+        private coreComponentService: CoreComponentService,
+        private confirmationService: ConfirmationService
     ) {}
 
     public items: MenuItem[] = [
@@ -60,6 +62,7 @@ export class ImageUploaderComponent implements OnInit {
     ];
 
     public columnSizes(): Object {
+        // modify number of cols depending on # of images uploaded
         if (this.imageData.length > 1 && this.imageData.length < 7) {
             return { 'column-count': 2, '-webkit-column-count': 2, '-moz-column-count': 2 };
         } else if (this.imageData.length === 1) {
@@ -92,26 +95,33 @@ export class ImageUploaderComponent implements OnInit {
             this.projectService.syncProject();
         }
         this.imageData = _imageData;
+        console.log(this.imageData, 'image data oninit');
+        console.log(this.imageDataCopy, 'image data oninit');
     }
 
-    public imageClick(index: number) {
+    public enlargeImage(index: number) {
         this.activeIndex = index;
         this.displayLightbox = true;
     }
 
-    public onThumbnailButtonClick() {
-        this.showThumbnails = !this.showThumbnails;
-    }
-
-    public onCheckboxPress($event: { checked: boolean }, imageIndex: number) {
-        if ($event.checked) {
-            this.selectedImages.push(imageIndex);
-        } else {
+    public selectImage(imageIndex: number) {
+        console.log(this.selectedImages);
+        if (this.selectedImages.includes(imageIndex)) {
+            // find index and only splice array when item is found
             const index = this.selectedImages.indexOf(imageIndex);
             if (index > -1) {
                 this.selectedImages.splice(index, 1);
             }
+        } else {
+            this.selectedImages.push(imageIndex);
         }
+
+        this.imageDataCopy = this.imageData;
+        console.log(this.imageDataCopy, 'selection _imageData');
+    }
+
+    public onThumbnailButtonClick() {
+        this.showThumbnails = !this.showThumbnails;
     }
 
     public onFileUploadSelected($event: { originalEvent: Event; files: FileList; currentFiles: File[] }) {
@@ -121,22 +131,59 @@ export class ImageUploaderComponent implements OnInit {
 
     public async onDeleteImagePress() {
         let index = this.selectedImages.length;
+        console.log(this.selectedImages, 'selected images outside loop');
+        console.log(this.imageData, 'image data outside loop');
+        console.log(this.imageDataCopy, '_image data outside loop');
+        this.confirmationService.confirm({
+            message: 'Are you sure that you want to remove these images? This action cannot be undone.',
+            key: this.field.id + '-gallery',
+            header: 'Remove Images?',
+            accept: async () => {
+                const result = await this.deleteImages(index as number);
+                if (result) {
+                    // console.log('LOOP DONE');
+                    this.projectService.syncProject();
+                }
+            },
+        });
+    }
+
+    private async deleteImages(index: number) {
         while (index--) {
             const imageIndex = this.selectedImages[index];
-            const filePath = this.imageData?.[imageIndex]?.filePath;
+            const filePath = this.imageDataCopy?.[imageIndex]?.filePath;
+            // const _selectedImages = this.imageData;
+            // console.log(this.selectedImages, 'selected Images');
+            // console.log(filePath, 'file path');
+            // console.log(imageIndex, 'image index');
+            // console.log(this.imageData, 'image data');
+            // console.log(this.imageDataCopy, '_image data');
             if (filePath) {
                 this.imageData.splice(imageIndex, 1);
                 this.selectedImages.splice(index, 1);
-                const success = await this.storageService.deleteFile(filePath);
-                if (success) {
-                    this.projectService.syncProject();
-                }
+                await this.storageService
+                    .deleteFile(filePath)
+                    .then(res => {
+                        console.log('Document successfully deleted!');
+                        this.imageData.splice(imageIndex, 1);
+                        this.selectedImages.splice(index, 1);
+                        return res;
+                    })
+                    .catch(error => {
+                        console.error('Error removing documents: ', error);
+                        return error;
+                    });
+                console.log('file path found');
             } else {
                 console.log('no file path');
                 this.imageData.splice(imageIndex, 1);
                 this.selectedImages.splice(index, 1);
-                this.projectService.syncProject();
             }
+        }
+        if (this.selectedImages.length === 0) {
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -146,13 +193,12 @@ export class ImageUploaderComponent implements OnInit {
         if (!file || !projectId) {
             return;
         }
-
         const filedata = await this.storageService.uploadProjectFile(file, projectId);
         const downloadUrl: string = await this.storageService.getDownloadUrl(filedata.metadata.fullPath);
         const fileMetadata = filedata.metadata;
         const filePath = fileMetadata.fullPath;
         const size = fileMetadata.size;
-        const name = fileMetadata.name;
+        const name = file.name;
 
         this.imageData.push({
             href: downloadUrl,
