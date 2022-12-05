@@ -1,20 +1,15 @@
-// // Start writing Firebase Functions
-// // https://firebase.google.com/docs/functions/typescript
-//
-// export const helloWorld = functions.https.onRequest((request, response) => {
-//   functions.logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
-// firebase deploy --only functions
+import * as functions from 'firebase-functions';
 import * as sgMail from '@sendgrid/mail';
 import * as admin from 'firebase-admin';
-import * as functions from 'firebase-functions';
-import { USER_COLLECTION_NAME } from '../../libs/interfaces/src';
+import { PROJECT_STORAGE_USAGE_COLLECTION, USER_COLLECTION_NAME } from '../../libs/interfaces/src';
+
+import { firestore } from 'firebase-admin';
+
 admin.initializeApp();
 // const db = admin.firestore();
 
-const API_KEY = functions.config().sendgrid.key;
-const TEMPLATE_ID = functions.config().sendgrid.template;
+const API_KEY = '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';
+const TEMPLATE_ID = 'd-5f34c6d8857d4c27867d0b58b64f02b1';
 
 sgMail.setApiKey(API_KEY);
 
@@ -134,3 +129,36 @@ export const createUserAndAttachMetadata = functions.https.onCall(
         return {};
     }
 );
+
+export const updateProjectStorageUsage = functions.storage.object().onFinalize(async handler => {
+    console.log(handler.bucket);
+    const filePath = handler.name?.split('/'); // File path in the bucket.
+    const projectId = filePath?.[1];
+    const fileSize = handler.size;
+
+    if (!filePath || !projectId) {
+        return;
+    }
+    try {
+        const storageUsageObj = await admin
+            .firestore()
+            .collection(PROJECT_STORAGE_USAGE_COLLECTION)
+            .where('projectId', '==', projectId)
+            .get();
+
+        if (!storageUsageObj.empty) {
+            const usageRef = storageUsageObj.docs[0].ref;
+            await usageRef.update({
+                totalBytes: firestore.FieldValue.increment(Number(fileSize)),
+            });
+        }
+
+        return {};
+    } catch (err) {
+        return { err };
+    }
+});
+
+// exports.generateThumbnail = functions.storage.object().onFinalize(async (object) => {
+//     // ...
+//   });
