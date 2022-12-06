@@ -37,7 +37,7 @@ export class ImageUploaderComponent implements OnInit {
     public showThumbnails: boolean = false;
     public showImageUploaderDialog = false;
     public imageData: Link[] = [];
-    public imageDataCopy: Link[] = []; // copy to have a reference of original data
+    public _imageData: Link[] = []; // clone to have a reference of original data
     public selectedImages: number[] = [];
     public componentMode: ComponentMode = 'view';
     public height?: number;
@@ -95,8 +95,7 @@ export class ImageUploaderComponent implements OnInit {
             this.projectService.syncProject();
         }
         this.imageData = _imageData;
-        console.log(this.imageData, 'image data oninit');
-        console.log(this.imageDataCopy, 'image data oninit');
+        this._imageData = [..._imageData];
     }
 
     public enlargeImage(index: number) {
@@ -105,7 +104,6 @@ export class ImageUploaderComponent implements OnInit {
     }
 
     public selectImage(imageIndex: number) {
-        console.log(this.selectedImages);
         if (this.selectedImages.includes(imageIndex)) {
             // find index and only splice array when item is found
             const index = this.selectedImages.indexOf(imageIndex);
@@ -115,9 +113,6 @@ export class ImageUploaderComponent implements OnInit {
         } else {
             this.selectedImages.push(imageIndex);
         }
-
-        this.imageDataCopy = this.imageData;
-        console.log(this.imageDataCopy, 'selection _imageData');
     }
 
     public onThumbnailButtonClick() {
@@ -129,19 +124,16 @@ export class ImageUploaderComponent implements OnInit {
         this.uploadFile($event.currentFiles[0]);
     }
 
-    public async onDeleteImagePress() {
+    public onDeleteImagePress() {
         let index = this.selectedImages.length;
-        console.log(this.selectedImages, 'selected images outside loop');
-        console.log(this.imageData, 'image data outside loop');
-        console.log(this.imageDataCopy, '_image data outside loop');
         this.confirmationService.confirm({
             message: 'Are you sure that you want to remove these images? This action cannot be undone.',
             key: this.field.id + '-gallery',
-            header: 'Remove Images?',
+            header: 'Remove images?',
             accept: async () => {
                 const result = await this.deleteImages(index as number);
                 if (result) {
-                    // console.log('LOOP DONE');
+                    console.log('LOOP DONE');
                     this.projectService.syncProject();
                 }
             },
@@ -151,16 +143,8 @@ export class ImageUploaderComponent implements OnInit {
     private async deleteImages(index: number) {
         while (index--) {
             const imageIndex = this.selectedImages[index];
-            const filePath = this.imageDataCopy?.[imageIndex]?.filePath;
-            // const _selectedImages = this.imageData;
-            // console.log(this.selectedImages, 'selected Images');
-            // console.log(filePath, 'file path');
-            // console.log(imageIndex, 'image index');
-            // console.log(this.imageData, 'image data');
-            // console.log(this.imageDataCopy, '_image data');
+            const filePath = this._imageData?.[imageIndex]?.filePath;
             if (filePath) {
-                this.imageData.splice(imageIndex, 1);
-                this.selectedImages.splice(index, 1);
                 await this.storageService
                     .deleteFile(filePath)
                     .then(res => {
@@ -173,9 +157,8 @@ export class ImageUploaderComponent implements OnInit {
                         console.error('Error removing documents: ', error);
                         return error;
                     });
-                console.log('file path found');
             } else {
-                console.log('no file path');
+                // no file path
                 this.imageData.splice(imageIndex, 1);
                 this.selectedImages.splice(index, 1);
             }
