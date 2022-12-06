@@ -15,7 +15,7 @@ export class CheckboxesComponent implements OnInit {
     @Input() field: BlockConfig = this.coreComponentService.createBlockConfig('checkboxes');
     @Input() resizable?: boolean;
     public componentMode: ComponentMode = 'view';
-    public showSaveButton: boolean = false;
+    public isEditing: boolean = false;
     public height?: number;
     public settings?: ComponentSettings;
 
@@ -50,29 +50,13 @@ export class CheckboxesComponent implements OnInit {
         this.projectService.setBlockDrag(false);
     }
 
-    private updateHeight(height: number = 400) {
-        if (!this.resizable) {
-            return;
-        }
-        this.height = height;
-        this.field.metadata.settings = { ...this.field.metadata.settings, height: height };
-    }
-
-    public saveTextblock() {
-        this.showSaveButton = false;
-        this.projectService.syncProject();
-    }
-
-    public onFocusIn() {
-        this.showSaveButton = true;
-    }
-
     public getCheckboxMenuItems(index: number): MenuItem[] {
         return [
             {
                 label: 'Delete item',
                 icon: 'pi pi-trash',
                 command: () => {
+                    console.log('menu');
                     this.onCheckboxDeletePress(index);
                 },
             },
@@ -82,6 +66,7 @@ export class CheckboxesComponent implements OnInit {
     public onAddCheckboxPress() {
         const newCheckbox = { item: '', checked: false };
         (this.field?.metadata as Checkboxes).data.value.splice(0, 0, newCheckbox);
+        this.saveContent();
     }
 
     public onCheckboxPress() {
@@ -100,7 +85,9 @@ export class CheckboxesComponent implements OnInit {
     }
 
     public onCheckboxDeletePress(index: number) {
+        console.log('delete?', index);
         (this.field.metadata as Checkboxes).data.value.splice(index, 1);
+        this.saveContent();
     }
 
     drop(event: CdkDragDrop<any>) {
@@ -115,6 +102,11 @@ export class CheckboxesComponent implements OnInit {
     }
 
     public saveContent() {
-        // this.projectService.syncProject();
+        this.projectService.syncProject();
+        this.isEditing = false;
+    }
+
+    public onEdit() {
+        this.isEditing = true;
     }
 }

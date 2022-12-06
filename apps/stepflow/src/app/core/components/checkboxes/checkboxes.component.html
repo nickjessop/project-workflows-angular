@@ -8,12 +8,7 @@
         </div>
     </ng-container>
     <ng-container *ngIf="componentMode === 'edit'">
-        <div
-            class="checkboxes checkboxes--edit"
-            on-focusin="onFocusIn()"
-            cdkDropList
-            (cdkDropListDropped)="drop($event)"
-        >
+        <div class="checkboxes checkboxes--edit" cdkDropList (cdkDropListDropped)="drop($event)">
             <button
                 pButton
                 type="button"
@@ -25,7 +20,7 @@
             <div
                 class="p-d-flex p-ai-center p-pl-2 p-py-2 checkbox"
                 *ngFor="let val of field.metadata.data.value; index as index"
-                [cdkDragDisabled]="val.checked"
+                [cdkDragDisabled]="val.checked || isEditing"
                 cdkDrag
             >
                 <p-checkbox
@@ -36,9 +31,10 @@
                 ></p-checkbox>
                 <p-inplace
                     closable="true"
-                    styleClass="checkbox__editable"
+                    styleClass="checkbox__editable p-mx-2"
                     closeIcon="pi pi-check"
                     (onDeactivate)="saveContent()"
+                    (onActivate)="onEdit()"
                 >
                     <ng-template pTemplate="display">
                         <label [for]="index" [ngClass]="{ checkbox__completed: val.checked }">{{
@@ -46,7 +42,13 @@
                         }}</label>
                     </ng-template>
                     <ng-template pTemplate="content">
-                        <textarea type="text" class="p-inputtext" [(ngModel)]="val.item" pInputText></textarea>
+                        <textarea
+                            type="text"
+                            class="p-inputtext p-mx-2"
+                            rows="1"
+                            [(ngModel)]="val.item"
+                            pInputText
+                        ></textarea>
                     </ng-template>
                 </p-inplace>
                 <button
@@ -57,10 +59,6 @@
                     (click)="menu.toggle($event)"
                 ></button>
                 <p-menu #menu [popup]="true" [model]="getCheckboxMenuItems(index)" appendTo="body"></p-menu>
-            </div>
-            <div *ngIf="showSaveButton" class="p-d-flex p-align-center p-mt-2">
-                <button (click)="saveTextblock()" class="p-button p-mr-2">Save</button>
-                <i class="ms-01">Unsaved changes</i>
             </div>
         </div>
     </ng-container>
