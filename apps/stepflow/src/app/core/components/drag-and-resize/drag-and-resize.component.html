@@ -64,7 +64,7 @@
                 ></button>
                 <button
                     *ngIf="canConfigureBlocks"
-                    (click)="onSaveBlock()"
+                    (click)="onPreviewBlock()"
                     pButton
                     type="button"
                     icon="pi pi-eye"
@@ -97,7 +97,7 @@
                     title="{{ blockMetaData.label }} block: {{ blockMetaData.description }}"
                 ></i>
                 <span class="view-label ms-1">
-                    {{ field.label ? field.label : 'Untitled block' }}
+                    {{ field.label ? field.label : field.metadata.label }}
                 </span>
             </div>
             <div class="field__settings">

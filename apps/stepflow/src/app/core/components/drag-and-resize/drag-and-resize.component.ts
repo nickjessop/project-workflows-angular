@@ -64,16 +64,16 @@ export class DragAndResizeComponent implements OnInit {
     public onEditBlock() {
         this.componentMode.emit('edit');
         this.editMode = true;
+        this.saveBlockData();
     }
 
     public onAddComment() {
         this.commentsService.setBlockId(this.field.id);
     }
 
-    public onSaveBlock() {
+    public onPreviewBlock() {
         this.componentMode.emit('view');
         this.editMode = false;
-        // this.projectService.syncProject();
     }
 
     public onDeleteBlock() {
