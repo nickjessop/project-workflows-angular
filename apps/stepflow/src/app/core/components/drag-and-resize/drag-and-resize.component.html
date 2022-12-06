@@ -30,10 +30,16 @@
                 ></i>
                 <p-inplace closable="true" closeIcon="pi pi-check" (onDeactivate)="saveBlockData()">
                     <ng-template pTemplate="display">
-                        <span class="ms-1">{{ field.label ? field.label : 'Untitled block' }}</span>
+                        <span class="ms-1">{{ field.label ? field.label : field.metadata.label }}</span>
                     </ng-template>
                     <ng-template pTemplate="content">
-                        <input type="text" class="p-inputtext ms-1" [(ngModel)]="field.label" pInputText />
+                        <input
+                            type="text"
+                            class="p-inputtext ms-1"
+                            [(ngModel)]="field.label"
+                            placeholder="{{ field.label ? field.label : field.metadata.label }}"
+                            pInputText
+                        />
                     </ng-template>
                 </p-inplace>
             </div>
@@ -61,9 +67,9 @@
                     (click)="onSaveBlock()"
                     pButton
                     type="button"
-                    icon="pi pi-check"
+                    icon="pi pi-eye"
                     class="p-button-text p-button-plain"
-                    pTooltip="Save changes"
+                    pTooltip="Preview block"
                 ></button>
             </div>
         </div>
@@ -90,9 +96,9 @@
                     [style.background-color]="blockMetaData.colour"
                     title="{{ blockMetaData.label }} block: {{ blockMetaData.description }}"
                 ></i>
-                <div class="ms-1">
+                <span class="view-label ms-1">
                     {{ field.label ? field.label : 'Untitled block' }}
-                </div>
+                </span>
             </div>
             <div class="field__settings">
                 <button
