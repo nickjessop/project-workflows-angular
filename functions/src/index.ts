@@ -170,14 +170,24 @@ export const updateProjectStorageUsageOnAddition = functions.storage.object().on
         const storageUsageObj = await admin
             .firestore()
             .collection(PROJECT_STORAGE_USAGE_COLLECTION)
-            .where('projectId', '==', projectId)
+            .doc(projectId)
             .get();
 
-        if (!storageUsageObj.empty) {
-            const usageRef = storageUsageObj.docs[0].ref;
+        if (storageUsageObj.exists) {
+            const usageRef = storageUsageObj.ref;
+
             await usageRef.update({
                 totalBytes: firestore.FieldValue.increment(Number(fileSize)),
             });
+        } else {
+            await admin
+                .firestore()
+                .collection(PROJECT_STORAGE_USAGE_COLLECTION)
+                .doc(projectId)
+                .set({
+                    projectId,
+                    totalBytes: Number(fileSize),
+                });
         }
 
         return {};
