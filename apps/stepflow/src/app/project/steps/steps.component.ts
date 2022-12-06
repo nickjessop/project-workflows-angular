@@ -34,6 +34,7 @@ export class StepsComponent implements OnInit {
     public project?: Project;
     public steps: StepConfig[] = [];
     public currentStep?: StepConfig;
+    public doesExceed30ProjectSteps = false;
 
     @Output() dragAndDropStepEvent: EventEmitter<{
         previousIndex: number;
@@ -106,6 +107,7 @@ export class StepsComponent implements OnInit {
                     this.project = _project;
 
                     if (_project.configuration) {
+                        this.doesExceed30ProjectSteps = _project.configuration.length >= 30;
                         this.steps = _project.configuration;
                         this.currentStep = _project.configuration[0];
                     }
