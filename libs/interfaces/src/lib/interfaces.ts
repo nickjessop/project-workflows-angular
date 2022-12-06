@@ -267,6 +267,7 @@ export const PROJECTS_COLLECTION = 'projects';
 export const INVITATION_COLLECTION = 'invitations';
 export const COMMENTS_COLLECTION = 'comments';
 export const SHARE_COLLECTION = 'shareLinks';
+export const PROJECT_STORAGE_USAGE_COLLECTION = 'projectStorageUsage';
 
 export const allowedUserIds = [
     '06T4lgj7x1emjUEMCmPnJYPFjum2',

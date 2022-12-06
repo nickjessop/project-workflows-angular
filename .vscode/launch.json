@@ -10,6 +10,12 @@
             "name": "Attach API Debugger",
             "restart": true,
             "port": 7777
+        },
+        {
+            "type": "node",
+            "request": "attach",
+            "name": "Debug Functions",
+            "port": 9229
         }
     ]
 }
