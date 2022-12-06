@@ -22,7 +22,7 @@ export class DragAndResizeComponent implements OnInit {
 
     public canConfigureBlocks: boolean = false;
     public canEditBlocks: boolean = false;
-    public editMode: boolean = false;
+    public editMode: boolean = true;
     public subscriptions: Subscription = new Subscription();
     public blockMetaData!: ComponentMetadata;
 
@@ -71,7 +71,9 @@ export class DragAndResizeComponent implements OnInit {
     }
 
     public onSaveBlock() {
-        this.projectService.syncProject();
+        this.componentMode.emit('view');
+        this.editMode = false;
+        // this.projectService.syncProject();
     }
 
     public onDeleteBlock() {

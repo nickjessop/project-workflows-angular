@@ -55,9 +55,15 @@ mwlResizable {
         }
     }
     .field__label {
-        font-weight: bold;
         flex-shrink: 0;
+        span {
+            font-weight: bold;
+        }
+        .view-label {
+            padding-left: 0.5rem;
+        }
     }
+
     .field__content {
         height: 100%;
     }
@@ -80,7 +86,7 @@ mwlResizable {
         }
         .p-inplace-display,
         .p-inputtext {
-            font-weight: 500;
+            font-weight: bold;
             color: var(--clr-text);
         }
     }
