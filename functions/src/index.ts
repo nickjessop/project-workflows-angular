@@ -185,7 +185,3 @@ export const updateProjectStorageUsageOnAddition = functions.storage.object().on
         return { err };
     }
 });
-
-// exports.generateThumbnail = functions.storage.object().onFinalize(async (object) => {
-//     // ...
-//   });
