@@ -133,7 +133,6 @@ export class ImageUploaderComponent implements OnInit {
             accept: async () => {
                 const result = await this.deleteImages(index as number);
                 if (result) {
-                    console.log('LOOP DONE');
                     this.projectService.syncProject();
                 }
             },

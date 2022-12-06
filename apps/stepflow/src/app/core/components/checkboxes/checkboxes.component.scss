@@ -14,14 +14,7 @@
             opacity: 0.6;
             text-decoration: line-through;
         }
-        &__editable,
-        p-inplace {
-            width: 100%;
-        }
-        input {
-            width: calc(100% - 60px);
-            margin-right: 10px;
-        }
+
         &:hover,
         &:focus-within {
             .checkbox__delete {
@@ -29,4 +22,20 @@
             }
         }
     }
+}
+//nesting host/ng-deep doesn't seem to work with scss
+:host ::ng-deep .p-inplace-content {
+    display: flex !important;
+    width: 100%;
+}
+:host ::ng-deep p-inplace {
+    width: 100%;
+}
+:host ::ng-deep .checkbox__editable textarea {
+    flex-grow: 1;
+    resize: none;
+}
+:host ::ng-deep .checkbox__editable label {
+    width: 100%;
+    line-height: 1.75rem;
 }
