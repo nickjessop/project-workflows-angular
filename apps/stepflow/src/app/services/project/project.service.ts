@@ -213,6 +213,10 @@ export class ProjectService {
         label?: string,
         name?: string
     ) {
+        const doesExceed30ProjectSteps = this.projectConfig.configuration?.length || 0 >= 30;
+
+        if (doesExceed30ProjectSteps) return false;
+
         const fieldConfig = this.coreComponentService.createBlockConfig('richTextInput', label, name);
 
         const stepConfig: StepConfig = {
