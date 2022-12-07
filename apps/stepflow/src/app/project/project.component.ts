@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ConfirmationService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { ProjectService } from '../services/project/project.service';
 
 @Component({
@@ -17,7 +17,8 @@ export class ProjectComponent implements OnInit {
     constructor(
         private projectService: ProjectService,
         private confirmationService: ConfirmationService,
-        private router: Router
+        private router: Router,
+        private messageService: MessageService
     ) {}
 
     ngOnInit() {
@@ -69,14 +70,20 @@ export class ProjectComponent implements OnInit {
 
         if (newProject) {
             this.router.navigateByUrl(`/project/${newProject.id}`);
+        } else if (newProject === false) {
+            // exceed quota of 3
+            this.messageService.add({
+                key: 'global-toast',
+                severity: 'error',
+                detail: 'You may only create a max of 3 projects on your plan.',
+            });
+        } else {
+            // error occurred during creation
+            this.messageService.add({
+                key: 'global-toast',
+                severity: 'error',
+                detail: 'An error occurred while attempting to create the project.  Please try again.',
+            });
         }
-        // this.projectService.createNewProject($event.projectName, $event.description).then(
-        //     success => {
-        //         this.getProjects();
-        //     },
-        //     error => {
-        //         console.log('Error creating new project');
-        //     }
-        // );
     }
 }

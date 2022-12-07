@@ -242,6 +242,17 @@ export class ProjectService {
     public async createNewProject(projectName: string, projectDescription?: string) {
         const userId = this.authenticationService.user?.id;
 
+        const projects = await this.getProjects();
+        let projectCount = 0;
+        projects.forEach(proj => {
+            if (proj.isOwner) {
+                projectCount++;
+            }
+        });
+        if (projectCount >= 3) {
+            return false;
+        }
+
         const baseProject = this.createBaseProject(userId || '', projectName, projectDescription);
 
         const proj = await this.firebaseService.db
@@ -256,6 +267,7 @@ export class ProjectService {
                 },
                 error => {
                     console.log(`Error occurred while creating a new project: ${error}`);
+                    return null;
                 }
             );
 
@@ -417,22 +429,6 @@ export class ProjectService {
         });
 
         return _projects;
-    }
-
-    public getMyProjects() {
-        const userId = this.authenticationService.user?.id || '';
-
-        const ref = this.firebaseService.db.collection(PROJECTS_COLLECTION);
-
-        return from(ref.where('members', 'array-contains', { userId, role: 'owner' }).get()).pipe(
-            map(data => {
-                const projects = data.docs.map(items => {
-                    return items.data();
-                });
-
-                return projects;
-            })
-        );
     }
 
     public isOwner(memberRoles: [{ userId: string; role: Role }]) {
