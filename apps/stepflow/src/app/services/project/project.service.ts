@@ -213,7 +213,7 @@ export class ProjectService {
         label?: string,
         name?: string
     ) {
-        const doesExceed30ProjectSteps = this.projectConfig.configuration?.length || 0 >= 30;
+        const doesExceed30ProjectSteps = (this.projectConfig.configuration?.length || 0) >= 30;
 
         if (doesExceed30ProjectSteps) return false;
 
@@ -329,13 +329,25 @@ export class ProjectService {
     }
 
     public addProjectBlock(projectBlock: BlockConfig) {
-        const currentStepIndex = this.getCurrentStepIndex() || 0;
+        let totalBlocks = 0;
 
+        this.projectConfig.configuration?.forEach(config => {
+            config.components?.forEach(block => {
+                totalBlocks++;
+            });
+        });
+
+        if (totalBlocks >= 150) {
+            return null;
+        }
+
+        const currentStepIndex = this.getCurrentStepIndex() || 0;
         const _projectConfig = _.cloneDeep(this.projectConfig);
+
         _projectConfig.configuration![currentStepIndex].components?.push(projectBlock);
 
         // this.projectConfig = _projectConfig;
-        this.setProject(_projectConfig);
+        return this.setProject(_projectConfig);
     }
 
     public async updateProjectSettings(projectSettings: { name: string; description: string }) {
