@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ComponentType } from '@stepflow/interfaces';
+import { MessageService } from 'primeng/api';
 import { CoreComponentService } from '../../core/core-component.service';
 import { ProjectService } from '../../services/project/project.service';
 @Component({
@@ -13,7 +14,11 @@ export class ControlsComponent implements OnInit {
     @Input()
     canConfigureProject: boolean = false;
 
-    constructor(public projectService: ProjectService, private coreComponentService: CoreComponentService) {}
+    constructor(
+        public projectService: ProjectService,
+        private coreComponentService: CoreComponentService,
+        private messageService: MessageService
+    ) {}
 
     ngOnInit() {}
 
@@ -21,9 +26,23 @@ export class ControlsComponent implements OnInit {
         this.addNewBlock(blockType);
     }
 
-    public addNewBlock(metadata: ComponentType, label?: string, name?: string) {
+    public async addNewBlock(metadata: ComponentType, label?: string, name?: string) {
         const newBlock = this.coreComponentService.createBlockConfig(metadata, label, name);
 
-        this.projectService.addProjectBlock(newBlock);
+        const res = await this.projectService.addProjectBlock(newBlock);
+
+        if (res == null) {
+            this.messageService.add({
+                key: 'global-toast',
+                severity: 'error',
+                detail: 'You may only have a total of 150 blocks per a project on your plan.',
+            });
+        } else if (!res) {
+            this.messageService.add({
+                key: 'global-toast',
+                severity: 'error',
+                detail: 'Failed to add new block. Please try again.',
+            });
+        }
     }
 }
