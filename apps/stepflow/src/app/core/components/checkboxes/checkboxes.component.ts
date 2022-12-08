@@ -18,6 +18,7 @@ export class CheckboxesComponent implements OnInit {
     public isEditing: boolean = false;
     public height?: number;
     public settings?: ComponentSettings;
+    public checkboxesAmount: number = 0;
 
     public items: MenuItem[] = [
         {

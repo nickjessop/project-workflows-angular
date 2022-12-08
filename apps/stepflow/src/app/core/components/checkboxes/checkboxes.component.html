@@ -9,14 +9,16 @@
     </ng-container>
     <ng-container *ngIf="componentMode === 'edit'">
         <div class="checkboxes checkboxes--edit" cdkDropList (cdkDropListDropped)="drop($event)">
-            <button
-                pButton
-                type="button"
-                icon="pi pi-plus"
-                label="Add a task"
-                (click)="onAddCheckboxPress()"
-                class="p-button p-button-secondary"
-            ></button>
+            <div class="toolbar">
+                <button
+                    pButton
+                    type="button"
+                    icon="pi pi-plus"
+                    label="Add a task"
+                    (click)="onAddCheckboxPress()"
+                    class="p-button p-button-text toolbar__button"
+                ></button>
+            </div>
             <div
                 class="p-d-flex p-ai-center p-pl-2 p-py-2 checkbox"
                 *ngFor="let val of field.metadata.data.value; index as index"

@@ -10,7 +10,9 @@
     <ng-container *ngIf="componentMode === 'edit'">
         <div class="rich-text edit">
             <form [formGroup]="form" on-focusin="onFocusIn($event)" #textBlock>
-                <ngx-editor-menu [editor]="editor" [toolbar]="toolbar"> </ngx-editor-menu>
+                <div class="toolbar">
+                    <ngx-editor-menu [editor]="editor" [toolbar]="toolbar"> </ngx-editor-menu>
+                </div>
                 <!-- <ngx-editor-floating-menu [editor]="editor">
                     <ngx-editor-menu [editor]="editor" [toolbar]="toolbar"></ngx-editor-menu>
                 </ngx-editor-floating-menu> -->
