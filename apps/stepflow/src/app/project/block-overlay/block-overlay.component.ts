@@ -1,3 +1,4 @@
+import * as amplitude from '@amplitude/analytics-browser';
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { ComponentType } from '@stepflow/interfaces';
 import { CoreComponentService } from '../../core/core-component.service';
@@ -35,5 +36,6 @@ export class BlockPanelOverlayComponent implements OnInit {
     public onAddNewBlockPress(componentType: ComponentType) {
         this.onSelectNewBlock.emit(componentType);
         this.displayBlockSidebar = false;
+        amplitude.track('Added block');
     }
 }

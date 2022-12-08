@@ -1,3 +1,4 @@
+import * as amplitude from '@amplitude/analytics-browser';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -67,9 +68,9 @@ export class ProjectComponent implements OnInit {
 
     public async onCreateNewProjectEvent($event: { projectName: string; description: string }) {
         const newProject = await this.projectService.createNewProject($event.projectName, $event.description);
-
         if (newProject) {
             this.router.navigateByUrl(`/project/${newProject.id}`);
+            amplitude.track('Created project');
         } else if (newProject === false) {
             // exceed quota of 3
             this.messageService.add({
@@ -77,6 +78,7 @@ export class ProjectComponent implements OnInit {
                 severity: 'error',
                 detail: 'You may only create a max of 3 projects on your plan.',
             });
+            amplitude.track('Hit project quota');
         } else {
             // error occurred during creation
             this.messageService.add({
