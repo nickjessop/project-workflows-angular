@@ -1,3 +1,4 @@
+import * as amplitude from '@amplitude/analytics-browser';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import {
@@ -17,6 +18,7 @@ import { MessageService } from 'primeng/api';
 import { fromEvent, Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ProjectService } from '../../services/project/project.service';
+
 @Component({
     selector: 'project-steps',
     templateUrl: './steps.component.html',
@@ -174,12 +176,13 @@ export class StepsComponent implements OnInit {
                         severity: 'error',
                         detail: 'You may only create a max of 30 steps',
                     });
-
+                    amplitude.track('Hit step quota');
                     return;
                 }
 
                 newStep.step = $event.step;
                 this.projectService.addProjectStep(newStep);
+                amplitude.track('Added step');
             }
         } else if (mode === 'delete') {
             this.projectService.deleteCurrentProjectStep();

@@ -29,7 +29,6 @@ import { ViewerComponent } from './project/viewer/viewer.component';
 import { ProtectedRoutingModule } from './protected-routing.module';
 import { ApiService } from './services/api/api.service';
 
-
 @NgModule({
     declarations: [
         AppComponent,
