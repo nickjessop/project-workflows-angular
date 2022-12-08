@@ -1,4 +1,4 @@
-<div class="steps-container p-d-flex p-pt-6 p-pb-3 p-pl-2">
+<div class="steps-container p-d-flex p-pb-6 p-pt-4">
     <div class="steps" @fade>
         <div class="steps__fade-right"></div>
         <div class="steps__fade-left"></div>
@@ -26,6 +26,7 @@
                         cdkDropListOrientation="vertical"
                         (cdkDropListDropped)="drop($event)"
                         class="p-d-flex p-ai-center"
+                        style="padding-left: 20px;"
                     >
                         <ng-container *ngFor="let stepConfig of steps; index as i" #stepLoop>
                             <div
@@ -64,11 +65,12 @@
         <button
             pButton
             type="button"
-            label="New step"
             icon="pi pi-plus"
-            class="p-button-secondary p-button-rounded"
+            class="p-button-rounded p-button-text"
             (click)="onAddNewStepPress()"
             *ngIf="canConfigureProject && !doesExceed30ProjectSteps"
+            pTooltip="Add new step"
+            tooltipPosition="bottom"
         ></button>
     </div>
     <ng-template #showEmptyState>

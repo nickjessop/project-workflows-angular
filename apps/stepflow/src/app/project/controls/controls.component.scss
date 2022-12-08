@@ -1,8 +1,5 @@
 .control {
-    position: sticky;
-    height: calc(100vh - 65px);
-    top: 0;
-    right: 0;
+    height: 100%;
     &__button {
         width: auto;
         // margin-left: auto;

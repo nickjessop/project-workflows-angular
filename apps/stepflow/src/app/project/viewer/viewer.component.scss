@@ -8,20 +8,29 @@
         height: 100%;
         &__steps {
             width: 100%;
-            background: white;
+            background: var(--surface-b);
+            border: 1px solid var(--surface-c);
         }
         &__step {
             height: 100%;
             max-height: 100%;
-            background: var(--surface-b);
-            margin: 0 auto;
             width: 100%;
+            background: white;
             .step-container {
                 height: auto;
-                max-width: 960px;
                 margin: 0 auto;
+                width: 95%;
                 border-radius: 16px;
                 background: white;
+                box-shadow: 0 4px 6px 2px rgb(0 0 0 / 6%);
+                margin-top: -1.5rem;
+                .step-title {
+                    border-bottom: 1px solid var(--surface-c);
+                }
+                .step-content {
+                    max-width: 960px;
+                    margin: 0 auto;
+                }
             }
             .step-status-label {
                 text-transform: uppercase;
@@ -34,6 +43,12 @@
                 }
             }
         }
+        &__controls {
+            position: fixed;
+            height: auto;
+            bottom: 0.5rem;
+            right: 1rem;
+        }
     }
 }
 .powered-by {
@@ -45,34 +60,44 @@
     }
 }
 
-@media screen and (min-width: 700px) {
-    .viewer {
-        flex-direction: row;
-        justify-content: center;
-        .viewer-container {
-            display: flex;
-            &__steps {
-                width: auto;
-                background: transparent;
-                // align-items: center; won't play nicely with position sticky :(
-                display: flex;
-                // width: 300px;
-                // min-width: 300px;
-            }
-            &__step {
-                max-width: auto;
-                // .step-container {
-                //     width: 100%;
-                // }
-            }
-            &__controls {
-                // width: 300px;
-                // min-width: 300px;
-                // padding-left: 20px;
-            }
-        }
+@media screen and (min-width: 800px) {
+    .step-container {
+        max-width: 85%;
+    }
+    .viewer-container__controls {
+        right: 1rem;
+        top: 95px;
+        height: calc(100vh - 200px);
     }
 }
+// @media screen and (min-width: 700px) {
+//     .viewer {
+//         flex-direction: row;
+//         justify-content: center;
+//         .viewer-container {
+//             display: flex;
+//             &__steps {
+//                 width: auto;
+//                 background: transparent;
+//                 // align-items: center; won't play nicely with position sticky :(
+//                 display: flex;
+//                 // width: 300px;
+//                 // min-width: 300px;
+//             }
+//             &__step {
+//                 max-width: auto;
+//                 // .step-container {
+//                 //     width: 100%;
+//                 // }
+//             }
+//             &__controls {
+//                 // width: 300px;
+//                 // min-width: 300px;
+//                 // padding-left: 20px;
+//             }
+//         }
+//     }
+// }
 
 :host ::ng-deep .p-chip.custom-chip {
     font-size: 12px;
