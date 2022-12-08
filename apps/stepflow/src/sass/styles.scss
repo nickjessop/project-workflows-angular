@@ -127,27 +127,6 @@ body.noscroll {
 .hidden {
     display: none;
 }
-#mobile-overlay {
-    display: none;
-}
-
-@media screen and (max-width: 700px) {
-    #mobile-overlay {
-        display: flex;
-        position: absolute;
-        z-index: 9999;
-        top: 0;
-        left: 0;
-        min-width: 100%;
-        min-height: 100%;
-        width: 100vw;
-        height: 100vw;
-        background: white;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
-    }
-}
 
 a,
 a:visited {
