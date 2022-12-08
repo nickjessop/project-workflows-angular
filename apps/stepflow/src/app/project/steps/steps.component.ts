@@ -13,6 +13,7 @@ import {
 } from '@angular/core';
 import { Project, Status, Step, StepConfig } from '@stepflow/interfaces';
 import * as _ from 'lodash';
+import { MessageService } from 'primeng/api';
 import { fromEvent, Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ProjectService } from '../../services/project/project.service';
@@ -33,6 +34,7 @@ export class StepsComponent implements OnInit {
     public project?: Project;
     public steps: StepConfig[] = [];
     public currentStep?: StepConfig;
+    public doesExceed30ProjectSteps = false;
 
     @Output() dragAndDropStepEvent: EventEmitter<{
         previousIndex: number;
@@ -57,7 +59,7 @@ export class StepsComponent implements OnInit {
     public scrollPosition: number = 0;
     public hasHorizontalScroll: boolean = false;
 
-    constructor(public projectService: ProjectService) {
+    constructor(public projectService: ProjectService, private messageService: MessageService) {
         this.statusOptions = [
             { label: 'No status', value: 'no-status', icon: '' },
             { label: 'In progress', value: 'in-progress', icon: 'pi-step-inprogress' },
@@ -100,11 +102,12 @@ export class StepsComponent implements OnInit {
 
     private initializeProject() {
         this.subscriptions.add(
-            this.projectService.projectConfig$.subscribe((_project) => {
+            this.projectService.projectConfig$.subscribe(_project => {
                 if (_project) {
                     this.project = _project;
 
                     if (_project.configuration) {
+                        this.doesExceed30ProjectSteps = _project.configuration.length >= 30;
                         this.steps = _project.configuration;
                         this.currentStep = _project.configuration[0];
                     }
@@ -164,6 +167,17 @@ export class StepsComponent implements OnInit {
         } else if (mode === 'new') {
             if ($event.step) {
                 const newStep = this.projectService.createNewProjectStep();
+
+                if (!newStep) {
+                    this.messageService.add({
+                        key: 'global-toast',
+                        severity: 'error',
+                        detail: 'You may only create a max of 30 steps',
+                    });
+
+                    return;
+                }
+
                 newStep.step = $event.step;
                 this.projectService.addProjectStep(newStep);
             }

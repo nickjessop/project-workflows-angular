@@ -213,6 +213,10 @@ export class ProjectService {
         label?: string,
         name?: string
     ) {
+        const doesExceed30ProjectSteps = (this.projectConfig.configuration?.length || 0) >= 30;
+
+        if (doesExceed30ProjectSteps) return false;
+
         const fieldConfig = this.coreComponentService.createBlockConfig('richTextInput', label, name);
 
         const stepConfig: StepConfig = {
@@ -238,6 +242,17 @@ export class ProjectService {
     public async createNewProject(projectName: string, projectDescription?: string) {
         const userId = this.authenticationService.user?.id;
 
+        const projects = await this.getProjects();
+        let projectCount = 0;
+        projects.forEach(proj => {
+            if (proj.isOwner) {
+                projectCount++;
+            }
+        });
+        if (projectCount >= 3) {
+            return false;
+        }
+
         const baseProject = this.createBaseProject(userId || '', projectName, projectDescription);
 
         const proj = await this.firebaseService.db
@@ -252,6 +267,7 @@ export class ProjectService {
                 },
                 error => {
                     console.log(`Error occurred while creating a new project: ${error}`);
+                    return null;
                 }
             );
 
@@ -313,13 +329,25 @@ export class ProjectService {
     }
 
     public addProjectBlock(projectBlock: BlockConfig) {
-        const currentStepIndex = this.getCurrentStepIndex() || 0;
+        let totalBlocks = 0;
 
+        this.projectConfig.configuration?.forEach(config => {
+            config.components?.forEach(block => {
+                totalBlocks++;
+            });
+        });
+
+        if (totalBlocks >= 150) {
+            return null;
+        }
+
+        const currentStepIndex = this.getCurrentStepIndex() || 0;
         const _projectConfig = _.cloneDeep(this.projectConfig);
+
         _projectConfig.configuration![currentStepIndex].components?.push(projectBlock);
 
         // this.projectConfig = _projectConfig;
-        this.setProject(_projectConfig);
+        return this.setProject(_projectConfig);
     }
 
     public async updateProjectSettings(projectSettings: { name: string; description: string }) {
@@ -413,22 +441,6 @@ export class ProjectService {
         });
 
         return _projects;
-    }
-
-    public getMyProjects() {
-        const userId = this.authenticationService.user?.id || '';
-
-        const ref = this.firebaseService.db.collection(PROJECTS_COLLECTION);
-
-        return from(ref.where('members', 'array-contains', { userId, role: 'owner' }).get()).pipe(
-            map(data => {
-                const projects = data.docs.map(items => {
-                    return items.data();
-                });
-
-                return projects;
-            })
-        );
     }
 
     public isOwner(memberRoles: [{ userId: string; role: Role }]) {
