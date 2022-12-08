@@ -49,8 +49,9 @@
     background: transparent;
     color: var(--primary-color);
     border: none;
+    padding: 0.5rem;
     &:hover {
-        background: var(--primary-color-light);
+        background: rgba(255, 255, 255, 0.2);
     }
 }
 
