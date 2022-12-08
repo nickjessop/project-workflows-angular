@@ -1,9 +1,12 @@
 $step-border-radius: 6px;
 .steps-container {
+    width: 95%;
+    margin: 0 auto;
     .steps {
         position: relative;
         overflow: hidden;
         width: 100%;
+        margin-left: -20px;
         &__list {
             overflow-x: scroll;
             -ms-overflow-style: none;
@@ -22,12 +25,12 @@ $step-border-radius: 6px;
         }
         &__fade-right {
             right: 0;
-            background: linear-gradient(270deg, #ffffff 0%, rgba(255, 255, 255, 0) 100%);
+            background: linear-gradient(270deg, #f7f7f7 0%, rgb(255 255 255 / 0%) 100%);
         }
         &__fade-left {
             left: 0;
             width: 15px;
-            background: linear-gradient(90deg, #ffffff 0%, rgba(255, 255, 255, 0) 100%);
+            background: linear-gradient(90deg, #f7f7f7 0%, rgb(255 255 255 / 0%) 100%);
         }
         &__arrow-left,
         &__arrow-right {
@@ -90,48 +93,8 @@ $step-border-radius: 6px;
     }
 }
 
-@media screen and (min-width: 700px) {
+@media screen and (min-width: 800px) {
     .steps-container {
-        position: sticky;
-        top: 0;
-        left: 0;
-        padding-right: 0.5rem;
-        max-width: 400px;
-        display: block !important;
-        .cdk-drop-list {
-            flex-direction: column;
-            align-items: flex-start;
-        }
-        .cdk-drag {
-            margin-right: 0 !important;
-            margin-bottom: 1rem;
-        }
-        .steps {
-            height: calc(100vh - 150px); // minus navbar and button height
-            &__list {
-                overflow-x: initial;
-                overflow-y: scroll;
-                height: 100%;
-            }
-            &__fade-right,
-            &__fade-left {
-                display: none;
-            }
-            &__arrow-left,
-            &__arrow-right {
-                display: none;
-            }
-        }
-        .step {
-            border: none;
-            color: var(--text-color-secondary);
-            &:hover {
-                border: none;
-                color: var(--text-color);
-            }
-        }
-        .step-selected {
-            color: var(--text-color);
-        }
+        max-width: 85%;
     }
 }
