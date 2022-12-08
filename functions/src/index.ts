@@ -130,8 +130,7 @@ export const createUserAndAttachMetadata = functions.https.onCall(
     }
 );
 
-export const updateProjectStorageUsage = functions.storage.object().onFinalize(async handler => {
-    console.log(handler.bucket);
+export const updateProjectStorageUsageOnDeletion = functions.storage.object().onDelete(async handler => {
     const filePath = handler.name?.split('/'); // File path in the bucket.
     const projectId = filePath?.[1];
     const fileSize = handler.size;
@@ -149,7 +148,7 @@ export const updateProjectStorageUsage = functions.storage.object().onFinalize(a
         if (!storageUsageObj.empty) {
             const usageRef = storageUsageObj.docs[0].ref;
             await usageRef.update({
-                totalBytes: firestore.FieldValue.increment(Number(fileSize)),
+                totalBytes: firestore.FieldValue.increment(Number(fileSize) * -1),
             });
         }
 
@@ -159,6 +158,40 @@ export const updateProjectStorageUsage = functions.storage.object().onFinalize(a
     }
 });
 
-// exports.generateThumbnail = functions.storage.object().onFinalize(async (object) => {
-//     // ...
-//   });
+export const updateProjectStorageUsageOnAddition = functions.storage.object().onFinalize(async handler => {
+    const filePath = handler.name?.split('/'); // File path in the bucket.
+    const projectId = filePath?.[1];
+    const fileSize = handler.size;
+
+    if (!filePath || !projectId) {
+        return;
+    }
+    try {
+        const storageUsageObj = await admin
+            .firestore()
+            .collection(PROJECT_STORAGE_USAGE_COLLECTION)
+            .doc(projectId)
+            .get();
+
+        if (storageUsageObj.exists) {
+            const usageRef = storageUsageObj.ref;
+
+            await usageRef.update({
+                totalBytes: firestore.FieldValue.increment(Number(fileSize)),
+            });
+        } else {
+            await admin
+                .firestore()
+                .collection(PROJECT_STORAGE_USAGE_COLLECTION)
+                .doc(projectId)
+                .set({
+                    projectId,
+                    totalBytes: Number(fileSize),
+                });
+        }
+
+        return {};
+    } catch (err) {
+        return { err };
+    }
+});
