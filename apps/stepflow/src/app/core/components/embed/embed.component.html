@@ -25,8 +25,7 @@
     <ng-container *ngIf="componentMode === 'edit'">
         <div class="edit p-d-flex p-flex-column p-jc-between p-mb-2">
             <ng-container *ngIf="embedData.data.value[0].href && domain.hostname != ''; else add">
-                <iframe [src]="cleanUrl" allowfullscreen frameBorder="0" #iframe></iframe>
-                <div class="url p-mt-2 p-d-flex p-ai-center">
+                <div class="toolbar p-mt-2">
                     <i class="pi pi-external-link p-mr-2"></i>
                     <a [href]="embedData.data.value[0].href" target="_blank" class="p-mr-2">{{ domain.hostname }}</a>
                     <button
@@ -37,6 +36,7 @@
                         (click)="onRemoveUrlPress()"
                     ></button>
                 </div>
+                <iframe [src]="cleanUrl" allowfullscreen frameBorder="0" #iframe></iframe>
             </ng-container>
             <ng-template #add>
                 <div class="p-d-flex p-flex-column p-jc-center" style="height: 100%;">
