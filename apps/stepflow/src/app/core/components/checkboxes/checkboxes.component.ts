@@ -2,7 +2,6 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, Input, OnInit } from '@angular/core';
 import { BlockConfig, Checkboxes, ComponentMode, ComponentSettings } from '@stepflow/interfaces';
 import * as _ from 'lodash';
-import { MenuItem } from 'primeng/api';
 import { ProjectService } from '../../../services/project/project.service';
 import { CoreComponentService } from '../../core-component.service';
 @Component({
@@ -15,20 +14,10 @@ export class CheckboxesComponent implements OnInit {
     @Input() field: BlockConfig = this.coreComponentService.createBlockConfig('checkboxes');
     @Input() resizable?: boolean;
     public componentMode: ComponentMode = 'view';
-    public isEditing: boolean = false;
+    public isEditing = false;
     public height?: number;
     public settings?: ComponentSettings;
-    public checkboxesAmount: number = 0;
-
-    public items: MenuItem[] = [
-        {
-            label: 'Delete Block',
-            icon: 'pi pi-times',
-            command: () => {
-                this.onDeleteBlock();
-            },
-        },
-    ];
+    public checkboxesAmount = 0;
 
     constructor(private projectService: ProjectService, private coreComponentService: CoreComponentService) {}
 
@@ -49,19 +38,6 @@ export class CheckboxesComponent implements OnInit {
 
     public dragFinished() {
         this.projectService.setBlockDrag(false);
-    }
-
-    public getCheckboxMenuItems(index: number): MenuItem[] {
-        return [
-            {
-                label: 'Delete item',
-                icon: 'pi pi-trash',
-                command: () => {
-                    console.log('menu');
-                    this.onCheckboxDeletePress(index);
-                },
-            },
-        ];
     }
 
     public onAddCheckboxPress() {

@@ -54,13 +54,13 @@
                     </ng-template>
                 </p-inplace>
                 <button
+                    (click)="onCheckboxDeletePress(index)"
                     pButton
                     type="button"
-                    icon="pi pi-ellipsis-h"
-                    class="p-button-text checkbox__delete p-js-right"
-                    (click)="menu.toggle($event)"
+                    icon="pi pi-times"
+                    class="p-button-text p-button-plain checkbox__delete"
+                    pTooltip="Delete checklist item"
                 ></button>
-                <p-menu #menu [popup]="true" [model]="getCheckboxMenuItems(index)" appendTo="body"></p-menu>
             </div>
         </div>
     </ng-container>
