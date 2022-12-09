@@ -39,6 +39,7 @@
                 columnResizeMode="expand"
                 scrollDirection="both"
                 styleClass="p-datatable-gridlines"
+                (onEditComplete)="saveTableData()"
             >
                 <ng-template pTemplate="header">
                     <tr pEditableRow>
