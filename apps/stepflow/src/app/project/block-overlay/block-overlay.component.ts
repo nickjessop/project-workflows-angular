@@ -36,6 +36,6 @@ export class BlockPanelOverlayComponent implements OnInit {
     public onAddNewBlockPress(componentType: ComponentType) {
         this.onSelectNewBlock.emit(componentType);
         this.displayBlockSidebar = false;
-        amplitude.track('Added block');
+        amplitude.track('blocks:block-add');
     }
 }
