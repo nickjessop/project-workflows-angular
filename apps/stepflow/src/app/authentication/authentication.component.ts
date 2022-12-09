@@ -12,6 +12,8 @@ import { AuthenticationService } from '../services/authentication/authentication
     styleUrls: ['./authentication.component.scss'],
 })
 export class AuthenticationComponent implements OnInit {
+    public isLoading = false;
+
     public authInfo: {
         firstName?: string;
         lastName?: string;
@@ -63,6 +65,8 @@ export class AuthenticationComponent implements OnInit {
     }
 
     public async register() {
+        this.isLoading = true;
+
         const { firstName, lastName, plan, password, password2, email } = this.authInfo;
 
         const message = {
@@ -76,14 +80,14 @@ export class AuthenticationComponent implements OnInit {
         if (password !== password2) {
             message.detail = 'Passwords do not match';
             this.messageService.add(message);
-
+            this.isLoading = false;
             return;
         }
 
         if (!password || !password2 || !firstName || !lastName || !plan) {
             message.detail = 'Please fill in password and name fields';
             this.messageService.add(message);
-
+            this.isLoading = false;
             return;
         }
 
@@ -98,7 +102,11 @@ export class AuthenticationComponent implements OnInit {
             } else {
                 this.router.navigate(['/auth/confirmation']);
             }
+        } else {
+            message.detail = 'An error occurred while attempting to sign you up.';
+            this.messageService.add(message);
         }
+        this.isLoading = false;
     }
 
     public async login() {
