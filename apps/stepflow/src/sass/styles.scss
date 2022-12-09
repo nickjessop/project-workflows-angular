@@ -155,9 +155,9 @@ button {
 // REMOVE?
 
 .toolbar {
-    background: rgba(0, 0, 0, 0.7);
+    background: var(--surface-c);
     padding: 0.35rem 0.75rem;
-    color: white !important;
+    color: black !important;
     border-radius: 6px;
     display: inline-flex;
     font-size: 0.8rem;
@@ -168,28 +168,28 @@ button {
     }
     &__button,
     .p-button.p-button-text {
-        color: white !important;
+        color: black !important;
         background: transparent !important;
         border: none !important;
         padding: 0.5rem !important;
         &:hover {
             background: rgba(255, 255, 255, 0.2) !important;
-            color: white !important;
+            color: black !important;
         }
     }
     .p-button.p-button-text:enabled:hover,
     .p-button-text-hover:hover {
-        color: white !important;
+        color: black !important;
         background: rgba(255, 255, 255, 0.2) !important;
     }
     a {
-        color: white !important;
+        color: black !important;
     }
     .NgxEditor__MenuBar {
         background: transparent;
     }
     .NgxEditor__MenuItem:hover {
-        background: rgba(255, 255, 255, 0.2) !important;
+        background: var(--surface-e);
         cursor: pointer;
     }
     .NgxEditor__MenuItem.NgxEditor__MenuItem--Active,
@@ -197,7 +197,7 @@ button {
         color: var(--primary-color);
     }
     .p-button.p-fileupload-choose {
-        color: white !important;
+        color: black !important;
     }
 }
 
