@@ -280,4 +280,6 @@ export const allowedUserIds = [
     'IoTwZeoPiSemew2z5IBbQcHPaNi2',
     'DxOw25Q8XigIlZMfnfN7vaCaVPo1',
     '3OqrvQESBPafZ7nF5U6v0QyM2B02',
+    'nXGebyRkhLUckUcwJzGvsygjDCy1',
+    'iGkMxx23DAVxVHkvMBM6oN9TjIJ3',
 ];

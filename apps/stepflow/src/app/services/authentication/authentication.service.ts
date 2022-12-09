@@ -96,18 +96,18 @@ export class AuthenticationService {
         lastName: string,
         plan: UserPlan
     ) {
-        const success = await this.firebaseService.auth
-            .setPersistence('local')
-            .catch(e => {
-                return false;
-            })
-            .then(success => {
-                return success;
-            });
+        // const success = await this.firebaseService.auth
+        //     .setPersistence('local')
+        //     .catch(e => {
+        //         return false;
+        //     })
+        //     .then(success => {
+        //         return success;
+        //     });
 
-        if (!success) {
-            return false;
-        }
+        // if (!success) {
+        //     return false;
+        // }
 
         const userCredential = await this.firebaseService.auth.createUserWithEmailAndPassword(email, password);
 

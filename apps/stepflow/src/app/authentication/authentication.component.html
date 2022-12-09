@@ -125,7 +125,19 @@
                 <div class="p-field p-pt-2">
                     <!-- <input type="hidden" name="plan" value="{{ authInfo.plan }}" [(ngModel)]="authInfo.plan" /> -->
                     <input type="hidden" name="plan" value="Starter" />
-                    <button pButton type="button" label="Sign up" class="p-button-lg" (click)="register()"></button>
+                    <button
+                        pButton
+                        type="button"
+                        label="Sign up"
+                        class="p-button-lg"
+                        (click)="register()"
+                        [disabled]="isLoading"
+                    ></button>
+                    <ng-container *ngIf="isLoading">
+                        <div class="p-d-flex p-jc-center p-py-6">
+                            <p-progressSpinner></p-progressSpinner>
+                        </div>
+                    </ng-container>
                     <p>
                         By clicking "Sign up" you agree to Stepflow's
                         <a href="https://stepflow.co/terms-of-service" target="_blank">Terms of Service</a> and
