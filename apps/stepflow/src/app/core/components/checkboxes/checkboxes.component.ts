@@ -77,6 +77,8 @@ export class CheckboxesComponent implements OnInit {
         const _checkboxes = _.cloneDeep(checkboxes);
         moveItemInArray(_checkboxes!, previousIndex, currentIndex);
         this.field.metadata.data.value = _checkboxes;
+
+        this.saveContent();
     }
 
     public saveContent() {
