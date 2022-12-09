@@ -59,6 +59,7 @@ export class CheckboxesComponent implements OnInit {
             return 0;
         });
         this.field.metadata.data.value = sortedData;
+        this.projectService.syncProject();
     }
 
     public onCheckboxDeletePress(index: number) {
