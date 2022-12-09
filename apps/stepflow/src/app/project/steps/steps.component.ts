@@ -176,13 +176,13 @@ export class StepsComponent implements OnInit {
                         severity: 'error',
                         detail: 'You may only create a max of 30 steps',
                     });
-                    amplitude.track('Hit step quota');
+                    amplitude.track('steps:quota-hit');
                     return;
                 }
 
                 newStep.step = $event.step;
                 this.projectService.addProjectStep(newStep);
-                amplitude.track('Added step');
+                amplitude.track('steps:step-add');
             }
         } else if (mode === 'delete') {
             this.projectService.deleteCurrentProjectStep();

@@ -70,7 +70,7 @@ export class ProjectComponent implements OnInit {
         const newProject = await this.projectService.createNewProject($event.projectName, $event.description);
         if (newProject) {
             this.router.navigateByUrl(`/project/${newProject.id}`);
-            amplitude.track('Created project');
+            amplitude.track('projects:project-create');
         } else if (newProject === false) {
             // exceed quota of 3
             this.messageService.add({
@@ -78,7 +78,7 @@ export class ProjectComponent implements OnInit {
                 severity: 'error',
                 detail: 'You may only create a max of 3 projects on your plan.',
             });
-            amplitude.track('Hit project quota');
+            amplitude.track('projects:quota-hit');
         } else {
             // error occurred during creation
             this.messageService.add({
