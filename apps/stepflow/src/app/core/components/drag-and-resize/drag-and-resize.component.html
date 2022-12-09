@@ -4,6 +4,7 @@
     #fieldContainer
     (cdkDragStarted)="dragStarted()"
     (cdkDragReleased)="dragFinished()"
+    [cdkDragDisabled]="!canConfigureBlocks"
     [style.height.px]="field.metadata.settings?.height && resizable ? field.metadata.settings!.height : ''"
     mwlResizable
     [enableGhostResize]="resizable"

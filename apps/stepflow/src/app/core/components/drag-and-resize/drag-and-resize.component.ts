@@ -51,6 +51,10 @@ export class DragAndResizeComponent implements OnInit {
                 }
                 if (val.allowedProjectModes.edit === true) {
                     this.canEditBlocks = true;
+                    this.componentMode.emit('edit');
+                } else {
+                    this.canEditBlocks = false;
+                    this.componentMode.emit('view');
                 }
             })
         );
