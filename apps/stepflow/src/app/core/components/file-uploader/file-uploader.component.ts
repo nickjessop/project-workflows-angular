@@ -36,16 +36,6 @@ export class FileUploaderComponent implements OnInit {
     public height?: number;
     public settings?: ComponentSettings;
 
-    public items: MenuItem[] = [
-        {
-            label: 'Delete Block',
-            icon: 'pi pi-times',
-            command: () => {
-                this.onDeleteBlock();
-            },
-        },
-    ];
-
     constructor(
         private storageService: StorageService,
         private messageService: MessageService,
@@ -87,32 +77,10 @@ export class FileUploaderComponent implements OnInit {
         this.field.metadata.settings = { ...this.field.metadata.settings, height: height };
     }
 
-    public getFileMenuItems(index: number, file: Link): MenuItem[] {
-        return [
-            {
-                label: 'Download file',
-                icon: 'pi pi-download',
-                command: () => {
-                    this.onDownloadFilePress(file.href || '', file.title || '', file.extension || '');
-                },
-            },
-            {
-                label: 'Edit file',
-                icon: 'pi pi-pencil',
-                command: () => {
-                    this.showFileUploaderDialog = true;
-                    this.fileDialogMode = 'edit';
-                    this.dialogData = file;
-                },
-            },
-            {
-                label: 'Delete file',
-                icon: 'pi pi-trash',
-                command: () => {
-                    this.onFileDeletePress(index);
-                },
-            },
-        ];
+    public editFile(file: Link) {
+        this.showFileUploaderDialog = true;
+        this.fileDialogMode = 'edit';
+        this.dialogData = file;
     }
 
     public onFileUploadSelected($event: { originalEvent: Event; files: FileList; currentFiles: File[] }) {
@@ -127,14 +95,18 @@ export class FileUploaderComponent implements OnInit {
     public async onFileDeletePress(index: number) {
         const filePath = this.fileData?.[index]?.filePath;
 
-        if (filePath) {
-            const success = await this.storageService.deleteFile(filePath);
+        if (!filePath) {
+            this.fileData.splice(index, 1);
+            this.projectService.syncProject();
+            return;
+        }
 
-            if (success) {
-                this.fileData.splice(index, 1);
-                this.projectService.syncProject();
-            }
-        } else {
+        try {
+            await this.storageService.deleteFile(filePath);
+
+            this.fileData.splice(index, 1);
+            this.projectService.syncProject();
+        } catch (err) {
             this.fileData.splice(index, 1);
             this.projectService.syncProject();
         }

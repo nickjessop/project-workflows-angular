@@ -102,20 +102,38 @@
                             <td style="width: 50%">{{ rowData.description }}</td>
                             <td style="width: 10%">{{ rowData.extension }}</td>
                             <td style="width: 10%; text-align: right">
+                                <a href="#" id="fileBlockDownload-{{ rowIndex }}" style="display: none">Download</a>
+
                                 <button
+                                    (click)="
+                                        onDownloadFilePress(
+                                            rowData.href || '',
+                                            rowData.title || '',
+                                            rowData.extension || ''
+                                        )
+                                    "
                                     pButton
                                     type="button"
-                                    icon="pi pi-ellipsis-h"
-                                    class="p-button-text file__menu"
-                                    (click)="menu.toggle($event)"
+                                    icon="pi pi-download"
+                                    class="p-button-text p-button-plain __hover-button"
+                                    pTooltip="Download file"
                                 ></button>
-                                <a href="#" id="fileBlockDownload-{{ rowIndex }}" style="display: none">Download</a>
-                                <p-menu
-                                    #menu
-                                    [popup]="true"
-                                    [model]="getFileMenuItems(rowIndex, rowData)"
-                                    appendTo="body"
-                                ></p-menu>
+                                <button
+                                    (click)="editFile(rowData)"
+                                    pButton
+                                    type="button"
+                                    icon="pi pi-pencil"
+                                    class="p-button-text p-button-plain __hover-button"
+                                    pTooltip="Edit file"
+                                ></button>
+                                <button
+                                    (click)="onFileDeletePress(rowIndex)"
+                                    pButton
+                                    type="button"
+                                    icon="pi pi-trash"
+                                    class="p-button-text p-button-plain __hover-button"
+                                    pTooltip="Delete file"
+                                ></button>
                             </td>
                         </tr>
                     </ng-container>
@@ -125,6 +143,18 @@
     </ng-container>
 
     <ng-template #noFiles>
+        <div class="toolbar">
+            <button
+                pButton
+                type="button"
+                icon="pi pi-plus"
+                label="Add a file"
+                pButton
+                (click)="showFileUploaderDialog = true; fileDialogMode = 'upload'"
+                class="p-button-text"
+            ></button>
+            <div class="p-pl-2">{{ fileData.length }} files</div>
+        </div>
         <div class="p-p-4 p-d-flex p-flex-column p-ai-center p-jc-center text-secondary">
             <div><i class="pi pi-folder" style="font-size: 48px"></i></div>
             <div>No files added</div>

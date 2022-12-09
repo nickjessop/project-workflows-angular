@@ -1,5 +1,5 @@
 .file {
-    &__menu {
+    &__menu, .__hover-button {
         visibility: hidden;
         &:focus,
         &:focus-within {
@@ -7,7 +7,7 @@
         }
     }
     &:hover {
-        .file__menu {
+        .file__menu, .__hover-button{
             visibility: visible;
         }
     }
