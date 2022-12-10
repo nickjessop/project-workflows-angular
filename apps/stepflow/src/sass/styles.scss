@@ -163,6 +163,7 @@ button {
     font-size: 0.8rem;
     margin-bottom: 0.5rem;
     align-items: center;
+    align-self: flex-start;
     &__button:first-child {
         padding-left: none;
     }
