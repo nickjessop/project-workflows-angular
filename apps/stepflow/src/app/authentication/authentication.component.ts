@@ -91,15 +91,17 @@ export class AuthenticationComponent implements OnInit {
             return;
         }
 
-        const success = await this.authService.register(email, password, firstName, lastName, plan);
+        const user = await this.authService.register(email, password, firstName, lastName, plan);
 
-        if (success) {
-            // this.router.navigate(['/project']);
-
-            if (plan !== 'Essential') {
-                this.router.navigate(['/auth/confirmation?plan=' + plan]);
+        if (user) {
+            if (!user.emailVerified) {
+                if (user.plan !== 'Essential') {
+                    this.router.navigate(['/auth/confirmation?plan=' + user.plan]);
+                } else {
+                    this.router.navigate(['/auth/confirmation']);
+                }
             } else {
-                this.router.navigate(['/auth/confirmation']);
+                this.router.navigate(['/project']);
             }
         } else {
             message.detail = 'An error occurred while attempting to sign you up.';

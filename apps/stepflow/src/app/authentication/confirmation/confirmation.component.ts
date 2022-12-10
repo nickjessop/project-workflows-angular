@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService } from './../../services/authentication/authentication.service';
 
 @Component({
@@ -12,11 +12,22 @@ export class ConfirmationComponent implements OnInit {
         'I just joined the waitlist for Stepflow, an upcoming app that lets you collaborate more efficiently with people outside your organization. Read more at';
     public authPlan: string = 'Essential';
     public didClickResend = false;
-    constructor(private activatedRoute: ActivatedRoute, private authService: AuthenticationService) {}
+    constructor(
+        private activatedRoute: ActivatedRoute,
+        private authService: AuthenticationService,
+        private router: Router
+    ) {}
 
     ngOnInit(): void {
         this.activatedRoute.queryParams.subscribe(params => {
             this.authPlan = params['plan'] || 'Essential';
+        });
+
+        this.authService.$user.subscribe(user => {
+            const isUserEmailVerified = user?.emailVerified;
+            if (isUserEmailVerified) {
+                this.router.navigate(['/project']);
+            }
         });
     }
 

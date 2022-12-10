@@ -22,6 +22,10 @@ export class ProtectedGuard implements CanActivate {
                     this.router.navigate(['/auth/login']);
                     return of(false);
                 } else {
+                    if (!user.emailVerified) {
+                        this.router.navigate(['auth/confirmation']);
+                        return of(false);
+                    }
                     return of(true);
                 }
             })

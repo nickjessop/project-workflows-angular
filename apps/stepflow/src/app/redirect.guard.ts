@@ -21,8 +21,13 @@ export class RedirectGuard implements CanActivate {
                 if (user == null) {
                     return of(true);
                 } else {
-                    this.router.navigate(['/project']);
-                    return of(false);
+                    if (!user.emailVerified) {
+                        this.router.navigate(['auth/confirmation']);
+                        return of(false);
+                    } else {
+                        this.router.navigate(['/project']);
+                        return of(false);
+                    }
                 }
             })
         );
