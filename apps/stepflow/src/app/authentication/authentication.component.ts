@@ -92,8 +92,15 @@ export class AuthenticationComponent implements OnInit {
         }
 
         const success = await this.authService.register(email, password, firstName, lastName, plan);
+
         if (success) {
-            this.router.navigate(['/project']);
+            // this.router.navigate(['/project']);
+
+            if (plan !== 'Essential') {
+                this.router.navigate(['/auth/confirmation?plan=' + plan]);
+            } else {
+                this.router.navigate(['/auth/confirmation']);
+            }
         } else {
             message.detail = 'An error occurred while attempting to sign you up.';
             this.messageService.add(message);
