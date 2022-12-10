@@ -11,11 +11,17 @@ export class ConfirmationComponent implements OnInit {
     public msg: string =
         'I just joined the waitlist for Stepflow, an upcoming app that lets you collaborate more efficiently with people outside your organization. Read more at';
     public authPlan: string = 'Essential';
+    public didClickResend = false;
     constructor(private activatedRoute: ActivatedRoute, private authService: AuthenticationService) {}
 
     ngOnInit(): void {
         this.activatedRoute.queryParams.subscribe(params => {
             this.authPlan = params['plan'] || 'Essential';
         });
+    }
+
+    public async resendVerificationEmail() {
+        this.didClickResend = true;
+        await this.authService.sendVerificationEmail();
     }
 }
