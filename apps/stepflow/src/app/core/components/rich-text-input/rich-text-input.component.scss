@@ -36,8 +36,10 @@
         padding: 1rem;
         border-radius: 2px;
     }
-}
-
-.editor .p-editor-container .p-editor-content .ql-editor {
-    font-size: 1rem;
+    .editor .p-editor-container .p-editor-content .ql-editor {
+        font-size: 1rem;
+    }
+    .NgxEditor {
+        min-height: 75px;
+    }
 }
