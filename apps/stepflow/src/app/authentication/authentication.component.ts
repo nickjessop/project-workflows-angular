@@ -1,7 +1,7 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { allowedUserIds, UserPlan } from '@stepflow/interfaces';
+import { UserPlan } from '@stepflow/interfaces';
 import { MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import { AuthenticationService } from '../services/authentication/authentication.service';
@@ -93,15 +93,7 @@ export class AuthenticationComponent implements OnInit {
 
         const success = await this.authService.register(email, password, firstName, lastName, plan);
         if (success) {
-            if (!allowedUserIds.includes(success?.id || '')) {
-                this.authService.logout(false);
-            }
-
-            if (plan !== 'Essential') {
-                this.router.navigate(['/auth/confirmation?plan=' + plan]);
-            } else {
-                this.router.navigate(['/auth/confirmation']);
-            }
+            this.router.navigate(['/project']);
         } else {
             message.detail = 'An error occurred while attempting to sign you up.';
             this.messageService.add(message);
@@ -136,20 +128,6 @@ export class AuthenticationComponent implements OnInit {
                 closable: true,
                 detail: 'Invalid email or password.',
             });
-        }
-
-        if (user && !allowedUserIds.includes(user?.uid)) {
-            this.authService.logout(true);
-
-            this.messageService.add({
-                severity: 'error',
-                key: 'global-toast',
-                life: 5000,
-                closable: true,
-                detail: 'Sorry, you may not login at this time.',
-            });
-
-            return;
         }
 
         const parsedUser = {
