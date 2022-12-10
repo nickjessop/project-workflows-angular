@@ -5,7 +5,7 @@ $step-border-radius: 6px;
     .steps {
         position: relative;
         overflow: hidden;
-        width: 100%;
+        width: calc(100% + 20px);
         margin-left: -20px;
         &__list {
             overflow-x: scroll;
