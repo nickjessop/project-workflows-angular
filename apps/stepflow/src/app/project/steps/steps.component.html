@@ -1,4 +1,4 @@
-<div class="steps-container p-d-flex p-pb-6 p-pt-4">
+<div class="steps-container p-d-flex p-px-6 p-py-5">
     <div class="steps" @fade>
         <div class="steps__fade-right"></div>
         <div class="steps__fade-left"></div>
@@ -26,7 +26,7 @@
                         cdkDropListOrientation="horizontal"
                         (cdkDropListDropped)="drop($event)"
                         class="p-d-flex p-ai-center"
-                        style="padding-left: 20px;width: 100%;"
+                        style="padding-left: 20px; width: 100%"
                     >
                         <ng-container *ngFor="let stepConfig of steps; index as i" #stepLoop>
                             <div
@@ -46,7 +46,7 @@
                     </div>
                 </ng-container>
                 <ng-template #showViewSteps>
-                    <div class="p-d-flex p-ai-center" style="padding-left: 20px;">
+                    <div class="p-d-flex p-ai-center" style="padding-left: 20px">
                         <ng-container *ngFor="let stepConfig of steps; index as i" #stepLoop>
                             <div
                                 class="step p-mr-2"

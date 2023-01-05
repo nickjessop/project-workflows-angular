@@ -1,12 +1,13 @@
 $step-border-radius: 6px;
 .steps-container {
-    width: 95%;
+    width: 100%;
     margin: 0 auto;
     .steps {
         position: relative;
         overflow: hidden;
         width: calc(100% + 20px);
         margin-left: -20px;
+        // to account for the fade effect on the left, otherwise part of the step name gets cut off
         &__list {
             overflow-x: scroll;
             -ms-overflow-style: none;
@@ -52,6 +53,7 @@ $step-border-radius: 6px;
     .step {
         position: relative;
         border: 1px solid var(--surface-d);
+        background: white;
         border-radius: 6px;
         white-space: nowrap;
         font-weight: 500;
@@ -90,11 +92,5 @@ $step-border-radius: 6px;
     }
     #desktop {
         display: none;
-    }
-}
-
-@media screen and (min-width: 800px) {
-    .steps-container {
-        max-width: 85%;
     }
 }
