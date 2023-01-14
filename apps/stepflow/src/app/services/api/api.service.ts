@@ -1,6 +1,7 @@
 import { HttpClient, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'apps/stepflow/src/environments/environment';
+import { lastValueFrom } from 'rxjs/internal/lastValueFrom';
 import { Observable } from 'rxjs/internal/Observable';
 import { from } from 'rxjs/internal/observable/from';
 import { switchMap } from 'rxjs/operators';
@@ -30,20 +31,20 @@ export class ApiService implements HttpInterceptor {
     public get(path: string, id?: string) {
         const _url = id ? `${path}/${id}` : path;
 
-        return this.http.get(_url);
+        return lastValueFrom(this.http.get(_url));
     }
 
     public post(path: string, payload?: any) {
-        return this.http.post(path, payload);
+        return lastValueFrom(this.http.post(path, payload));
     }
 
     public put(path: string, payload?: any) {
-        return this.http.put(path, payload);
+        return lastValueFrom(this.http.put(path, payload));
     }
 
     public delete(path: string, id?: string) {
         const _url = id ? `${path}/${id}` : path;
-        return this.http.delete(_url);
+        return lastValueFrom(this.http.delete(_url));
     }
 
     public testApi() {

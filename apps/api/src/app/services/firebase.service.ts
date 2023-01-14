@@ -3,7 +3,7 @@ import * as admin from 'firebase-admin';
 
 @Injectable()
 export class FirebaseService {
-    private serviceAccount = require('../../secrets/stepflow-d6a02-firebase-adminsdk-bdo05-40361fcfec.json');
+    private serviceAccount = require('../secrets/stepflow-d6a02-firebase-adminsdk-bdo05-40361fcfec.json');
 
     constructor() {
         admin.initializeApp({

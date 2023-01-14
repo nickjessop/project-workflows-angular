@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { allowedUserIds, User, UserPlan, USER_COLLECTION_NAME } from '@stepflow/interfaces';
+import { User, UserPlan, USER_COLLECTION_NAME } from '@stepflow/interfaces';
 import firebase from 'firebase';
 import * as _ from 'lodash';
 import { union as _union } from 'lodash';
-import { MessageService } from 'primeng/api';
 import { BehaviorSubject, from, Subscription } from 'rxjs';
 import { FirebaseService } from '../firebase/firebase.service';
 

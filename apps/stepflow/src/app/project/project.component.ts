@@ -2,6 +2,7 @@ import * as amplitude from '@amplitude/analytics-browser';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { ProjectApiService } from '../services/project/project-api.service';
 import { ProjectService } from '../services/project/project.service';
 
 @Component({
@@ -19,11 +20,13 @@ export class ProjectComponent implements OnInit {
         private projectService: ProjectService,
         private confirmationService: ConfirmationService,
         private router: Router,
-        private messageService: MessageService
+        private messageService: MessageService,
+        private projectApiService: ProjectApiService
     ) {}
 
     ngOnInit() {
         this.getProjects();
+        this.projectApiService.getAllProjects();
         // this.apiService.testApi().subscribe();
     }
 

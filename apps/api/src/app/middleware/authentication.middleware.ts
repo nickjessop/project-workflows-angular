@@ -1,6 +1,6 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { NextFunction, Request, Response } from 'express';
-import { FirebaseService } from '../services/firebase/firebase.service';
+import { FirebaseService } from '../services/firebase.service';
 
 @Injectable()
 export class AuthenticationMiddleware implements NestMiddleware {
