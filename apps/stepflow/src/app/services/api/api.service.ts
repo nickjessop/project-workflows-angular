@@ -29,25 +29,21 @@ export class ApiService implements HttpInterceptor {
     }
 
     public get(path: string, id?: string) {
-        const _url = id ? `${path}/${id}` : path;
+        const _url = id ? `${this.API_URL}/${path}/${id}` : `${this.API_URL}/${path}`;
 
         return lastValueFrom(this.http.get(_url));
     }
 
     public post(path: string, payload?: any) {
-        return lastValueFrom(this.http.post(path, payload));
+        return lastValueFrom(this.http.post(`${this.API_URL}/${path}`, payload));
     }
 
     public put(path: string, payload?: any) {
-        return lastValueFrom(this.http.put(path, payload));
+        return lastValueFrom(this.http.put(`${this.API_URL}/${path}`, payload));
     }
 
     public delete(path: string, id?: string) {
-        const _url = id ? `${path}/${id}` : path;
+        const _url = id ? `${this.API_URL}/${path}/${id}` : `${this.API_URL}/${path}`;
         return lastValueFrom(this.http.delete(_url));
-    }
-
-    public testApi() {
-        return this.post(`${this.API_URL}user`, { test: 'asdf' });
     }
 }

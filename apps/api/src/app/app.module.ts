@@ -1,4 +1,4 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { BlockController } from './controllers/block/block.controller';
 import { ProjectController } from './controllers/project/project.controller';
@@ -14,6 +14,8 @@ import { FirebaseService } from './services/firebase.service';
 })
 export class AppModule implements NestModule {
     configure(consumer: MiddlewareConsumer) {
-        consumer.apply(AuthenticationMiddleware).forRoutes('project', 'user', 'block', 'step');
+        consumer
+            .apply(AuthenticationMiddleware)
+            .forRoutes(ProjectController, UserController, StepController, BlockController);
     }
 }
