@@ -1,6 +1,15 @@
 # Stepflow
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.1.0.
+The folder structure of this app is organized using nx CLI, and is set up as follows:
+
+```
+ |-- apps
+    |-- api (backend api - Not currently in use)
+    |-- stepflow (Main Frontend app)
+    |-- stepflow-e2e (Full end to end test - Not in use)
+ |-- functions (Firebase functions)
+ |-- libs (Shared library between apps projects)
+```
 
 Install npm version 6.14.16 and node 12.22.10. It is recommended to use nvm with ohmyzsh, and to add a script that allows your terminals to automatically change your node/npm versions based on .nvmrc file contexts.
 
