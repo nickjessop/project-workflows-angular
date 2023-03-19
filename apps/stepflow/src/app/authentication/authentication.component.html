@@ -1,28 +1,9 @@
-<!-- <div class="p-col-12 nav p-d-flex p-ai-center">
-    <div class="container p-d-flex p-ai-center p-jc-between">
-        <a href="https://stepflow.co" alt="Stepflow logo" style="height: 26px;">
-            <img src="/assets/stepflow-logo.svg" alt="Stepflow logo" height="26px" />
-        </a>
-        <ng-container *ngIf="authMode === 'register'">
-            <button pButton type="button" class="p-button-secondary" label="Login" routerLink="/auth/login"></button>
-        </ng-container>
-        <ng-container *ngIf="authMode === 'login'">
-            <button
-                pButton
-                type="button"
-                class="p-button-secondary"
-                label="Join the waitlist"
-                routerLink="/auth/register"
-            ></button>
-        </ng-container>
-    </div>
-</div> -->
 <ng-container *ngIf="authMode === 'register'">
     <div class="p-d-flex register p-p-4">
         <div class="p-col-5 register__left">
             <div class="p-d-flex p-p-4 p-flex-column p-jc-between" style="height: 100%">
                 <div class="intro">
-                    <a href="https://stepflow.co" alt="Stepflow logo" style="height: 26px;">
+                    <a href="https://stepflow.co" alt="Stepflow logo" style="height: 26px">
                         <img src="/assets/stepflow-logo-white.svg" alt="Stepflow logo" height="26px" />
                     </a>
                     <h1 class="ms-8 p-mt-6 p-pt-6">Start your journey with us</h1>
@@ -67,7 +48,7 @@
                     <input
                         id="name"
                         type="name"
-                        style="width: 100%;"
+                        style="width: 100%"
                         class="p-py-3"
                         aria-describedby="Enter your first name"
                         pInputText
@@ -79,7 +60,7 @@
                     <input
                         id="name"
                         type="name"
-                        style="width: 100%;"
+                        style="width: 100%"
                         class="p-py-3"
                         aria-describedby="Enter your last name"
                         pInputText
@@ -91,7 +72,7 @@
                     <input
                         id="email"
                         type="email"
-                        style="width: 100%;"
+                        style="width: 100%"
                         class="p-py-3"
                         aria-describedby="Enter your email"
                         pInputText
@@ -103,7 +84,7 @@
                     <input
                         id="password"
                         type="password"
-                        style="width: 100%;"
+                        style="width: 100%"
                         class="p-py-3"
                         aria-describedby="Enter a secure password"
                         pInputText
@@ -115,7 +96,7 @@
                     <input
                         id="cpassword"
                         type="password"
-                        style="width: 100%;"
+                        style="width: 100%"
                         class="p-py-3"
                         aria-describedby="Confirm password previously entered"
                         [(ngModel)]="authInfo.password2"
@@ -150,8 +131,8 @@
 </ng-container>
 <ng-container *ngIf="authMode === 'login'">
     <div class="p-d-flex p-flex-column p-ai-center p-jc-center login">
-        <div class="p-d-flex p-flex-column" style="min-width: 320px;">
-            <div style="height: 40px;" class="p-d-flex p-jc-center p-mb-6">
+        <div class="p-d-flex p-flex-column" style="min-width: 320px">
+            <div style="height: 40px" class="p-d-flex p-jc-center p-mb-6">
                 <img src="/assets/stepflow-logo.svg" alt="Stepflow logo" height="40px" />
             </div>
             <div class="p-field p-col-12">
@@ -161,7 +142,7 @@
                             id="email"
                             type="email"
                             pInputText
-                            style="width: 100%;"
+                            style="width: 100%"
                             class="p-py-3"
                             [(ngModel)]="authInfo.email"
                         />
@@ -176,7 +157,7 @@
                             id="password"
                             type="password"
                             pInputText
-                            style="width: 100%;"
+                            style="width: 100%"
                             class="p-py-3"
                             [(ngModel)]="authInfo.password"
                         />
@@ -190,7 +171,7 @@
                     type="button"
                     label="Login"
                     class="p-button-lg"
-                    style="width: 100%;"
+                    style="width: 100%"
                     (click)="login()"
                 ></button>
                 <p class="p-mt-4 text-secondary">
@@ -203,7 +184,7 @@
                 label="stepflow.co"
                 icon="pi pi-chevron-left"
                 class="p-button p-button-text p-button-secondary p-d-flex p-ai-center"
-                style="position: absolute;top: 10px;left: 10px;text-decoration:none;"
+                style="position: absolute; top: 10px; left: 10px; text-decoration: none"
                 (click)="goToHomepage()"
             ></button>
         </div>
