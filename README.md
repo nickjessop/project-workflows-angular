@@ -1,6 +1,15 @@
 # Stepflow
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.1.0.
+The folder structure of this app is organized using nx CLI, and is set up as follows:
+
+```
+ |-- apps
+    |-- api (backend api - Not currently in use)
+    |-- stepflow (Main Frontend app)
+    |-- stepflow-e2e (Full end to end test - Not in use)
+ |-- functions (Firebase functions)
+ |-- libs (Shared library between apps projects)
+```
 
 Install npm version 6.14.16 and node 12.22.10. It is recommended to use nvm with ohmyzsh, and to add a script that allows your terminals to automatically change your node/npm versions based on .nvmrc file contexts.
 
@@ -34,7 +43,11 @@ Run `npm run nx serve` for a dev server. Navigate to `http://localhost:4200/`. T
 
 ## Code scaffolding
 
+### Creating components
+
 Run `npm run nx g @nrwl/angular:component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+
+### Creating services
 
 Run `npm run nx -- g @nrwl/nest:service --project=api` to generate a new service for API. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
@@ -45,10 +58,6 @@ Run `ng build` to build the project. The build artifacts will be stored in the `
 ## Running end-to-end tests
 
 Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
 
 ## Deployment to Firebase from Local machine
 
