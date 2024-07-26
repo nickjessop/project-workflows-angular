@@ -4,9 +4,7 @@ The folder structure of this app is organized using nx CLI, and is set up as fol
 
 ```
  |-- apps
-    |-- api (backend api - Not currently in use)
     |-- stepflow (Main Frontend app)
-    |-- stepflow-e2e (Full end to end test - Not in use)
  |-- functions (Firebase functions)
  |-- libs (Shared library between apps projects)
 ```
@@ -16,6 +14,12 @@ Install npm version 6.14.16 and node 12.22.10. It is recommended to use nvm with
 See https://github.com/nvm-sh/nvm#calling-nvm-use-automatically-in-a-directory-with-a-nvmrc-file
 and
 https://github.com/ohmyzsh/ohmyzsh
+
+# Firebase and Send Grid Set Up
+
+Replace placeholders in apps/stepflow/src/app/services/firebase/firebase.service.ts with your Firebase settings
+
+Replace placeholders in /functions/src/index.ts with your SendGrid settings
 
 ## Development server
 
