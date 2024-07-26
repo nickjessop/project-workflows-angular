@@ -1,5 +1,7 @@
 # Stepflow
 
+![Stepflow App](libs/screenshots/stepflow-screenshot.jpg)
+
 The folder structure of this app is organized using nx CLI, and is set up as follows:
 
 ```
@@ -69,3 +71,21 @@ To build the full Stepflow app, with the new authenication page do the following
 
 1. Using terminal from the root of the project, use `npm run build-stepflow-prod`
 2. Once built, use `firebase deploy --only hosting:stepflow-app` to deploy the locally compiled stepflow app to firebase
+
+## Screenshots
+
+![Stepflow App Login](libs/screenshots/login.png)
+
+![Stepflow App Signup](libs/screenshots/signup.png)
+
+![Stepflow App Project Listing](libs/screenshots/project-listing.png)
+
+## Firebase Example Configuration
+
+![Firebase db](libs/screenshots/database-example.png)
+
+![Firebase db](libs/screenshots/database-example-2.png)
+
+![Firebase storage](libs/screenshots/storage-example.png)
+
+![Firebase functions](libs/screenshots/functions-example.png)
