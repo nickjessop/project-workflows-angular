@@ -1,7 +1,7 @@
 # Stepflow
 
-[!WARNING]
-This repo is not actively maintained. Use as is.
+> [!WARNING]
+> This repo is not actively maintained. Use as is.
 
 Stepflow provides the easiest way to work with collaborators outside your organization. It's everything you need in workflow, instead of getting lost in email, Slack, or tracking down links across multiple applications.
 
