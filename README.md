@@ -1,10 +1,12 @@
 # Stepflow
 
+[!WARNING]
+This repo is not actively maintained. Use as is.
+
 Stepflow provides the easiest way to work with collaborators outside your organization. It's everything you need in workflow, instead of getting lost in email, Slack, or tracking down links across multiple applications.
 
 When working with collaborators outside your organization often times projects become disorganized, key information gets missed, and productivity decreases.
 
-SOLUTION
 The product is an external collaboration tool that brings everyone together in a simple workflow. Create the steps of the workflow and then add blocks to store your content. Blocks offer an easy way to add the content you need, in the format that works best. Image gallery, table, PDF, and embed blocks are just a few of the options available!
 
 What you end up with is a simple document that combines all the information you need to get a project done in one place. This becomes the common reference point everyone can look to.
