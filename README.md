@@ -1,9 +1,9 @@
-# Stepflow
+# Project Workflows App
 
 > [!WARNING]
 > This repo is not actively maintained. Use as is.
 
-Stepflow provides the easiest way to work with collaborators outside your organization. It's everything you need in workflow, instead of getting lost in email, Slack, or tracking down links across multiple applications.
+Project Workflows provides the easiest way to work with collaborators outside your organization. It's everything you need in workflow, instead of getting lost in email, Slack, or tracking down links across multiple applications.
 
 When working with collaborators outside your organization often times projects become disorganized, key information gets missed, and productivity decreases.
 
@@ -11,7 +11,7 @@ The product is an external collaboration tool that brings everyone together in a
 
 What you end up with is a workflow that combines all the information you need to get a project done, in one place. This becomes a common reference point everyone can look to.
 
-![Stepflow App](libs/screenshots/stepflow-screenshot.jpg)
+![Project Workflows App](libs/screenshots/stepflow-screenshot.jpg)
 
 ## Setup
 
@@ -19,7 +19,7 @@ The folder structure of this app is organized using nx CLI, and is set up as fol
 
 ```
  |-- apps
-    |-- stepflow (Main Frontend app)
+    |-- project-workflows (Main Frontend app)
  |-- functions (Firebase functions)
  |-- libs (Shared library between apps projects)
 ```
@@ -32,7 +32,7 @@ https://github.com/ohmyzsh/ohmyzsh
 
 # Firebase and Send Grid Set Up
 
-Replace placeholders in apps/stepflow/src/app/services/firebase/firebase.service.ts with your Firebase settings
+Replace placeholders in apps/project-workflows/src/app/services/firebase/firebase.service.ts with your Firebase settings
 
 Replace placeholders in /functions/src/index.ts with your SendGrid settings
 
@@ -41,8 +41,8 @@ Replace placeholders in /functions/src/index.ts with your SendGrid settings
 1. Install packages and dependencies,
    Run `npm i`
 
-2. For quick start of Stepflow use:
-   `npm run stepflow`
+2. For quick start of Project Workflows use:
+   `npm run project-workflows`
 
 Here are a few other useful commands:
 
@@ -54,9 +54,9 @@ Run `nx serve` for a dev server. Navigate to `http://localhost:4200/`. The app w
 
 For running NX CLI without it install globally
 
-Run `npm run stepflow` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Run `npm run project-workflows` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 OR
-Run `npm run stepflow-api` for a API dev server, this currently isn't used much as we aren't fully migrated from Firebase functions. API route at `http://localhost:3333/api/`.
+Run `npm run project-workflows-api` for a API dev server, this currently isn't used much as we aren't fully migrated from Firebase functions. API route at `http://localhost:3333/api/`.
 OR
 Run `npm run nx serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
@@ -80,18 +80,18 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 
 ## Deployment to Firebase from Local machine
 
-To build the full Stepflow app, with the new authenication page do the following:
+To build the full Project Workflows app, with the new authenication page do the following:
 
-1. Using terminal from the root of the project, use `npm run build-stepflow-prod`
-2. Once built, use `firebase deploy --only hosting:stepflow-app` to deploy the locally compiled stepflow app to firebase
+1. Using terminal from the root of the project, use `npm run build-project-workflows-prod`
+2. Once built, use `firebase deploy --only hosting:project-workflows-app` to deploy the locally compiled Project Workflows app to firebase
 
 ## Screenshots
 
-![Stepflow App Login](libs/screenshots/login.png)
+![Project Workflows App Login](libs/screenshots/login.png)
 
-![Stepflow App Signup](libs/screenshots/signup.png)
+![Project Workflows App Signup](libs/screenshots/signup.png)
 
-![Stepflow App Project Listing](libs/screenshots/project-listing.png)
+![Project Workflows App Project Listing](libs/screenshots/project-listing.png)
 
 ## Firebase Example Configuration
 
