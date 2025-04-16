@@ -87,18 +87,6 @@ To build the full Project Workflows app, with the new authenication page do the 
 
 ## Screenshots
 
-![Project Workflows App Login](libs/screenshots/login.png)
-
-![Project Workflows App Signup](libs/screenshots/signup.png)
+![Project Workflows App](libs/screenshots/project-workflows-screenshot.jpg)
 
 ![Project Workflows App Project Listing](libs/screenshots/project-listing.png)
-
-## Firebase Example Configuration
-
-![Firebase db](libs/screenshots/database-example.png)
-
-![Firebase db](libs/screenshots/database-example-2.png)
-
-![Firebase storage](libs/screenshots/storage-example.png)
-
-![Firebase functions](libs/screenshots/functions-example.png)
