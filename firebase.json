@@ -1,8 +1,8 @@
 {
   "hosting": [
     {
-      "site": "stepflow-app",
-      "public": "dist/apps/stepflow",
+      "site": "project-workflows",
+      "public": "dist/apps/project-workflows",
       "ignore": [
         "firebase.json",
         "**/.*",

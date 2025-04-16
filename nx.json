@@ -1,5 +1,5 @@
 {
-    "npmScope": "stepflow",
+    "npmScope": "project-workflows",
     "implicitDependencies": {
         "angular.json": "*",
         "package.json": "*",
@@ -20,5 +20,5 @@
     "@nrwl/angular:component": {
         "style": "scss"
     },
-    "defaultProject": "stepflow"
+    "defaultProject": "project-workflows"
 }

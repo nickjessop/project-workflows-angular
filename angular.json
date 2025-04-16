@@ -5,7 +5,7 @@
     "projects": {
         "api": "apps/api",
         "interfaces": "libs/interfaces",
-        "stepflow": "apps/stepflow",
-        "stepflow-e2e": "apps/stepflow-e2e"
+        "project-workflows": "apps/project-workflows",
+        "project-workflows-e2e": "apps/project-workflows-e2e"
     }
 }

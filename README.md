@@ -11,7 +11,7 @@ The product is an external collaboration tool that brings everyone together in a
 
 What you end up with is a workflow that combines all the information you need to get a project done, in one place. This becomes a common reference point everyone can look to.
 
-![Project Workflows App](libs/screenshots/stepflow-screenshot.jpg)
+![Project Workflows App](libs/screenshots/project-workflows-screenshot.jpg)
 
 ## Setup
 

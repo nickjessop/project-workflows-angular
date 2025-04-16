@@ -1,0 +1,123 @@
+{
+    "projectType": "application",
+    "tags": [
+        "scope:client"
+    ],
+    "generators": {
+        "@schematics/angular:component": {
+            "style": "scss"
+        }
+    },
+    "root": "apps/project-workflows",
+    "sourceRoot": "apps/project-workflows/src",
+    "prefix": "app",
+    "targets": {
+        "build": {
+            "executor": "@angular-devkit/build-angular:browser",
+            "options": {
+                "outputPath": "dist/apps/project-workflows",
+                "index": "apps/project-workflows/src/index.html",
+                "main": "apps/project-workflows/src/main.ts",
+                "polyfills": "apps/project-workflows/src/polyfills.ts",
+                "tsConfig": "apps/project-workflows/tsconfig.app.json",
+                "aot": true,
+                "assets": [
+                    "apps/project-workflows/src/favicon.ico",
+                    "apps/project-workflows/src/assets"
+                ],
+                "styles": [
+                    "node_modules/primeng/resources/themes/saga-blue/theme.css",
+                    "node_modules/primeng/resources/primeng.min.css",
+                    "node_modules/primeicons/primeicons.css",
+                    "node_modules/primeflex/primeflex.css",
+                    "node_modules/quill/dist/quill.core.css",
+                    "node_modules/quill/dist/quill.snow.css",
+                    "apps/project-workflows/src/sass/styles.scss"
+                ],
+                "stylePreprocessorOptions": {
+                    "includePaths": [
+                        "apps/project-workflows/src/sass"
+                    ]
+                },
+                "scripts": [
+                    "node_modules/quill/dist/quill.js"
+                ]
+            },
+            "configurations": {
+                "production": {
+                    "fileReplacements": [
+                        {
+                            "replace": "apps/project-workflows/src/environments/environment.ts",
+                            "with": "apps/project-workflows/src/environments/environment.prod.ts"
+                        }
+                    ],
+                    "optimization": true,
+                    "outputHashing": "all",
+                    "sourceMap": false,
+                    "namedChunks": false,
+                    "aot": true,
+                    "extractLicenses": true,
+                    "vendorChunk": false,
+                    "buildOptimizer": true,
+                    "budgets": [
+                        {
+                            "type": "initial",
+                            "maximumWarning": "2mb",
+                            "maximumError": "5mb"
+                        }
+                    ]
+                },
+                "dev": {
+                    "optimization": false,
+                    "aot": false,
+                    "buildOptimizer": false,
+                    "budgets": [
+                        {
+                            "type": "initial",
+                            "maximumWarning": "2mb",
+                            "maximumError": "5mb"
+                        }
+                    ],
+                    "sourceMap": true,
+                    "namedChunks": true,
+                    "extractLicenses": true,
+                    "vendorChunk": true
+                }
+            }
+        },
+        "serve": {
+            "executor": "@angular-devkit/build-angular:dev-server",
+            "options": {
+                "browserTarget": "project-workflows:build",
+                "port": 4200,
+                "proxyConfig": "apps/project-workflows/src/proxy.conf.json"
+            },
+            "configurations": {
+                "production": {
+                    "browserTarget": "project-workflows:build:production"
+                },
+                "dev": {
+                    "browserTarget": "project-workflows:build:dev"
+                }
+            }
+        },
+        "extract-i18n": {
+            "executor": "@angular-devkit/build-angular:extract-i18n",
+            "options": {
+                "browserTarget": "project-workflows:build"
+            }
+        },
+        "lint": {
+            "executor": "@nrwl/linter:eslint",
+            "options": {
+                "tsConfig": [
+                    "apps/project-workflows/tsconfig.app.json",
+                    "apps/project-workflows/tsconfig.spec.json"
+                ],
+                "exclude": [
+                    "**/node_modules/**"
+                ]
+            }
+        }
+    }
+}
